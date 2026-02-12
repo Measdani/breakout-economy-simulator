@@ -297,6 +297,8 @@ export default function Simulator() {
               <div className="space-y-6">
                 <PresetScenarios onSelectPreset={(config, presetName) => {
                   if (presetName) setCurrentConfig(presetName);
+
+
                   handlePresetSelect(config);
                 }} />
               </div>
@@ -326,7 +328,16 @@ export default function Simulator() {
                 if (current > 0) setActiveScreen(screens[current - 1]);
               }}
               className="px-5 py-3 rounded transition"
-              style={{ background: '#0F172A', color: '#00D9FF', border: '2px solid #00D9FF', fontSize: '16px', fontWeight: '900', letterSpacing: '0.5px' }}
+              style={{
+                background: '#0F172A',
+                color: '#00D9FF',
+                border: '2px solid #00D9FF',
+                fontSize: '18px',
+                fontWeight: '900',
+                letterSpacing: '0.5px',
+                textShadow: '0 0 10px #00D9FF, 0 0 20px rgba(0, 217, 255, 0.5)',
+                WebkitTextStroke: '0.5px #00D9FF'
+              }}
             >
               ← Back
             </button>
@@ -361,7 +372,16 @@ export default function Simulator() {
                 if (current < screens.length - 1) setActiveScreen(screens[current + 1]);
               }}
               className="px-5 py-3 rounded transition"
-              style={{ background: '#0F172A', color: '#00D9FF', border: '2px solid #00D9FF', fontSize: '16px', fontWeight: '900', letterSpacing: '0.5px' }}
+              style={{
+                background: '#0F172A',
+                color: '#00D9FF',
+                border: '2px solid #00D9FF',
+                fontSize: '18px',
+                fontWeight: '900',
+                letterSpacing: '0.5px',
+                textShadow: '0 0 10px #00D9FF, 0 0 20px rgba(0, 217, 255, 0.5)',
+                WebkitTextStroke: '0.5px #00D9FF'
+              }}
             >
               Next →
             </button>
