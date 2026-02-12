@@ -92,7 +92,7 @@ export default function PolicySliders({
       {/* Slider Container */}
       <div className="relative mb-6 pt-2">
         <div
-          className="absolute -top-6 transform -translate-x-1/2 bg-slate-100 px-2.5 py-1 rounded text-xs font-semibold text-slate-700 whitespace-nowrap pointer-events-none"
+          className="absolute -top-6 transform -translate-x-1/2 bg-slate-900 px-2.5 py-1 rounded text-xs font-semibold text-white whitespace-nowrap pointer-events-none shadow-md"
           style={{ left: `${position}%` }}
         >
           {formattedValue}
@@ -131,6 +131,7 @@ export default function PolicySliders({
 
   return (
     <div className="space-y-6">
+      {/* Policy Controls Section */}
       {/* Token Tax Rate - Revenue Driver */}
       <SliderSection
         title="Revenue Driver"
