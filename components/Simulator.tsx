@@ -325,7 +325,8 @@ export default function Simulator() {
                 const current = screens.indexOf(activeScreen);
                 if (current > 0) setActiveScreen(screens[current - 1]);
               }}
-              className="text-white hover:text-blue-300 font-bold text-sm transition"
+              className="px-4 py-2 rounded transition"
+              style={{ background: '#0F172A', color: '#FFFFFF', border: '2px solid #00D9FF', fontSize: '14px', fontWeight: 'bold' }}
             >
               ← Back
             </button>
@@ -359,7 +360,8 @@ export default function Simulator() {
                 const current = screens.indexOf(activeScreen);
                 if (current < screens.length - 1) setActiveScreen(screens[current + 1]);
               }}
-              className="text-white hover:text-blue-300 font-bold text-sm transition"
+              className="px-4 py-2 rounded transition"
+              style={{ background: '#0F172A', color: '#FFFFFF', border: '2px solid #00D9FF', fontSize: '14px', fontWeight: 'bold' }}
             >
               Next →
             </button>
