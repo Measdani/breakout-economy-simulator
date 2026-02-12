@@ -249,3 +249,39 @@ input[type='range']::-moz-range-thumb:active {
 .slider-purple::-moz-range-thumb {
   border-color: #A855F7;
 }
+
+/* ═══ EXPLICIT COLOR UTILITY CLASSES ═══ */
+/* Background colors */
+.bg-deep-navy {
+  background-color: #0F172A;
+}
+
+.bg-darker-navy {
+  background-color: #111827;
+}
+
+.bg-dark-slate {
+  background-color: #1E293B;
+}
+
+.bg-darker-slate {
+  background-color: #1a2332;
+}
+
+/* Text colors */
+.text-bright {
+  color: #F8FAFC;
+}
+
+.text-muted {
+  color: #94A3B8;
+}
+
+.text-dimmed {
+  color: #64748B;
+}
+
+/* Border colors */
+.border-border-slate {
+  border-color: #334155;
+}
