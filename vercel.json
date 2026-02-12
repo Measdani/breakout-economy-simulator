@@ -1,8 +1,5 @@
 {
   "buildCommand": "npm run build",
   "installCommand": "npm install",
-  "outputDirectory": ".next",
-  "env": {
-    "BUILD_TIME": "@now"
-  }
+  "outputDirectory": ".next"
 }
