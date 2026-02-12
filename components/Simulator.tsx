@@ -122,7 +122,7 @@ export default function Simulator() {
               className={`py-3 px-4 text-lg transition border-b-2 ${
                 activeScreen === 'controls'
                   ? 'border-blue-500 text-blue-400'
-                  : 'border-transparent text-muted hover:text-bright'
+                  : 'border-transparent text-white hover:text-white'
               }`}
             >
               ⚙️
@@ -131,8 +131,8 @@ export default function Simulator() {
               onClick={() => setActiveScreen('scenarios')}
               className={`py-3 px-4 text-lg transition border-b-2 ${
                 activeScreen === 'scenarios'
-                  ? 'border-purple-600 text-purple-600'
-                  : 'border-transparent text-slate-400 hover:text-slate-600'
+                  ? 'border-purple-600 text-purple-400'
+                  : 'border-transparent text-white hover:text-white'
               }`}
             >
               ⚡
@@ -141,8 +141,8 @@ export default function Simulator() {
               onClick={() => setActiveScreen('results')}
               className={`py-3 px-4 text-lg transition border-b-2 ${
                 activeScreen === 'results'
-                  ? 'border-purple-600 text-purple-600'
-                  : 'border-transparent text-slate-400 hover:text-slate-600'
+                  ? 'border-purple-600 text-purple-400'
+                  : 'border-transparent text-white hover:text-white'
               }`}
             >
               📊
@@ -151,8 +151,8 @@ export default function Simulator() {
               onClick={() => setActiveScreen('charts')}
               className={`py-3 px-4 text-lg transition border-b-2 ${
                 activeScreen === 'charts'
-                  ? 'border-purple-600 text-purple-600'
-                  : 'border-transparent text-slate-400 hover:text-slate-600'
+                  ? 'border-purple-600 text-purple-400'
+                  : 'border-transparent text-white hover:text-white'
               }`}
             >
               📈

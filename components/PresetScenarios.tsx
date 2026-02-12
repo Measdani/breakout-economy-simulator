@@ -87,7 +87,7 @@ export default function PresetScenarios({ onSelectPreset }: PresetScenariosProps
                 key={preset.name}
                 className={`p-3 rounded-lg border-2 ${preset.borderColor} transition-colors duration-300 cursor-pointer overflow-hidden`}
                 style={{
-                  background: isSelected ? preset.bgColor : 'white'
+                  background: isSelected ? preset.bgColor : '#1E3A5F'
                 }}
                 onClick={() => handleSelectPreset(preset.name, preset.config)}
               >
