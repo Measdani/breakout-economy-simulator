@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+    Cantarell, 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ═══ CUSTOM RANGE SLIDER STYLING ═══ */
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  padding: 0;
+}
+
+/* ─── Webkit browsers (Chrome, Safari, Edge) ─── */
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: white;
+  border: 3px solid currentColor;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+input[type='range']::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+input[type='range']::-webkit-slider-thumb:active {
+  transform: scale(1.2);
+}
+
+/* ─── Firefox ─── */
+input[type='range']::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: white;
+  border: 3px solid currentColor;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+input[type='range']::-moz-range-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+input[type='range']::-moz-range-thumb:active {
+  transform: scale(1.2);
+}
+
+/* Color-specific thumb styles */
+.slider-blue::-webkit-slider-thumb {
+  border-color: #3B82F6;
+}
+
+.slider-blue::-moz-range-thumb {
+  border-color: #3B82F6;
+}
+
+.slider-green::-webkit-slider-thumb {
+  border-color: #10B981;
+}
+
+.slider-green::-moz-range-thumb {
+  border-color: #10B981;
+}
+
+.slider-purple::-webkit-slider-thumb {
+  border-color: #A855F7;
+}
+
+.slider-purple::-moz-range-thumb {
+  border-color: #A855F7;
+}
