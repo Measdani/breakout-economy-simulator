@@ -17,7 +17,7 @@ body {
     Cantarell, 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: radial-gradient(ellipse at center, rgba(255,255,255,0.15) 0%, #1E3A5F 50%, #0F172A 100%);
+  background: radial-gradient(ellipse 900px 500px at center, rgba(255,255,255,0.25) 0%, #2A4A7F 40%, #1E3A5F 70%, #0F172A 100%);
   min-height: 100vh;
 }
 
@@ -285,4 +285,23 @@ input[type='range']::-moz-range-thumb:active {
 /* Border colors */
 .border-border-slate {
   border-color: #334155;
+}
+
+/* ═══ COMPREHENSIVE TEXT COLOR FIXES ═══ */
+/* Ensure all text is white across the interface */
+label {
+  color: #FFFFFF !important;
+}
+
+p, span, div, h1, h2, h3, h4, h5, h6 {
+  color: inherit;
+}
+
+/* Slider labels and descriptions */
+.slider-label,
+.slider-section label,
+.policy-control label,
+[class*="label"],
+[class*="text"] {
+  color: #FFFFFF !important;
 }
