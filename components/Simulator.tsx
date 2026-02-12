@@ -160,7 +160,7 @@ export default function Simulator() {
           </div>
 
           {/* Screen Content - With Background */}
-          <div className="p-6 flex-1 bg-darker-navy overflow-hidden">
+          <div className="p-6 flex-1 bg-darker-navy overflow-y-auto">
             {/* Controls Screen - Split Layout */}
             {activeScreen === 'controls' && (
               <div className="grid grid-cols-5 gap-6 h-full">
@@ -318,26 +318,26 @@ export default function Simulator() {
           </div>
 
           {/* Footer Navigation - Enhanced */}
-          <div className="px-5 py-4 border-t border-border-slate bg-darker-slate flex justify-between items-center">
+          <div className="px-5 py-5 border-t border-border-slate bg-bg-dark-slate flex justify-between items-center" style={{ background: '#1E293B' }}>
             <button
               onClick={() => {
                 const screens: Array<typeof activeScreen> = ['controls', 'scenarios', 'results', 'charts'];
                 const current = screens.indexOf(activeScreen);
                 if (current > 0) setActiveScreen(screens[current - 1]);
               }}
-              className="text-blue-400 hover:text-blue-300 font-semibold text-sm transition"
+              className="text-white hover:text-blue-300 font-bold text-sm transition"
             >
               ← Back
             </button>
-            <div className="flex flex-col items-center gap-1.5">
-              <div className="flex gap-1 items-center">
+            <div className="flex flex-col items-center gap-2">
+              <div className="flex gap-2 items-center">
                 {['controls', 'scenarios', 'results', 'charts'].map((screen, idx) => (
-                  <span key={screen} className={`text-sm ${activeScreen === screen || ['controls', 'scenarios', 'results', 'charts'].indexOf(activeScreen) > idx ? 'text-white' : 'text-gray-500'}`}>
+                  <span key={screen} className={`text-lg ${activeScreen === screen || ['controls', 'scenarios', 'results', 'charts'].indexOf(activeScreen) > idx ? 'text-blue-400' : 'text-gray-600'}`}>
                     {activeScreen === screen || ['controls', 'scenarios', 'results', 'charts'].indexOf(activeScreen) > idx ? '●' : '○'}
                   </span>
                 ))}
               </div>
-              <span className="text-xs text-white font-medium">
+              <span className="text-sm text-white font-bold">
                 Step {['controls', 'scenarios', 'results', 'charts'].indexOf(activeScreen) + 1} — {
                   activeScreen === 'controls' ? 'Configure' :
                   activeScreen === 'scenarios' ? 'Quick Scenarios' :
@@ -352,7 +352,7 @@ export default function Simulator() {
                 const current = screens.indexOf(activeScreen);
                 if (current < screens.length - 1) setActiveScreen(screens[current + 1]);
               }}
-              className="text-blue-400 hover:text-blue-300 font-semibold text-sm transition"
+              className="text-white hover:text-blue-300 font-bold text-sm transition"
             >
               Next →
             </button>
