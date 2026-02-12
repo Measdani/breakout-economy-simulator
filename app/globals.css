@@ -288,7 +288,7 @@ input[type='range']::-moz-range-thumb:active {
 }
 
 /* ═══ COMPREHENSIVE TEXT COLOR FIXES ═══ */
-/* Ensure all text is white across the interface */
+/* Ensure all text is white across the interface - v2 */
 label {
   color: #FFFFFF !important;
 }
