@@ -2,7 +2,7 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  // Force rebuild to ensure dark theme CSS is applied
+  // Force rebuild to ensure pagination and scrolling fixes are applied
   env: {
     BUILD_TIME: new Date().toISOString(),
   },
