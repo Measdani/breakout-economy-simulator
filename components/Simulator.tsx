@@ -336,8 +336,8 @@ export default function Simulator() {
                   return (
                     <span
                       key={screen}
-                      className="text-lg font-bold"
-                      style={{ color: isActive ? '#60A5FA' : '#9CA3AF' }}
+                      className="text-xl font-bold"
+                      style={{ color: isActive ? '#00D9FF' : '#555555', textShadow: isActive ? '0 0 8px #00D9FF' : 'none' }}
                     >
                       {isActive ? '●' : '○'}
                     </span>
