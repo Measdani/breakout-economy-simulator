@@ -17,6 +17,7 @@ body {
     Cantarell, 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #0F172A !important;
 }
 
 /* ═══ DARK DATA LAB THEME VARIABLES ═══ */
