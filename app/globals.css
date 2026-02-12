@@ -17,7 +17,8 @@ body {
     Cantarell, 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--bg-deep-navy, #0F172A);
+  background: radial-gradient(ellipse at center, rgba(255,255,255,0.15) 0%, #1E3A5F 50%, #0F172A 100%);
+  min-height: 100vh;
 }
 
 /* ═══ DARK DATA LAB THEME VARIABLES ═══ */
@@ -35,9 +36,9 @@ body {
   --border-glow-blue: #3B82F6;
 
   /* Text colors */
-  --text-bright: #F8FAFC;
-  --text-muted: #94A3B8;
-  --text-dimmed: #64748B;
+  --text-bright: #FFFFFF;
+  --text-muted: #FFFFFF;
+  --text-dimmed: #FFFFFF;
 
   /* Glow colors */
   --glow-green: rgba(16, 185, 129, 0.5);
@@ -270,15 +271,15 @@ input[type='range']::-moz-range-thumb:active {
 
 /* Text colors */
 .text-bright {
-  color: #F8FAFC;
+  color: #FFFFFF;
 }
 
 .text-muted {
-  color: #94A3B8;
+  color: #FFFFFF;
 }
 
 .text-dimmed {
-  color: #64748B;
+  color: #FFFFFF;
 }
 
 /* Border colors */
