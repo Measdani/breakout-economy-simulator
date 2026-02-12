@@ -61,14 +61,14 @@ export default function Simulator() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-400 via-pink-300 to-purple-300 px-4 py-8 flex items-center justify-center">
-      <div className="w-full" style={{ maxWidth: '500px' }}>
+      <div className="w-full h-screen flex items-center" style={{ maxWidth: '1000px' }}>
         {/* Onboarding Tour */}
         {showTour && <OnboardingTour onComplete={() => setShowTour(false)} />}
 
         {/* Tablet Case/Bezel Frame */}
         <div className="bg-gradient-to-b from-slate-700 to-slate-800 rounded-3xl p-4 shadow-2xl" style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)' }}>
           {/* Tablet Container */}
-          <div className="bg-white rounded-2xl overflow-hidden shadow-lg">
+          <div className="bg-white rounded-2xl overflow-hidden shadow-lg flex flex-col h-screen" style={{ maxHeight: '700px' }}>
           {/* Header - Polished */}
           <div className="bg-white px-5 py-6">
             <div className="mb-5">
@@ -132,18 +132,87 @@ export default function Simulator() {
           </div>
 
           {/* Screen Content - With Background */}
-          <div className="p-6 min-h-80 bg-slate-50">
-            {/* Controls Screen */}
+          <div className="p-6 flex-1 bg-slate-50 overflow-hidden">
+            {/* Controls Screen - Split Layout */}
             {activeScreen === 'controls' && (
-              <div className="space-y-8">
-                <PolicySliders
-                  tokenTaxRate={tokenTaxRate}
-                  onTokenTaxRateChange={setTokenTaxRate}
-                  ubiAnnualPerAdult={ubiAnnualPerAdult}
-                  onUbiChange={setUbiAnnualPerAdult}
-                  breakoutPoint={breakoutPoint}
-                  onBreakoutPointChange={setBreakoutPoint}
-                />
+              <div className="grid grid-cols-5 gap-6 h-full">
+                {/* LEFT: Configuration Sliders (40%) */}
+                <div className="col-span-2 overflow-y-auto pr-2">
+                  <PolicySliders
+                    tokenTaxRate={tokenTaxRate}
+                    onTokenTaxRateChange={setTokenTaxRate}
+                    ubiAnnualPerAdult={ubiAnnualPerAdult}
+                    onUbiChange={setUbiAnnualPerAdult}
+                    breakoutPoint={breakoutPoint}
+                    onBreakoutPointChange={setBreakoutPoint}
+                  />
+                </div>
+
+                {/* RIGHT: Live Fiscal Status Panel (60%) */}
+                <div className="col-span-3 bg-slate-900 rounded-lg p-8 text-white overflow-y-auto" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.15)' }}>
+                  <div className="space-y-8">
+                    {/* Status Indicator */}
+                    <div>
+                      <p className="text-sm font-semibold text-slate-400 uppercase tracking-wide mb-3">System Status</p>
+                      <div className="flex items-baseline gap-4">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-4 h-4 rounded-full ${result.surplusDeficit >= 0 ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                          <p className="text-3xl font-bold">{result.surplusDeficit >= 0 ? 'SOLVENT' : 'DEFICIT'}</p>
+                        </div>
+                      </div>
+                      <p className="text-4xl font-bold mt-3" style={{ color: result.surplusDeficit >= 0 ? '#10B981' : '#EF4444' }}>
+                        {result.surplusDeficit >= 0 ? '+' : ''}{(result.surplusDeficit / 1e9).toFixed(1)}B
+                      </p>
+                    </div>
+
+                    {/* Revenue & Obligations */}
+                    <div className="space-y-4 border-t border-slate-700 pt-6">
+                      <div>
+                        <div className="flex justify-between items-center mb-2">
+                          <p className="text-sm text-slate-300">Revenue</p>
+                          <p className="text-xl font-bold text-emerald-400">${(result.totalRevenue / 1e12).toFixed(2)}T</p>
+                        </div>
+                        <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                          <div className="bg-emerald-500 h-full rounded-full" style={{ width: '75%' }}></div>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex justify-between items-center mb-2">
+                          <p className="text-sm text-slate-300">Obligations</p>
+                          <p className="text-xl font-bold text-orange-400">${(result.totalObligations / 1e12).toFixed(2)}T</p>
+                        </div>
+                        <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                          <div className="bg-orange-500 h-full rounded-full" style={{ width: '70%' }}></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Impact Indicator */}
+                    <div className="bg-slate-800 rounded-lg p-4 border border-slate-700">
+                      <p className="text-xs text-slate-400 mb-2">Live Impact</p>
+                      <p className="text-2xl font-bold text-blue-400">
+                        {result.surplusDeficit >= 0 ? '+' : ''}{(result.surplusDeficit / 1e9).toFixed(1)}B
+                      </p>
+                      <p className="text-xs text-slate-400 mt-1">Change in fiscal balance</p>
+                    </div>
+
+                    {/* Key Metrics Summary */}
+                    <div className="space-y-3 border-t border-slate-700 pt-6">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-slate-400">UBI Cost</span>
+                        <span className="font-semibold">${(result.ubiCost / 1e12).toFixed(2)}T</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-slate-400">Token Tax Revenue</span>
+                        <span className="font-semibold text-blue-400">${(result.tokenTaxRevenue / 1e12).toFixed(2)}T</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-slate-400">Tax Rate</span>
+                        <span className="font-semibold">{(tokenTaxRate * 100).toFixed(2)}%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
 
@@ -218,6 +287,8 @@ export default function Simulator() {
         <Glossary />
         </div>
         {/* Close Tablet Case */}
+
+
 
 
 
