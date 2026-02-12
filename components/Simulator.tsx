@@ -331,11 +331,18 @@ export default function Simulator() {
             </button>
             <div className="flex flex-col items-center gap-2">
               <div className="flex gap-2 items-center">
-                {['controls', 'scenarios', 'results', 'charts'].map((screen, idx) => (
-                  <span key={screen} className={`text-lg ${activeScreen === screen || ['controls', 'scenarios', 'results', 'charts'].indexOf(activeScreen) > idx ? 'text-blue-400' : 'text-gray-600'}`}>
-                    {activeScreen === screen || ['controls', 'scenarios', 'results', 'charts'].indexOf(activeScreen) > idx ? '●' : '○'}
-                  </span>
-                ))}
+                {['controls', 'scenarios', 'results', 'charts'].map((screen, idx) => {
+                  const isActive = activeScreen === screen || ['controls', 'scenarios', 'results', 'charts'].indexOf(activeScreen) > idx;
+                  return (
+                    <span
+                      key={screen}
+                      className="text-lg font-bold"
+                      style={{ color: isActive ? '#60A5FA' : '#9CA3AF' }}
+                    >
+                      {isActive ? '●' : '○'}
+                    </span>
+                  );
+                })}
               </div>
               <span className="text-sm text-white font-bold">
                 Step {['controls', 'scenarios', 'results', 'charts'].indexOf(activeScreen) + 1} — {
