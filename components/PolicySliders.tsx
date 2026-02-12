@@ -77,23 +77,26 @@ export default function PolicySliders({
     maxLabel,
     formattedValue
   }: any) => (
-    <div className="bg-white rounded-lg p-5" style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
+    <div className="bg-dark-slate rounded-lg p-5 glow-border-slate card-hover-glow" style={{ transition: 'all 0.3s ease' }}>
       {/* Section Category */}
       <div className="mb-4">
-        <p className="text-sm font-semibold text-slate-500">{icon} {title}</p>
+        <p className="text-sm font-semibold text-muted uppercase tracking-wide">{icon} {title}</p>
       </div>
 
       {/* Control Label & Value */}
       <div className="mb-5">
-        {subtitle && <p className="text-sm text-slate-600 mb-2">{subtitle}</p>}
-        <p className="text-5xl font-bold text-slate-900">{formattedValue}</p>
+        {subtitle && <p className="text-sm text-dimmed mb-2">{subtitle}</p>}
+        <p className="text-5xl font-bold text-bright">{formattedValue}</p>
       </div>
 
       {/* Slider Container */}
       <div className="relative mb-6 pt-2">
         <div
-          className="absolute -top-6 transform -translate-x-1/2 bg-slate-900 px-2.5 py-1 rounded text-xs font-semibold text-white whitespace-nowrap pointer-events-none shadow-md"
-          style={{ left: `${position}%` }}
+          className="absolute -top-6 transform -translate-x-1/2 bg-darker-slate border border-border-slate px-2.5 py-1 rounded text-xs font-semibold text-bright whitespace-nowrap pointer-events-none"
+          style={{
+            left: `${position}%`,
+            boxShadow: '0 0 10px rgba(59, 130, 246, 0.3)'
+          }}
         >
           {formattedValue}
         </div>
@@ -107,24 +110,33 @@ export default function PolicySliders({
           className={`slider slider-${color} w-full h-2.5 rounded-full appearance-none cursor-pointer`}
           style={{
             background: `linear-gradient(to right, ${
-              color === 'blue' ? '#5B7FD0' : color === 'green' ? '#1F856F' : '#8B5F9F'
+              color === 'blue' ? '#3B82F6' : color === 'green' ? '#10B981' : '#A855F7'
             } 0%, ${
-              color === 'blue' ? '#5B7FD0' : color === 'green' ? '#1F856F' : '#8B5F9F'
-            } ${position}%, #E5E7EB ${position}%, #E5E7EB 100%)`
+              color === 'blue' ? '#60A5FA' : color === 'green' ? '#34D399' : '#C084FC'
+            } ${position}%, #334155 ${position}%, #1a2332 100%)`,
+            boxShadow: `0 2px 12px ${
+              color === 'blue' ? 'rgba(59, 130, 246, 0.4)' :
+              color === 'green' ? 'rgba(16, 185, 129, 0.4)' :
+              'rgba(168, 85, 247, 0.4)'
+            }, 0 0 20px ${
+              color === 'blue' ? 'rgba(59, 130, 246, 0.2)' :
+              color === 'green' ? 'rgba(16, 185, 129, 0.2)' :
+              'rgba(168, 85, 247, 0.2)'
+            }`
           }}
         />
       </div>
 
       {/* Range Labels */}
-      <div className="flex justify-between text-xs text-slate-400 mb-4">
+      <div className="flex justify-between text-xs text-dimmed mb-4">
         <span>Min {minLabel}</span>
         <span>Max {maxLabel}</span>
       </div>
 
       {/* Context - Two-line metric format */}
-      <div className="p-4 bg-slate-50 rounded-lg" style={{ boxShadow: '0 1px 2px rgba(0,0,0,0.04)' }}>
-        <p className="text-xs text-slate-500 mb-2">{context.label}</p>
-        <p className="text-lg font-bold text-slate-900">{context.value}</p>
+      <div className="p-4 bg-darker-slate rounded-lg border border-border-slate">
+        <p className="text-xs text-muted mb-2 uppercase tracking-wide">{context.label}</p>
+        <p className="text-lg font-bold text-bright">{context.value}</p>
       </div>
     </div>
   );
@@ -189,20 +201,20 @@ export default function PolicySliders({
       {/* Summary Cards - Compact 3-column */}
       <div className="mt-12 pt-8">
         <div className="grid grid-cols-3 gap-4">
-          <div className="text-center p-4 bg-white rounded-lg" style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
+          <div className="text-center p-4 bg-dark-slate rounded-lg border border-border-slate card-hover-glow">
             <div className="text-3xl mb-3">💰</div>
-            <p className="text-sm font-semibold text-slate-900 mb-1.5">Revenue</p>
-            <p className="text-xs text-slate-500">Funds UBI & ops</p>
+            <p className="text-sm font-semibold text-bright mb-1.5">Revenue</p>
+            <p className="text-xs text-dimmed">Funds UBI & ops</p>
           </div>
-          <div className="text-center p-4 bg-white rounded-lg" style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
+          <div className="text-center p-4 bg-dark-slate rounded-lg border border-border-slate card-hover-glow">
             <div className="text-3xl mb-3">📊</div>
-            <p className="text-sm font-semibold text-slate-900 mb-1.5">Social Floor</p>
-            <p className="text-xs text-slate-500">Minimum income</p>
+            <p className="text-sm font-semibold text-bright mb-1.5">Social Floor</p>
+            <p className="text-xs text-dimmed">Minimum income</p>
           </div>
-          <div className="text-center p-4 bg-white rounded-lg" style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
+          <div className="text-center p-4 bg-dark-slate rounded-lg border border-border-slate card-hover-glow">
             <div className="text-3xl mb-3">🎯</div>
-            <p className="text-sm font-semibold text-slate-900 mb-1.5">Incentives</p>
-            <p className="text-xs text-slate-500">Work always pays</p>
+            <p className="text-sm font-semibold text-bright mb-1.5">Incentives</p>
+            <p className="text-xs text-dimmed">Work always pays</p>
           </div>
         </div>
       </div>

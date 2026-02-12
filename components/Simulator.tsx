@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { runSimulation } from '../lib/engine';
+import { useAnimatedNumber, numberFormatters } from '../lib/hooks/useAnimatedNumber';
 import type { PolicyConfig, SimulationResult } from '../lib/types';
 import PolicySliders from './PolicySliders';
 import ResultsDisplay from './ResultsDisplay';
@@ -53,6 +54,33 @@ export default function Simulator() {
 
   const result: SimulationResult = useMemo(() => runSimulation(config), [config]);
 
+  // Animated number displays for hero panel
+  const animatedBalance = useAnimatedNumber(
+    result.balance.surplusDeficit,
+    800,
+    numberFormatters.billions
+  );
+  const animatedRevenue = useAnimatedNumber(
+    result.revenue.totalRevenue,
+    800,
+    numberFormatters.trillions
+  );
+  const animatedObligations = useAnimatedNumber(
+    result.obligations.totalObligations,
+    800,
+    numberFormatters.trillions
+  );
+  const animatedUbiCost = useAnimatedNumber(
+    result.obligations.ubiCost,
+    800,
+    numberFormatters.trillions
+  );
+  const animatedTokenTax = useAnimatedNumber(
+    result.revenue.tokenTaxRevenue,
+    800,
+    numberFormatters.trillions
+  );
+
   const handlePresetSelect = (presetConfig: Partial<PolicyConfig>) => {
     if (presetConfig.tokenTaxRate) setTokenTaxRate(presetConfig.tokenTaxRate);
     if (presetConfig.ubiAnnualPerAdult) setUbiAnnualPerAdult(presetConfig.ubiAnnualPerAdult);
@@ -60,7 +88,7 @@ export default function Simulator() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-400 via-pink-300 to-purple-300 px-4 py-8 flex items-center justify-center">
+    <div className="min-h-screen bg-deep-navy px-4 py-8 flex items-center justify-center">
       <div className="w-full h-screen flex items-center" style={{ maxWidth: '1000px' }}>
         {/* Onboarding Tour */}
         {showTour && <OnboardingTour onComplete={() => setShowTour(false)} />}
@@ -68,33 +96,33 @@ export default function Simulator() {
         {/* Tablet Case/Bezel Frame */}
         <div className="bg-gradient-to-b from-slate-700 to-slate-800 rounded-3xl p-4 shadow-2xl" style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)' }}>
           {/* Tablet Container */}
-          <div className="bg-white rounded-2xl overflow-hidden shadow-lg flex flex-col h-screen" style={{ maxHeight: '700px' }}>
+          <div className="bg-dark-slate rounded-2xl overflow-hidden shadow-lg flex flex-col h-screen glow-border-slate" style={{ maxHeight: '700px' }}>
           {/* Header - Polished */}
-          <div className="bg-white px-5 py-6">
+          <div className="bg-darker-slate px-5 py-6 border-b border-border-slate">
             <div className="mb-5">
-              <h1 className="text-xl font-bold text-slate-900">Policy Flight Simulator</h1>
-              <p className="text-xs text-slate-400 mt-0.5">Breakout Economy Model v0.2</p>
+              <h1 className="text-xl font-bold text-bright">Policy Flight Simulator</h1>
+              <p className="text-xs text-muted mt-0.5">Breakout Economy Model v0.2</p>
             </div>
 
-            <div className="border-t border-slate-100 pt-5">
+            <div className="border-t border-border-slate pt-5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className={`w-2 h-2 rounded-full ${tokenTaxRate > ubiAnnualPerAdult / 1000000 ? 'bg-green-500' : 'bg-slate-300'}`}></div>
-                  <span className="text-xs text-slate-500">Configuration:</span>
-                  <span className="text-xs font-medium text-slate-700 bg-slate-100 px-2.5 py-1 rounded-full">{currentConfig}</span>
+                  <div className={`w-2 h-2 rounded-full ${tokenTaxRate > ubiAnnualPerAdult / 1000000 ? 'bg-green-500' : 'bg-slate-600'}`}></div>
+                  <span className="text-xs text-muted">Configuration:</span>
+                  <span className="text-xs font-medium text-bright bg-darker-slate px-2.5 py-1 rounded-full border border-border-slate">{currentConfig}</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Simple Tab Navigation */}
-          <div className="flex border-b border-purple-100 px-2">
+          <div className="flex border-b border-border-slate px-2 bg-darker-slate">
             <button
               onClick={() => setActiveScreen('controls')}
               className={`py-3 px-4 text-lg transition border-b-2 ${
                 activeScreen === 'controls'
-                  ? 'border-purple-600 text-purple-600'
-                  : 'border-transparent text-slate-400 hover:text-slate-600'
+                  ? 'border-blue-500 text-blue-400'
+                  : 'border-transparent text-muted hover:text-bright'
               }`}
             >
               ⚙️
@@ -132,7 +160,7 @@ export default function Simulator() {
           </div>
 
           {/* Screen Content - With Background */}
-          <div className="p-6 flex-1 bg-slate-50 overflow-hidden">
+          <div className="p-6 flex-1 bg-darker-navy overflow-hidden">
             {/* Controls Screen - Split Layout */}
             {activeScreen === 'controls' && (
               <div className="grid grid-cols-5 gap-6 h-full">
@@ -149,66 +177,114 @@ export default function Simulator() {
                 </div>
 
                 {/* RIGHT: Live Fiscal Status Panel (60%) */}
-                <div className="col-span-3 bg-slate-900 rounded-lg p-8 text-white overflow-y-auto" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.15)' }}>
+                <div
+                  className={`col-span-3 rounded-lg p-8 text-white overflow-y-auto ${
+                    result.balance.surplusDeficit >= 0
+                      ? 'bg-dark-slate glow-border-green pulse-glow-green'
+                      : 'bg-dark-slate glow-border-red pulse-glow-red'
+                  }`}
+                >
                   <div className="space-y-8">
-                    {/* Status Indicator */}
+                    {/* Status Indicator - HERO DISPLAY */}
                     <div>
-                      <p className="text-sm font-semibold text-slate-400 uppercase tracking-wide mb-3">System Status</p>
-                      <div className="flex items-baseline gap-4">
-                        <div className="flex items-center gap-3">
-                          <div className={`w-4 h-4 rounded-full ${result.balance.surplusDeficit >= 0 ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                          <p className="text-3xl font-bold">{result.balance.surplusDeficit >= 0 ? 'SOLVENT' : 'DEFICIT'}</p>
-                        </div>
+                      <p className="text-sm font-semibold text-muted uppercase tracking-wider mb-3">
+                        System Status
+                      </p>
+                      <div className="flex items-center gap-4 mb-4">
+                        <div
+                          className={`w-5 h-5 rounded-full pulse-dot ${
+                            result.balance.surplusDeficit >= 0 ? 'bg-green-500' : 'bg-red-500'
+                          }`}
+                        />
+                        <p className="text-4xl font-bold text-bright">
+                          {result.balance.surplusDeficit >= 0 ? 'SOLVENT' : 'DEFICIT'}
+                        </p>
                       </div>
-                      <p className="text-4xl font-bold mt-3" style={{ color: result.balance.surplusDeficit >= 0 ? '#10B981' : '#EF4444' }}>
-                        {result.balance.surplusDeficit >= 0 ? '+' : ''}{(result.balance.surplusDeficit / 1e9).toFixed(1)}B
+
+                      {/* HERO NUMBER - 60px dramatic display */}
+                      <p
+                        className="font-bold leading-none"
+                        style={{
+                          fontSize: '60px',
+                          color: result.balance.surplusDeficit >= 0 ? '#10B981' : '#EF4444',
+                          textShadow: result.balance.surplusDeficit >= 0
+                            ? '0 0 20px rgba(16, 185, 129, 0.5)'
+                            : '0 0 20px rgba(239, 68, 68, 0.5)'
+                        }}
+                      >
+                        {result.balance.surplusDeficit >= 0 ? '+' : ''}{animatedBalance}
+                      </p>
+                      <p className="text-xs text-dimmed mt-2 uppercase tracking-wide">
+                        Fiscal Balance
                       </p>
                     </div>
 
-                    {/* Revenue & Obligations */}
-                    <div className="space-y-4 border-t border-slate-700 pt-6">
+                    {/* Revenue & Obligations - Enhanced Progress Bars */}
+                    <div className="space-y-5 border-t border-border-slate pt-6">
                       <div>
-                        <div className="flex justify-between items-center mb-2">
-                          <p className="text-sm text-slate-300">Revenue</p>
-                          <p className="text-xl font-bold text-emerald-400">${(result.revenue.totalRevenue / 1e12).toFixed(2)}T</p>
+                        <div className="flex justify-between items-center mb-3">
+                          <p className="text-sm text-muted uppercase tracking-wide">Revenue</p>
+                          <p className="text-2xl font-bold text-emerald-400">
+                            ${animatedRevenue}
+                          </p>
                         </div>
-                        <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
-                          <div className="bg-emerald-500 h-full rounded-full" style={{ width: '75%' }}></div>
+                        <div className="relative w-full bg-darker-navy rounded-full h-3 overflow-hidden border border-emerald-900">
+                          <div
+                            className="bg-gradient-to-r from-emerald-600 to-emerald-400 h-full rounded-full slider-track-glow-green transition-all duration-500"
+                            style={{
+                              width: `${Math.min(100, (result.revenue.totalRevenue / (result.revenue.totalRevenue + result.obligations.totalObligations)) * 100)}%`
+                            }}
+                          />
                         </div>
                       </div>
+
                       <div>
-                        <div className="flex justify-between items-center mb-2">
-                          <p className="text-sm text-slate-300">Obligations</p>
-                          <p className="text-xl font-bold text-orange-400">${(result.obligations.totalObligations / 1e12).toFixed(2)}T</p>
+                        <div className="flex justify-between items-center mb-3">
+                          <p className="text-sm text-muted uppercase tracking-wide">Obligations</p>
+                          <p className="text-2xl font-bold text-orange-400">
+                            ${animatedObligations}
+                          </p>
                         </div>
-                        <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
-                          <div className="bg-orange-500 h-full rounded-full" style={{ width: '70%' }}></div>
+                        <div className="relative w-full bg-darker-navy rounded-full h-3 overflow-hidden border border-orange-900">
+                          <div
+                            className="bg-gradient-to-r from-orange-600 to-orange-400 h-full rounded-full transition-all duration-500"
+                            style={{
+                              width: `${Math.min(100, (result.obligations.totalObligations / (result.revenue.totalRevenue + result.obligations.totalObligations)) * 100)}%`,
+                              boxShadow: '0 2px 12px rgba(251, 146, 60, 0.4)'
+                            }}
+                          />
                         </div>
                       </div>
                     </div>
 
-                    {/* Impact Indicator */}
-                    <div className="bg-slate-800 rounded-lg p-4 border border-slate-700">
-                      <p className="text-xs text-slate-400 mb-2">Live Impact</p>
-                      <p className="text-2xl font-bold text-blue-400">
-                        {result.balance.surplusDeficit >= 0 ? '+' : ''}{(result.balance.surplusDeficit / 1e9).toFixed(1)}B
+                    {/* Impact Indicator - Refined */}
+                    <div className="bg-darker-navy rounded-lg p-5 border border-border-slate glow-border-blue">
+                      <p className="text-xs text-muted uppercase tracking-wide mb-3">Live Impact</p>
+                      <p className="text-3xl font-bold text-blue-400">
+                        {result.balance.surplusDeficit >= 0 ? '+' : ''}{animatedBalance}
                       </p>
-                      <p className="text-xs text-slate-400 mt-1">Change in fiscal balance</p>
+                      <p className="text-xs text-dimmed mt-2">Change in fiscal balance</p>
                     </div>
 
-                    {/* Key Metrics Summary */}
-                    <div className="space-y-3 border-t border-slate-700 pt-6">
+                    {/* Key Metrics Summary - Refined Typography */}
+                    <div className="space-y-3 border-t border-border-slate pt-6">
                       <div className="flex justify-between text-sm">
-                        <span className="text-slate-400">UBI Cost</span>
-                        <span className="font-semibold">${(result.obligations.ubiCost / 1e12).toFixed(2)}T</span>
+                        <span className="text-muted">UBI Cost</span>
+                        <span className="font-semibold text-bright">
+                          ${animatedUbiCost}
+                        </span>
                       </div>
                       <div className="flex justify-between text-sm">
-                        <span className="text-slate-400">Token Tax Revenue</span>
-                        <span className="font-semibold text-blue-400">${(result.revenue.tokenTaxRevenue / 1e12).toFixed(2)}T</span>
+                        <span className="text-muted">Token Tax Revenue</span>
+                        <span className="font-semibold text-blue-400">
+                          ${animatedTokenTax}
+                        </span>
                       </div>
                       <div className="flex justify-between text-sm">
-                        <span className="text-slate-400">Tax Rate</span>
-                        <span className="font-semibold">{(tokenTaxRate * 100).toFixed(2)}%</span>
+                        <span className="text-muted">Tax Rate</span>
+                        <span className="font-semibold text-bright">
+                          {(tokenTaxRate * 100).toFixed(2)}%
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -242,26 +318,26 @@ export default function Simulator() {
           </div>
 
           {/* Footer Navigation - Enhanced */}
-          <div className="px-5 py-4 border-t border-slate-200 flex justify-between items-center">
+          <div className="px-5 py-4 border-t border-border-slate bg-darker-slate flex justify-between items-center">
             <button
               onClick={() => {
                 const screens: Array<typeof activeScreen> = ['controls', 'scenarios', 'results', 'charts'];
                 const current = screens.indexOf(activeScreen);
                 if (current > 0) setActiveScreen(screens[current - 1]);
               }}
-              className="text-purple-600 hover:text-purple-700 font-semibold text-sm transition"
+              className="text-blue-400 hover:text-blue-300 font-semibold text-sm transition"
             >
               ← Back
             </button>
             <div className="flex flex-col items-center gap-1.5">
               <div className="flex gap-1 items-center">
                 {['controls', 'scenarios', 'results', 'charts'].map((screen, idx) => (
-                  <span key={screen} className={`text-sm ${activeScreen === screen || ['controls', 'scenarios', 'results', 'charts'].indexOf(activeScreen) > idx ? 'text-slate-700' : 'text-slate-300'}`}>
+                  <span key={screen} className={`text-sm ${activeScreen === screen || ['controls', 'scenarios', 'results', 'charts'].indexOf(activeScreen) > idx ? 'text-bright' : 'text-muted'}`}>
                     {activeScreen === screen || ['controls', 'scenarios', 'results', 'charts'].indexOf(activeScreen) > idx ? '●' : '○'}
                   </span>
                 ))}
               </div>
-              <span className="text-xs text-slate-600 font-medium">
+              <span className="text-xs text-dimmed font-medium">
                 Step {['controls', 'scenarios', 'results', 'charts'].indexOf(activeScreen) + 1} — {
                   activeScreen === 'controls' ? 'Configure' :
                   activeScreen === 'scenarios' ? 'Quick Scenarios' :
@@ -276,7 +352,7 @@ export default function Simulator() {
                 const current = screens.indexOf(activeScreen);
                 if (current < screens.length - 1) setActiveScreen(screens[current + 1]);
               }}
-              className="text-purple-600 hover:text-purple-700 font-semibold text-sm transition"
+              className="text-blue-400 hover:text-blue-300 font-semibold text-sm transition"
             >
               Next →
             </button>
