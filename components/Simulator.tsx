@@ -332,12 +332,12 @@ export default function Simulator() {
             <div className="flex flex-col items-center gap-1.5">
               <div className="flex gap-1 items-center">
                 {['controls', 'scenarios', 'results', 'charts'].map((screen, idx) => (
-                  <span key={screen} className={`text-sm ${activeScreen === screen || ['controls', 'scenarios', 'results', 'charts'].indexOf(activeScreen) > idx ? 'text-bright' : 'text-muted'}`}>
+                  <span key={screen} className={`text-sm ${activeScreen === screen || ['controls', 'scenarios', 'results', 'charts'].indexOf(activeScreen) > idx ? 'text-white' : 'text-gray-500'}`}>
                     {activeScreen === screen || ['controls', 'scenarios', 'results', 'charts'].indexOf(activeScreen) > idx ? '●' : '○'}
                   </span>
                 ))}
               </div>
-              <span className="text-xs text-dimmed font-medium">
+              <span className="text-xs text-white font-medium">
                 Step {['controls', 'scenarios', 'results', 'charts'].indexOf(activeScreen) + 1} — {
                   activeScreen === 'controls' ? 'Configure' :
                   activeScreen === 'scenarios' ? 'Quick Scenarios' :

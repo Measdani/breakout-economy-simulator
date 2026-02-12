@@ -13,9 +13,9 @@ const PRESETS = [
     icon: '⚖️',
     description: 'Default moderate policy',
     color: 'from-blue-400 to-blue-600',
-    textColor: 'text-blue-700',
-    bgColor: 'bg-blue-50',
-    borderColor: 'border-blue-300',
+    textColor: 'text-blue-300',
+    bgColor: '#1E3A5F',
+    borderColor: 'border-blue-400',
     config: {
       tokenTaxRate: 0.0035,
       ubiAnnualPerAdult: 12000,
@@ -27,9 +27,9 @@ const PRESETS = [
     icon: '📈',
     description: 'Lower taxes, higher UBI',
     color: 'from-green-400 to-green-600',
-    textColor: 'text-green-700',
-    bgColor: 'bg-green-50',
-    borderColor: 'border-green-300',
+    textColor: 'text-green-300',
+    bgColor: '#1E3A5F',
+    borderColor: 'border-green-400',
     config: {
       tokenTaxRate: 0.002,
       ubiAnnualPerAdult: 15000,
@@ -41,9 +41,9 @@ const PRESETS = [
     icon: '🛡️',
     description: 'Higher taxes, robust UBI',
     color: 'from-orange-400 to-orange-600',
-    textColor: 'text-orange-700',
-    bgColor: 'bg-orange-50',
-    borderColor: 'border-orange-300',
+    textColor: 'text-orange-300',
+    bgColor: '#1E3A5F',
+    borderColor: 'border-orange-400',
     config: {
       tokenTaxRate: 0.005,
       ubiAnnualPerAdult: 16000,
@@ -55,9 +55,9 @@ const PRESETS = [
     icon: '⚡',
     description: 'Low taxes, lean support',
     color: 'from-purple-400 to-purple-600',
-    textColor: 'text-purple-700',
-    bgColor: 'bg-purple-50',
-    borderColor: 'border-purple-300',
+    textColor: 'text-purple-300',
+    bgColor: '#1E3A5F',
+    borderColor: 'border-purple-400',
     config: {
       tokenTaxRate: 0.0015,
       ubiAnnualPerAdult: 8000,
@@ -77,7 +77,7 @@ export default function PresetScenarios({ onSelectPreset }: PresetScenariosProps
   return (
     <div className="space-y-3 overflow-hidden">
       <div className="flex flex-col items-center">
-        <h3 className="text-sm font-semibold text-slate-900 mb-3">Quick Scenarios</h3>
+        <h3 className="text-sm font-semibold text-white mb-3">Quick Scenarios</h3>
         <div className="inline-grid grid-cols-2 gap-2 overflow-hidden">
           {PRESETS.map((preset) => {
             const isSelected = selectedPreset === preset.name;
@@ -97,7 +97,7 @@ export default function PresetScenarios({ onSelectPreset }: PresetScenariosProps
                     <div className={`font-bold text-xs ${preset.textColor} mb-0.5`}>
                       {preset.name}
                     </div>
-                    <div className="text-xs text-slate-600 line-clamp-2">
+                    <div className="text-xs text-gray-300 line-clamp-2">
                       {preset.description}
                     </div>
                   </div>
