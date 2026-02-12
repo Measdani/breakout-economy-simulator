@@ -156,12 +156,12 @@ export default function Simulator() {
                       <p className="text-sm font-semibold text-slate-400 uppercase tracking-wide mb-3">System Status</p>
                       <div className="flex items-baseline gap-4">
                         <div className="flex items-center gap-3">
-                          <div className={`w-4 h-4 rounded-full ${result.surplusDeficit >= 0 ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                          <p className="text-3xl font-bold">{result.surplusDeficit >= 0 ? 'SOLVENT' : 'DEFICIT'}</p>
+                          <div className={`w-4 h-4 rounded-full ${result.balance.surplusDeficit >= 0 ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                          <p className="text-3xl font-bold">{result.balance.surplusDeficit >= 0 ? 'SOLVENT' : 'DEFICIT'}</p>
                         </div>
                       </div>
-                      <p className="text-4xl font-bold mt-3" style={{ color: result.surplusDeficit >= 0 ? '#10B981' : '#EF4444' }}>
-                        {result.surplusDeficit >= 0 ? '+' : ''}{(result.surplusDeficit / 1e9).toFixed(1)}B
+                      <p className="text-4xl font-bold mt-3" style={{ color: result.balance.surplusDeficit >= 0 ? '#10B981' : '#EF4444' }}>
+                        {result.balance.surplusDeficit >= 0 ? '+' : ''}{(result.balance.surplusDeficit / 1e9).toFixed(1)}B
                       </p>
                     </div>
 
@@ -170,7 +170,7 @@ export default function Simulator() {
                       <div>
                         <div className="flex justify-between items-center mb-2">
                           <p className="text-sm text-slate-300">Revenue</p>
-                          <p className="text-xl font-bold text-emerald-400">${(result.totalRevenue / 1e12).toFixed(2)}T</p>
+                          <p className="text-xl font-bold text-emerald-400">${(result.revenue.totalRevenue / 1e12).toFixed(2)}T</p>
                         </div>
                         <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
                           <div className="bg-emerald-500 h-full rounded-full" style={{ width: '75%' }}></div>
@@ -179,7 +179,7 @@ export default function Simulator() {
                       <div>
                         <div className="flex justify-between items-center mb-2">
                           <p className="text-sm text-slate-300">Obligations</p>
-                          <p className="text-xl font-bold text-orange-400">${(result.totalObligations / 1e12).toFixed(2)}T</p>
+                          <p className="text-xl font-bold text-orange-400">${(result.obligations.totalObligations / 1e12).toFixed(2)}T</p>
                         </div>
                         <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
                           <div className="bg-orange-500 h-full rounded-full" style={{ width: '70%' }}></div>
@@ -191,7 +191,7 @@ export default function Simulator() {
                     <div className="bg-slate-800 rounded-lg p-4 border border-slate-700">
                       <p className="text-xs text-slate-400 mb-2">Live Impact</p>
                       <p className="text-2xl font-bold text-blue-400">
-                        {result.surplusDeficit >= 0 ? '+' : ''}{(result.surplusDeficit / 1e9).toFixed(1)}B
+                        {result.balance.surplusDeficit >= 0 ? '+' : ''}{(result.balance.surplusDeficit / 1e9).toFixed(1)}B
                       </p>
                       <p className="text-xs text-slate-400 mt-1">Change in fiscal balance</p>
                     </div>
@@ -200,11 +200,11 @@ export default function Simulator() {
                     <div className="space-y-3 border-t border-slate-700 pt-6">
                       <div className="flex justify-between text-sm">
                         <span className="text-slate-400">UBI Cost</span>
-                        <span className="font-semibold">${(result.ubiCost / 1e12).toFixed(2)}T</span>
+                        <span className="font-semibold">${(result.obligations.ubiCost / 1e12).toFixed(2)}T</span>
                       </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-slate-400">Token Tax Revenue</span>
-                        <span className="font-semibold text-blue-400">${(result.tokenTaxRevenue / 1e12).toFixed(2)}T</span>
+                        <span className="font-semibold text-blue-400">${(result.revenue.tokenTaxRevenue / 1e12).toFixed(2)}T</span>
                       </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-slate-400">Tax Rate</span>
