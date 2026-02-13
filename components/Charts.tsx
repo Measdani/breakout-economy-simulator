@@ -114,8 +114,8 @@ export default function Charts({ result, config }: ChartsProps) {
         <div className="bg-slate-900 text-white p-3 rounded-lg shadow-lg text-sm border border-slate-700">
           <p className="font-bold mb-2">${(props.label / 1000).toFixed(0)}k Income</p>
           <div className="space-y-1">
-            <p className="text-green-400">UBI: {formatCurrency(props.payload[0].value)}</p>
-            <p className="text-purple-400">Supplement: {formatCurrency(props.payload[1].value)}</p>
+            <p style={{ color: '#4ade80' }}>UBI: {formatCurrency(props.payload[0].value)}</p>
+            <p style={{ color: '#c084fc' }}>Supplement: {formatCurrency(props.payload[1].value)}</p>
           </div>
         </div>
       );
