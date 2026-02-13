@@ -68,7 +68,7 @@ export default function Charts({ result, config }: ChartsProps) {
   return (
     <div className="space-y-8">
       {/* Revenue Breakdown */}
-      <div className="bg-white rounded-lg shadow-lg p-6">
+      <div className="bg-white rounded-lg shadow-lg p-6 glow-border-green">
         <h3 className="text-lg font-bold text-slate-900 mb-4">Revenue Sources (Billions)</h3>
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>
@@ -92,7 +92,7 @@ export default function Charts({ result, config }: ChartsProps) {
       </div>
 
       {/* Obligations Breakdown */}
-      <div className="bg-white rounded-lg shadow-lg p-6">
+      <div className="bg-white rounded-lg shadow-lg p-6 glow-border-red">
         <h3 className="text-lg font-bold text-slate-900 mb-4">Budget Obligations (Billions)</h3>
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>
@@ -116,7 +116,7 @@ export default function Charts({ result, config }: ChartsProps) {
       </div>
 
       {/* Supplement Curve */}
-      <div className="bg-white rounded-lg shadow-lg p-6">
+      <div className="bg-white rounded-lg shadow-lg p-6 glow-border-blue">
         <h3 className="text-lg font-bold text-slate-900 mb-4">Supplement & UBI by Earned Income</h3>
         <p className="text-sm text-slate-600 mb-4">
           Shows how UBI + supplement varies with earned income. No welfare cliffs—net income always increases.

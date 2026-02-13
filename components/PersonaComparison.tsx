@@ -70,7 +70,7 @@ export default function PersonaComparison({ personas }: PersonaComparisonProps) 
   return (
     <div className="space-y-6">
       {/* Chart Insight */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 glow-border-blue">
         <p className="text-sm text-blue-900">
           <span className="font-semibold">💡 </span>
           {getChartInsight()}
@@ -78,7 +78,7 @@ export default function PersonaComparison({ personas }: PersonaComparisonProps) 
       </div>
 
       {/* Comparison Chart */}
-      <div className="bg-white rounded-lg shadow-lg p-6">
+      <div className="bg-white rounded-lg shadow-lg p-6 glow-border-blue">
         <h3 className="text-lg font-bold text-slate-900 mb-4">Persona Income Breakdown</h3>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
@@ -96,7 +96,7 @@ export default function PersonaComparison({ personas }: PersonaComparisonProps) 
       </div>
 
       {/* Detailed Persona View */}
-      <div className="bg-white rounded-lg shadow-lg p-6">
+      <div className="bg-white rounded-lg shadow-lg p-6 glow-border-blue">
         <h3 className="text-lg font-bold text-slate-900 mb-4">Detailed Breakdown</h3>
         <div className="grid grid-cols-4 gap-2 mb-6">
           {personas.map((persona) => (

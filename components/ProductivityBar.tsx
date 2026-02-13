@@ -88,7 +88,7 @@ export default function ProductivityBar({ personas }: ProductivityBarProps) {
   const insights = getShortInsights(incentiveScore);
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 space-y-5">
+    <div className="bg-white rounded-lg shadow-lg p-6 space-y-5 glow-border-green">
       {/* Header with Large Score */}
       <div className="text-center space-y-2">
         <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">

@@ -45,7 +45,7 @@ export default function ResultsDisplay({ result }: ResultsDisplayProps) {
       </div>
 
       {/* Revenue Card */}
-      <div className="bg-white rounded-lg shadow-lg p-6">
+      <div className="bg-white rounded-lg shadow-lg p-6 glow-border-green">
         <h3 className="text-lg font-bold text-slate-900 mb-4">Revenue</h3>
         <div className="space-y-3">
           <div className="flex justify-between items-center pb-3 border-b">
@@ -76,7 +76,7 @@ export default function ResultsDisplay({ result }: ResultsDisplayProps) {
       </div>
 
       {/* Obligations Card */}
-      <div className="bg-white rounded-lg shadow-lg p-6">
+      <div className="bg-white rounded-lg shadow-lg p-6 glow-border-red">
         <h3 className="text-lg font-bold text-slate-900 mb-4">Obligations</h3>
         <div className="space-y-3">
           <div className="flex justify-between items-center pb-3 border-b">
