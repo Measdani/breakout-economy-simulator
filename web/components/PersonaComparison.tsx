@@ -128,25 +128,25 @@ export default function PersonaComparison({ personas }: PersonaComparisonProps) 
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="p-4 bg-blue-50 rounded-lg">
-              <p className="text-xs text-slate-600 mb-1">Earned Income</p>
+              <p className="text-xs text-slate-600 mb-1">💼 Earned Income</p>
               <p className="text-2xl font-bold text-blue-600">
                 {formatCurrency(selectedPersona.earnedIncome)}
               </p>
             </div>
             <div className="p-4 bg-green-50 rounded-lg">
-              <p className="text-xs text-slate-600 mb-1">Base UBI</p>
+              <p className="text-xs text-slate-600 mb-1">🎁 Base UBI</p>
               <p className="text-2xl font-bold text-green-600">
                 {formatCurrency(selectedPersona.ubi)}
               </p>
             </div>
             <div className="p-4 bg-purple-50 rounded-lg">
-              <p className="text-xs text-slate-600 mb-1">Supplement Bonus</p>
+              <p className="text-xs text-slate-600 mb-1">💝 Supplement Bonus</p>
               <p className="text-2xl font-bold text-purple-600">
                 {formatCurrency(selectedPersona.supplement)}
               </p>
             </div>
             <div className="p-4 bg-red-50 rounded-lg">
-              <p className="text-xs text-slate-600 mb-1">Income Tax</p>
+              <p className="text-xs text-slate-600 mb-1">💸 Income Tax</p>
               <p className="text-2xl font-bold text-red-600">
                 -{formatCurrency(selectedPersona.incomeTax)}
               </p>
@@ -155,7 +155,7 @@ export default function PersonaComparison({ personas }: PersonaComparisonProps) 
 
           {/* Net Income Summary */}
           <div className="p-6 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg text-white">
-            <p className="text-sm opacity-90 mb-2">NET INCOME (Take Home)</p>
+            <p className="text-sm opacity-90 mb-2">💰 NET INCOME (Take Home)</p>
             <p className="text-4xl font-bold">{formatCurrency(selectedPersona.netIncome)}</p>
             <p className="text-sm opacity-75 mt-2">
               +{((selectedPersona.netIncome / selectedPersona.earnedIncome) * 100).toFixed(0)}% of earned income
