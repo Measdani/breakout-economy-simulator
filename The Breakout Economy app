@@ -1,0 +1,185 @@
+# Breakout Economy — Policy Flight Simulator (SPEC v0.1)
+
+## 1) What we are building (Overview)
+We are building an interactive “Policy Flight Simulator” that lets users explore a fiscally-solvent Universal Basic Income (UBI) model funded by a Token Tax on electronic value flow, plus a simplified income tax structure and captured welfare efficiency savings. Users adjust key policy parameters with sliders and immediately see the impact on total revenue, total obligations, surplus/deficit, and example “persona” outcomes across income brackets. The system is educational and exploratory: it makes the mechanics transparent, interactive, and testable—without storing personal data or providing financial advice.
+
+---
+
+## 2) Primary goals (Product outcomes)
+- Make UBI + Token Tax mechanics understandable through real-time simulation.
+- Demonstrate how “incentive slopes” avoid welfare cliffs (work is always rewarded).
+- Provide transparent fiscal solvency outputs (surplus/deficit) with clear assumptions.
+- Provide a simple v1 interface that is engaging, fast, and deterministic.
+
+---
+
+## 3) What is in scope (v0.1 – v1.0)
+### In scope
+- A deterministic math engine (source of truth) that computes:
+  - Token Tax revenue from “Flow Base” and “Tax Rate”
+  - Income tax revenue from tier rules
+  - Welfare savings credit
+  - UBI obligations and total obligations
+  - Net surplus/deficit
+  - Citizen supplement curve (Apex + Glide + Breakout point)
+  - Persona comparison outputs for multiple earned-income levels
+- A UI with sliders and immediate feedback (red/green solvency indicator)
+- Basic charts/tables (by v0.3)
+- Educational tooltips / glossary (by v0.4)
+- Optional crowdsourcing module (submit configurations + leaderboard) (v1.0)
+
+### Out of scope (for now)
+- Predictive macroeconomic modeling (inflation, GDP feedback loops)
+- Financial advice, tax filing guidance, or user-specific recommendations
+- Storing user PII or linking configurations to identities
+- Real payments, real token taxation, or integration with government systems
+
+---
+
+## 4) Non-functional requirements (Engineering constraints)
+- Deterministic: same inputs always produce same outputs.
+- Fast: UI updates in < 500ms for recalculation.
+- Transparent: formulas visible in-app (at least in a “How it works” section).
+- No PII required. Anonymous analytics/config submissions only (optional).
+- Clear disclaimers: educational simulation only.
+
+---
+
+## 5) Core model assumptions (Defaults; adjustable where noted)
+### Constants (default)
+- Adult population: 265,000,000
+- Annual electronic flow base: 1,000,000,000,000,000 (1 Quadrillion)
+- Welfare savings credit: 630,000,000,000 (630B)
+- Government operating requirement: 2,740,000,000,000 (2.74T)
+- Base UBI per adult (annual): 12,000
+
+### Default policy parameters (user adjustable)
+- Token tax rate: 0.35% (0.0035)
+- Breakout point (income threshold): 60,000
+- Tier 1 bracket: 60,001–135,000 at 19% marginal
+- Tier 2 bracket: >135,000 at 29% marginal
+- Supplement curve:
+  - Apex earned income point: 24,000
+  - Bonus at apex: 6,000
+  - Glide taper ends at breakout point: 60,000
+  - Taper slope: -0.16 (meaning: benefits reduce by $0.16 per $1 earned between apex and breakout)
+
+Note: The supplement curve should ensure "no cliffs" and never reduce net income as earned income rises.
+
+---
+
+## 6) Inputs and outputs (API contract for the math engine)
+### Inputs (PolicyConfig)
+- tokenTaxRate (0.001–0.01 allowed)
+- flowBaseAnnual (default 1e15; optional slider in later version)
+- ubiAnnualPerAdult (0–20000 allowed)
+- adultPopulation (default 265e6; constant for v0.x)
+- welfareSavingsCredit (default 630e9)
+- govtOperatingRequirement (default 2.74e12)
+- breakoutPoint (30000–80000 allowed)
+- tier1Rate (default 0.19)
+- tier2Rate (default 0.29)
+- tier1Start (default breakoutPoint)
+- tier2Start (default 135000)
+- supplementApexIncome (default 24000)
+- supplementApexBonus (default 6000)
+- supplementGlideSlope (default -0.16)
+
+### Outputs (SimulationResult)
+- revenue:
+  - tokenTaxRevenue
+  - incomeTaxRevenue (if modeled; may be simplified in v0.1)
+  - welfareSavingsCredit
+  - totalRevenue
+- obligations:
+  - ubiCost
+  - govtOperatingRequirement
+  - totalObligations
+- balance:
+  - surplusDeficit (totalRevenue - totalObligations)
+  - isSolvent (boolean)
+- citizenModel:
+  - supplementFunctionSummary (human readable)
+  - personaOutcomes[]:
+    - label (Starter/Professional/Manager/Executive)
+    - earnedIncome
+    - ubi
+    - supplement
+    - incomeTax
+    - netIncome (earnedIncome + ubi + supplement - incomeTax)
+- diagnostics:
+  - warnings[] (e.g., “Token tax rate unusually high—may imply capital flight risk” as informational only)
+
+---
+
+## 7) Supplement curve (definition)
+We will implement a “Floor & Launchpad” supplement that:
+- Gives everyone base UBI.
+- Adds a bonus/supplement that peaks at earned income = 24,000 (Apex).
+- Tapers down smoothly until earned income = Breakout Point.
+- Never creates a cliff (no sudden drops).
+- Never makes net income decrease with higher earnings.
+
+Reference behavior:
+- At earned income 24,000: supplement = 6,000
+- At earned income 60,000: supplement = 0
+
+---
+
+## 8) UI requirements (v0.2+)
+### v0.2 UI (Working simulator)
+- 3 sliders:
+  1) Token Tax Rate
+  2) UBI Floor
+  3) Breakout Point
+- Output cards:
+  - Total Revenue
+  - Total Obligations
+  - Surplus/Deficit
+- Red/Green solvency indicator:
+  - Green if surplus >= 0
+  - Red if deficit < 0
+- Persona table:
+  - Show net income for 4 personas at fixed earned incomes
+
+### v0.3 additions
+- Revenue breakdown chart
+- Obligations breakdown chart
+- Persona comparison chart/table enhancements
+
+### v0.4 additions
+- Glossary tooltips
+- “How it works” explainer section
+
+### v1.0 additions (optional)
+- Submit configuration (anonymous)
+- Leaderboard (top surplus / most balanced)
+- Export config as shareable link or JSON
+
+---
+
+## 9) Acceptance criteria (Definition of Done for Part 0)
+Part 0 is complete when:
+- This SPEC is stored as `SPEC.md` and/or in Notion.
+- All defaults and ranges are defined.
+- Inputs/outputs are clearly listed.
+- Supplement curve behavior is explicitly defined.
+- A versioned release sequence (v0.1 → v1.0) is captured.
+
+---
+
+## 10) Version plan (Release gates)
+- v0.1: Logic engine + unit tests (no UI required)
+- v0.2: UI sliders + output cards + solvency indicator
+- v0.3: Charts + improved persona visualization
+- v0.4: Educational layer (glossary + explainers) + staging readiness
+- v1.0: Crowdsourcing + leaderboard + production hardening
+
+---
+
+## 11) Engineering notes (implementation guidance)
+- Keep the math engine independent from UI (pure function approach).
+- Add unit tests that lock expected outputs for default config.
+- Use numeric formatting helpers for currency and trillions.
+- Include a disclaimer banner in UI: “Educational simulation only.”
+
