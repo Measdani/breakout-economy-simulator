@@ -79,7 +79,7 @@ export default function PersonaComparison({ personas }: PersonaComparisonProps) 
 
       {/* Comparison Chart */}
       <div className="bg-white rounded-lg shadow-lg p-6 glow-border-blue">
-        <h3 className="text-lg font-bold text-slate-900 mb-4">Persona Income Breakdown</h3>
+        <h3 className="text-lg font-bold text-slate-900 mb-4">📊 Persona Income Breakdown</h3>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" opacity={0.3} />
@@ -97,7 +97,7 @@ export default function PersonaComparison({ personas }: PersonaComparisonProps) 
 
       {/* Detailed Persona View */}
       <div className="bg-white rounded-lg shadow-lg p-6 glow-border-blue">
-        <h3 className="text-lg font-bold text-slate-900 mb-4">Detailed Breakdown</h3>
+        <h3 className="text-lg font-bold text-slate-900 mb-4">📋 Detailed Breakdown</h3>
         <div className="grid grid-cols-4 gap-3 mb-6">
           {personas.map((persona, idx) => {
             const colors = ['#3b82f6', '#06b6d4', '#8b5cf6', '#ec4899'];
@@ -164,7 +164,7 @@ export default function PersonaComparison({ personas }: PersonaComparisonProps) 
 
           {/* Incentive Analysis */}
           <div className="p-4 bg-slate-50 rounded-lg">
-            <p className="text-sm font-semibold text-slate-900 mb-3">Work Incentive Analysis</p>
+            <p className="text-sm font-semibold text-slate-900 mb-3">⚡ Work Incentive Analysis</p>
             <div className="space-y-2 text-sm">
               {personas.map((persona, idx) => {
                 const nextPersona = personas[idx + 1];

@@ -128,7 +128,7 @@ export default function ProductivityBar({ personas }: ProductivityBarProps) {
       {/* Key Insights */}
       <div className="space-y-2 pt-4 bg-green-50 rounded-lg p-3" style={{ borderTop: '2px solid #10b981', boxShadow: 'inset 0 1px 0 rgba(16, 185, 129, 0.3)' }}>
         <p className="text-xs font-bold text-green-700 uppercase tracking-widest">
-          Key Insights
+          💡 Key Insights
         </p>
         <div className="space-y-2">
           {insights.map((insight, idx) => (
@@ -143,7 +143,7 @@ export default function ProductivityBar({ personas }: ProductivityBarProps) {
       {/* Key Metric: Net Income Increase */}
       <div className="bg-blue-600 rounded-lg p-4" style={{ border: '2px solid #0d47a1', borderTop: '3px solid #06b6d4', boxShadow: 'inset 0 1px 0 rgba(6, 182, 212, 0.5)' }}>
         <p className="text-xs font-bold text-blue-100 uppercase tracking-widest mb-2">
-          Net Income Impact
+          💰 Net Income Impact
         </p>
         <p className="text-4xl font-bold text-white">{netIncomeIncrease.toFixed(0)}%</p>
         <p className="text-xs text-blue-100 mt-1">increase from lowest to highest earner</p>
@@ -152,7 +152,7 @@ export default function ProductivityBar({ personas }: ProductivityBarProps) {
       {/* Retention by Income Transition */}
       <div className="space-y-3 pt-4" style={{ borderTop: '2px solid #3b82f6', boxShadow: 'inset 0 1px 0 rgba(59, 130, 246, 0.3)' }}>
         <p className="text-xs font-bold text-slate-600 uppercase tracking-widest">
-          Retention by Transition
+          📈 Retention by Transition
         </p>
         <div className="space-y-3">
           {personas.map((persona, idx) => {
