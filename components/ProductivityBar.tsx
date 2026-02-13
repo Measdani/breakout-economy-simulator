@@ -131,32 +131,32 @@ export default function ProductivityBar({ personas }: ProductivityBarProps) {
       </div>
 
       {/* Key Insights */}
-      <div className="space-y-2 border-t border-slate-100 pt-4">
-        <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">
+      <div className="space-y-2 border-t-2 border-slate-200 pt-4 bg-green-50 rounded-lg p-3">
+        <p className="text-xs font-bold text-green-700 uppercase tracking-widest">
           Key Insights
         </p>
-        <div className="space-y-1.5">
+        <div className="space-y-2">
           {insights.map((insight, idx) => (
             <div key={idx} className="flex gap-2 items-start">
-              <span className="font-bold flex-shrink-0" style={{ color: '#10b981' }}>✓</span>
-              <span className="text-xs font-medium text-slate-700">{insight}</span>
+              <span className="font-bold flex-shrink-0 text-green-600 text-lg">✓</span>
+              <span className="text-xs font-semibold text-slate-800">{insight}</span>
             </div>
           ))}
         </div>
       </div>
 
       {/* Key Metric: Net Income Increase */}
-      <div className="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-lg p-4">
-        <p className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">
+      <div className="bg-blue-600 border-2 border-blue-700 rounded-lg p-4">
+        <p className="text-xs font-bold text-blue-100 uppercase tracking-widest mb-2">
           Net Income Impact
         </p>
-        <p className="text-3xl font-bold text-blue-900">{netIncomeIncrease.toFixed(0)}%</p>
-        <p className="text-xs text-blue-700 mt-1">increase from lowest to highest earner</p>
+        <p className="text-4xl font-bold text-white">{netIncomeIncrease.toFixed(0)}%</p>
+        <p className="text-xs text-blue-100 mt-1">increase from lowest to highest earner</p>
       </div>
 
       {/* Retention by Income Transition */}
-      <div className="space-y-3 border-t border-slate-100 pt-4">
-        <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">
+      <div className="space-y-3 border-t-2 border-slate-200 pt-4">
+        <p className="text-xs font-bold text-slate-600 uppercase tracking-widest">
           Retention by Transition
         </p>
         <div className="space-y-3">
@@ -169,16 +169,16 @@ export default function ProductivityBar({ personas }: ProductivityBarProps) {
             const retention = (netDiff / incomeDiff) * 100;
 
             return (
-              <div key={persona.label}>
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-xs font-semibold text-slate-700">
+              <div key={persona.label} className="bg-slate-50 rounded-lg p-3">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-bold text-slate-800">
                     {persona.label} → {nextPersona.label}
                   </span>
-                  <span className="text-sm font-bold" style={{ color: '#10b981' }}>
+                  <span className="text-base font-bold text-blue-600">
                     {retention.toFixed(0)}%
                   </span>
                 </div>
-                <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                <div className="w-full bg-slate-300 rounded-full h-2.5 overflow-hidden shadow-sm">
                   <div
                     className="h-full rounded-full transition-all duration-500"
                     style={{
