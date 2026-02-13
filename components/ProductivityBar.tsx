@@ -146,7 +146,7 @@ export default function ProductivityBar({ personas }: ProductivityBarProps) {
       </div>
 
       {/* Key Metric: Net Income Increase */}
-      <div className="bg-blue-600 border-2 border-blue-700 rounded-lg p-4" style={{ borderTop: '2px solid #06b6d4', boxShadow: 'inset 0 1px 0 rgba(6, 182, 212, 0.3)' }}>
+      <div className="bg-blue-600 rounded-lg p-4" style={{ border: '2px solid #0d47a1', borderTop: '3px solid #06b6d4', boxShadow: 'inset 0 1px 0 rgba(6, 182, 212, 0.5)' }}>
         <p className="text-xs font-bold text-blue-100 uppercase tracking-widest mb-2">
           Net Income Impact
         </p>
