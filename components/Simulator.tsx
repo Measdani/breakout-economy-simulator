@@ -355,11 +355,10 @@ export default function Simulator() {
                 background: '#0F172A',
                 color: '#00D9FF',
                 border: '2px solid #00D9FF',
-                fontSize: '18px',
-                fontWeight: '900',
-                letterSpacing: '0.5px',
-                textShadow: '0 0 10px #00D9FF, 0 0 20px rgba(0, 217, 255, 0.5)',
-                WebkitTextStroke: '0.5px #00D9FF'
+                fontSize: '16px',
+                fontWeight: '700',
+                letterSpacing: '0.3px',
+                textShadow: '0 0 8px rgba(0, 217, 255, 0.6)'
               }}
             >
               ← Back
@@ -400,11 +399,10 @@ export default function Simulator() {
                 background: '#0F172A',
                 color: '#00D9FF',
                 border: '2px solid #00D9FF',
-                fontSize: '18px',
-                fontWeight: '900',
-                letterSpacing: '0.5px',
-                textShadow: '0 0 10px #00D9FF, 0 0 20px rgba(0, 217, 255, 0.5)',
-                WebkitTextStroke: '0.5px #00D9FF'
+                fontSize: '16px',
+                fontWeight: '700',
+                letterSpacing: '0.3px',
+                textShadow: '0 0 8px rgba(0, 217, 255, 0.6)'
               }}
             >
               Next →

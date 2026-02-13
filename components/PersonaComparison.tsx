@@ -35,21 +35,61 @@ export default function PersonaComparison({ personas }: PersonaComparisonProps) 
     return `${slope}% retention`;
   };
 
+  // Calculate key insight
+  const getChartInsight = () => {
+    const starter = personas[0];
+    const executive = personas[personas.length - 1];
+    const netIncomeIncrease = ((executive.netIncome / starter.netIncome) - 1) * 100;
+    return `Net income increases ${netIncomeIncrease.toFixed(0)}% from lowest to highest earner`;
+  };
+
+  const customTooltip = (props: any) => {
+    if (props.active && props.payload && props.payload.length) {
+      const data = props.payload[0].payload;
+      const personaData = personas.find(p => p.label === data.name);
+      if (personaData) {
+        return (
+          <div className="bg-slate-900 text-white p-3 rounded-lg shadow-lg text-sm border border-slate-700">
+            <p className="font-bold mb-2">{personaData.label}</p>
+            <div className="space-y-1">
+              <p>Earned: {formatCurrency(personaData.earnedIncome)}</p>
+              <p className="text-green-400">UBI: {formatCurrency(personaData.ubi)}</p>
+              <p className="text-purple-400">Supplement: {formatCurrency(personaData.supplement)}</p>
+              <p className="text-red-400">Tax: {formatCurrency(personaData.incomeTax)}</p>
+              <p className="border-t border-slate-600 pt-1 mt-1 font-bold">
+                Net: {formatCurrency(personaData.netIncome)}
+              </p>
+            </div>
+          </div>
+        );
+      }
+    }
+    return null;
+  };
+
   return (
     <div className="space-y-6">
+      {/* Chart Insight */}
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <p className="text-sm text-blue-900">
+          <span className="font-semibold">💡 </span>
+          {getChartInsight()}
+        </p>
+      </div>
+
       {/* Comparison Chart */}
       <div className="bg-white rounded-lg shadow-lg p-6">
-        <h3 className="text-lg font-bold text-slate-900 mb-4">Persona Income Breakdown (Thousands)</h3>
+        <h3 className="text-lg font-bold text-slate-900 mb-4">Persona Income Breakdown</h3>
         <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" />
+          <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" opacity={0.3} />
             <XAxis dataKey="name" />
             <YAxis label={{ value: 'Amount ($K)', angle: -90, position: 'insideLeft' }} />
-            <Tooltip formatter={(value) => `$${(value as number).toFixed(0)}k`} />
+            <Tooltip content={customTooltip} />
             <Legend />
             <Bar dataKey="Earned Income" stackId="a" fill="#3b82f6" />
-            <Bar dataKey="UBI" stackId="a" fill="#10b981" />
-            <Bar dataKey="Supplement" stackId="a" fill="#8b5cf6" />
+            <Bar dataKey="UBI" stackId="a" fill="#22c55e" />
+            <Bar dataKey="Supplement" stackId="a" fill="#a78bfa" />
             <Bar dataKey="Income Tax" stackId="a" fill="#ef4444" />
           </BarChart>
         </ResponsiveContainer>
