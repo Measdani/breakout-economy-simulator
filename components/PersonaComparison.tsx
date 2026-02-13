@@ -49,14 +49,14 @@ export default function PersonaComparison({ personas }: PersonaComparisonProps) 
       const personaData = personas.find(p => p.label === data.name);
       if (personaData) {
         return (
-          <div className="bg-slate-900 text-white p-3 rounded-lg shadow-lg text-sm border border-slate-700">
-            <p className="font-bold mb-2">{personaData.label}</p>
-            <div className="space-y-1">
+          <div style={{ background: '#1e293b', color: 'white', padding: '12px', borderRadius: '8px', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)', fontSize: '14px', border: '1px solid #334155' }}>
+            <p style={{ fontWeight: 'bold', marginBottom: '8px' }}>{personaData.label}</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
               <p>Earned: {formatCurrency(personaData.earnedIncome)}</p>
-              <p className="text-green-400">UBI: {formatCurrency(personaData.ubi)}</p>
-              <p className="text-purple-400">Supplement: {formatCurrency(personaData.supplement)}</p>
-              <p className="text-red-400">Tax: {formatCurrency(personaData.incomeTax)}</p>
-              <p className="border-t border-slate-600 pt-1 mt-1 font-bold">
+              <p style={{ color: '#4ade80' }}>UBI: {formatCurrency(personaData.ubi)}</p>
+              <p style={{ color: '#c084fc' }}>Supplement: {formatCurrency(personaData.supplement)}</p>
+              <p style={{ color: '#f87171' }}>Tax: {formatCurrency(personaData.incomeTax)}</p>
+              <p style={{ borderTop: '1px solid #475569', paddingTop: '4px', marginTop: '4px', fontWeight: 'bold' }}>
                 Net: {formatCurrency(personaData.netIncome)}
               </p>
             </div>
