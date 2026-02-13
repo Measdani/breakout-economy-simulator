@@ -204,40 +204,33 @@ export default function PolicySliders({
         context={getBreakoutContext()}
       />
 
-      {/* Reset Button */}
-      <div className="mt-12 pt-8 mb-6">
+      {/* Mode Toggle Cards - Compact 3-column */}
+      <div className="pb-8 mt-12 pt-8">
+        {/* Reset Link */}
         <button
           onClick={onReset}
           style={{
-            width: '100%',
-            padding: '14px 20px',
-            background: 'linear-gradient(135deg, #DC2626, #B91C1C)',
-            border: '2px solid #EF4444',
-            borderRadius: '8px',
-            color: '#FFFFFF',
-            fontSize: '14px',
-            fontWeight: '700',
-            textTransform: 'uppercase',
-            letterSpacing: '0.5px',
+            background: 'none',
+            border: 'none',
+            color: '#64748b',
+            fontSize: '13px',
             cursor: 'pointer',
-            transition: 'all 0.3s ease',
-            boxShadow: '0 0 15px rgba(220, 38, 38, 0.4)',
+            padding: '0',
+            marginBottom: '12px',
+            transition: 'color 0.2s ease',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = '0 0 25px rgba(220, 38, 38, 0.6)';
-            e.currentTarget.style.transform = 'scale(1.02)';
+            e.currentTarget.style.color = '#94a3b8';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = '0 0 15px rgba(220, 38, 38, 0.4)';
-            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.color = '#64748b';
           }}
         >
-          🔄 Reset to Default
+          ↺ Reset to Default
         </button>
-      </div>
-
-      {/* Mode Toggle Cards - Compact 3-column */}
-      <div className="pb-8">
         <div className="grid grid-cols-3 gap-4">
           <button
             onClick={() => onViewModeChange('revenue')}
