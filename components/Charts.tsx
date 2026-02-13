@@ -76,15 +76,15 @@ export default function Charts({ result, config }: ChartsProps) {
   const revenueTooltip = (props: any) => {
     if (props.active && props.payload && props.payload.length) {
       const data = props.payload[0];
-      const colorClass: { [key: string]: string } = {
-        'Token Tax': 'text-blue-400',
-        'Income Tax': 'text-green-400',
-        'Welfare Savings': 'text-purple-400'
+      const colors: { [key: string]: string } = {
+        'Token Tax': '#60a5fa',
+        'Income Tax': '#4ade80',
+        'Welfare Savings': '#c084fc'
       };
       return (
-        <div className="bg-slate-900 text-white p-3 rounded-lg shadow-lg text-sm border border-slate-700">
-          <p className="font-bold mb-2">{data.name}</p>
-          <p className={colorClass[data.name] || 'text-white'}>${data.value.toFixed(1)}B</p>
+        <div style={{ background: '#1e293b', color: 'white', padding: '12px', borderRadius: '8px', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)', fontSize: '14px', border: '1px solid #334155' }}>
+          <p style={{ fontWeight: 'bold', marginBottom: '8px' }}>{data.name}</p>
+          <p style={{ color: colors[data.name] || 'white' }}>${data.value.toFixed(1)}B</p>
         </div>
       );
     }
@@ -94,14 +94,14 @@ export default function Charts({ result, config }: ChartsProps) {
   const obligationsTooltip = (props: any) => {
     if (props.active && props.payload && props.payload.length) {
       const data = props.payload[0];
-      const colorClass: { [key: string]: string } = {
-        'UBI Cost': 'text-yellow-400',
-        'Govt Operations': 'text-red-400'
+      const colors: { [key: string]: string } = {
+        'UBI Cost': '#facc15',
+        'Govt Operations': '#f87171'
       };
       return (
-        <div className="bg-slate-900 text-white p-3 rounded-lg shadow-lg text-sm border border-slate-700">
-          <p className="font-bold mb-2">{data.name}</p>
-          <p className={colorClass[data.name] || 'text-white'}>${data.value.toFixed(1)}B</p>
+        <div style={{ background: '#1e293b', color: 'white', padding: '12px', borderRadius: '8px', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)', fontSize: '14px', border: '1px solid #334155' }}>
+          <p style={{ fontWeight: 'bold', marginBottom: '8px' }}>{data.name}</p>
+          <p style={{ color: colors[data.name] || 'white' }}>${data.value.toFixed(1)}B</p>
         </div>
       );
     }
@@ -111,11 +111,11 @@ export default function Charts({ result, config }: ChartsProps) {
   const supplementTooltip = (props: any) => {
     if (props.active && props.payload && props.payload.length) {
       return (
-        <div className="bg-slate-900 text-white p-3 rounded-lg shadow-lg text-sm border border-slate-700">
-          <p className="font-bold mb-2">${(props.label / 1000).toFixed(0)}k Income</p>
-          <div className="space-y-1">
-            <p className="text-green-400">UBI: {formatCurrency(props.payload[0].value)}</p>
-            <p className="text-purple-400">Supplement: {formatCurrency(props.payload[1].value)}</p>
+        <div style={{ background: '#1e293b', color: 'white', padding: '12px', borderRadius: '8px', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)', fontSize: '14px', border: '1px solid #334155' }}>
+          <p style={{ fontWeight: 'bold', marginBottom: '8px' }}>${(props.label / 1000).toFixed(0)}k Income</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <p style={{ color: '#4ade80' }}>UBI: {formatCurrency(props.payload[0].value)}</p>
+            <p style={{ color: '#c084fc' }}>Supplement: {formatCurrency(props.payload[1].value)}</p>
           </div>
         </div>
       );
