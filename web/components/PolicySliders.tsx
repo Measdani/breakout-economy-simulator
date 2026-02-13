@@ -211,8 +211,8 @@ export default function PolicySliders({
           style={{
             width: '100%',
             padding: '14px 20px',
-            background: 'linear-gradient(135deg, #EF4444, #DC2626)',
-            border: '2px solid #F87171',
+            background: 'linear-gradient(135deg, #DC2626, #B91C1C)',
+            border: '2px solid #EF4444',
             borderRadius: '8px',
             color: '#FFFFFF',
             fontSize: '14px',
@@ -221,14 +221,14 @@ export default function PolicySliders({
             letterSpacing: '0.5px',
             cursor: 'pointer',
             transition: 'all 0.3s ease',
-            boxShadow: '0 0 15px rgba(239, 68, 68, 0.4)',
+            boxShadow: '0 0 15px rgba(220, 38, 38, 0.4)',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = '0 0 25px rgba(239, 68, 68, 0.6)';
+            e.currentTarget.style.boxShadow = '0 0 25px rgba(220, 38, 38, 0.6)';
             e.currentTarget.style.transform = 'scale(1.02)';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = '0 0 15px rgba(239, 68, 68, 0.4)';
+            e.currentTarget.style.boxShadow = '0 0 15px rgba(220, 38, 38, 0.4)';
             e.currentTarget.style.transform = 'scale(1)';
           }}
         >
@@ -252,8 +252,7 @@ export default function PolicySliders({
             }}
           >
             <div className="text-3xl mb-3">💰</div>
-            <p className="text-sm font-semibold mb-1.5">Revenue</p>
-            <p className="text-xs opacity-90">Funds UBI & ops</p>
+            <p className="text-sm font-semibold">Revenue</p>
           </button>
           <button
             onClick={() => onViewModeChange('social')}
@@ -268,8 +267,7 @@ export default function PolicySliders({
             }}
           >
             <div className="text-3xl mb-3">📊</div>
-            <p className="text-sm font-semibold mb-1.5">Social Floor</p>
-            <p className="text-xs opacity-90">Minimum income</p>
+            <p className="text-sm font-semibold">Social Floor</p>
           </button>
           <button
             onClick={() => onViewModeChange('incentives')}
@@ -284,8 +282,7 @@ export default function PolicySliders({
             }}
           >
             <div className="text-3xl mb-3">🎯</div>
-            <p className="text-sm font-semibold mb-1.5">Incentives</p>
-            <p className="text-xs opacity-90">Work always pays</p>
+            <p className="text-sm font-semibold">Incentives</p>
           </button>
         </div>
       </div>
