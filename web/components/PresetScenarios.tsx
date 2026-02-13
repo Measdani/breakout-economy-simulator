@@ -93,8 +93,8 @@ export default function PresetScenarios({ onSelectPreset }: PresetScenariosProps
     onSelectPreset(config, presetName);
   };
 
-  // Calculate preview for hovered preset
-  const previewPreset = hoveredPreset ? PRESETS.find(p => p.name === hoveredPreset) : selectedPreset ? PRESETS.find(p => p.name === selectedPreset) : null;
+  // Calculate preview for hovered or selected preset (hover takes priority)
+  const previewPreset = (hoveredPreset || selectedPreset) ? PRESETS.find(p => p.name === (hoveredPreset || selectedPreset)) : null;
   const previewConfig: PolicyConfig = previewPreset ? {
     ...DEFAULT_CONFIG,
     ...previewPreset.config,
@@ -171,7 +171,7 @@ export default function PresetScenarios({ onSelectPreset }: PresetScenariosProps
         })}
       </div>
 
-      {/* Preview Section - Now properly centered */}
+      {/* Preview Section - Only visible when selected */}
       {(hoveredPreset || selectedPreset) && (
         <div style={{
           width: '100%',
@@ -244,6 +244,7 @@ export default function PresetScenarios({ onSelectPreset }: PresetScenariosProps
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }
