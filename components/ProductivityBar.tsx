@@ -131,7 +131,7 @@ export default function ProductivityBar({ personas }: ProductivityBarProps) {
       </div>
 
       {/* Key Insights */}
-      <div className="space-y-2 border-t-2 border-slate-200 pt-4 bg-green-50 rounded-lg p-3">
+      <div className="space-y-2 pt-4 bg-green-50 rounded-lg p-3" style={{ borderTop: '2px solid #10b981', boxShadow: 'inset 0 1px 0 rgba(16, 185, 129, 0.3)' }}>
         <p className="text-xs font-bold text-green-700 uppercase tracking-widest">
           Key Insights
         </p>
@@ -155,7 +155,7 @@ export default function ProductivityBar({ personas }: ProductivityBarProps) {
       </div>
 
       {/* Retention by Income Transition */}
-      <div className="space-y-3 border-t-2 border-slate-200 pt-4">
+      <div className="space-y-3 pt-4" style={{ borderTop: '2px solid #3b82f6', boxShadow: 'inset 0 1px 0 rgba(59, 130, 246, 0.3)' }}>
         <p className="text-xs font-bold text-slate-600 uppercase tracking-widest">
           Retention by Transition
         </p>
