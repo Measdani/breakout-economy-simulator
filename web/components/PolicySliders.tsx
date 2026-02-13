@@ -7,6 +7,9 @@ interface PolicySlidersProps {
   onUbiChange: (value: number) => void;
   breakoutPoint: number;
   onBreakoutPointChange: (value: number) => void;
+  viewMode: 'revenue' | 'social' | 'incentives';
+  onViewModeChange: (mode: 'revenue' | 'social' | 'incentives') => void;
+  onReset: () => void;
 }
 
 export default function PolicySliders({
@@ -16,6 +19,9 @@ export default function PolicySliders({
   onUbiChange,
   breakoutPoint,
   onBreakoutPointChange,
+  viewMode,
+  onViewModeChange,
+  onReset,
 }: PolicySlidersProps) {
   const formatPercent = (value: number) => {
     return `${(value * 100).toFixed(2)}%`;
@@ -198,24 +204,89 @@ export default function PolicySliders({
         context={getBreakoutContext()}
       />
 
-      {/* Summary Cards - Compact 3-column */}
-      <div className="mt-12 pt-8">
+      {/* Reset Button */}
+      <div className="mt-12 pt-8 mb-6">
+        <button
+          onClick={onReset}
+          style={{
+            width: '100%',
+            padding: '14px 20px',
+            background: 'linear-gradient(135deg, #EF4444, #DC2626)',
+            border: '2px solid #F87171',
+            borderRadius: '8px',
+            color: '#FFFFFF',
+            fontSize: '14px',
+            fontWeight: '700',
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease',
+            boxShadow: '0 0 15px rgba(239, 68, 68, 0.4)',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.boxShadow = '0 0 25px rgba(239, 68, 68, 0.6)';
+            e.currentTarget.style.transform = 'scale(1.02)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.boxShadow = '0 0 15px rgba(239, 68, 68, 0.4)';
+            e.currentTarget.style.transform = 'scale(1)';
+          }}
+        >
+          🔄 Reset to Default
+        </button>
+      </div>
+
+      {/* Mode Toggle Cards - Compact 3-column */}
+      <div className="pb-8">
         <div className="grid grid-cols-3 gap-4">
-          <div className="text-center p-4 bg-dark-slate rounded-lg border border-border-slate card-hover-glow">
+          <button
+            onClick={() => onViewModeChange('revenue')}
+            className="text-center p-4 rounded-lg border transition-all duration-300"
+            style={{
+              background: viewMode === 'revenue' ? 'linear-gradient(135deg, #3B82F6, #2563EB)' : '#1a2332',
+              border: viewMode === 'revenue' ? '2px solid #60A5FA' : '2px solid #334155',
+              color: 'white',
+              cursor: 'pointer',
+              opacity: viewMode === 'revenue' ? 1 : 0.6,
+              boxShadow: viewMode === 'revenue' ? '0 0 20px rgba(59, 130, 246, 0.6)' : 'none',
+            }}
+          >
             <div className="text-3xl mb-3">💰</div>
-            <p className="text-sm font-semibold text-bright mb-1.5">Revenue</p>
-            <p className="text-xs text-dimmed">Funds UBI & ops</p>
-          </div>
-          <div className="text-center p-4 bg-dark-slate rounded-lg border border-border-slate card-hover-glow">
+            <p className="text-sm font-semibold mb-1.5">Revenue</p>
+            <p className="text-xs opacity-90">Funds UBI & ops</p>
+          </button>
+          <button
+            onClick={() => onViewModeChange('social')}
+            className="text-center p-4 rounded-lg border transition-all duration-300"
+            style={{
+              background: viewMode === 'social' ? 'linear-gradient(135deg, #10B981, #059669)' : '#1a2332',
+              border: viewMode === 'social' ? '2px solid #34D399' : '2px solid #334155',
+              color: 'white',
+              cursor: 'pointer',
+              opacity: viewMode === 'social' ? 1 : 0.6,
+              boxShadow: viewMode === 'social' ? '0 0 20px rgba(16, 185, 129, 0.6)' : 'none',
+            }}
+          >
             <div className="text-3xl mb-3">📊</div>
-            <p className="text-sm font-semibold text-bright mb-1.5">Social Floor</p>
-            <p className="text-xs text-dimmed">Minimum income</p>
-          </div>
-          <div className="text-center p-4 bg-dark-slate rounded-lg border border-border-slate card-hover-glow">
+            <p className="text-sm font-semibold mb-1.5">Social Floor</p>
+            <p className="text-xs opacity-90">Minimum income</p>
+          </button>
+          <button
+            onClick={() => onViewModeChange('incentives')}
+            className="text-center p-4 rounded-lg border transition-all duration-300"
+            style={{
+              background: viewMode === 'incentives' ? 'linear-gradient(135deg, #A855F7, #9333EA)' : '#1a2332',
+              border: viewMode === 'incentives' ? '2px solid #C084FC' : '2px solid #334155',
+              color: 'white',
+              cursor: 'pointer',
+              opacity: viewMode === 'incentives' ? 1 : 0.6,
+              boxShadow: viewMode === 'incentives' ? '0 0 20px rgba(168, 85, 247, 0.6)' : 'none',
+            }}
+          >
             <div className="text-3xl mb-3">🎯</div>
-            <p className="text-sm font-semibold text-bright mb-1.5">Incentives</p>
-            <p className="text-xs text-dimmed">Work always pays</p>
-          </div>
+            <p className="text-sm font-semibold mb-1.5">Incentives</p>
+            <p className="text-xs opacity-90">Work always pays</p>
+          </button>
         </div>
       </div>
     </div>
