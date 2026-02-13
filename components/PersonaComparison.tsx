@@ -98,21 +98,30 @@ export default function PersonaComparison({ personas }: PersonaComparisonProps) 
       {/* Detailed Persona View */}
       <div className="bg-white rounded-lg shadow-lg p-6 glow-border-blue">
         <h3 className="text-lg font-bold text-slate-900 mb-4">Detailed Breakdown</h3>
-        <div className="grid grid-cols-4 gap-2 mb-6">
-          {personas.map((persona) => (
-            <button
-              key={persona.label}
-              onClick={() => setSelectedPersona(persona)}
-              className={`p-3 rounded-lg border-2 transition ${
-                selectedPersona.label === persona.label
-                  ? 'border-blue-600 bg-blue-50'
-                  : 'border-slate-200 hover:border-blue-400'
-              }`}
-            >
-              <div className="font-semibold text-slate-900">{persona.label}</div>
-              <div className="text-xs text-slate-500">{formatCurrency(persona.earnedIncome)}</div>
-            </button>
-          ))}
+        <div className="grid grid-cols-4 gap-3 mb-6">
+          {personas.map((persona, idx) => {
+            const colors = ['#3b82f6', '#06b6d4', '#8b5cf6', '#ec4899'];
+            const isSelected = selectedPersona.label === persona.label;
+            return (
+              <button
+                key={persona.label}
+                onClick={() => setSelectedPersona(persona)}
+                style={{
+                  padding: '16px',
+                  borderRadius: '8px',
+                  border: 'none',
+                  background: isSelected ? colors[idx] : '#334155',
+                  color: 'white',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  borderLeft: `4px solid ${colors[idx]}`
+                }}
+              >
+                <div style={{ fontWeight: '600', marginBottom: '4px' }}>{persona.label}</div>
+                <div style={{ fontSize: '12px', opacity: 0.9 }}>{formatCurrency(persona.earnedIncome)}</div>
+              </button>
+            );
+          })}
         </div>
 
         {/* Detailed Breakdown */}
