@@ -241,7 +241,6 @@ export default function PresetScenarios({ onSelectPreset }: PresetScenariosProps
           </div>
         </div>
       )}
-      </div>
     </div>
   );
 }
