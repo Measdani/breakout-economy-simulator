@@ -85,7 +85,6 @@ const DEFAULT_CONFIG: PolicyConfig = {
 
 export default function PresetScenarios({ onSelectPreset }: PresetScenariosProps) {
   const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
-  const [hoveredPreset, setHoveredPreset] = useState<string | null>(null);
   const colors = ['#3b82f6', '#10b981', '#f59e0b', '#a78bfa'];
 
   const handleSelectPreset = (presetName: string, config: Partial<PolicyConfig>) => {
@@ -93,8 +92,8 @@ export default function PresetScenarios({ onSelectPreset }: PresetScenariosProps
     onSelectPreset(config, presetName);
   };
 
-  // Calculate preview for hovered or selected preset (hover takes priority)
-  const previewPreset = (hoveredPreset || selectedPreset) ? PRESETS.find(p => p.name === (hoveredPreset || selectedPreset)) : null;
+  // Calculate preview for selected preset only (not on hover)
+  const previewPreset = selectedPreset ? PRESETS.find(p => p.name === selectedPreset) : null;
   const previewConfig: PolicyConfig = previewPreset ? {
     ...DEFAULT_CONFIG,
     ...previewPreset.config,
@@ -137,8 +136,6 @@ export default function PresetScenarios({ onSelectPreset }: PresetScenariosProps
             <button
               key={preset.name}
               onClick={() => handleSelectPreset(preset.name, preset.config)}
-              onMouseEnter={() => setHoveredPreset(preset.name)}
-              onMouseLeave={() => setHoveredPreset(null)}
               style={{
                 padding: '16px',
                 borderRadius: '8px',
@@ -172,7 +169,7 @@ export default function PresetScenarios({ onSelectPreset }: PresetScenariosProps
       </div>
 
       {/* Preview Section - Only visible when selected */}
-      {(hoveredPreset || selectedPreset) && (
+      {selectedPreset && (
         <div style={{
           width: '100%',
           marginTop: '12px',
@@ -183,7 +180,7 @@ export default function PresetScenarios({ onSelectPreset }: PresetScenariosProps
           maxWidth: '400px'
         }}>
           <p style={{ fontSize: '12px', fontWeight: '600', color: '#94a3b8', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-            📊 {hoveredPreset || selectedPreset} Preview
+            📊 {selectedPreset} Preview
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             {/* Fiscal Balance */}
