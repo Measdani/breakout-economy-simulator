@@ -77,14 +77,14 @@ export default function Charts({ result, config }: ChartsProps) {
     if (props.active && props.payload && props.payload.length) {
       const data = props.payload[0];
       const colors: { [key: string]: string } = {
-        'Token Tax': 'text-blue-400',
-        'Income Tax': 'text-green-400',
-        'Welfare Savings': 'text-purple-400'
+        'Token Tax': '#60a5fa',
+        'Income Tax': '#4ade80',
+        'Welfare Savings': '#c084fc'
       };
       return (
         <div className="bg-slate-900 text-white p-3 rounded-lg shadow-lg text-sm border border-slate-700">
           <p className="font-bold mb-2">{data.name}</p>
-          <p className={colors[data.name] || 'text-white'}>${data.value.toFixed(1)}B</p>
+          <p style={{ color: colors[data.name] || 'white' }}>${data.value.toFixed(1)}B</p>
         </div>
       );
     }
@@ -95,13 +95,13 @@ export default function Charts({ result, config }: ChartsProps) {
     if (props.active && props.payload && props.payload.length) {
       const data = props.payload[0];
       const colors: { [key: string]: string } = {
-        'UBI Cost': 'text-yellow-400',
-        'Govt Operations': 'text-red-400'
+        'UBI Cost': '#facc15',
+        'Govt Operations': '#f87171'
       };
       return (
         <div className="bg-slate-900 text-white p-3 rounded-lg shadow-lg text-sm border border-slate-700">
           <p className="font-bold mb-2">{data.name}</p>
-          <p className={colors[data.name] || 'text-white'}>${data.value.toFixed(1)}B</p>
+          <p style={{ color: colors[data.name] || 'white' }}>${data.value.toFixed(1)}B</p>
         </div>
       );
     }
