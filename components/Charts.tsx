@@ -23,6 +23,14 @@ interface ChartsProps {
   config: PolicyConfig;
 }
 
+const formatCurrency = (value: number) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+  }).format(value);
+};
+
 export default function Charts({ result, config }: ChartsProps) {
   // Revenue Chart Data
   const revenueData = [
@@ -65,6 +73,47 @@ export default function Charts({ result, config }: ChartsProps) {
   const COLORS_REVENUE = ['#3b82f6', '#10b981', '#8b5cf6'];
   const COLORS_OBLIGATIONS = ['#f59e0b', '#ef4444'];
 
+  const revenueTooltip = (props: any) => {
+    if (props.active && props.payload && props.payload.length) {
+      const data = props.payload[0];
+      return (
+        <div className="bg-slate-900 text-white p-3 rounded-lg shadow-lg text-sm border border-slate-700">
+          <p className="font-bold mb-2">{data.name}</p>
+          <p className="text-blue-400">${data.value.toFixed(1)}B</p>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const obligationsTooltip = (props: any) => {
+    if (props.active && props.payload && props.payload.length) {
+      const data = props.payload[0];
+      return (
+        <div className="bg-slate-900 text-white p-3 rounded-lg shadow-lg text-sm border border-slate-700">
+          <p className="font-bold mb-2">{data.name}</p>
+          <p className="text-red-400">${data.value.toFixed(1)}B</p>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const supplementTooltip = (props: any) => {
+    if (props.active && props.payload && props.payload.length) {
+      return (
+        <div className="bg-slate-900 text-white p-3 rounded-lg shadow-lg text-sm border border-slate-700">
+          <p className="font-bold mb-2">${(props.label / 1000).toFixed(0)}k Income</p>
+          <div className="space-y-1">
+            <p className="text-green-400">UBI: {formatCurrency(props.payload[0].value)}</p>
+            <p className="text-purple-400">Supplement: {formatCurrency(props.payload[1].value)}</p>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className="space-y-8">
       {/* Revenue Breakdown */}
@@ -86,7 +135,7 @@ export default function Charts({ result, config }: ChartsProps) {
                 <Cell key={`cell-${index}`} fill={COLORS_REVENUE[index]} />
               ))}
             </Pie>
-            <Tooltip formatter={(value) => `$${(value as number).toFixed(0)}B`} />
+            <Tooltip content={revenueTooltip} />
           </PieChart>
         </ResponsiveContainer>
       </div>
@@ -110,7 +159,7 @@ export default function Charts({ result, config }: ChartsProps) {
                 <Cell key={`cell-${index}`} fill={COLORS_OBLIGATIONS[index]} />
               ))}
             </Pie>
-            <Tooltip formatter={(value) => `$${(value as number).toFixed(0)}B`} />
+            <Tooltip content={obligationsTooltip} />
           </PieChart>
         </ResponsiveContainer>
       </div>
@@ -133,10 +182,7 @@ export default function Charts({ result, config }: ChartsProps) {
               label={{ value: 'Amount ($)', angle: -90, position: 'insideLeft' }}
               tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
             />
-            <Tooltip
-              formatter={(value) => `$${(value as number).toLocaleString(undefined, { maximumFractionDigits: 0 })}`}
-              labelFormatter={(label) => `$${(label as number).toLocaleString()}`}
-            />
+            <Tooltip content={supplementTooltip} />
             <Legend />
             <Line
               type="monotone"
