@@ -77,6 +77,13 @@ export default function PersonaComparison({ personas }: PersonaComparisonProps) 
         </p>
       </div>
 
+      {/* Policy Summary */}
+      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+        <p className="text-sm text-amber-900">
+          Minimal State reduces tax burden but risks deficit expansion.
+        </p>
+      </div>
+
       {/* Comparison Chart */}
       <div className="bg-white rounded-lg shadow-lg p-6 glow-border-blue">
         <h3 className="text-lg font-bold text-slate-900 mb-4">📊 Persona Income Breakdown</h3>
