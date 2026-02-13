@@ -33,6 +33,15 @@ export default function ProductivityBar({ personas }: ProductivityBarProps) {
   const averageIncentive = getAverageIncentive();
   const incentiveScore = Math.min(100, Math.max(0, averageIncentive));
 
+  // Calculate key metric: net income increase from lowest to highest earner
+  const getNetIncomeIncrease = () => {
+    const starter = personas[0];
+    const executive = personas[personas.length - 1];
+    return ((executive.netIncome / starter.netIncome) - 1) * 100;
+  };
+
+  const netIncomeIncrease = getNetIncomeIncrease();
+
   // Determine color and status based on incentive level
   const getColor = (score: number) => {
     if (score >= 80) return 'from-green-600 to-green-400';
@@ -48,143 +57,139 @@ export default function ProductivityBar({ personas }: ProductivityBarProps) {
     return 'Needs Improvement';
   };
 
-  const getInsights = (score: number) => {
+  const getShortInsights = (score: number) => {
     if (score >= 80) {
       return [
-        'Strong work incentives across all earning levels',
-        'High income retention for wage earners',
-        'No significant marginal penalty spikes'
+        'Strong incentives across all levels',
+        'High income retention',
+        'No penalty spikes'
       ];
     } else if (score >= 60) {
       return [
-        'Good work incentives overall',
-        'Solid income retention for most workers',
-        'Minor disincentives at higher income levels'
+        'Good incentives overall',
+        'Solid retention for most',
+        'Minor upper-income disincentives'
       ];
     } else if (score >= 40) {
       return [
-        'Moderate work incentives',
-        'Policy is functional but could improve',
-        'Consider adjusting tax rates for better retention'
+        'Moderate incentives',
+        'Functional but improvable',
+        'Review tax rates'
       ];
     } else {
       return [
-        'Weak work incentives',
-        'Significant marginal rate concerns',
-        'Workers may be discouraged from earning more'
+        'Weak incentives',
+        'Marginal rate concerns',
+        'May discourage earning'
       ];
     }
   };
 
-  const insights = getInsights(incentiveScore);
+  const insights = getShortInsights(incentiveScore);
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
-      <div className="space-y-6">
-        {/* Header with Large Score */}
-        <div className="text-center space-y-3">
-          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">
-            Work Incentive Score
-          </p>
-          <div style={{
-            fontSize: '64px',
-            fontWeight: '900',
-            color: incentiveScore >= 80 ? '#10b981' :
-                   incentiveScore >= 60 ? '#06b6d4' :
-                   incentiveScore >= 40 ? '#f59e0b' :
-                   '#ef4444',
-            lineHeight: '1',
-            textShadow: '0 2px 4px rgba(0,0,0,0.1)'
-          }}>
-            {incentiveScore.toFixed(0)}%
-          </div>
-          <p className={`text-lg font-bold px-4 py-2 rounded-full inline-block ${
-            incentiveScore >= 80 ? 'bg-green-100 text-green-800' :
-            incentiveScore >= 60 ? 'bg-cyan-100 text-cyan-800' :
-            incentiveScore >= 40 ? 'bg-amber-100 text-amber-800' :
-            'bg-red-100 text-red-800'
-          }`}>
-            {getStatusText(incentiveScore)}
-          </p>
-          <p className="text-sm text-slate-600 mt-2">
-            Higher = stronger incentive to work
-          </p>
+    <div className="bg-white rounded-lg shadow-lg p-6 space-y-5">
+      {/* Header with Large Score */}
+      <div className="text-center space-y-2">
+        <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">
+          Work Incentive Score
+        </p>
+        <div style={{
+          fontSize: '64px',
+          fontWeight: '900',
+          color: incentiveScore >= 80 ? '#10b981' :
+                 incentiveScore >= 60 ? '#06b6d4' :
+                 incentiveScore >= 40 ? '#f59e0b' :
+                 '#ef4444',
+          lineHeight: '1'
+        }}>
+          {incentiveScore.toFixed(0)}%
         </div>
+        <p className={`text-sm font-bold px-3 py-1.5 rounded-full inline-block ${
+          incentiveScore >= 80 ? 'bg-green-100 text-green-800' :
+          incentiveScore >= 60 ? 'bg-cyan-100 text-cyan-800' :
+          incentiveScore >= 40 ? 'bg-amber-100 text-amber-800' :
+          'bg-red-100 text-red-800'
+        }`}>
+          {getStatusText(incentiveScore)}
+        </p>
+      </div>
 
-        {/* Visual Meter */}
-        <div className="space-y-2">
-          <div className="relative w-full bg-slate-100 rounded-full h-6 overflow-hidden shadow-sm">
-            <div
-              className={`h-full rounded-full bg-gradient-to-r ${getColor(incentiveScore)} transition-all duration-700 ease-out`}
-              style={{ width: `${incentiveScore}%` }}
-            />
-            <div className="absolute inset-0 flex items-center justify-end pr-3">
-              {incentiveScore > 15 && (
-                <span className="text-xs font-bold text-white drop-shadow">
-                  {incentiveScore.toFixed(0)}%
-                </span>
-              )}
+      {/* Visual Meter */}
+      <div className="space-y-1.5">
+        <div className="relative w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+          <div
+            className={`h-full rounded-full bg-gradient-to-r ${getColor(incentiveScore)} transition-all duration-700 ease-out`}
+            style={{ width: `${incentiveScore}%` }}
+          />
+        </div>
+        <div className="flex justify-between text-xs font-medium text-slate-500">
+          <span>0%</span>
+          <span>50%</span>
+          <span>100%</span>
+        </div>
+      </div>
+
+      {/* Key Insights */}
+      <div className="space-y-2 border-t border-slate-100 pt-4">
+        <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">
+          Key Insights
+        </p>
+        <div className="space-y-1.5">
+          {insights.map((insight, idx) => (
+            <div key={idx} className="flex gap-2 items-start">
+              <span className="font-bold flex-shrink-0" style={{ color: '#10b981' }}>✓</span>
+              <span className="text-xs font-medium text-slate-700">{insight}</span>
             </div>
-          </div>
-          <div className="flex justify-between text-xs text-slate-500">
-            <span>0%</span>
-            <span>50%</span>
-            <span>100%</span>
-          </div>
+          ))}
         </div>
+      </div>
 
-        {/* Key Insights */}
-        <div className="space-y-3 border-t border-slate-200 pt-6">
-          <p className="text-xs font-bold text-slate-600 uppercase tracking-widest">
-            Key Insights
-          </p>
-          <div className="space-y-2">
-            {insights.map((insight, idx) => (
-              <div key={idx} className="flex gap-3 items-start bg-slate-50 p-3 rounded-lg">
-                <span className="text-xl font-bold flex-shrink-0" style={{ color: '#10b981' }}>✓</span>
-                <span className="text-sm font-medium text-slate-800">{insight}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+      {/* Key Metric: Net Income Increase */}
+      <div className="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-lg p-4">
+        <p className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">
+          Net Income Impact
+        </p>
+        <p className="text-3xl font-bold text-blue-900">{netIncomeIncrease.toFixed(0)}%</p>
+        <p className="text-xs text-blue-700 mt-1">increase from lowest to highest earner</p>
+      </div>
 
-        {/* Retention by Income Transition */}
-        <div className="space-y-3 border-t border-slate-200 pt-6">
-          <p className="text-xs font-bold text-slate-600 uppercase tracking-widest">
-            Retention by Income Transition
-          </p>
-          <div className="space-y-4">
-            {personas.map((persona, idx) => {
-              const nextPersona = personas[idx + 1];
-              if (!nextPersona) return null;
+      {/* Retention by Income Transition */}
+      <div className="space-y-3 border-t border-slate-100 pt-4">
+        <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">
+          Retention by Transition
+        </p>
+        <div className="space-y-3">
+          {personas.map((persona, idx) => {
+            const nextPersona = personas[idx + 1];
+            if (!nextPersona) return null;
 
-              const incomeDiff = nextPersona.earnedIncome - persona.earnedIncome;
-              const netDiff = nextPersona.netIncome - persona.netIncome;
-              const retention = (netDiff / incomeDiff) * 100;
+            const incomeDiff = nextPersona.earnedIncome - persona.earnedIncome;
+            const netDiff = nextPersona.netIncome - persona.netIncome;
+            const retention = (netDiff / incomeDiff) * 100;
 
-              return (
-                <div key={persona.label} className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-semibold text-slate-800">
-                      {persona.label} → {nextPersona.label}
-                    </span>
-                    <span className="text-xl font-bold" style={{ color: '#10b981' }}>
-                      {retention.toFixed(0)}%
-                    </span>
-                  </div>
-                  <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden shadow-sm">
-                    <div
-                      className="h-full rounded-full transition-all duration-500"
-                      style={{
-                        width: `${Math.max(0, retention)}%`,
-                        background: 'linear-gradient(to right, #3b82f6, #10b981)'
-                      }}
-                    />
-                  </div>
+            return (
+              <div key={persona.label}>
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-xs font-semibold text-slate-700">
+                    {persona.label} → {nextPersona.label}
+                  </span>
+                  <span className="text-sm font-bold" style={{ color: '#10b981' }}>
+                    {retention.toFixed(0)}%
+                  </span>
                 </div>
-              );
-            })}
-          </div>
+                <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                  <div
+                    className="h-full rounded-full transition-all duration-500"
+                    style={{
+                      width: `${Math.max(0, retention)}%`,
+                      background: 'linear-gradient(to right, #3b82f6, #10b981)'
+                    }}
+                  />
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
