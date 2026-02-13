@@ -10,6 +10,7 @@ import PersonaTable from './PersonaTable';
 import PresetScenarios from './PresetScenarios';
 import Charts from './Charts';
 import PersonaComparison from './PersonaComparison';
+import ProductivityBar from './ProductivityBar';
 import Glossary from './Glossary';
 import OnboardingTour from './OnboardingTour';
 
@@ -157,6 +158,16 @@ export default function Simulator() {
             >
               📈
             </button>
+            <button
+              onClick={() => setActiveScreen('personas')}
+              className={`py-3 px-4 text-lg transition border-b-2 ${
+                activeScreen === 'personas'
+                  ? 'border-purple-600 text-purple-400'
+                  : 'border-transparent text-white hover:text-white'
+              }`}
+            >
+              👥
+            </button>
           </div>
 
           {/* Screen Content - With Background */}
@@ -299,6 +310,10 @@ export default function Simulator() {
                   if (presetName) setCurrentConfig(presetName);
 
 
+
+
+
+
                   handlePresetSelect(config);
                 }} />
               </div>
@@ -317,13 +332,21 @@ export default function Simulator() {
                 <Charts result={result} config={config} />
               </div>
             )}
+
+            {/* Personas Screen */}
+            {activeScreen === 'personas' && (
+              <div className="space-y-6">
+                <ProductivityBar personas={result.citizenModel.personaOutcomes} />
+                <PersonaComparison personas={result.citizenModel.personaOutcomes} />
+              </div>
+            )}
           </div>
 
           {/* Footer Navigation - Enhanced */}
           <div className="px-5 py-5 border-t border-border-slate bg-bg-dark-slate flex justify-between items-center" style={{ background: '#1E293B' }}>
             <button
               onClick={() => {
-                const screens: Array<typeof activeScreen> = ['controls', 'scenarios', 'results', 'charts'];
+                const screens: Array<typeof activeScreen> = ['controls', 'scenarios', 'results', 'charts', 'personas'];
                 const current = screens.indexOf(activeScreen);
                 if (current > 0) setActiveScreen(screens[current - 1]);
               }}
@@ -343,8 +366,8 @@ export default function Simulator() {
             </button>
             <div className="flex flex-col items-center gap-2">
               <div className="flex gap-2 items-center">
-                {['controls', 'scenarios', 'results', 'charts'].map((screen, idx) => {
-                  const isActive = activeScreen === screen || ['controls', 'scenarios', 'results', 'charts'].indexOf(activeScreen) > idx;
+                {['controls', 'scenarios', 'results', 'charts', 'personas'].map((screen, idx) => {
+                  const isActive = activeScreen === screen || ['controls', 'scenarios', 'results', 'charts', 'personas'].indexOf(activeScreen) > idx;
                   return (
                     <span
                       key={screen}
@@ -357,17 +380,18 @@ export default function Simulator() {
                 })}
               </div>
               <span className="text-sm text-white font-bold">
-                Step {['controls', 'scenarios', 'results', 'charts'].indexOf(activeScreen) + 1} — {
+                Step {['controls', 'scenarios', 'results', 'charts', 'personas'].indexOf(activeScreen) + 1} — {
                   activeScreen === 'controls' ? 'Configure' :
                   activeScreen === 'scenarios' ? 'Quick Scenarios' :
                   activeScreen === 'results' ? 'Results' :
-                  'Visualize'
+                  activeScreen === 'charts' ? 'Visualize' :
+                  'Compare Personas'
                 }
               </span>
             </div>
             <button
               onClick={() => {
-                const screens: Array<typeof activeScreen> = ['controls', 'scenarios', 'results', 'charts'];
+                const screens: Array<typeof activeScreen> = ['controls', 'scenarios', 'results', 'charts', 'personas'];
                 const current = screens.indexOf(activeScreen);
                 if (current < screens.length - 1) setActiveScreen(screens[current + 1]);
               }}
