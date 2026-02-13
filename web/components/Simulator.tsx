@@ -263,7 +263,7 @@ export default function Simulator() {
                           <div className="flex justify-between">
                             <span className="text-sm text-muted">Welfare Savings</span>
                             <span className="font-semibold text-purple-400">
-                              ${((result.revenue.welfareSavings) / 1e9).toFixed(1)}B
+                              ${((result.revenue.welfareSavingsCredit) / 1e9).toFixed(1)}B
                             </span>
                           </div>
                           <div className="flex justify-between pt-3 border-t border-border-slate">
