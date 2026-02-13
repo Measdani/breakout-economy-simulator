@@ -239,6 +239,13 @@ export default function PresetScenarios({ onSelectPreset }: PresetScenariosProps
               </p>
             </div>
           </div>
+
+          {/* Policy Summary */}
+          <div style={{ marginTop: '12px', padding: '12px', background: 'rgba(217, 119, 6, 0.1)', borderRadius: '6px', border: '1px solid #d97706' }}>
+            <p style={{ fontSize: '12px', color: '#fbbf24', lineHeight: '1.5' }}>
+              Minimal State reduces tax burden but risks deficit expansion.
+            </p>
+          </div>
         </div>
       )}
     </div>
