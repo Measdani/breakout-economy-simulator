@@ -4,6 +4,8 @@ import { createServiceClient } from '@/lib/supabase/server'
 import AdminTable from '@/components/AdminTable'
 import Link from 'next/link'
 
+export const dynamic = 'force-dynamic'
+
 async function getAllSubmissions() {
   if (!(await isAdmin())) {
     redirect('/admin/login')

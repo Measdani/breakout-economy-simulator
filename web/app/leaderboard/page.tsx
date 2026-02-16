@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 
+export const dynamic = 'force-dynamic'
+
 async function getLeaderboard() {
   const supabase = createClient()
 
