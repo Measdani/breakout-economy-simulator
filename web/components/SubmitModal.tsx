@@ -60,7 +60,7 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
               <p
                 className="text-4xl font-bold mb-3"
                 style={{
-                  color: '#00D9FF',
+                  color: '#00D9FF !important',
                   textShadow: '0 0 10px rgba(0, 217, 255, 0.6), 0 0 20px rgba(0, 217, 255, 0.3)',
                   letterSpacing: '0.05em'
                 }}
