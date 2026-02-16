@@ -20,12 +20,12 @@ export default async function LeaderboardPage() {
   const submissions = await getLeaderboard()
 
   return (
-    <div className="min-h-screen bg-deep-navy px-4 py-8 flex items-center justify-center">
-      <div className="w-full max-w-2xl">
+    <div className="min-h-screen bg-deep-navy px-4 py-6">
+      <div className="w-full max-w-2xl mx-auto">
+        <Link href="/" className="text-blue-400 hover:text-blue-300 text-xs inline-block mb-6 transition">
+          ← Back to Simulator
+        </Link>
         <div className="mb-8 text-center">
-          <Link href="/" className="text-blue-400 hover:text-blue-300 text-xs inline-block mb-4 transition">
-            ← Back to Simulator
-          </Link>
           <h1 className="leaderboard-title">🏆 Leaderboard</h1>
           <p className="leaderboard-subtitle">Compare policies and discover the best approaches</p>
         </div>
