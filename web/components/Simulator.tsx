@@ -594,7 +594,7 @@ export default function Simulator() {
             })()}
             <button
               onClick={() => setShowSubmitModal(true)}
-              className="px-5 py-3 rounded transition"
+              className="px-5 py-3 rounded transition hover:shadow-lg"
               style={{
                 background: '#0F172A',
                 color: '#00D9FF',
@@ -602,7 +602,15 @@ export default function Simulator() {
                 fontSize: '16px',
                 fontWeight: '700',
                 letterSpacing: '0.3px',
-                textShadow: '0 0 8px rgba(0, 217, 255, 0.6)'
+                textShadow: '0 0 8px rgba(0, 217, 255, 0.6)',
+                boxShadow: '0 0 12px rgba(0, 217, 255, 0.4), inset 0 0 12px rgba(0, 217, 255, 0.1)',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 20px rgba(0, 217, 255, 0.6), inset 0 0 12px rgba(0, 217, 255, 0.2)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 12px rgba(0, 217, 255, 0.4), inset 0 0 12px rgba(0, 217, 255, 0.1)';
               }}
             >
               📤 Submit
