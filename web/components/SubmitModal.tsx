@@ -4,8 +4,6 @@ import { useState } from 'react'
 import type { PolicyConfig, SimulationResult } from '@/lib/types'
 import { submitSimulation } from '@/app/actions/submissions'
 
-// Trigger deployment
-
 interface Props {
   config: PolicyConfig
   result: SimulationResult
