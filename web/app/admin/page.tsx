@@ -5,7 +5,7 @@ import AdminTable from '@/components/AdminTable'
 import Link from 'next/link'
 
 async function getAllSubmissions() {
-  if (!isAdmin()) {
+  if (!(await isAdmin())) {
     redirect('/admin/login')
   }
 

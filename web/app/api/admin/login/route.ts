@@ -5,7 +5,8 @@ export async function POST(request: Request) {
   const { password } = await request.json()
 
   if (password === process.env.ADMIN_SECRET_KEY) {
-    cookies().set('admin_token', password, {
+    const cookieStore = await cookies()
+    cookieStore.set('admin_token', password, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',

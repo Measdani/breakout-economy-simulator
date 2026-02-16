@@ -1,12 +1,13 @@
 import { cookies } from 'next/headers'
 
-export function isAdmin(): boolean {
-  const adminToken = cookies().get('admin_token')?.value
+export async function isAdmin(): Promise<boolean> {
+  const cookieStore = await cookies()
+  const adminToken = cookieStore.get('admin_token')?.value
   return adminToken === process.env.ADMIN_SECRET_KEY
 }
 
-export function requireAdmin() {
-  if (!isAdmin()) {
+export async function requireAdmin() {
+  if (!(await isAdmin())) {
     throw new Error('Unauthorized')
   }
 }
