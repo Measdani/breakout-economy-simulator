@@ -667,8 +667,6 @@ export default function Simulator() {
 
         {/* Glossary Button */}
         <Glossary />
-        </div>
-        {/* Close Tablet Case */}
       </div>
 
       {/* Submit Modal */}
