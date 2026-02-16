@@ -45,8 +45,8 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, minHeight: '100vh' }}>
       <div className="bg-gradient-to-br from-dark-slate via-darker-slate to-darker-navy rounded-lg border border-blue-500/60 shadow-2xl" style={{ width: '320px', padding: '1.25rem' }}>
-        <h2 className="text-2xl font-bold text-bright mb-2 text-center">Submit Your Model</h2>
-        <p className="text-muted text-xs mb-6 text-center">Share your policy configuration with the community</p>
+        <h2 className="text-lg font-bold text-bright mb-1 text-center">Submit Your Model</h2>
+        <p className="text-muted text-xs mb-4 text-center">Share your policy configuration with the community</p>
 
         {success ? (
           <div className="text-center py-4">
@@ -56,7 +56,7 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
         ) : (
           <>
             <div
-              className="mb-8 rounded-lg p-4 border border-blue-500/20 backdrop-blur-sm text-center"
+              className="mb-5 rounded-lg p-3 border border-blue-500/20 backdrop-blur-sm text-center"
               style={{
                 background: result.balance.isSolvent
                   ? 'linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%)'
@@ -66,13 +66,13 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
                   : '0 4px 12px rgba(239, 68, 68, 0.1)'
               }}
             >
-              <p className="text-xs text-muted mb-3 uppercase tracking-wide font-semibold">Fiscal Balance</p>
+              <p className="text-xs text-muted mb-2 uppercase tracking-wide font-semibold">Fiscal Balance</p>
               <p
                 style={{
                   color: '#00D9FF',
-                  fontSize: '2.25rem',
+                  fontSize: '1.875rem',
                   fontWeight: 'bold',
-                  marginBottom: '0.75rem',
+                  marginBottom: '0.5rem',
                   textShadow: '0 0 10px rgba(0, 217, 255, 0.6), 0 0 20px rgba(0, 217, 255, 0.3)',
                   letterSpacing: '0.05em'
                 }}
@@ -82,7 +82,7 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
               <p className="text-xs text-muted leading-relaxed">Your model's fiscal outcome after configuration</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-xs text-muted mb-2 uppercase tracking-wide font-semibold">Name (leave blank to stay anonymous)</label>
                 <input
@@ -130,7 +130,7 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
 
               {error && <div className="text-red-400 text-xs mt-2 leading-relaxed">{error}</div>}
 
-              <div className="flex gap-3 mt-9">
+              <div className="flex gap-2 mt-5">
                 <button
                   type="button"
                   onClick={onClose}
