@@ -44,9 +44,9 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
 
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}>
-      <div className="bg-gradient-to-br from-dark-slate via-darker-slate to-darker-navy rounded-lg p-4 w-80 border border-blue-500/60 shadow-2xl">
-        <h2 className="text-xl font-bold text-bright mb-1">Submit Your Model</h2>
-        <p className="text-muted text-xs mb-3">Share your policy configuration with the community</p>
+      <div className="bg-gradient-to-br from-dark-slate via-darker-slate to-darker-navy rounded-lg p-6 w-96 border border-blue-500/60 shadow-2xl">
+        <h2 className="text-xl font-bold text-bright mb-2">Submit Your Model</h2>
+        <p className="text-muted text-xs mb-5">Share your policy configuration with the community</p>
 
         {success ? (
           <div className="text-center py-4">
@@ -55,19 +55,19 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
           </div>
         ) : (
           <>
-            <div className="mb-5 bg-darker-navy/60 rounded-lg p-3 border border-blue-500/20 backdrop-blur-sm">
+            <div className="mb-7 bg-darker-navy/60 rounded-lg p-4 border border-blue-500/20 backdrop-blur-sm">
               <p className="text-xs text-muted mb-2 uppercase tracking-wide font-semibold">Fiscal Balance</p>
               <p
-                className={`text-2xl font-bold mb-1 ${
+                className={`text-2xl font-bold mb-2 ${
                   result.balance.isSolvent ? 'text-green-400' : 'text-red-400'
                 }`}
               >
                 {result.balance.isSolvent ? '+' : ''}${(result.balance.surplusDeficit / 1e9).toFixed(1)}B
               </p>
-              <p className="text-xs text-muted">Your model's fiscal outcome after configuration</p>
+              <p className="text-xs text-muted leading-relaxed">Your model's fiscal outcome after configuration</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label className="block text-xs text-muted mb-2 uppercase tracking-wide font-semibold">Name (leave blank to stay anonymous)</label>
                 <input
@@ -75,7 +75,7 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Anonymous"
-                  className="w-full px-3 py-2 bg-darker-navy border border-border-slate/50 rounded text-bright text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                  className="w-full px-3 py-3 bg-darker-navy border border-border-slate/50 rounded text-bright text-sm leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                   maxLength={50}
                 />
               </div>
@@ -87,13 +87,13 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your@email.com"
-                  className="w-full px-3 py-2 bg-darker-navy border border-border-slate/50 rounded text-bright text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                  className="w-full px-3 py-3 bg-darker-navy border border-border-slate/50 rounded text-bright text-sm leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 />
               </div>
 
-              {error && <div className="text-red-400 text-xs mt-2">{error}</div>}
+              {error && <div className="text-red-400 text-xs mt-2 leading-relaxed">{error}</div>}
 
-              <div className="flex gap-3 mt-6">
+              <div className="flex gap-3 mt-8">
                 <button
                   type="button"
                   onClick={onClose}
