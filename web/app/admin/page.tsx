@@ -20,7 +20,7 @@ async function getAllSubmissions() {
   return data
 }
 
-async function getStatistics(submissions: typeof Array<any>) {
+async function getStatistics(submissions: any[]) {
   const totalSubmissions = submissions.length
   const solventCount = submissions.filter((s) => s.is_solvent).length
   const deficitCount = submissions.filter((s) => !s.is_solvent).length
