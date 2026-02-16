@@ -26,7 +26,7 @@ export default async function LeaderboardPage() {
           <Link href="/" className="text-blue-400 hover:text-blue-300 text-xs inline-block mb-4 transition">
             ← Back to Simulator
           </Link>
-          <h1 className="text-6xl font-bold text-bright mb-3 drop-shadow-lg">🏆 Leaderboard</h1>
+          <h1 className="text-6xl font-bold text-bright mb-3 shadow-lg">🏆 Leaderboard</h1>
           <p className="text-sm text-blue-200">Compare policies and discover the best approaches</p>
         </div>
 
