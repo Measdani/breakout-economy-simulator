@@ -44,7 +44,7 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
 
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}>
-      <div className="bg-gradient-to-br from-dark-slate via-darker-slate to-darker-navy rounded-lg p-5 w-80 border border-blue-500/60 shadow-2xl">
+      <div className="bg-gradient-to-br from-dark-slate via-darker-slate to-darker-navy rounded-lg border border-blue-500/60 shadow-2xl" style={{ width: '320px', padding: '1.25rem' }}>
         <h2 className="text-2xl font-bold text-bright mb-2 text-center">Submit Your Model</h2>
         <p className="text-muted text-xs mb-6 text-center">Share your policy configuration with the community</p>
 
