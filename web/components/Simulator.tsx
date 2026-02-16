@@ -569,25 +569,29 @@ export default function Simulator() {
 
           {/* Footer Navigation - Enhanced */}
           <div className="px-5 py-5 border-t border-border-slate bg-bg-dark-slate flex justify-between items-center gap-4" style={{ background: '#1E293B' }}>
-            <button
-              onClick={() => {
-                const screens: Array<typeof activeScreen> = ['controls', 'scenarios', 'results', 'charts', 'personas'];
-                const current = screens.indexOf(activeScreen);
-                if (current > 0) setActiveScreen(screens[current - 1]);
-              }}
-              className="px-5 py-3 rounded transition"
-              style={{
-                background: '#0F172A',
-                color: '#00D9FF',
-                border: '2px solid #00D9FF',
-                fontSize: '16px',
-                fontWeight: '700',
-                letterSpacing: '0.3px',
-                textShadow: '0 0 8px rgba(0, 217, 255, 0.6)'
-              }}
-            >
-              ← Back
-            </button>
+            {(() => {
+              const screens: Array<typeof activeScreen> = ['controls', 'scenarios', 'results', 'charts', 'personas'];
+              const current = screens.indexOf(activeScreen);
+              return current > 0 ? (
+                <button
+                  onClick={() => {
+                    if (current > 0) setActiveScreen(screens[current - 1]);
+                  }}
+                  className="px-5 py-3 rounded transition"
+                  style={{
+                    background: '#0F172A',
+                    color: '#00D9FF',
+                    border: '2px solid #00D9FF',
+                    fontSize: '16px',
+                    fontWeight: '700',
+                    letterSpacing: '0.3px',
+                    textShadow: '0 0 8px rgba(0, 217, 255, 0.6)'
+                  }}
+                >
+                  ← Back
+                </button>
+              ) : null;
+            })()}
             <button
               onClick={() => setShowSubmitModal(true)}
               className="px-5 py-3 rounded transition"
