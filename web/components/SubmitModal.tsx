@@ -58,9 +58,11 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
             <div className="mb-7 bg-darker-navy/60 rounded-lg p-4 border border-blue-500/20 backdrop-blur-sm text-center">
               <p className="text-xs text-muted mb-3 uppercase tracking-wide font-semibold">Fiscal Balance</p>
               <p
-                className="text-4xl font-bold mb-3"
                 style={{
-                  color: '#00D9FF !important',
+                  color: '#00D9FF',
+                  fontSize: '2.25rem',
+                  fontWeight: 'bold',
+                  marginBottom: '0.75rem',
                   textShadow: '0 0 10px rgba(0, 217, 255, 0.6), 0 0 20px rgba(0, 217, 255, 0.3)',
                   letterSpacing: '0.05em'
                 }}
