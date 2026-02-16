@@ -102,17 +102,22 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
                 <button
                   type="button"
                   onClick={onClose}
-                  style={{ backgroundColor: '#1a2d3d', border: '1px solid rgba(96, 165, 250, 0.3)', color: '#8b94a5' }}
-                  className="flex-1 px-3 py-2.5 rounded-lg text-sm font-medium transition hover:bg-opacity-80 hover:text-white"
+                  style={{
+                    backgroundColor: '#2a3f52',
+                    border: '1.5px solid rgba(0, 217, 255, 0.4)',
+                    color: '#ffffff',
+                    fontWeight: 500
+                  }}
+                  className="flex-1 px-3 py-2.5 rounded-lg text-sm transition"
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#243847'
-                    e.currentTarget.style.borderColor = 'rgba(96, 165, 250, 0.6)'
-                    e.currentTarget.style.color = '#ffffff'
+                    e.currentTarget.style.backgroundColor = '#3a5268'
+                    e.currentTarget.style.borderColor = 'rgba(0, 217, 255, 0.7)'
+                    e.currentTarget.style.boxShadow = '0 0 12px rgba(0, 217, 255, 0.3)'
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#1a2d3d'
-                    e.currentTarget.style.borderColor = 'rgba(96, 165, 250, 0.3)'
-                    e.currentTarget.style.color = '#8b94a5'
+                    e.currentTarget.style.backgroundColor = '#2a3f52'
+                    e.currentTarget.style.borderColor = 'rgba(0, 217, 255, 0.4)'
+                    e.currentTarget.style.boxShadow = 'none'
                   }}
                   disabled={isSubmitting}
                 >
