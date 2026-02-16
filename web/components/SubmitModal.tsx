@@ -43,7 +43,7 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
   }
 
   return (
-    <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
+    <div className="fixed inset-0 flex items-center justify-center z-50" style={{ backgroundColor: '#000000' }}>
       <div className="bg-gradient-to-br from-dark-slate via-darker-slate to-darker-navy rounded-2xl p-8 max-w-md w-full border border-blue-500/60 shadow-2xl">
         <h2 className="text-3xl font-bold text-bright mb-2">Submit Your Model</h2>
         <p className="text-muted text-sm mb-6">Share your policy configuration with the community</p>
