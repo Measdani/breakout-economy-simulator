@@ -97,14 +97,41 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
                 <button
                   type="button"
                   onClick={onClose}
-                  className="flex-1 px-3 py-2.5 bg-darker-navy/80 border border-blue-400/30 text-muted rounded-lg text-sm font-medium hover:bg-darker-slate hover:text-bright hover:border-blue-400/60 transition"
+                  style={{ backgroundColor: '#1a2d3d', border: '1px solid rgba(96, 165, 250, 0.3)', color: '#8b94a5' }}
+                  className="flex-1 px-3 py-2.5 rounded-lg text-sm font-medium transition hover:bg-opacity-80 hover:text-white"
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#243847'
+                    e.currentTarget.style.borderColor = 'rgba(96, 165, 250, 0.6)'
+                    e.currentTarget.style.color = '#ffffff'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#1a2d3d'
+                    e.currentTarget.style.borderColor = 'rgba(96, 165, 250, 0.3)'
+                    e.currentTarget.style.color = '#8b94a5'
+                  }}
                   disabled={isSubmitting}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-3 py-2.5 bg-gradient-to-r from-blue-600 via-blue-500 to-green-500 text-white font-bold rounded-lg text-sm hover:from-blue-500 hover:via-blue-400 hover:to-green-400 shadow-lg hover:shadow-blue-500/50 transition transform hover:scale-105 disabled:opacity-50 disabled:hover:scale-100"
+                  style={{
+                    background: 'linear-gradient(to right, #2563eb, #3b82f6, #22c55e)',
+                    color: '#ffffff',
+                    border: 'none',
+                    boxShadow: '0 10px 15px -3px rgba(37, 99, 235, 0.3)'
+                  }}
+                  className="flex-1 px-3 py-2.5 font-bold rounded-lg text-sm transition transform"
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'linear-gradient(to right, #1d4ed8, #2563eb, #16a34a)'
+                    e.currentTarget.style.boxShadow = '0 15px 25px -3px rgba(37, 99, 235, 0.5)'
+                    e.currentTarget.style.transform = 'scale(1.05)'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'linear-gradient(to right, #2563eb, #3b82f6, #22c55e)'
+                    e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(37, 99, 235, 0.3)'
+                    e.currentTarget.style.transform = 'scale(1)'
+                  }}
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? 'Submitting...' : 'Submit'}
