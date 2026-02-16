@@ -654,8 +654,6 @@ export default function Simulator() {
         isOpen={showSubmitModal}
         onClose={() => setShowSubmitModal(false)}
       />
-
-      </div>
     </div>
   );
 }
