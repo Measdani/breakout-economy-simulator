@@ -32,13 +32,13 @@ export default async function LeaderboardPage() {
 
         {submissions.length === 0 ? (
           <div className="bg-gradient-to-br from-dark-slate to-darker-navy rounded-lg border border-blue-600 p-8 text-center">
-            <p className="text-muted text-lg mb-2">No submissions yet.</p>
-            <p className="text-bright font-semibold mb-6">Be the first to create and submit your model! 🚀</p>
+            <p className="text-gray-400 text-lg mb-2 italic">No submissions yet.</p>
+            <p className="text-bright font-semibold mb-6">Get started by creating and submitting your model!</p>
             <Link
               href="/"
-              className="inline-block px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold rounded-full transition-all duration-200 transform hover:scale-105"
+              className="inline-block px-8 py-3 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-500 hover:via-purple-500 hover:to-pink-500 text-white font-bold rounded-full transition-all duration-300 transform hover:scale-110 hover:shadow-lg shadow-md"
             >
-              Start Your Model
+              🚀 Start Your Model
             </Link>
           </div>
         ) : (
