@@ -43,7 +43,7 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-end justify-center z-50 pb-24">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 pt-64">
       <div className="bg-dark-slate rounded-lg p-8 max-w-md w-full border-2 border-blue-500">
         <h2 className="text-2xl font-bold text-bright mb-4">Submit Your Model</h2>
 
