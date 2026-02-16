@@ -31,7 +31,7 @@ export default async function LeaderboardPage() {
         </div>
 
         {submissions.length === 0 ? (
-          <div className="bg-gradient-to-br from-dark-slate to-darker-navy rounded-xl border-2 border-blue-500/30 p-12 text-center">
+          <div className="bg-gradient-to-br from-dark-slate to-darker-navy rounded-lg border border-blue-600 p-8 text-center">
             <p className="text-muted text-lg mb-2">No submissions yet.</p>
             <p className="text-bright font-semibold mb-6">Be the first to create and submit your model! 🚀</p>
             <Link
