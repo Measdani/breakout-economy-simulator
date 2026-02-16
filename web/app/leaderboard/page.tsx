@@ -33,12 +33,12 @@ export default async function LeaderboardPage() {
         {submissions.length === 0 ? (
           <div className="bg-gradient-to-br from-dark-slate to-darker-navy rounded-lg border border-blue-600 p-8 text-center">
             <p className="text-gray-400 text-lg mb-2 italic">No submissions yet.</p>
-            <p className="text-bright font-semibold mb-6">Get started by creating and submitting your model!</p>
+            <p className="text-bright font-semibold mb-6">Create your first model and join the leaderboard!</p>
             <Link
               href="/"
-              className="inline-block px-8 py-3 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-500 hover:via-purple-500 hover:to-pink-500 text-white font-bold rounded-full transition-all duration-300 transform hover:scale-110 hover:shadow-lg shadow-md"
+              className="cta-button inline-block px-8 py-3 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-500 hover:via-purple-500 hover:to-pink-500 text-white font-bold rounded-full transition-all duration-300 transform hover:scale-110 hover:shadow-lg shadow-md"
             >
-              🚀 Start Your Model
+              <span className="rocket-animate">🚀</span> Start Your Model
             </Link>
           </div>
         ) : (
