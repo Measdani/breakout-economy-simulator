@@ -44,20 +44,24 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
 
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, minHeight: '100vh' }}>
-      <div className="bg-gradient-to-br from-dark-slate via-darker-slate to-darker-navy rounded-lg border border-blue-500/60 shadow-2xl" style={{ width: '320px', padding: '1.25rem' }}>
-        <h2 className="text-lg font-bold text-bright mb-1 text-center">Submit Your Model</h2>
-        <p className="text-muted text-xs mb-4 text-center">Share your policy configuration with the community</p>
+      <div style={{ width: '280px', padding: '0.75rem', backgroundColor: '#1a2332', border: '1.5px solid rgba(0, 217, 255, 0.6)', borderRadius: '0.5rem', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.6)' }}>
+        <h2 style={{ fontSize: '0.875rem', fontWeight: 'bold', color: '#e0e7ff', marginBottom: '0.25rem', textAlign: 'center' }}>Submit Your Model</h2>
+        <p style={{ color: '#94a3b8', fontSize: '0.65rem', marginBottom: '0.75rem', textAlign: 'center' }}>Share your policy configuration with the community</p>
 
         {success ? (
-          <div className="text-center py-4">
-            <div className="text-4xl mb-2">✓</div>
-            <p className="text-green-400 text-sm">Submitted successfully!</p>
+          <div style={{ textAlign: 'center', paddingTop: '0.5rem', paddingBottom: '0.5rem' }}>
+            <div style={{ fontSize: '2rem', marginBottom: '0.25rem' }}>✓</div>
+            <p style={{ color: '#4ade80', fontSize: '0.75rem' }}>Submitted successfully!</p>
           </div>
         ) : (
           <>
             <div
-              className="mb-5 rounded-lg p-3 border border-blue-500/20 backdrop-blur-sm text-center"
               style={{
+                marginBottom: '0.5rem',
+                borderRadius: '0.375rem',
+                padding: '0.5rem',
+                border: '1px solid rgba(0, 217, 255, 0.3)',
+                textAlign: 'center',
                 background: result.balance.isSolvent
                   ? 'linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%)'
                   : 'linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%)',
@@ -66,33 +70,40 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
                   : '0 4px 12px rgba(239, 68, 68, 0.1)'
               }}
             >
-              <p className="text-xs text-muted mb-2 uppercase tracking-wide font-semibold">Fiscal Balance</p>
+              <p style={{ fontSize: '0.65rem', color: '#94a3b8', marginBottom: '0.25rem', fontWeight: 600, letterSpacing: '0.05em' }}>FISCAL BALANCE</p>
               <p
                 style={{
                   color: '#00D9FF',
-                  fontSize: '1.875rem',
+                  fontSize: '1.25rem',
                   fontWeight: 'bold',
-                  marginBottom: '0.5rem',
-                  textShadow: '0 0 10px rgba(0, 217, 255, 0.6), 0 0 20px rgba(0, 217, 255, 0.3)',
-                  letterSpacing: '0.05em'
+                  marginBottom: '0.25rem',
+                  textShadow: '0 0 8px rgba(0, 217, 255, 0.5)',
+                  letterSpacing: '0.03em'
                 }}
               >
                 {result.balance.isSolvent ? '+' : ''}${(result.balance.surplusDeficit / 1e9).toFixed(1)}B
               </p>
-              <p className="text-xs text-muted leading-relaxed">Your model's fiscal outcome after configuration</p>
+              <p style={{ fontSize: '0.6rem', color: '#94a3b8', lineHeight: '1.2' }}>Your model's outcome</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <div>
-                <label className="block text-xs text-muted mb-2 uppercase tracking-wide font-semibold">Name (leave blank to stay anonymous)</label>
+                <label style={{ display: 'block', fontSize: '0.6rem', color: '#94a3b8', marginBottom: '0.25rem', fontWeight: 600, letterSpacing: '0.05em' }}>Name (optional)</label>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Anonymous"
-                  className="w-full px-3 py-3 bg-darker-navy/80 border border-blue-500/30 rounded-lg text-bright text-sm leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                   style={{
-                    boxShadow: '0 2px 4px rgba(0, 217, 255, 0.05)'
+                    width: '100%',
+                    padding: '0.375rem 0.5rem',
+                    backgroundColor: '#0f1419',
+                    border: '1px solid rgba(0, 217, 255, 0.3)',
+                    borderRadius: '0.25rem',
+                    color: '#e0e7ff',
+                    fontSize: '0.75rem',
+                    boxShadow: '0 2px 4px rgba(0, 217, 255, 0.05)',
+                    boxSizing: 'border-box'
                   }}
                   onFocus={(e) => {
                     e.currentTarget.style.borderColor = 'rgba(0, 217, 255, 0.6)'
@@ -107,15 +118,22 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
               </div>
 
               <div>
-                <label className="block text-xs text-muted mb-2 uppercase tracking-wide font-semibold">Email (optional, for updates)</label>
+                <label style={{ display: 'block', fontSize: '0.6rem', color: '#94a3b8', marginBottom: '0.25rem', fontWeight: 600, letterSpacing: '0.05em' }}>Email (optional)</label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your@email.com"
-                  className="w-full px-3 py-3 bg-darker-navy/80 border border-blue-500/30 rounded-lg text-bright text-sm leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                   style={{
-                    boxShadow: '0 2px 4px rgba(0, 217, 255, 0.05)'
+                    width: '100%',
+                    padding: '0.375rem 0.5rem',
+                    backgroundColor: '#0f1419',
+                    border: '1px solid rgba(0, 217, 255, 0.3)',
+                    borderRadius: '0.25rem',
+                    color: '#e0e7ff',
+                    fontSize: '0.75rem',
+                    boxShadow: '0 2px 4px rgba(0, 217, 255, 0.05)',
+                    boxSizing: 'border-box'
                   }}
                   onFocus={(e) => {
                     e.currentTarget.style.borderColor = 'rgba(0, 217, 255, 0.6)'
@@ -128,23 +146,28 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
                 />
               </div>
 
-              {error && <div className="text-red-400 text-xs mt-2 leading-relaxed">{error}</div>}
+              {error && <div style={{ color: '#ef4444', fontSize: '0.65rem', marginTop: '0.25rem' }}>{error}</div>}
 
-              <div className="flex gap-2 mt-5">
+              <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem' }}>
                 <button
                   type="button"
                   onClick={onClose}
                   style={{
+                    flex: 1,
+                    padding: '0.375rem 0.5rem',
                     backgroundColor: '#2a3f52',
-                    border: '1.5px solid rgba(0, 217, 255, 0.4)',
+                    border: '1px solid rgba(0, 217, 255, 0.4)',
                     color: '#ffffff',
-                    fontWeight: 500
+                    fontWeight: 500,
+                    fontSize: '0.7rem',
+                    borderRadius: '0.25rem',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s'
                   }}
-                  className="flex-1 px-3 py-3 rounded-lg text-sm transition"
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = '#3a5268'
                     e.currentTarget.style.borderColor = 'rgba(0, 217, 255, 0.7)'
-                    e.currentTarget.style.boxShadow = '0 0 12px rgba(0, 217, 255, 0.3)'
+                    e.currentTarget.style.boxShadow = '0 0 8px rgba(0, 217, 255, 0.3)'
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = '#2a3f52'
@@ -153,30 +176,36 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
                   }}
                   disabled={isSubmitting}
                 >
-                  Cancel Submission
+                  Cancel
                 </button>
                 <button
                   type="submit"
                   style={{
+                    flex: 1,
+                    padding: '0.375rem 0.5rem',
                     background: 'linear-gradient(to right, #2563eb, #3b82f6, #22c55e)',
                     color: '#ffffff',
                     border: 'none',
-                    boxShadow: '0 10px 15px -3px rgba(37, 99, 235, 0.3)'
+                    fontWeight: 600,
+                    fontSize: '0.7rem',
+                    borderRadius: '0.25rem',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s',
+                    boxShadow: '0 4px 12px rgba(37, 99, 235, 0.25)'
                   }}
-                  className="flex-1 px-3 py-3 font-bold rounded-lg text-sm transition transform"
                   onMouseEnter={(e) => {
                     e.currentTarget.style.background = 'linear-gradient(to right, #1d4ed8, #2563eb, #16a34a)'
-                    e.currentTarget.style.boxShadow = '0 15px 25px -3px rgba(37, 99, 235, 0.5)'
-                    e.currentTarget.style.transform = 'scale(1.05)'
+                    e.currentTarget.style.boxShadow = '0 8px 16px rgba(37, 99, 235, 0.4)'
+                    e.currentTarget.style.transform = 'scale(1.02)'
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.background = 'linear-gradient(to right, #2563eb, #3b82f6, #22c55e)'
-                    e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(37, 99, 235, 0.3)'
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.25)'
                     e.currentTarget.style.transform = 'scale(1)'
                   }}
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? 'Submitting...' : 'Submit Model'}
+                  {isSubmitting ? 'Submitting...' : 'Submit'}
                 </button>
               </div>
             </form>
