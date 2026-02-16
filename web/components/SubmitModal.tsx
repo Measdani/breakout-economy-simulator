@@ -43,9 +43,10 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-start justify-center z-50" style={{ paddingTop: '300px' }}>
-      <div className="bg-dark-slate rounded-lg p-8 max-w-md w-full border-2 border-blue-500">
-        <h2 className="text-2xl font-bold text-bright mb-4">Submit Your Model</h2>
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-gradient-to-br from-dark-slate via-darker-slate to-darker-navy rounded-2xl p-8 max-w-md w-full border border-blue-500/40 shadow-2xl">
+        <h2 className="text-3xl font-bold text-bright mb-2">Submit Your Model</h2>
+        <p className="text-muted text-sm mb-6">Share your policy configuration with the community</p>
 
         {success ? (
           <div className="text-center py-8">
@@ -54,10 +55,10 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
           </div>
         ) : (
           <>
-            <div className="mb-6 bg-darker-navy rounded p-4 border border-border-slate">
-              <p className="text-sm text-muted mb-2">Fiscal Balance:</p>
+            <div className="mb-6 bg-darker-navy/60 rounded-xl p-4 border border-blue-500/20 backdrop-blur-sm">
+              <p className="text-xs text-muted mb-2 uppercase tracking-wide">Fiscal Balance</p>
               <p
-                className={`text-2xl font-bold ${
+                className={`text-3xl font-bold ${
                   result.balance.isSolvent ? 'text-green-400' : 'text-red-400'
                 }`}
               >
@@ -67,42 +68,42 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm text-muted mb-2">Name (optional)</label>
+                <label className="block text-xs text-muted mb-2 uppercase tracking-wide">Name (optional)</label>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Anonymous"
-                  className="w-full px-4 py-2 bg-darker-navy border border-border-slate rounded text-bright"
+                  className="w-full px-4 py-3 bg-darker-navy border border-border-slate/50 rounded-lg text-bright focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                   maxLength={50}
                 />
               </div>
 
               <div>
-                <label className="block text-sm text-muted mb-2">Email (optional)</label>
+                <label className="block text-xs text-muted mb-2 uppercase tracking-wide">Email (optional)</label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your@email.com"
-                  className="w-full px-4 py-2 bg-darker-navy border border-border-slate rounded text-bright"
+                  className="w-full px-4 py-3 bg-darker-navy border border-border-slate/50 rounded-lg text-bright focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 />
               </div>
 
               {error && <div className="text-red-400 text-sm">{error}</div>}
 
-              <div className="flex gap-3">
+              <div className="flex gap-3 mt-8">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="flex-1 px-4 py-2 bg-slate-700 text-white rounded hover:bg-slate-600"
+                  className="flex-1 px-4 py-3 bg-darker-navy border border-border-slate text-muted rounded-lg hover:bg-darker-slate hover:text-bright transition"
                   disabled={isSubmitting}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 disabled:opacity-50"
+                  className="flex-1 px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-bold rounded-lg hover:from-blue-500 hover:to-blue-400 transition disabled:opacity-50"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? 'Submitting...' : 'Submit'}
