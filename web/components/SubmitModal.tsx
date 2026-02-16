@@ -45,8 +45,8 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}>
       <div className="bg-gradient-to-br from-dark-slate via-darker-slate to-darker-navy rounded-lg p-6 w-96 border border-blue-500/60 shadow-2xl">
-        <h2 className="text-xl font-bold text-bright mb-2">Submit Your Model</h2>
-        <p className="text-muted text-xs mb-5">Share your policy configuration with the community</p>
+        <h2 className="text-xl font-bold text-bright mb-2 text-center">Submit Your Model</h2>
+        <p className="text-muted text-xs mb-5 text-center">Share your policy configuration with the community</p>
 
         {success ? (
           <div className="text-center py-4">
@@ -55,10 +55,10 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
           </div>
         ) : (
           <>
-            <div className="mb-7 bg-darker-navy/60 rounded-lg p-4 border border-blue-500/20 backdrop-blur-sm">
-              <p className="text-xs text-muted mb-2 uppercase tracking-wide font-semibold">Fiscal Balance</p>
+            <div className="mb-7 bg-darker-navy/60 rounded-lg p-4 border border-blue-500/20 backdrop-blur-sm text-center">
+              <p className="text-xs text-muted mb-3 uppercase tracking-wide font-semibold">Fiscal Balance</p>
               <p
-                className={`text-2xl font-bold mb-2 ${
+                className={`text-3xl font-bold mb-3 ${
                   result.balance.isSolvent ? 'text-green-400' : 'text-red-400'
                 }`}
               >
@@ -67,7 +67,7 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
               <p className="text-xs text-muted leading-relaxed">Your model's fiscal outcome after configuration</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-7">
               <div>
                 <label className="block text-xs text-muted mb-2 uppercase tracking-wide font-semibold">Name (leave blank to stay anonymous)</label>
                 <input
