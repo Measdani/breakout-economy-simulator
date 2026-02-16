@@ -24,6 +24,20 @@ async function getAllSubmissions() {
 
 async function getStatistics(submissions: any[]) {
   const totalSubmissions = submissions.length
+  if (totalSubmissions === 0) {
+    return {
+      totalSubmissions: 0,
+      solventCount: 0,
+      deficitCount: 0,
+      avgSurplus: 0,
+      maxSurplus: 0,
+      minSurplus: 0,
+      avgRevenue: 0,
+      avgObligations: 0,
+      avgWorkIncentive: 0
+    }
+  }
+
   const solventCount = submissions.filter((s) => s.is_solvent).length
   const deficitCount = submissions.filter((s) => !s.is_solvent).length
   const avgSurplus =
@@ -37,13 +51,29 @@ async function getStatistics(submissions: any[]) {
       1e9) ||
     0
 
+  const totalRevenue = submissions.reduce((sum, s) => sum + (s.result?.revenue?.totalRevenue || 0), 0) / 1e9
+  const avgRevenue = totalRevenue / totalSubmissions
+  const totalObligations = submissions.reduce((sum, s) => sum + (s.result?.obligations?.totalObligations || 0), 0) / 1e9
+  const avgObligations = totalObligations / totalSubmissions
+
+  const workIncentiveScores = submissions
+    .map(s => {
+      const personas = s.result?.citizenModel?.personaOutcomes || []
+      if (!personas.length) return 0
+      return (personas.reduce((sum, p) => sum + ((p.earnedIncome - p.incomeTax) / p.earnedIncome), 0) / personas.length * 100)
+    })
+  const avgWorkIncentive = workIncentiveScores.reduce((a, b) => a + b, 0) / totalSubmissions
+
   return {
     totalSubmissions,
     solventCount,
     deficitCount,
     avgSurplus,
     maxSurplus,
-    minSurplus
+    minSurplus,
+    avgRevenue,
+    avgObligations,
+    avgWorkIncentive
   }
 }
 
@@ -101,6 +131,21 @@ export default async function AdminPage() {
           <div className="bg-dark-slate rounded-lg border border-border-slate p-4">
             <p className="text-xs text-muted mb-1">Max Deficit</p>
             <p className="text-xl font-bold text-red-400">${stats.minSurplus.toFixed(1)}B</p>
+          </div>
+
+          <div className="bg-dark-slate rounded-lg border border-border-slate p-4">
+            <p className="text-xs text-muted mb-1">Avg Revenue</p>
+            <p className="text-xl font-bold text-blue-400">${stats.avgRevenue.toFixed(1)}B</p>
+          </div>
+
+          <div className="bg-dark-slate rounded-lg border border-border-slate p-4">
+            <p className="text-xs text-muted mb-1">Avg Obligations</p>
+            <p className="text-xl font-bold text-yellow-400">${stats.avgObligations.toFixed(1)}B</p>
+          </div>
+
+          <div className="bg-dark-slate rounded-lg border border-border-slate p-4 col-span-2">
+            <p className="text-xs text-muted mb-1">Avg Work Incentive Score</p>
+            <p className="text-xl font-bold text-purple-400">{stats.avgWorkIncentive.toFixed(1)}%</p>
           </div>
         </div>
 

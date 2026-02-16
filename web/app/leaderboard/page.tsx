@@ -49,43 +49,55 @@ export default async function LeaderboardPage() {
                   <th className="px-4 py-3 text-left text-sm font-semibold text-muted">Rank</th>
                   <th className="px-4 py-3 text-left text-sm font-semibold text-muted">Name</th>
                   <th className="px-4 py-3 text-right text-sm font-semibold text-muted">Balance</th>
-                  <th className="px-4 py-3 text-right text-sm font-semibold text-muted">UBI</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-muted">Revenue</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-muted">Work Incentive</th>
                   <th className="px-4 py-3 text-right text-sm font-semibold text-muted">Tax Rate</th>
                   <th className="px-4 py-3 text-right text-sm font-semibold text-muted">Date</th>
                 </tr>
               </thead>
               <tbody>
-                {submissions.map((sub, idx) => (
-                  <tr
-                    key={sub.id}
-                    className={`border-t border-border-slate transition ${
-                      idx === 0
-                        ? 'bg-yellow-900/20 hover:bg-yellow-900/30'
-                        : 'hover:bg-darker-navy'
-                    }`}
-                  >
-                    <td className={`px-4 py-3 font-bold ${idx === 0 ? 'text-yellow-400 text-lg' : 'text-bright'}`}>
-                      {idx === 0 ? '👑 #1' : `#${idx + 1}`}
-                    </td>
-                    <td className="px-4 py-3 text-bright">{sub.name || 'Anonymous'}</td>
-                    <td
-                      className={`px-4 py-3 text-right font-bold ${
-                        sub.is_solvent ? 'text-green-400' : 'text-red-400'
+                {submissions.map((sub, idx) => {
+                  const revenue = (sub.result?.revenue?.totalRevenue || 0) / 1e9
+                  const workIncentive = sub.result?.citizenModel?.personaOutcomes
+                    ? (sub.result.citizenModel.personaOutcomes.reduce((sum, p) => sum + (p.earnedIncome - p.incomeTax) / p.earnedIncome, 0) /
+                      sub.result.citizenModel.personaOutcomes.length * 100)
+                    : 0
+
+                  return (
+                    <tr
+                      key={sub.id}
+                      className={`border-t border-border-slate transition ${
+                        idx === 0
+                          ? 'bg-yellow-900/20 hover:bg-yellow-900/30'
+                          : 'hover:bg-darker-navy'
                       }`}
                     >
-                      {sub.is_solvent ? '+' : ''}${(sub.surplus_deficit / 1e9).toFixed(1)}B
-                    </td>
-                    <td className="px-4 py-3 text-right text-muted">
-                      ${(sub.ubi_annual / 1000).toFixed(0)}K
-                    </td>
-                    <td className="px-4 py-3 text-right text-muted">
-                      {(sub.token_tax_rate * 100).toFixed(2)}%
-                    </td>
-                    <td className="px-4 py-3 text-right text-muted text-sm">
-                      {new Date(sub.created_at).toLocaleDateString()}
-                    </td>
-                  </tr>
-                ))}
+                      <td className={`px-4 py-3 font-bold ${idx === 0 ? 'text-yellow-400 text-lg' : 'text-bright'}`}>
+                        {idx === 0 ? '👑 #1' : `#${idx + 1}`}
+                      </td>
+                      <td className="px-4 py-3 text-bright">{sub.name || 'Anonymous'}</td>
+                      <td
+                        className={`px-4 py-3 text-right font-bold ${
+                          sub.is_solvent ? 'text-green-400' : 'text-red-400'
+                        }`}
+                      >
+                        {sub.is_solvent ? '+' : ''}${(sub.surplus_deficit / 1e9).toFixed(1)}B
+                      </td>
+                      <td className="px-4 py-3 text-right text-muted">
+                        ${revenue.toFixed(1)}B
+                      </td>
+                      <td className="px-4 py-3 text-right text-muted">
+                        {workIncentive.toFixed(0)}%
+                      </td>
+                      <td className="px-4 py-3 text-right text-muted">
+                        {(sub.token_tax_rate * 100).toFixed(2)}%
+                      </td>
+                      <td className="px-4 py-3 text-right text-muted text-sm">
+                        {new Date(sub.created_at).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </div>
