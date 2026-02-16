@@ -590,7 +590,16 @@ export default function Simulator() {
             </button>
             <button
               onClick={() => setShowSubmitModal(true)}
-              className="px-4 py-2 rounded transition text-sm font-bold text-white bg-blue-600 hover:bg-blue-500"
+              className="px-5 py-3 rounded transition"
+              style={{
+                background: '#0F172A',
+                color: '#00D9FF',
+                border: '2px solid #00D9FF',
+                fontSize: '16px',
+                fontWeight: '700',
+                letterSpacing: '0.3px',
+                textShadow: '0 0 8px rgba(0, 217, 255, 0.6)'
+              }}
             >
               📤 Submit
             </button>
