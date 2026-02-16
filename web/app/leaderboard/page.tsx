@@ -22,19 +22,23 @@ export default async function LeaderboardPage() {
   return (
     <div className="min-h-screen bg-deep-navy px-4 py-8 flex items-center justify-center">
       <div className="w-full max-w-2xl">
-        <div className="mb-6 text-center">
-          <Link href="/" className="text-blue-400 hover:text-blue-300 text-sm inline-block mb-3">
+        <div className="mb-8 text-center">
+          <Link href="/" className="text-blue-400 hover:text-blue-300 text-xs inline-block mb-4 transition">
             ← Back to Simulator
           </Link>
-          <h1 className="text-3xl font-bold text-bright">🏆 Leaderboard</h1>
-          <p className="text-muted text-sm mt-1">Top 20 submissions ranked by fiscal balance</p>
+          <h1 className="text-5xl font-bold text-bright mb-2">🏆 Leaderboard</h1>
+          <p className="text-muted text-sm">See how your model stacks up against others!</p>
         </div>
 
         {submissions.length === 0 ? (
-          <div className="bg-dark-slate rounded-lg border border-border-slate p-8 text-center">
-            <p className="text-muted">No submissions yet. Be the first to submit your model!</p>
-            <Link href="/" className="text-blue-400 hover:text-blue-300 mt-4 inline-block">
-              Go to Simulator →
+          <div className="bg-gradient-to-br from-dark-slate to-darker-navy rounded-xl border-2 border-blue-500/30 p-12 text-center">
+            <p className="text-muted text-lg mb-2">No submissions yet.</p>
+            <p className="text-bright font-semibold mb-6">Be the first to create and submit your model! 🚀</p>
+            <Link
+              href="/"
+              className="inline-block px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold rounded-full transition-all duration-200 transform hover:scale-105"
+            >
+              Start Your Model
             </Link>
           </div>
         ) : (
@@ -52,8 +56,17 @@ export default async function LeaderboardPage() {
               </thead>
               <tbody>
                 {submissions.map((sub, idx) => (
-                  <tr key={sub.id} className="border-t border-border-slate hover:bg-darker-navy transition">
-                    <td className="px-4 py-3 text-bright font-bold">#{idx + 1}</td>
+                  <tr
+                    key={sub.id}
+                    className={`border-t border-border-slate transition ${
+                      idx === 0
+                        ? 'bg-yellow-900/20 hover:bg-yellow-900/30'
+                        : 'hover:bg-darker-navy'
+                    }`}
+                  >
+                    <td className={`px-4 py-3 font-bold ${idx === 0 ? 'text-yellow-400 text-lg' : 'text-bright'}`}>
+                      {idx === 0 ? '👑 #1' : `#${idx + 1}`}
+                    </td>
                     <td className="px-4 py-3 text-bright">{sub.name || 'Anonymous'}</td>
                     <td
                       className={`px-4 py-3 text-right font-bold ${
