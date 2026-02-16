@@ -58,9 +58,12 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
             <div className="mb-7 bg-darker-navy/60 rounded-lg p-4 border border-blue-500/20 backdrop-blur-sm text-center">
               <p className="text-xs text-muted mb-3 uppercase tracking-wide font-semibold">Fiscal Balance</p>
               <p
-                className={`text-3xl font-bold mb-3 ${
-                  result.balance.isSolvent ? 'text-green-400' : 'text-red-400'
-                }`}
+                className="text-4xl font-bold mb-3"
+                style={{
+                  color: '#00D9FF',
+                  textShadow: '0 0 10px rgba(0, 217, 255, 0.6), 0 0 20px rgba(0, 217, 255, 0.3)',
+                  letterSpacing: '0.05em'
+                }}
               >
                 {result.balance.isSolvent ? '+' : ''}${(result.balance.surplusDeficit / 1e9).toFixed(1)}B
               </p>
