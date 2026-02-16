@@ -45,7 +45,7 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, minHeight: '100vh' }}>
       <div style={{ width: '280px', padding: '0.75rem', backgroundColor: '#1a2332', border: '1.5px solid rgba(0, 217, 255, 0.6)', borderRadius: '0.5rem', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.6)' }}>
-        <h2 style={{ fontSize: '0.875rem', fontWeight: 'bold', color: '#e0e7ff', marginBottom: '0.25rem', textAlign: 'center' }}>Submit Your Model</h2>
+        <h2 style={{ fontSize: '0.875rem', fontWeight: 'bold', color: '#00ff00', marginBottom: '0.25rem', textAlign: 'center' }}>✓ DEPLOYED - Submit Model</h2>
         <p style={{ color: '#94a3b8', fontSize: '0.65rem', marginBottom: '0.75rem', textAlign: 'center' }}>Share your policy configuration with the community</p>
 
         {success ? (
