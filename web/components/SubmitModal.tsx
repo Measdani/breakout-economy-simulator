@@ -44,21 +44,21 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
 
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}>
-      <div className="bg-gradient-to-br from-dark-slate via-darker-slate to-darker-navy rounded-2xl p-8 max-w-md w-full border border-blue-500/60 shadow-2xl">
-        <h2 className="text-3xl font-bold text-bright mb-2">Submit Your Model</h2>
-        <p className="text-muted text-sm mb-6">Share your policy configuration with the community</p>
+      <div className="bg-gradient-to-br from-dark-slate via-darker-slate to-darker-navy rounded-lg p-4 w-80 border border-blue-500/60 shadow-2xl">
+        <h2 className="text-xl font-bold text-bright mb-1">Submit Your Model</h2>
+        <p className="text-muted text-xs mb-3">Share your policy configuration with the community</p>
 
         {success ? (
-          <div className="text-center py-8">
-            <div className="text-6xl mb-4">✓</div>
-            <p className="text-green-400 text-lg">Submitted successfully!</p>
+          <div className="text-center py-4">
+            <div className="text-4xl mb-2">✓</div>
+            <p className="text-green-400 text-sm">Submitted successfully!</p>
           </div>
         ) : (
           <>
-            <div className="mb-6 bg-darker-navy/60 rounded-xl p-4 border border-blue-500/20 backdrop-blur-sm">
-              <p className="text-xs text-muted mb-2 uppercase tracking-wide">Fiscal Balance</p>
+            <div className="mb-3 bg-darker-navy/60 rounded p-2 border border-blue-500/20 backdrop-blur-sm">
+              <p className="text-xs text-muted mb-1 uppercase tracking-wide">Fiscal Balance</p>
               <p
-                className={`text-3xl font-bold ${
+                className={`text-lg font-bold ${
                   result.balance.isSolvent ? 'text-green-400' : 'text-red-400'
                 }`}
               >
@@ -66,44 +66,44 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-2">
               <div>
-                <label className="block text-xs text-muted mb-2 uppercase tracking-wide">Name (optional)</label>
+                <label className="block text-xs text-muted mb-1 uppercase tracking-wide">Name (optional)</label>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Anonymous"
-                  className="w-full px-4 py-3 bg-darker-navy border border-border-slate/50 rounded-lg text-bright focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                  className="w-full px-2 py-1.5 bg-darker-navy border border-border-slate/50 rounded text-bright text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                   maxLength={50}
                 />
               </div>
 
               <div>
-                <label className="block text-xs text-muted mb-2 uppercase tracking-wide">Email (optional)</label>
+                <label className="block text-xs text-muted mb-1 uppercase tracking-wide">Email (optional)</label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your@email.com"
-                  className="w-full px-4 py-3 bg-darker-navy border border-border-slate/50 rounded-lg text-bright focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                  className="w-full px-2 py-1.5 bg-darker-navy border border-border-slate/50 rounded text-bright text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 />
               </div>
 
-              {error && <div className="text-red-400 text-sm">{error}</div>}
+              {error && <div className="text-red-400 text-xs">{error}</div>}
 
-              <div className="flex gap-3 mt-8">
+              <div className="flex gap-2 mt-3">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="flex-1 px-4 py-3 bg-darker-navy border border-border-slate text-muted rounded-lg hover:bg-darker-slate hover:text-bright transition"
+                  className="flex-1 px-2 py-1.5 bg-darker-navy border border-border-slate text-muted rounded text-sm hover:bg-darker-slate hover:text-bright transition"
                   disabled={isSubmitting}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-bold rounded-lg hover:from-blue-500 hover:to-blue-400 transition disabled:opacity-50"
+                  className="flex-1 px-2 py-1.5 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-bold rounded text-sm hover:from-blue-500 hover:to-blue-400 transition disabled:opacity-50"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? 'Submitting...' : 'Submit'}
