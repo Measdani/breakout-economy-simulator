@@ -52,21 +52,21 @@ export default async function AdminPage() {
   const stats = await getStatistics(submissions)
 
   return (
-    <div className="min-h-screen bg-deep-navy px-4 py-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-deep-navy px-4 py-8 flex items-center justify-center">
+      <div className="w-full max-w-2xl">
         {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-4xl font-bold text-bright">📊 Admin Dashboard</h1>
-            <p className="text-muted mt-2">{stats.totalSubmissions} total submissions</p>
+        <div className="mb-6 text-center">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <h1 className="text-2xl font-bold text-bright">📊 Admin Dashboard</h1>
           </div>
-          <Link href="/" className="px-4 py-2 bg-slate-600 text-white rounded hover:bg-slate-500">
+          <p className="text-muted text-sm">{stats.totalSubmissions} total submissions</p>
+          <Link href="/" className="text-blue-400 hover:text-blue-300 text-xs inline-block mt-3">
             ← Back to Simulator
           </Link>
         </div>
 
         {/* Statistics Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+        <div className="grid grid-cols-2 gap-3 mb-6">
           <div className="bg-dark-slate rounded-lg border border-border-slate p-4">
             <p className="text-xs text-muted mb-1">Total Submissions</p>
             <p className="text-2xl font-bold text-bright">{stats.totalSubmissions}</p>
