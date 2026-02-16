@@ -59,7 +59,7 @@ export default async function LeaderboardPage() {
                 {submissions.map((sub, idx) => {
                   const revenue = (sub.result?.revenue?.totalRevenue || 0) / 1e9
                   const workIncentive = sub.result?.citizenModel?.personaOutcomes
-                    ? (sub.result.citizenModel.personaOutcomes.reduce((sum, p) => sum + (p.earnedIncome - p.incomeTax) / p.earnedIncome, 0) /
+                    ? (sub.result.citizenModel.personaOutcomes.reduce((sum: number, p: any) => sum + (p.earnedIncome - p.incomeTax) / p.earnedIncome, 0) /
                       sub.result.citizenModel.personaOutcomes.length * 100)
                     : 0
 

@@ -60,9 +60,9 @@ async function getStatistics(submissions: any[]) {
     .map(s => {
       const personas = s.result?.citizenModel?.personaOutcomes || []
       if (!personas.length) return 0
-      return (personas.reduce((sum, p) => sum + ((p.earnedIncome - p.incomeTax) / p.earnedIncome), 0) / personas.length * 100)
+      return (personas.reduce((sum: number, p: any) => sum + ((p.earnedIncome - p.incomeTax) / p.earnedIncome), 0) / personas.length * 100)
     })
-  const avgWorkIncentive = workIncentiveScores.reduce((a, b) => a + b, 0) / totalSubmissions
+  const avgWorkIncentive = workIncentiveScores.reduce((a: number, b: number) => a + b, 0) / totalSubmissions
 
   return {
     totalSubmissions,
