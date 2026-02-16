@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import Link from 'next/link';
 import { runSimulation } from '../lib/engine';
 import { useAnimatedNumber, numberFormatters } from '../lib/hooks/useAnimatedNumber';
 import type { PolicyConfig, SimulationResult } from '../lib/types';
@@ -13,6 +14,7 @@ import PersonaComparison from './PersonaComparison';
 import ProductivityBar from './ProductivityBar';
 import Glossary from './Glossary';
 import OnboardingTour from './OnboardingTour';
+import SubmitModal from './SubmitModal';
 
 const DEFAULT_CONFIG: PolicyConfig = {
   tokenTaxRate: 0.0035,
@@ -41,6 +43,7 @@ export default function Simulator() {
   const [activeScreen, setActiveScreen] = useState<'controls' | 'scenarios' | 'results' | 'charts' | 'personas' | 'income' | 'warnings'>('controls');
   const [currentConfig, setCurrentConfig] = useState<string>('Default');
   const [viewMode, setViewMode] = useState<'revenue' | 'social' | 'incentives'>('revenue');
+  const [showSubmitModal, setShowSubmitModal] = useState(false);
 
   const handlePresetSelectWithName = (presetName: string, presetConfig: Partial<PolicyConfig>) => {
     setCurrentConfig(presetName);
@@ -121,6 +124,14 @@ export default function Simulator() {
                   <div className={`w-2 h-2 rounded-full ${tokenTaxRate > ubiAnnualPerAdult / 1000000 ? 'bg-green-500' : 'bg-slate-600'}`}></div>
                   <span className="text-xs text-muted">Configuration:</span>
                   <span className="text-xs font-medium text-bright bg-darker-slate px-2.5 py-1 rounded-full border border-border-slate">{currentConfig}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Link href="/leaderboard" className="px-3 py-1.5 text-xs font-semibold text-bright bg-purple-600 hover:bg-purple-500 rounded transition">
+                    🏆 Leaderboard
+                  </Link>
+                  <Link href="/admin" className="px-3 py-1.5 text-xs font-semibold text-bright bg-slate-600 hover:bg-slate-500 rounded transition">
+                    ⚙️ Admin
+                  </Link>
                 </div>
               </div>
             </div>
@@ -557,7 +568,7 @@ export default function Simulator() {
           </div>
 
           {/* Footer Navigation - Enhanced */}
-          <div className="px-5 py-5 border-t border-border-slate bg-bg-dark-slate flex justify-between items-center" style={{ background: '#1E293B' }}>
+          <div className="px-5 py-5 border-t border-border-slate bg-bg-dark-slate flex justify-between items-center gap-4" style={{ background: '#1E293B' }}>
             <button
               onClick={() => {
                 const screens: Array<typeof activeScreen> = ['controls', 'scenarios', 'results', 'charts', 'personas'];
@@ -576,6 +587,12 @@ export default function Simulator() {
               }}
             >
               ← Back
+            </button>
+            <button
+              onClick={() => setShowSubmitModal(true)}
+              className="px-4 py-2 rounded transition text-sm font-bold text-white bg-blue-600 hover:bg-blue-500"
+            >
+              📤 Submit
             </button>
             <div className="flex flex-col items-center gap-2">
               <div className="flex gap-2 items-center">
@@ -628,10 +645,15 @@ export default function Simulator() {
         <Glossary />
         </div>
         {/* Close Tablet Case */}
+      </div>
 
-
-
-
+      {/* Submit Modal */}
+      <SubmitModal
+        config={config}
+        result={result}
+        isOpen={showSubmitModal}
+        onClose={() => setShowSubmitModal(false)}
+      />
 
 
 
