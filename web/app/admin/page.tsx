@@ -112,7 +112,10 @@ export default async function AdminPage() {
         <AdminHeader />
 
         {/* Stats Summary */}
-        <p className="text-sm text-center mb-6"><span className="text-green-400 font-bold text-lg">{stats.totalSubmissions}</span> <span className="text-muted">total submissions</span></p>
+        <p style={{ textAlign: 'center', marginBottom: '1.5rem', fontSize: '0.875rem' }}>
+          <span style={{ color: '#22c55e', fontWeight: 'bold', fontSize: '1.125rem' }}>{stats.totalSubmissions}</span>
+          <span style={{ color: '#94a3b8' }}> total submissions</span>
+        </p>
 
         {/* Statistics Cards */}
         <div className="grid grid-cols-3 gap-3 mb-8">
