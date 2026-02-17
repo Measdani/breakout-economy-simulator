@@ -10,24 +10,60 @@ export default function NavButtons() {
   const isAdmin = pathname?.startsWith('/admin')
 
   return (
-    <div className="flex items-center gap-2">
+    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
       <Link
         href="/leaderboard"
-        className={`px-3 py-1.5 text-xs font-semibold rounded transition ${
-          isLeaderboard
-            ? 'bg-purple-500 text-bright border border-purple-400'
-            : 'bg-purple-600 hover:bg-purple-500 text-bright border border-purple-600'
-        }`}
+        style={{
+          padding: '0.375rem 0.75rem',
+          fontSize: '0.75rem',
+          fontWeight: '600',
+          borderRadius: '0.25rem',
+          transition: 'all 0.2s',
+          textDecoration: 'none',
+          color: '#ffffff',
+          backgroundColor: isLeaderboard ? '#a855f7' : '#9333ea',
+          border: isLeaderboard ? '1px solid #c084fc' : '1px solid #9333ea',
+          display: 'inline-block',
+          cursor: 'pointer'
+        }}
+        onMouseEnter={(e) => {
+          if (!isLeaderboard) {
+            (e.currentTarget as HTMLElement).style.backgroundColor = '#a855f7'
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!isLeaderboard) {
+            (e.currentTarget as HTMLElement).style.backgroundColor = '#9333ea'
+          }
+        }}
       >
         🏆 Leaderboard
       </Link>
       <Link
         href="/admin"
-        className={`px-3 py-1.5 text-xs font-semibold rounded transition ${
-          isAdmin
-            ? 'bg-slate-500 text-bright border border-slate-400'
-            : 'bg-slate-600 hover:bg-slate-500 text-bright border border-slate-600'
-        }`}
+        style={{
+          padding: '0.375rem 0.75rem',
+          fontSize: '0.75rem',
+          fontWeight: '600',
+          borderRadius: '0.25rem',
+          transition: 'all 0.2s',
+          textDecoration: 'none',
+          color: '#ffffff',
+          backgroundColor: isAdmin ? '#64748b' : '#475569',
+          border: isAdmin ? '1px solid #94a3b8' : '1px solid #475569',
+          display: 'inline-block',
+          cursor: 'pointer'
+        }}
+        onMouseEnter={(e) => {
+          if (!isAdmin) {
+            (e.currentTarget as HTMLElement).style.backgroundColor = '#64748b'
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!isAdmin) {
+            (e.currentTarget as HTMLElement).style.backgroundColor = '#475569'
+          }
+        }}
       >
         ⚙️ Admin
       </Link>

@@ -8,15 +8,56 @@ export default function AdminHeader() {
     <div className="mb-6">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold text-bright">📊 Admin Dashboard</h1>
-        <div className="flex gap-2">
-          <Link href="/admin/settings" className="px-3 py-1.5 text-xs font-semibold text-blue-400 bg-blue-900/30 hover:bg-blue-900/50 rounded border border-blue-500/50 hover:border-blue-400 transition">
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <Link
+            href="/admin/settings"
+            style={{
+              padding: '0.375rem 0.75rem',
+              fontSize: '0.75rem',
+              fontWeight: '600',
+              color: '#60a5fa',
+              backgroundColor: 'rgba(30, 58, 138, 0.3)',
+              border: '1px solid rgba(59, 130, 246, 0.5)',
+              borderRadius: '0.25rem',
+              transition: 'all 0.2s',
+              textDecoration: 'none',
+              display: 'inline-block',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(30, 58, 138, 0.5)'
+              ;(e.currentTarget as HTMLElement).style.borderColor = 'rgba(96, 165, 250, 0.8)'
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(30, 58, 138, 0.3)'
+              ;(e.currentTarget as HTMLElement).style.borderColor = 'rgba(59, 130, 246, 0.5)'
+            }}
+          >
             ⚙️ Settings
           </Link>
           <button
             onClick={async () => {
               await logout()
             }}
-            className="px-3 py-1.5 text-xs font-semibold text-red-400 bg-red-900/30 hover:bg-red-900/50 rounded border border-red-500/50 hover:border-red-400 transition"
+            style={{
+              padding: '0.375rem 0.75rem',
+              fontSize: '0.75rem',
+              fontWeight: '600',
+              color: '#f87171',
+              backgroundColor: 'rgba(127, 29, 29, 0.3)',
+              border: '1px solid rgba(239, 68, 68, 0.5)',
+              borderRadius: '0.25rem',
+              transition: 'all 0.2s',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(127, 29, 29, 0.5)'
+              ;(e.currentTarget as HTMLElement).style.borderColor = 'rgba(248, 113, 113, 0.8)'
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(127, 29, 29, 0.3)'
+              ;(e.currentTarget as HTMLElement).style.borderColor = 'rgba(239, 68, 68, 0.5)'
+            }}
           >
             🚪 Logout
           </button>
