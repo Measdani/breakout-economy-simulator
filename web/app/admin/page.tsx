@@ -112,7 +112,7 @@ export default async function AdminPage() {
         <AdminHeader />
 
         {/* Stats Summary */}
-        <p className="text-muted text-sm text-center mb-6">{stats.totalSubmissions} total submissions</p>
+        <p className="text-sm text-center mb-6"><span className="text-green-400 font-bold text-lg">{stats.totalSubmissions}</span> <span className="text-muted">total submissions</span></p>
 
         {/* Statistics Cards */}
         <div className="grid grid-cols-3 gap-3 mb-8">
