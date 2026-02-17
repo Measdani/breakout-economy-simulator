@@ -3,6 +3,7 @@ import { isAdmin } from '@/lib/auth/admin'
 import { createServiceClient } from '@/lib/supabase/server'
 import AdminTable from '@/components/AdminTable'
 import AdminCharts from '@/components/AdminCharts'
+import FeedbackTable from '@/components/FeedbackTable'
 import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
@@ -21,6 +22,22 @@ async function getAllSubmissions() {
 
   if (error) throw error
   return data
+}
+
+async function getFeedback() {
+  if (!(await isAdmin())) {
+    redirect('/admin/login')
+  }
+
+  const supabase = createServiceClient()
+
+  const { data, error } = await supabase
+    .from('feedback')
+    .select('*')
+    .order('created_at', { ascending: false })
+
+  if (error) throw error
+  return data || []
 }
 
 async function getStatistics(submissions: any[]) {
@@ -84,20 +101,26 @@ async function getStatistics(submissions: any[]) {
 
 export default async function AdminPage() {
   const submissions = await getAllSubmissions()
+  const feedback = await getFeedback()
   const stats = await getStatistics(submissions)
 
   return (
     <div className="min-h-screen bg-deep-navy px-4 py-8">
       <div className="w-full max-w-6xl mx-auto">
         {/* Header */}
-        <div className="mb-6 text-center">
-          <div className="flex items-center justify-center gap-2 mb-2">
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-2">
             <h1 className="text-2xl font-bold text-bright">📊 Admin Dashboard</h1>
+            <Link href="/admin/settings" className="text-blue-400 hover:text-blue-300 text-xs bg-dark-slate px-3 py-2 rounded border border-border-slate">
+              ⚙️ Settings
+            </Link>
           </div>
-          <p className="text-muted text-sm">{stats.totalSubmissions} total submissions</p>
-          <Link href="/" className="text-blue-400 hover:text-blue-300 text-xs inline-block mt-3">
-            ← Back to Simulator
-          </Link>
+          <p className="text-muted text-sm text-center">{stats.totalSubmissions} total submissions</p>
+          <div className="flex justify-center mt-3">
+            <Link href="/" className="text-blue-400 hover:text-blue-300 text-xs inline-block">
+              ← Back to Simulator
+            </Link>
+          </div>
         </div>
 
         {/* Statistics Cards */}
@@ -157,6 +180,12 @@ export default async function AdminPage() {
         {/* Charts and Analytics */}
         <div className="mb-8">
           <AdminCharts submissions={submissions} />
+        </div>
+
+        {/* Feedback Section */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-bright mb-4">📝 User Feedback ({feedback.length})</h2>
+          <FeedbackTable feedback={feedback} />
         </div>
 
         {/* All Submissions Table */}

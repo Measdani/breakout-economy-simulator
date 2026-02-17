@@ -15,6 +15,7 @@ import ProductivityBar from './ProductivityBar';
 import Glossary from './Glossary';
 import OnboardingTour from './OnboardingTour';
 import SubmitModal from './SubmitModal';
+import FeedbackModal from './FeedbackModal';
 
 const DEFAULT_CONFIG: PolicyConfig = {
   tokenTaxRate: 0.0035,
@@ -33,17 +34,23 @@ const DEFAULT_CONFIG: PolicyConfig = {
   personaWeights: [0.25, 0.25, 0.25, 0.25],
 };
 
-export default function Simulator() {
-  const [tokenTaxRate, setTokenTaxRate] = useState(DEFAULT_CONFIG.tokenTaxRate);
+interface SimulatorProps {
+  initialConfig?: Partial<PolicyConfig>
+}
+
+export default function Simulator({ initialConfig }: SimulatorProps = {}) {
+  const mergedConfig = { ...DEFAULT_CONFIG, ...initialConfig }
+  const [tokenTaxRate, setTokenTaxRate] = useState(mergedConfig.tokenTaxRate);
   const [ubiAnnualPerAdult, setUbiAnnualPerAdult] = useState(
-    DEFAULT_CONFIG.ubiAnnualPerAdult
+    mergedConfig.ubiAnnualPerAdult
   );
-  const [breakoutPoint, setBreakoutPoint] = useState(DEFAULT_CONFIG.breakoutPoint);
+  const [breakoutPoint, setBreakoutPoint] = useState(mergedConfig.breakoutPoint);
   const [showTour, setShowTour] = useState(false);
   const [activeScreen, setActiveScreen] = useState<'controls' | 'scenarios' | 'results' | 'charts' | 'personas' | 'income' | 'warnings'>('controls');
   const [currentConfig, setCurrentConfig] = useState<string>('Default');
   const [viewMode, setViewMode] = useState<'revenue' | 'social' | 'incentives'>('revenue');
   const [showSubmitModal, setShowSubmitModal] = useState(false);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
 
   const handlePresetSelectWithName = (presetName: string, presetConfig: Partial<PolicyConfig>) => {
     setCurrentConfig(presetName);
@@ -661,6 +668,29 @@ export default function Simulator() {
               >
                 📤 Submit
               </button>
+              <button
+                onClick={() => setShowFeedbackModal(true)}
+                className="px-5 py-3 rounded transition hover:shadow-lg"
+                style={{
+                  background: '#0F172A',
+                  color: '#00D9FF',
+                  border: '2px solid #00D9FF',
+                  fontSize: '16px',
+                  fontWeight: '700',
+                  letterSpacing: '0.3px',
+                  textShadow: '0 0 8px rgba(0, 217, 255, 0.6)',
+                  boxShadow: '0 0 12px rgba(0, 217, 255, 0.4), inset 0 0 12px rgba(0, 217, 255, 0.1)',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.boxShadow = '0 0 20px rgba(0, 217, 255, 0.6), inset 0 0 12px rgba(0, 217, 255, 0.2)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.boxShadow = '0 0 12px rgba(0, 217, 255, 0.4), inset 0 0 12px rgba(0, 217, 255, 0.1)';
+                }}
+              >
+                📝 Feedback
+              </button>
             </div>
           </div>
         </div>
@@ -675,6 +705,15 @@ export default function Simulator() {
         result={result}
         isOpen={showSubmitModal}
         onClose={() => setShowSubmitModal(false)}
+        configName={currentConfig}
+      />
+
+      {/* Feedback Modal */}
+      <FeedbackModal
+        config={config}
+        result={result}
+        isOpen={showFeedbackModal}
+        onClose={() => setShowFeedbackModal(false)}
         configName={currentConfig}
       />
     </div>
