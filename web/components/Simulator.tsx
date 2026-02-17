@@ -675,6 +675,7 @@ export default function Simulator() {
         result={result}
         isOpen={showSubmitModal}
         onClose={() => setShowSubmitModal(false)}
+        configName={currentConfig}
       />
     </div>
   );

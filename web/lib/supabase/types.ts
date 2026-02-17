@@ -12,6 +12,7 @@ export interface SubmissionRow {
   token_tax_rate: number
   breakout_point: number
   is_solvent: boolean
+  config_name: string | null
 }
 
 export type Database = {

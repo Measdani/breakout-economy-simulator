@@ -8,7 +8,8 @@ export async function submitSimulation(
   config: PolicyConfig,
   result: SimulationResult,
   name?: string,
-  email?: string
+  email?: string,
+  configName?: string
 ) {
   const supabase = createClient()
 
@@ -24,6 +25,7 @@ export async function submitSimulation(
       token_tax_rate: config.tokenTaxRate,
       breakout_point: config.breakoutPoint,
       is_solvent: result.balance.isSolvent,
+      config_name: configName || 'Default',
     })
     .select()
     .single()

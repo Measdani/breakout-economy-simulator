@@ -9,9 +9,10 @@ interface Props {
   result: SimulationResult
   isOpen: boolean
   onClose: () => void
+  configName?: string
 }
 
-export default function SubmitModal({ config, result, isOpen, onClose }: Props) {
+export default function SubmitModal({ config, result, isOpen, onClose, configName }: Props) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -26,7 +27,7 @@ export default function SubmitModal({ config, result, isOpen, onClose }: Props) 
     setError(null)
 
     try {
-      await submitSimulation(config, result, name || undefined, email || undefined)
+      await submitSimulation(config, result, name || undefined, email || undefined, configName)
       setSuccess(true)
       setTimeout(() => {
         onClose()
