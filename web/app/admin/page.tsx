@@ -5,6 +5,7 @@ import AdminTable from '@/components/AdminTable'
 import AdminCharts from '@/components/AdminCharts'
 import FeedbackTable from '@/components/FeedbackTable'
 import Link from 'next/link'
+import AdminHeader from '@/components/AdminHeader'
 
 export const dynamic = 'force-dynamic'
 
@@ -108,20 +109,10 @@ export default async function AdminPage() {
     <div className="min-h-screen bg-deep-navy px-4 py-8">
       <div className="w-full max-w-6xl mx-auto">
         {/* Header */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-2">
-            <h1 className="text-2xl font-bold text-bright">📊 Admin Dashboard</h1>
-            <Link href="/admin/settings" className="text-blue-400 hover:text-blue-300 text-xs bg-dark-slate px-3 py-2 rounded border border-border-slate">
-              ⚙️ Settings
-            </Link>
-          </div>
-          <p className="text-muted text-sm text-center">{stats.totalSubmissions} total submissions</p>
-          <div className="flex justify-center mt-3">
-            <Link href="/" className="text-blue-400 hover:text-blue-300 text-xs inline-block">
-              ← Back to Simulator
-            </Link>
-          </div>
-        </div>
+        <AdminHeader />
+
+        {/* Stats Summary */}
+        <p className="text-muted text-sm text-center mb-6">{stats.totalSubmissions} total submissions</p>
 
         {/* Statistics Cards */}
         <div className="grid grid-cols-3 gap-3 mb-8">
