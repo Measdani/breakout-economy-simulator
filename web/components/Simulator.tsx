@@ -16,6 +16,7 @@ import Glossary from './Glossary';
 import OnboardingTour from './OnboardingTour';
 import SubmitModal from './SubmitModal';
 import FeedbackModal from './FeedbackModal';
+import NavButtons from './NavButtons';
 
 const DEFAULT_CONFIG: PolicyConfig = {
   tokenTaxRate: 0.0035,
@@ -132,14 +133,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                   <span className="text-xs text-muted">Configuration:</span>
                   <span className="text-xs font-medium text-bright bg-darker-slate px-2.5 py-1 rounded-full border border-border-slate">{currentConfig}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Link href="/leaderboard" className="px-3 py-1.5 text-xs font-semibold text-bright bg-purple-600 hover:bg-purple-500 rounded transition">
-                    🏆 Leaderboard
-                  </Link>
-                  <Link href="/admin" className="px-3 py-1.5 text-xs font-semibold text-bright bg-slate-600 hover:bg-slate-500 rounded transition">
-                    ⚙️ Admin
-                  </Link>
-                </div>
+                <NavButtons />
               </div>
             </div>
           </div>
