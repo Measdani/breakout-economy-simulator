@@ -12,8 +12,20 @@ const GLOSSARY_ITEMS = [
   {
     term: 'Token Tax',
     definition:
-      'A small tax on electronic financial transactions (digital payments, transfers, etc.). Also called a "Tobin tax."',
-    example: 'Default: 0.35% of all electronic flow',
+      'A tax on financial flow (all electronic financial transactions and digital transfers), not labor or wages. The tax base is the total annual volume of electronic payments in the economy.',
+    example: '0.35% × $1 quadrillion annual flow = $3.5 trillion/year revenue. Labor income below breakout point is not taxed.',
+  },
+  {
+    term: 'Welfare Trap',
+    definition:
+      'Under traditional welfare, earning one more dollar causes you to lose more in government benefits than you gain in income. The result: work financially punishes you.',
+    example: 'Old system: $1 earned = $1.50 lost in benefits. Net result = −$0.50. No incentive to work. This model eliminates it.',
+  },
+  {
+    term: 'Welfare Floor & Launchpad',
+    definition:
+      'The UBI is a guaranteed income floor—it never disappears when you earn more. The supplement is a launchpad—a bonus that rises as you enter the workforce, peaking around $24k earned income, then gliding smoothly to zero at the breakout point.',
+    example: 'Floor = $12k/yr guaranteed to all. Launchpad = +$6k bonus at $24k earned. No cliff, no trap.',
   },
   {
     term: 'Breakout Point',
@@ -26,6 +38,12 @@ const GLOSSARY_ITEMS = [
     definition:
       'A bonus on top of base UBI that peaks at lower incomes and tapers to zero at the breakout point. Encourages work without welfare cliffs.',
     example: 'Peaks at $24k earned income (+$6k bonus), tapers to $0 at $60k',
+  },
+  {
+    term: 'Incentive Slopes: Climb & Glide',
+    definition:
+      'The Climb: from $0 to ~$24k earned income, your supplement rises (the launchpad effect). The Glide: from ~$24k to the breakout point, it tapers smoothly. Every extra dollar earned still improves your net income.',
+    example: 'Supplement tapers at ~16.7¢ per $1 earned. You keep ~83¢ of every extra dollar you earn—strong work incentive.',
   },
   {
     term: 'Welfare Cliff',

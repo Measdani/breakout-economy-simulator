@@ -1,5 +1,7 @@
 'use client';
 
+import Tooltip from './Tooltip';
+
 interface PolicySlidersProps {
   tokenTaxRate: number;
   onTokenTaxRateChange: (value: number) => void;
@@ -81,12 +83,21 @@ export default function PolicySliders({
     step,
     minLabel,
     maxLabel,
-    formattedValue
+    formattedValue,
+    tooltipText
   }: any) => (
     <div className="bg-dark-slate rounded-lg p-5 glow-border-slate card-hover-glow" style={{ transition: 'all 0.3s ease' }}>
       {/* Section Category */}
       <div className="mb-4">
-        <p className="text-sm font-semibold text-muted uppercase tracking-wide">{icon} {title}</p>
+        <p className="text-sm font-semibold text-muted uppercase tracking-wide">
+          {icon} {title}
+          {tooltipText && (
+            <Tooltip text={tooltipText}>
+              <span style={{ marginLeft: 6, cursor: 'help', color: '#64748b', fontSize: '11px',
+                border: '1px solid #475569', borderRadius: '50%', padding: '2px 5px', display: 'inline-block' }}>?</span>
+            </Tooltip>
+          )}
+        </p>
       </div>
 
       {/* Control Label & Value */}
@@ -166,6 +177,7 @@ export default function PolicySliders({
         formattedValue={formatPercent(tokenTaxRate)}
         position={tokenTaxPosition}
         context={getTokenTaxContext()}
+        tooltipText="Taxes financial flow (digital transactions), not labor or wages. Flow = all electronic transfers. 0.35% × $1 quadrillion = $3.5T/yr revenue."
       />
 
       {/* UBI Annual Per Adult - Social Floor */}
@@ -184,6 +196,7 @@ export default function PolicySliders({
         formattedValue={formatCurrency(ubiAnnualPerAdult)}
         position={ubiPosition}
         context={getUBIContext()}
+        tooltipText="The UBI is a guaranteed income floor—earning more never reduces it. Unlike traditional welfare, there's no trap: every dollar earned stays in your pocket."
       />
 
       {/* Breakout Point - Incentive Structure */}
@@ -202,6 +215,7 @@ export default function PolicySliders({
         formattedValue={formatCurrency(breakoutPoint)}
         position={breakoutPosition}
         context={getBreakoutContext()}
+        tooltipText="The Climb: supplement rises as you enter the workforce (up to ~$24k). The Glide: tapers smoothly to zero—no cliff, no penalty for earning more."
       />
 
       {/* Mode Toggle Cards - Compact 3-column */}
