@@ -177,7 +177,7 @@ export default function PolicySliders({
         formattedValue={formatPercent(tokenTaxRate)}
         position={tokenTaxPosition}
         context={getTokenTaxContext()}
-        tooltipText="Taxes financial flow (digital transactions), not labor or wages. Flow = all electronic transfers. 0.35% × $1 quadrillion = $3.5T/yr revenue."
+        tooltipText="Shifts part of the tax base from labor to digital capital activity."
       />
 
       {/* UBI Annual Per Adult - Social Floor */}
@@ -196,7 +196,7 @@ export default function PolicySliders({
         formattedValue={formatCurrency(ubiAnnualPerAdult)}
         position={ubiPosition}
         context={getUBIContext()}
-        tooltipText="The UBI is a guaranteed income floor—earning more never reduces it. Unlike traditional welfare, there's no trap: every dollar earned stays in your pocket."
+        tooltipText="Designed to provide income stability while preserving work incentives."
       />
 
       {/* Breakout Point - Incentive Structure */}
@@ -215,7 +215,7 @@ export default function PolicySliders({
         formattedValue={formatCurrency(breakoutPoint)}
         position={breakoutPosition}
         context={getBreakoutContext()}
-        tooltipText="The Climb: supplement rises as you enter the workforce (up to ~$24k). The Glide: tapers smoothly to zero—no cliff, no penalty for earning more."
+        tooltipText="Breakout Point = income level where supplemental support fully phases out."
       />
 
       {/* Mode Toggle Cards - Compact 3-column */}
