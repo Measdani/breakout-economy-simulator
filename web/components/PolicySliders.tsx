@@ -93,8 +93,8 @@ export default function PolicySliders({
           {icon} {title}
           {tooltipText && (
             <Tooltip text={tooltipText}>
-              <span style={{ marginLeft: 6, cursor: 'help', color: '#64748b', fontSize: '11px',
-                border: '1px solid #475569', borderRadius: '50%', padding: '2px 5px', display: 'inline-block' }}>?</span>
+              <span style={{ marginLeft: 6, cursor: 'help', color: '#cbd5e1', fontSize: '11px',
+                border: '1px solid #cbd5e1', borderRadius: '50%', padding: '2px 5px', display: 'inline-block' }}>?</span>
             </Tooltip>
           )}
         </p>
