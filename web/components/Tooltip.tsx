@@ -37,9 +37,9 @@ export default function Tooltip({ text, children }: TooltipProps) {
       </div>
 
       {isVisible && (
-        <div className="fixed z-50 px-3 py-2 text-sm text-white rounded-lg max-w-2xl whitespace-normal pointer-events-none shadow-lg" style={{ backgroundColor: '#000000', bottom: '120px', left: '50%', transform: 'translateX(-50%)', overflow: 'visible' }}>
+        <div className="absolute z-50 px-3 py-2 text-sm text-white rounded-lg max-w-md whitespace-normal shadow-lg" style={{ backgroundColor: '#000000', bottom: '100%', left: '-150px', marginBottom: '8px' }}>
           {text}
-          <div className="absolute w-2 h-2 transform rotate-45" style={{ backgroundColor: '#000000', top: '100%', left: '50%', marginLeft: '-4px' }}></div>
+          <div className="absolute w-2 h-2 transform rotate-45" style={{ backgroundColor: '#000000', top: '100%', left: '170px' }}></div>
         </div>
       )}
     </div>
