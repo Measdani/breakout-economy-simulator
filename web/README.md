@@ -1,4 +1,4 @@
-# Policy Flight Simulator - Web UI (v0.2)
+# Policy Flight Simulator - Web UI (v1.1)
 
 Interactive web interface for the Policy Flight Simulator - Educational UBI + Token Tax explorer.
 
@@ -139,6 +139,6 @@ Default policy settings in `components/Simulator.tsx`:
 
 ---
 
-**Version**: 0.2.0
+**Version**: 1.1.0
 **Last Updated**: 2026-02-11
 **Status**: ✅ Production Ready

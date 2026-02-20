@@ -123,7 +123,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
           <div className="bg-darker-slate px-5 py-6 border-b border-border-slate">
             <div className="mb-5">
               <h1 className="text-xl font-bold text-bright">Policy Flight Simulator</h1>
-              <p className="text-xs text-muted mt-0.5">Breakout Economy Model v0.2</p>
+              <p className="text-xs text-muted mt-0.5">Breakout Economy Model v1.1</p>
             </div>
 
             <div className="border-t border-border-slate pt-5">
