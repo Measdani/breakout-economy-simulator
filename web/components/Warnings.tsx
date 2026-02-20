@@ -40,25 +40,6 @@ export default function Warnings({ result, config }: WarningsProps) {
     }
   }
 
-  if (warnings.length === 0) {
-    return (
-      <div style={{
-        padding: '20px',
-        background: 'rgba(16, 185, 129, 0.1)',
-        border: '1px solid #10B981',
-        borderRadius: '8px',
-        marginTop: '16px',
-      }}>
-        <p style={{ fontSize: '13px', color: '#10B981', fontWeight: '600', margin: 0 }}>
-          ✓ No warnings detected
-        </p>
-        <p style={{ fontSize: '12px', color: '#86EFAC', marginTop: '6px', margin: '6px 0 0 0' }}>
-          This configuration is economically viable.
-        </p>
-      </div>
-    );
-  }
-
   // No deficit case
   if (severityLevel === 'none') {
     return (
