@@ -13,6 +13,8 @@ interface PolicySlidersProps {
   viewMode: 'revenue' | 'social' | 'incentives';
   onViewModeChange: (mode: 'revenue' | 'social' | 'incentives') => void;
   onReset: () => void;
+  showGlossary?: boolean;
+  onGlossaryToggle?: (show: boolean) => void;
 }
 
 export default function PolicySliders({
@@ -25,6 +27,8 @@ export default function PolicySliders({
   viewMode,
   onViewModeChange,
   onReset,
+  showGlossary = false,
+  onGlossaryToggle = () => {},
 }: PolicySlidersProps) {
   const formatPercent = (value: number) => {
     return `${(value * 100).toFixed(2)}%`;
@@ -212,31 +216,55 @@ export default function PolicySliders({
 
       {/* Mode Toggle Cards - Compact 3-column */}
       <div className="pb-8 mt-12 pt-8">
-        {/* Reset Link */}
-        <button
-          onClick={onReset}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: '#64748b',
-            fontSize: '13px',
-            cursor: 'pointer',
-            padding: '0',
-            marginBottom: '12px',
-            transition: 'color 0.2s ease',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.color = '#94a3b8';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.color = '#64748b';
-          }}
-        >
-          ↺ Reset to Default
-        </button>
+        {/* Reset Link + Glossary Button */}
+        <div style={{ display: 'flex', gap: '16px', marginBottom: '12px', alignItems: 'center' }}>
+          <button
+            onClick={onReset}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#64748b',
+              fontSize: '13px',
+              cursor: 'pointer',
+              padding: '0',
+              transition: 'color 0.2s ease',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = '#94a3b8';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = '#64748b';
+            }}
+          >
+            ↺ Reset to Default
+          </button>
+          <button
+            onClick={() => onGlossaryToggle(!showGlossary)}
+            style={{
+              background: 'rgba(51, 65, 85, 0.6)',
+              border: '1px solid #475569',
+              color: '#cbd5e1',
+              fontSize: '13px',
+              cursor: 'pointer',
+              padding: '6px 12px',
+              borderRadius: '6px',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(71, 85, 105, 0.8)';
+              e.currentTarget.style.color = '#f1f5f9';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'rgba(51, 65, 85, 0.6)';
+              e.currentTarget.style.color = '#cbd5e1';
+            }}
+          >
+            ? Glossary
+          </button>
+        </div>
         <div className="grid grid-cols-3 gap-4">
           <button
             onClick={() => onViewModeChange('revenue')}
