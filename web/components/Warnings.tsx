@@ -147,20 +147,29 @@ export default function Warnings({ result, config }: WarningsProps) {
               padding: '10px',
               borderRadius: '4px',
             }}>
-              <p style={{ margin: '0 0 6px 0' }}>
-                <strong>Deficit Pressure Ratio:</strong> {(deficitPressureRatio * 100).toFixed(2)}% = Deficit ÷ Total Obligations
+              <p style={{ margin: '0 0 8px 0' }}>
+                <strong>Deficit Pressure Ratio (DPR):</strong> {(deficitPressureRatio * 100).toFixed(2)}%
+                <br />
+                <span style={{ color: '#64748b', fontSize: '10px' }}>Defined as: Structural Deficit ÷ Total Fiscal Obligations</span>
+              </p>
+              <p style={{ margin: '0 0 8px 0' }}>
+                <strong>Fiscal Stability Classification:</strong>
+                <br />
+                • 0–2% → Stable
+                <br />
+                • 2–5% → Moderate Imbalance
+                <br />
+                • &gt; 5% → Structural Instability
               </p>
               <p style={{ margin: '0 0 6px 0' }}>
-                <strong>Severity Threshold:</strong>
+                <strong>Methodology:</strong>
                 <br />
-                • &lt; 2% = Yellow (Low pressure)
-                <br />
-                • 2–5% = Orange (Moderate pressure)
-                <br />
-                • &gt; 5% = Red (High pressure)
+                <span style={{ color: '#64748b', fontSize: '10px' }}>
+                  Purchasing power impact is modeled proportionally based on deficit scale and financing assumption. This estimate reflects structural currency pressure, not a formal inflation forecast.
+                </span>
               </p>
-              <p style={{ margin: 0 }}>
-                <strong>Note:</strong> Purchasing power sensitivity is estimated directionally and is not a CPI forecast.
+              <p style={{ margin: 0, color: '#64748b', fontSize: '10px', fontStyle: 'italic', borderTop: '1px solid #475569', paddingTop: '6px' }}>
+                This model assumes deficit monetization impacts currency value proportionally in the absence of productivity growth offset.
               </p>
             </div>
           )}
