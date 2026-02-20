@@ -618,25 +618,27 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                 }
               </span>
             </div>
-              <button
-                onClick={() => {
-                  const screens: Array<typeof activeScreen> = ['controls', 'scenarios', 'results', 'charts', 'personas'];
-                  const current = screens.indexOf(activeScreen);
-                  if (current < screens.length - 1) setActiveScreen(screens[current + 1]);
-                }}
-                className="px-5 py-3 rounded transition"
-                style={{
-                  background: '#0F172A',
-                  color: '#00D9FF',
-                  border: '2px solid #00D9FF',
-                  fontSize: '16px',
-                  fontWeight: '700',
-                  letterSpacing: '0.3px',
-                  textShadow: '0 0 8px rgba(0, 217, 255, 0.6)'
-                }}
-              >
-                Next →
-              </button>
+              {activeScreen !== 'personas' && (
+                <button
+                  onClick={() => {
+                    const screens: Array<typeof activeScreen> = ['controls', 'scenarios', 'results', 'charts', 'personas'];
+                    const current = screens.indexOf(activeScreen);
+                    if (current < screens.length - 1) setActiveScreen(screens[current + 1]);
+                  }}
+                  className="px-5 py-3 rounded transition"
+                  style={{
+                    background: '#0F172A',
+                    color: '#00D9FF',
+                    border: '2px solid #00D9FF',
+                    fontSize: '16px',
+                    fontWeight: '700',
+                    letterSpacing: '0.3px',
+                    textShadow: '0 0 8px rgba(0, 217, 255, 0.6)'
+                  }}
+                >
+                  Next →
+                </button>
+              )}
             </div>
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
               {activeScreen === 'personas' && (
