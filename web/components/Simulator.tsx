@@ -621,9 +621,9 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
               {activeScreen !== 'personas' && (
                 <button
                   onClick={() => {
-                    const screens: Array<typeof activeScreen> = ['controls', 'scenarios', 'results', 'charts', 'personas'];
-                    const current = screens.indexOf(activeScreen);
-                    if (current < screens.length - 1) setActiveScreen(screens[current + 1]);
+                    const screens = ['controls', 'scenarios', 'results', 'charts', 'personas'] as const;
+                    const current = screens.indexOf(activeScreen as any);
+                    if (current < screens.length - 1) setActiveScreen(screens[current + 1] as typeof activeScreen);
                   }}
                   className="px-5 py-3 rounded transition"
                   style={{
