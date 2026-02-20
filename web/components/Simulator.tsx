@@ -197,8 +197,8 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
           <div className="p-6 flex-1 bg-darker-navy overflow-y-auto">
             {/* Controls Screen - Split Layout */}
             {activeScreen === 'controls' && (
-              <div className="grid grid-cols-5 gap-6 h-full">
-                {/* LEFT: Configuration Sliders (40%) */}
+              <div className="grid grid-cols-6 gap-6 h-full">
+                {/* LEFT: Configuration Sliders (33%) */}
                 <div className="col-span-2 overflow-y-auto pr-2">
                   <PolicySliders
                     tokenTaxRate={tokenTaxRate}
@@ -215,9 +215,9 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                   />
                 </div>
 
-                {/* RIGHT: Mode-Specific Fiscal Status Panel (60%) */}
+                {/* MIDDLE: Mode-Specific Fiscal Status Panel (50%) */}
                 <div
-                  className={`col-span-3 rounded-lg p-8 text-white overflow-y-auto view-transition ${
+                  className={`col-span-2 rounded-lg p-8 text-white overflow-y-auto view-transition ${
                     result.balance.surplusDeficit >= 0
                       ? 'bg-dark-slate glow-border-green pulse-glow-green'
                       : 'bg-dark-slate glow-border-red pulse-glow-red'
@@ -528,9 +528,16 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                       </div>
                     </div>
                   )}
+                </div>
 
-                  {/* Warnings Section */}
-                  <Warnings result={result} config={config} />
+                {/* RIGHT: Warnings & Alerts Panel (17%) */}
+                <div className="col-span-2 overflow-y-auto">
+                  <div className="bg-darker-slate rounded-lg p-6 border border-border-slate" style={{ height: '100%' }}>
+                    <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#cbd5e1', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                      ⚡ Policy Alerts
+                    </h3>
+                    <Warnings result={result} config={config} />
+                  </div>
                 </div>
               </div>
             )}
