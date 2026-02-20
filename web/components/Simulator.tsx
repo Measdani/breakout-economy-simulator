@@ -47,7 +47,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   );
   const [breakoutPoint, setBreakoutPoint] = useState(mergedConfig.breakoutPoint);
   const [showTour, setShowTour] = useState(false);
-  const [activeScreen, setActiveScreen] = useState<'controls' | 'scenarios' | 'results' | 'charts' | 'personas' | 'income' | 'warnings'>('controls');
+  const [activeScreen, setActiveScreen] = useState<'controls' | 'scenarios' | 'results' | 'charts' | 'personas'>('controls');
   const [currentConfig, setCurrentConfig] = useState<string>('Default');
   const [viewMode, setViewMode] = useState<'revenue' | 'social' | 'incentives'>('revenue');
   const [showSubmitModal, setShowSubmitModal] = useState(false);
