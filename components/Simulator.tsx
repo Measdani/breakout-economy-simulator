@@ -409,6 +409,7 @@ export default function Simulator() {
                 Next →
               </button>
             )}
+            {activeScreen === 'personas' && <div style={{ width: '90px' }} />}
           </div>
         </div>
 
