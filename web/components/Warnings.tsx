@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import type { SimulationResult, PolicyConfig } from '../lib/types';
 
 interface WarningsProps {
@@ -8,70 +9,35 @@ interface WarningsProps {
 }
 
 export default function Warnings({ result, config }: WarningsProps) {
-  const warnings = [];
+  const [expandedNote, setExpandedNote] = useState(false);
+  const [financingMode, setFinancingMode] = useState<'bond' | 'mixed' | 'monetized'>('bond');
 
-  // Fiscal deficit warnings - multiple perspectives
+  // Calculate deficit pressure ratio
+  const deficitPressureRatio = Math.abs(result.balance.surplusDeficit) / result.obligations.totalObligations;
+
+  // Determine severity level
+  let severityLevel: 'none' | 'yellow' | 'orange' | 'red' = 'none';
+  let severityColor = '#10B981';
+  let severityBg = 'rgba(16, 185, 129, 0.1)';
+  let severityBorder = '#10B981';
+
   if (result.balance.surplusDeficit < 0) {
-    warnings.push({
-      type: 'fiscal-deficit',
-      severity: 'warning',
-      icon: '⚠️',
-      title: 'Fiscal Risk Notice',
-      message: 'This configuration produces a structural deficit. Sustained deficits typically require borrowing or monetary expansion, which may reduce purchasing power over time.',
-      color: '#EF4444',
-      bgColor: 'rgba(239, 68, 68, 0.1)',
-      borderColor: '#DC2626',
-    });
-
-    warnings.push({
-      type: 'sustainability-alert',
-      severity: 'warning',
-      icon: '📈',
-      title: 'Sustainability Alert',
-      message: 'The current parameters generate a deficit. If financed through money creation, the expanded money supply could reduce the real value of the UBI through inflation.',
-      color: '#F97316',
-      bgColor: 'rgba(249, 115, 22, 0.1)',
-      borderColor: '#FB923C',
-    });
-
-    warnings.push({
-      type: 'macroeconomic-constraint',
-      severity: 'warning',
-      icon: '💹',
-      title: 'Macroeconomic Constraint',
-      message: 'This scenario requires deficit financing. Long-term monetary expansion without productivity growth may erode currency purchasing power, offsetting nominal income gains.',
-      color: '#8B5CF6',
-      bgColor: 'rgba(139, 92, 246, 0.1)',
-      borderColor: '#A78BFA',
-    });
-  }
-
-  // Token tax rate warning
-  if (config.tokenTaxRate > 0.008) {
-    warnings.push({
-      type: 'high-tax-rate',
-      severity: 'warning',
-      icon: '💰',
-      title: 'High Tax Rate',
-      message: 'Token tax rate exceeds 0.8%. Consider the impact on transaction volume and economic activity.',
-      color: '#F59E0B',
-      bgColor: 'rgba(245, 158, 11, 0.1)',
-      borderColor: '#F59E0B',
-    });
-  }
-
-  // High UBI warning
-  if (config.ubiAnnualPerAdult > 18000) {
-    warnings.push({
-      type: 'high-ubi',
-      severity: 'info',
-      icon: '📊',
-      title: 'High UBI Configuration',
-      message: 'UBI exceeds $18,000. Verify this aligns with your policy objectives and revenue projections.',
-      color: '#3B82F6',
-      bgColor: 'rgba(59, 130, 246, 0.1)',
-      borderColor: '#3B82F6',
-    });
+    if (deficitPressureRatio < 0.02) {
+      severityLevel = 'yellow';
+      severityColor = '#EAB308';
+      severityBg = 'rgba(234, 179, 8, 0.1)';
+      severityBorder = '#FACC15';
+    } else if (deficitPressureRatio < 0.05) {
+      severityLevel = 'orange';
+      severityColor = '#F97316';
+      severityBg = 'rgba(249, 115, 22, 0.1)';
+      severityBorder = '#FB923C';
+    } else {
+      severityLevel = 'red';
+      severityColor = '#EF4444';
+      severityBg = 'rgba(239, 68, 68, 0.1)';
+      severityBorder = '#DC2626';
+    }
   }
 
   if (warnings.length === 0) {
@@ -93,43 +59,187 @@ export default function Warnings({ result, config }: WarningsProps) {
     );
   }
 
+  // No deficit case
+  if (severityLevel === 'none') {
+    return (
+      <div style={{
+        padding: '16px',
+        background: 'rgba(16, 185, 129, 0.1)',
+        border: '1px solid #10B981',
+        borderRadius: '8px',
+      }}>
+        <p style={{ fontSize: '13px', color: '#10B981', fontWeight: '600', margin: 0 }}>
+          ✓ Fiscally Solvent
+        </p>
+        <p style={{ fontSize: '12px', color: '#86EFAC', marginTop: '6px', margin: '6px 0 0 0' }}>
+          This configuration maintains budget equilibrium.
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '16px' }}>
-      {warnings.map((warning, idx) => (
-        <div
-          key={idx}
-          style={{
-            padding: '16px',
-            background: warning.bgColor,
-            border: `1px solid ${warning.borderColor}`,
-            borderRadius: '8px',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-            <span style={{ fontSize: '18px', marginTop: '2px', minWidth: '24px' }}>
-              {warning.icon}
-            </span>
-            <div style={{ flex: 1 }}>
-              <p style={{
-                fontSize: '13px',
-                fontWeight: '600',
-                color: warning.color,
-                margin: '0 0 6px 0',
-              }}>
-                {warning.title}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      {/* Main Policy Alert Panel - Dynamic Severity */}
+      <div style={{
+        padding: '16px',
+        background: severityBg,
+        border: `2px solid ${severityBorder}`,
+        borderRadius: '8px',
+      }}>
+        {/* Primary Alert */}
+        <div style={{ marginBottom: '12px' }}>
+          <p style={{
+            fontSize: '13px',
+            fontWeight: '700',
+            color: severityColor,
+            margin: '0 0 6px 0',
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px',
+          }}>
+            ⚠ Structural Deficit Detected
+          </p>
+          <p style={{
+            fontSize: '12px',
+            color: '#cbd5e1',
+            lineHeight: '1.5',
+            margin: 0,
+          }}>
+            This configuration generates a sustained fiscal deficit. Long-term financing may require borrowing or monetary expansion.
+          </p>
+        </div>
+
+        {/* Secondary Line */}
+        <div style={{
+          paddingTop: '12px',
+          borderTop: `1px solid ${severityBorder}`,
+          marginTop: '12px',
+        }}>
+          <p style={{
+            fontSize: '12px',
+            color: '#cbd5e1',
+            margin: '0 0 6px 0',
+            fontStyle: 'italic',
+          }}>
+            Estimated Purchasing Power Risk:
+          </p>
+          <p style={{
+            fontSize: '12px',
+            color: severityColor,
+            margin: 0,
+            fontWeight: '600',
+          }}>
+            If fully monetized, sustained deficit pressure may reduce real income value by ~{(deficitPressureRatio * 100).toFixed(1)}%.
+          </p>
+        </div>
+
+        {/* Expandable Technical Note */}
+        <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: `1px solid ${severityBorder}` }}>
+          <button
+            onClick={() => setExpandedNote(!expandedNote)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#94a3b8',
+              fontSize: '11px',
+              cursor: 'pointer',
+              padding: '0',
+              textDecoration: 'underline',
+              transition: 'color 0.2s',
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.color = '#cbd5e1'}
+            onMouseLeave={(e) => e.currentTarget.style.color = '#94a3b8'}
+          >
+            {expandedNote ? '▼' : '▶'} How this is modeled
+          </button>
+
+          {expandedNote && (
+            <div style={{
+              marginTop: '8px',
+              fontSize: '11px',
+              color: '#94a3b8',
+              lineHeight: '1.6',
+              fontFamily: 'monospace',
+              background: 'rgba(0, 0, 0, 0.2)',
+              padding: '10px',
+              borderRadius: '4px',
+            }}>
+              <p style={{ margin: '0 0 6px 0' }}>
+                <strong>Deficit Pressure Ratio:</strong> {(deficitPressureRatio * 100).toFixed(2)}% = Deficit ÷ Total Obligations
               </p>
-              <p style={{
-                fontSize: '12px',
-                color: '#cbd5e1',
-                lineHeight: '1.5',
-                margin: 0,
-              }}>
-                {warning.message}
+              <p style={{ margin: '0 0 6px 0' }}>
+                <strong>Severity Threshold:</strong>
+                <br />
+                • &lt; 2% = Yellow (Low pressure)
+                <br />
+                • 2–5% = Orange (Moderate pressure)
+                <br />
+                • &gt; 5% = Red (High pressure)
+              </p>
+              <p style={{ margin: 0 }}>
+                <strong>Note:</strong> Purchasing power sensitivity is estimated directionally and is not a CPI forecast.
               </p>
             </div>
-          </div>
+          )}
         </div>
-      ))}
+      </div>
+
+      {/* Financing Assumption Selector */}
+      <div style={{
+        padding: '12px',
+        background: 'rgba(71, 85, 105, 0.3)',
+        borderRadius: '8px',
+        border: '1px solid #475569',
+      }}>
+        <p style={{
+          fontSize: '11px',
+          fontWeight: '700',
+          color: '#cbd5e1',
+          margin: '0 0 10px 0',
+          textTransform: 'uppercase',
+          letterSpacing: '0.5px',
+        }}>
+          Financing Assumption
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {[
+            { value: 'bond' as const, label: 'Bond-financed (Debt)', note: 'Low inflation impact' },
+            { value: 'mixed' as const, label: '50% Monetized', note: 'Moderate inflation' },
+            { value: 'monetized' as const, label: 'Fully Monetized', note: 'High inflation risk' },
+          ].map((option) => (
+            <label
+              key={option.value}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                cursor: 'pointer',
+                padding: '6px',
+                borderRadius: '4px',
+                background: financingMode === option.value ? 'rgba(71, 85, 105, 0.6)' : 'transparent',
+                transition: 'background 0.2s',
+              }}
+            >
+              <input
+                type="radio"
+                name="financing"
+                value={option.value}
+                checked={financingMode === option.value}
+                onChange={(e) => setFinancingMode(e.target.value as typeof financingMode)}
+                style={{ cursor: 'pointer' }}
+              />
+              <div>
+                <span style={{ fontSize: '12px', color: '#cbd5e1', fontWeight: '500' }}>
+                  {option.label}
+                </span>
+                <span style={{ fontSize: '10px', color: '#94a3b8', marginLeft: '6px' }}>
+                  {option.note}
+                </span>
+              </div>
+            </label>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
