@@ -91,15 +91,6 @@ export default function PolicySliders({
 
       {/* Slider Container */}
       <div className="relative mb-6 pt-2">
-        <div
-          className="absolute -top-6 transform -translate-x-1/2 bg-darker-slate border border-border-slate px-2.5 py-1 rounded text-xs font-semibold text-bright whitespace-nowrap pointer-events-none"
-          style={{
-            left: `${position}%`,
-            boxShadow: '0 0 10px rgba(59, 130, 246, 0.3)'
-          }}
-        >
-          {formattedValue}
-        </div>
         <input
           type="range"
           min={min}
