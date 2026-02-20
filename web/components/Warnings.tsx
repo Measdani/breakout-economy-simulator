@@ -97,12 +97,14 @@ export default function Warnings({ result, config }: WarningsProps) {
           marginTop: '12px',
         }}>
           <p style={{
-            fontSize: '12px',
-            color: '#cbd5e1',
+            fontSize: '11px',
+            color: '#94a3b8',
             margin: '0 0 6px 0',
             fontStyle: 'italic',
+            textTransform: 'uppercase',
+            letterSpacing: '0.3px',
           }}>
-            Estimated Purchasing Power Risk:
+            Real Income Sensitivity (Full Monetization Assumption)
           </p>
           <p style={{
             fontSize: '12px',
@@ -110,7 +112,7 @@ export default function Warnings({ result, config }: WarningsProps) {
             margin: 0,
             fontWeight: '600',
           }}>
-            If fully monetized, sustained deficit pressure may reduce real income value by ~{(deficitPressureRatio * 100).toFixed(1)}%.
+            ~{(deficitPressureRatio * 100).toFixed(1)}% estimated adjustment
           </p>
         </div>
 
@@ -220,6 +222,16 @@ export default function Warnings({ result, config }: WarningsProps) {
             </label>
           ))}
         </div>
+        <p style={{
+          fontSize: '10px',
+          color: '#64748b',
+          margin: '10px 0 0 0',
+          fontStyle: 'italic',
+          borderTop: '1px solid #475569',
+          paddingTop: '10px',
+        }}>
+          Model assumes deficit financing method impacts currency purchasing power proportionally.
+        </p>
       </div>
     </div>
   );
