@@ -774,62 +774,6 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
             </div>
           </div>
         </div>
-
-        {/* Glossary Panel - Inline */}
-        {showGlossary && (
-          <div style={{
-            position: 'fixed',
-            bottom: '20px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: '90%',
-            maxWidth: '600px',
-            maxHeight: '400px',
-            overflowY: 'auto',
-            background: 'linear-gradient(135deg, #1E293B, #0F172A)',
-            border: '2px solid #334155',
-            borderRadius: '12px',
-            padding: '20px',
-            zIndex: 50,
-            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)'
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', paddingBottom: '12px', borderBottom: '1px solid #475569' }}>
-              <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#FFFFFF' }}>Glossary</h3>
-              <button
-                onClick={() => setShowGlossary(false)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#94a3b8',
-                  fontSize: '20px',
-                  cursor: 'pointer',
-                  padding: '0',
-                  transition: 'color 0.2s'
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.color = '#cbd5e1'}
-                onMouseLeave={(e) => e.currentTarget.style.color = '#94a3b8'}
-              >
-                ✕
-              </button>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-              {[
-                { term: 'UBI', definition: 'Guaranteed annual payment to all adults', example: 'Default: $12,000/year' },
-                { term: 'Token Tax', definition: 'Tax on financial flow (digital transactions), not labor', example: '0.35% × $1 quadrillion = $3.5T/year' },
-                { term: 'Breakout Point', definition: 'Income level where supplement reaches zero', example: 'Default: $60,000' },
-                { term: 'Welfare Trap', definition: 'Earning more causes loss of benefits (eliminated here)', example: 'Old: $1 earned = lose $1.50 benefits' },
-                { term: 'Welfare Floor & Launchpad', definition: 'UBI floor + supplement bonus with no cliffs', example: 'Floor = $12k, Launchpad bonus peaks at $24k' },
-                { term: 'Incentive Slopes', definition: 'Climb up (UBI rise) and Glide down (smooth taper)', example: 'Keep ~83¢ of every extra $1 earned' },
-              ].map((item, idx) => (
-                <div key={idx} style={{ padding: '12px', background: 'rgba(71, 85, 105, 0.3)', borderRadius: '8px', border: '1px solid #475569' }}>
-                  <h4 style={{ fontSize: '13px', fontWeight: '600', color: '#60a5fa', marginBottom: '4px' }}>{item.term}</h4>
-                  <p style={{ fontSize: '12px', color: '#cbd5e1', marginBottom: '6px', lineHeight: '1.4' }}>{item.definition}</p>
-                  <p style={{ fontSize: '11px', color: '#94a3b8', fontStyle: 'italic' }}>💡 {item.example}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Submit Modal */}
