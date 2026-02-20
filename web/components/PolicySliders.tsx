@@ -1,5 +1,6 @@
 'use client';
 
+// Version marker: v1.1 - Floating label removed - Build 2026-02-20
 import Tooltip from './Tooltip';
 
 interface PolicySlidersProps {
