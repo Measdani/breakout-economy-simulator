@@ -10,7 +10,7 @@ interface WarningsProps {
 export default function Warnings({ result, config }: WarningsProps) {
   const warnings = [];
 
-  // Fiscal deficit warning
+  // Fiscal deficit warnings - multiple perspectives
   if (result.balance.surplusDeficit < 0) {
     warnings.push({
       type: 'fiscal-deficit',
@@ -21,6 +21,28 @@ export default function Warnings({ result, config }: WarningsProps) {
       color: '#EF4444',
       bgColor: 'rgba(239, 68, 68, 0.1)',
       borderColor: '#DC2626',
+    });
+
+    warnings.push({
+      type: 'sustainability-alert',
+      severity: 'warning',
+      icon: '📈',
+      title: 'Sustainability Alert',
+      message: 'The current parameters generate a deficit. If financed through money creation, the expanded money supply could reduce the real value of the UBI through inflation.',
+      color: '#F97316',
+      bgColor: 'rgba(249, 115, 22, 0.1)',
+      borderColor: '#FB923C',
+    });
+
+    warnings.push({
+      type: 'macroeconomic-constraint',
+      severity: 'warning',
+      icon: '💹',
+      title: 'Macroeconomic Constraint',
+      message: 'This scenario requires deficit financing. Long-term monetary expansion without productivity growth may erode currency purchasing power, offsetting nominal income gains.',
+      color: '#8B5CF6',
+      bgColor: 'rgba(139, 92, 246, 0.1)',
+      borderColor: '#A78BFA',
     });
   }
 
