@@ -350,6 +350,32 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         <p className="text-xs text-dimmed mt-2 uppercase tracking-wide">
                           Minimum annual income (UBI + Supplement at $0 earned)
                         </p>
+
+                        {/* Real Purchasing Power Hero Indicator */}
+                        {result.balance.surplusDeficit < 0 && (
+                          <div style={{
+                            marginTop: '16px',
+                            padding: '12px',
+                            background: 'rgba(249, 115, 22, 0.15)',
+                            borderRadius: '8px',
+                            border: '1px solid #FB923C'
+                          }}>
+                            <p style={{ fontSize: '10px', color: '#FB923C', fontWeight: '700', margin: '0 0 6px 0', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                              Real Purchasing Power (Adjusted)
+                            </p>
+                            <p style={{
+                              fontSize: '28px',
+                              fontWeight: '700',
+                              color: '#FB923C',
+                              margin: '0'
+                            }}>
+                              ${(((result.citizenModel.personaOutcomes[0].ubi + result.citizenModel.personaOutcomes[0].supplement) * (1 - Math.abs(result.balance.surplusDeficit) / result.obligations.totalObligations)) / 1000).toFixed(1)}K
+                            </p>
+                            <p style={{ fontSize: '10px', color: '#94a3b8', margin: '4px 0 0 0' }}>
+                              if deficit sustained via money creation
+                            </p>
+                          </div>
+                        )}
                       </div>
 
                       {/* UBI Cost and Details */}
@@ -362,6 +388,35 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                               ${(ubiAnnualPerAdult / 1000).toFixed(1)}K
                             </span>
                           </div>
+
+                          {/* Real Purchasing Power Indicator */}
+                          {result.balance.surplusDeficit < 0 && (
+                            <div style={{
+                              padding: '12px',
+                              background: 'rgba(249, 115, 22, 0.1)',
+                              borderRadius: '6px',
+                              border: '1px solid #FB923C',
+                              marginTop: '8px'
+                            }}>
+                              <p style={{ fontSize: '11px', color: '#FB923C', fontWeight: '600', margin: '0 0 6px 0', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                                Real Purchasing Power (Inflation-Adjusted)
+                              </p>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                                <span style={{ fontSize: '12px', color: '#cbd5e1' }}>If deficit sustained:</span>
+                                <span style={{
+                                  fontSize: '18px',
+                                  fontWeight: '700',
+                                  color: '#FB923C'
+                                }}>
+                                  ${(ubiAnnualPerAdult * (1 - Math.abs(result.balance.surplusDeficit) / result.obligations.totalObligations) / 1000).toFixed(1)}K
+                                </span>
+                              </div>
+                              <p style={{ fontSize: '10px', color: '#94a3b8', margin: '6px 0 0 0', fontStyle: 'italic' }}>
+                                Nominal value eroded by {(Math.abs(result.balance.surplusDeficit) / result.obligations.totalObligations * 100).toFixed(1)}% estimated inflation
+                              </p>
+                            </div>
+                          )}
+
                           <div className="flex justify-between">
                             <span className="text-sm text-muted">Max Supplement Bonus</span>
                             <span className="font-semibold text-purple-400">
