@@ -14,6 +14,7 @@ import PersonaComparison from './PersonaComparison';
 import ProductivityBar from './ProductivityBar';
 import OnboardingTour from './OnboardingTour';
 import Warnings from './Warnings';
+import GlossaryPanel from './GlossaryPanel';
 import SubmitModal from './SubmitModal';
 import FeedbackModal from './FeedbackModal';
 import NavButtons from './NavButtons';
@@ -588,10 +589,22 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                 {/* RIGHT: Warnings & Alerts Panel (17%) */}
                 <div className="col-span-2 overflow-y-auto">
                   <div className="bg-darker-slate rounded-lg p-6 border border-border-slate" style={{ height: '100%' }}>
-                    <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#cbd5e1', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                      ⚡ Policy Alerts
-                    </h3>
-                    <Warnings result={result} config={config} />
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                      {/* Policy Alerts Section */}
+                      <div>
+                        <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#cbd5e1', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                          ⚡ Policy Alerts
+                        </h3>
+                        <Warnings result={result} config={config} />
+                      </div>
+
+                      {/* Glossary Section - Conditional */}
+                      {showGlossary && (
+                        <div style={{ borderTop: '1px solid #334155', paddingTop: '16px' }}>
+                          <GlossaryPanel />
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
