@@ -13,6 +13,7 @@ import Charts from './Charts';
 import PersonaComparison from './PersonaComparison';
 import ProductivityBar from './ProductivityBar';
 import OnboardingTour from './OnboardingTour';
+import Warnings from './Warnings';
 import SubmitModal from './SubmitModal';
 import FeedbackModal from './FeedbackModal';
 import NavButtons from './NavButtons';
@@ -527,6 +528,9 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                       </div>
                     </div>
                   )}
+
+                  {/* Warnings Section */}
+                  <Warnings result={result} config={config} />
                 </div>
               </div>
             )}
