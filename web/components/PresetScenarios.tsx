@@ -13,6 +13,7 @@ const PRESETS = [
     name: 'Balanced',
     icon: '⚖️',
     description: 'Default moderate policy',
+    summary: 'Balanced achieves surplus while maintaining income security and high marginal income retention.',
     color: 'from-blue-400 to-blue-600',
     textColor: 'text-blue-300',
     bgColor: '#1E3A5F',
@@ -27,6 +28,7 @@ const PRESETS = [
     name: 'High Growth',
     icon: '📈',
     description: 'Lower taxes, higher UBI',
+    summary: 'High Growth increases household income and workforce participation, with tighter fiscal buffer.',
     color: 'from-green-400 to-green-600',
     textColor: 'text-green-300',
     bgColor: '#1E3A5F',
@@ -41,6 +43,7 @@ const PRESETS = [
     name: 'Safety Net',
     icon: '🛡️',
     description: 'Higher taxes, robust UBI',
+    summary: 'Safety Net maximizes baseline stability at the cost of higher structural revenue requirements.',
     color: 'from-orange-400 to-orange-600',
     textColor: 'text-orange-300',
     bgColor: '#1E3A5F',
@@ -55,6 +58,7 @@ const PRESETS = [
     name: 'Minimal State',
     icon: '⚡',
     description: 'Low taxes, lean support',
+    summary: 'Minimal State minimizes redistribution but requires disciplined fiscal management to remain solvent.',
     color: 'from-purple-400 to-purple-600',
     textColor: 'text-purple-300',
     bgColor: '#1E3A5F',
@@ -243,7 +247,7 @@ export default function PresetScenarios({ onSelectPreset }: PresetScenariosProps
           {/* Policy Summary */}
           <div style={{ marginTop: '12px', padding: '12px', background: 'rgba(217, 119, 6, 0.1)', borderRadius: '6px', border: '1px solid #d97706' }}>
             <p style={{ fontSize: '12px', color: '#fbbf24', lineHeight: '1.5' }}>
-              Minimal State reduces tax burden but risks deficit expansion.
+              {previewPreset?.summary}
             </p>
           </div>
         </div>
