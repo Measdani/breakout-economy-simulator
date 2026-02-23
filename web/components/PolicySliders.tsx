@@ -1,6 +1,7 @@
 'use client';
 
 // Version marker: v1.1 - Floating label removed - Build 2026-02-20
+import { useState } from 'react';
 import Tooltip from './Tooltip';
 
 interface PolicySlidersProps {
@@ -10,6 +11,18 @@ interface PolicySlidersProps {
   onUbiChange: (value: number) => void;
   breakoutPoint: number;
   onBreakoutPointChange: (value: number) => void;
+  ubiDependent1: number;
+  onUbiDep1Change: (value: number) => void;
+  ubiDependent2: number;
+  onUbiDep2Change: (value: number) => void;
+  ubiDependent3: number;
+  onUbiDep3Change: (value: number) => void;
+  pctHouseholds1Dep: number;
+  onPct1Change: (value: number) => void;
+  pctHouseholds2Dep: number;
+  onPct2Change: (value: number) => void;
+  pctHouseholds3Dep: number;
+  onPct3Change: (value: number) => void;
   viewMode: 'revenue' | 'social' | 'incentives';
   onViewModeChange: (mode: 'revenue' | 'social' | 'incentives') => void;
   onReset: () => void;
@@ -24,12 +37,25 @@ export default function PolicySliders({
   onUbiChange,
   breakoutPoint,
   onBreakoutPointChange,
+  ubiDependent1,
+  onUbiDep1Change,
+  ubiDependent2,
+  onUbiDep2Change,
+  ubiDependent3,
+  onUbiDep3Change,
+  pctHouseholds1Dep,
+  onPct1Change,
+  pctHouseholds2Dep,
+  onPct2Change,
+  pctHouseholds3Dep,
+  onPct3Change,
   viewMode,
   onViewModeChange,
   onReset,
   showGlossary = false,
   onGlossaryToggle = () => {},
 }: PolicySlidersProps) {
+  const [showHouseholdDetails, setShowHouseholdDetails] = useState(false);
   const formatPercent = (value: number) => {
     return `${(value * 100).toFixed(2)}%`;
   };
@@ -60,9 +86,15 @@ export default function PolicySliders({
   };
 
   const getUBIContext = () => {
-    const cost = estimatedUBICost / 1e12;
+    const numHH = 130000000; // default households
+    const tier1Count = numHH * (pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep);
+    const tier2Count = numHH * (pctHouseholds2Dep + pctHouseholds3Dep);
+    const tier3Count = numHH * pctHouseholds3Dep;
+    const dependentCost = tier1Count * ubiDependent1 + tier2Count * ubiDependent2 + tier3Count * ubiDependent3;
+    const totalUBICost = estimatedUBICost + dependentCost;
+    const cost = totalUBICost / 1e12;
     return {
-      label: 'Total UBI Cost',
+      label: 'Total UBI Cost (Adults + Dependents)',
       value: `$${cost.toFixed(2)}T`
     };
   };
@@ -194,6 +226,115 @@ export default function PolicySliders({
         context={getUBIContext()}
         tooltipText="Designed to provide income stability while preserving work incentives."
       />
+
+      {/* Expandable Household Structure Assumptions */}
+      <div className="bg-dark-slate rounded-lg p-5 glow-border-slate" style={{ transition: 'all 0.3s ease' }}>
+        <div className="mb-4 cursor-pointer" onClick={() => setShowHouseholdDetails(!showHouseholdDetails)}>
+          <p className="text-sm font-semibold text-muted uppercase tracking-wide">
+            {showHouseholdDetails ? '▼' : '▶'} Household Structure Assumptions
+          </p>
+        </div>
+
+        {showHouseholdDetails && (
+          <div className="space-y-6 pt-4 border-t border-border-slate">
+            {/* Dependent UBI Rates */}
+            <div>
+              <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-4">💰 Dependent UBI Rates</p>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm text-dimmed">1st Dependent</label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      value={ubiDependent1}
+                      onChange={(e) => onUbiDep1Change(Math.max(0, parseInt(e.target.value) || 0))}
+                      className="w-24 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright"
+                    />
+                    <span className="text-dimmed text-sm">USD</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <label className="text-sm text-dimmed">2nd Dependent</label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      value={ubiDependent2}
+                      onChange={(e) => onUbiDep2Change(Math.max(0, parseInt(e.target.value) || 0))}
+                      className="w-24 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright"
+                    />
+                    <span className="text-dimmed text-sm">USD</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <label className="text-sm text-dimmed">3rd Dependent</label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      value={ubiDependent3}
+                      onChange={(e) => onUbiDep3Change(Math.max(0, parseInt(e.target.value) || 0))}
+                      className="w-24 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright"
+                    />
+                    <span className="text-dimmed text-sm">USD</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Household Distribution */}
+            <div>
+              <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-4">📋 Household Distribution</p>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm text-dimmed">% Households w/ 1 Dep</label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      value={Math.round(pctHouseholds1Dep * 100)}
+                      onChange={(e) => onPct1Change(Math.max(0, Math.min(100, parseInt(e.target.value) || 0)) / 100)}
+                      className="w-16 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                    />
+                    <span className="text-dimmed text-sm">%</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <label className="text-sm text-dimmed">% Households w/ 2 Deps</label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      value={Math.round(pctHouseholds2Dep * 100)}
+                      onChange={(e) => onPct2Change(Math.max(0, Math.min(100, parseInt(e.target.value) || 0)) / 100)}
+                      className="w-16 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                    />
+                    <span className="text-dimmed text-sm">%</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <label className="text-sm text-dimmed">% Households w/ 3+ Deps</label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      value={Math.round(pctHouseholds3Dep * 100)}
+                      onChange={(e) => onPct3Change(Math.max(0, Math.min(100, parseInt(e.target.value) || 0)) / 100)}
+                      className="w-16 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                    />
+                    <span className="text-dimmed text-sm">%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Computed Average */}
+            <div className="pt-3 border-t border-border-slate">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted">Average Dependents per Household</span>
+                <span className="text-lg font-bold text-bright">
+                  {(pctHouseholds1Dep + 2 * pctHouseholds2Dep + 3 * pctHouseholds3Dep).toFixed(2)}
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Breakout Point - Incentive Structure */}
       <SliderSection

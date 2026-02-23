@@ -121,7 +121,21 @@ export function runSimulation(config: PolicyConfig): SimulationResult {
   const welfareSavingsCredit = config.welfareSavingsCredit;
   const totalRevenue = tokenTaxRevenue + incomeTaxRevenue + welfareSavingsCredit;
 
-  const ubiCost = config.ubiAnnualPerAdult * config.adultPopulation;
+  // Calculate UBI cost: adults + tiered dependents
+  const dep1Rate = config.ubiDependent1 ?? 6000;
+  const dep2Rate = config.ubiDependent2 ?? 4000;
+  const dep3Rate = config.ubiDependent3 ?? 2000;
+  const numHH = config.numHouseholds ?? 130000000;
+  const pct1 = config.pctHouseholds1Dep ?? 0.25;
+  const pct2 = config.pctHouseholds2Dep ?? 0.15;
+  const pct3 = config.pctHouseholds3Dep ?? 0.10;
+
+  const tier1Count = numHH * (pct1 + pct2 + pct3);  // all HHs with ≥1 dep
+  const tier2Count = numHH * (pct2 + pct3);          // all HHs with ≥2 deps
+  const tier3Count = numHH * pct3;                    // all HHs with 3 deps
+
+  const dependentCost = tier1Count * dep1Rate + tier2Count * dep2Rate + tier3Count * dep3Rate;
+  const ubiCost = config.ubiAnnualPerAdult * config.adultPopulation + dependentCost;
   const govtOperatingRequirement = config.govtOperatingRequirement;
   const totalObligations = ubiCost + govtOperatingRequirement;
 

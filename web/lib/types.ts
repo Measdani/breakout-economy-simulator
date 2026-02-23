@@ -18,6 +18,15 @@ export interface PolicyConfig {
   supplementApexIncome: number;
   supplementApexBonus: number;
   personaWeights?: number[];
+  // Dependent UBI tiers
+  ubiDependent1?: number;
+  ubiDependent2?: number;
+  ubiDependent3?: number;
+  // Household structure
+  numHouseholds?: number;
+  pctHouseholds1Dep?: number;
+  pctHouseholds2Dep?: number;
+  pctHouseholds3Dep?: number;
 }
 
 export interface Revenue {

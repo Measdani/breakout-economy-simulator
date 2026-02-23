@@ -47,6 +47,12 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     mergedConfig.ubiAnnualPerAdult
   );
   const [breakoutPoint, setBreakoutPoint] = useState(mergedConfig.breakoutPoint);
+  const [ubiDependent1, setUbiDependent1] = useState(mergedConfig.ubiDependent1 ?? 6000);
+  const [ubiDependent2, setUbiDependent2] = useState(mergedConfig.ubiDependent2 ?? 4000);
+  const [ubiDependent3, setUbiDependent3] = useState(mergedConfig.ubiDependent3 ?? 2000);
+  const [pctHouseholds1Dep, setPctHouseholds1Dep] = useState(mergedConfig.pctHouseholds1Dep ?? 0.25);
+  const [pctHouseholds2Dep, setPctHouseholds2Dep] = useState(mergedConfig.pctHouseholds2Dep ?? 0.15);
+  const [pctHouseholds3Dep, setPctHouseholds3Dep] = useState(mergedConfig.pctHouseholds3Dep ?? 0.10);
   const [showTour, setShowTour] = useState(false);
   const [activeScreen, setActiveScreen] = useState<'controls' | 'scenarios' | 'results' | 'charts' | 'personas'>('controls');
   const [currentConfig, setCurrentConfig] = useState<string>('Default');
@@ -65,6 +71,12 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     tokenTaxRate,
     ubiAnnualPerAdult,
     breakoutPoint,
+    ubiDependent1,
+    ubiDependent2,
+    ubiDependent3,
+    pctHouseholds1Dep,
+    pctHouseholds2Dep,
+    pctHouseholds3Dep,
   };
 
   const result: SimulationResult = useMemo(() => runSimulation(config), [config]);
@@ -106,6 +118,12 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     setTokenTaxRate(DEFAULT_CONFIG.tokenTaxRate);
     setUbiAnnualPerAdult(DEFAULT_CONFIG.ubiAnnualPerAdult);
     setBreakoutPoint(DEFAULT_CONFIG.breakoutPoint);
+    setUbiDependent1(6000);
+    setUbiDependent2(4000);
+    setUbiDependent3(2000);
+    setPctHouseholds1Dep(0.25);
+    setPctHouseholds2Dep(0.15);
+    setPctHouseholds3Dep(0.10);
     setViewMode('revenue');
     setCurrentConfig('Default');
     setActiveScreen('controls');
@@ -208,6 +226,18 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                     onUbiChange={setUbiAnnualPerAdult}
                     breakoutPoint={breakoutPoint}
                     onBreakoutPointChange={setBreakoutPoint}
+                    ubiDependent1={ubiDependent1}
+                    onUbiDep1Change={setUbiDependent1}
+                    ubiDependent2={ubiDependent2}
+                    onUbiDep2Change={setUbiDependent2}
+                    ubiDependent3={ubiDependent3}
+                    onUbiDep3Change={setUbiDependent3}
+                    pctHouseholds1Dep={pctHouseholds1Dep}
+                    onPct1Change={setPctHouseholds1Dep}
+                    pctHouseholds2Dep={pctHouseholds2Dep}
+                    onPct2Change={setPctHouseholds2Dep}
+                    pctHouseholds3Dep={pctHouseholds3Dep}
+                    onPct3Change={setPctHouseholds3Dep}
                     viewMode={viewMode}
                     onViewModeChange={setViewMode}
                     onReset={handleReset}
