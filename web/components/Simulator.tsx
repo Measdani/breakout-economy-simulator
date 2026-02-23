@@ -622,19 +622,22 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                 <div className="text-center space-y-4">
                   <button
                     onClick={() => setShowSubmitModal(true)}
-                    className="px-8 py-4 rounded-lg font-bold text-white"
-                    style={{ background: 'linear-gradient(135deg, #3B82F6, #2563EB)', fontSize: '16px' }}
+                    className="px-8 py-4 rounded-lg font-bold text-white transition hover:shadow-lg"
+                    style={{
+                      background: 'linear-gradient(135deg, #A855F7, #D946EF)',
+                      fontSize: '16px',
+                      boxShadow: '0 0 20px rgba(168, 85, 247, 0.4)',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.boxShadow = '0 0 30px rgba(217, 70, 239, 0.6)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.boxShadow = '0 0 20px rgba(168, 85, 247, 0.4)';
+                    }}
                   >
-                    Submit This Configuration
+                    📤 Submit This Configuration
                   </button>
                   <p className="text-xs text-dimmed">Contribute your configuration to the research dataset.</p>
-                  <button
-                    onClick={() => setShowFeedbackModal(true)}
-                    className="text-xs text-muted"
-                    style={{ background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}
-                  >
-                    Give feedback on this model
-                  </button>
                 </div>
               </div>
             )}
