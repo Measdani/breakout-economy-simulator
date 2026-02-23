@@ -13,6 +13,7 @@ import PersonaComparison from './PersonaComparison';
 import ProductivityBar from './ProductivityBar';
 import OnboardingTour from './OnboardingTour';
 import Warnings from './Warnings';
+import GlossaryPanel from './GlossaryPanel';
 import SubmitModal from './SubmitModal';
 import FeedbackModal from './FeedbackModal';
 import NavButtons from './NavButtons';
@@ -56,6 +57,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   const [currentConfig, setCurrentConfig] = useState<string>('Default');
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [showGlossary, setShowGlossary] = useState(false);
 
   const handlePresetSelectWithName = (presetName: string, presetConfig: Partial<PolicyConfig>) => {
     setCurrentConfig(presetName);
@@ -182,6 +184,8 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                     breakoutPoint={breakoutPoint}
                     onBreakoutPointChange={setBreakoutPoint}
                     onReset={handleReset}
+                    showGlossary={showGlossary}
+                    onGlossaryToggle={setShowGlossary}
                   />
                 </div>
 
@@ -295,6 +299,13 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                           />
                         </div>
                       </div>
+                    </div>
+                  )}
+
+                  {/* Glossary Section - Conditional */}
+                  {showGlossary && (
+                    <div style={{ borderTop: '1px solid #334155', paddingTop: '16px', marginTop: '16px' }}>
+                      <GlossaryPanel />
                     </div>
                   )}
                 </div>
@@ -697,31 +708,6 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
             {activeScreen === 'submit' && <div style={{ width: '90px' }} />}
           </div>
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-              {activeScreen === 'submit' && (
-                <button
-                  onClick={() => setShowSubmitModal(true)}
-                  className="px-5 py-3 rounded transition hover:shadow-lg"
-                  style={{
-                    background: '#0F172A',
-                    color: '#00D9FF',
-                    border: '2px solid #00D9FF',
-                    fontSize: '16px',
-                    fontWeight: '700',
-                    letterSpacing: '0.3px',
-                    textShadow: '0 0 8px rgba(0, 217, 255, 0.6)',
-                    boxShadow: '0 0 12px rgba(0, 217, 255, 0.4), inset 0 0 12px rgba(0, 217, 255, 0.1)',
-                    transition: 'all 0.3s ease'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.boxShadow = '0 0 20px rgba(0, 217, 255, 0.6), inset 0 0 12px rgba(0, 217, 255, 0.2)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.boxShadow = '0 0 12px rgba(0, 217, 255, 0.4), inset 0 0 12px rgba(0, 217, 255, 0.1)';
-                  }}
-                >
-                  📤 Submit
-                </button>
-              )}
               <button
                 onClick={() => setShowFeedbackModal(true)}
                 className="px-5 py-3 rounded transition hover:shadow-lg"
