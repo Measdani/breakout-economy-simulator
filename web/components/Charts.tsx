@@ -14,6 +14,7 @@ import {
   ResponsiveContainer,
   BarChart,
   Bar,
+  ComposedChart,
 } from 'recharts';
 import type { SimulationResult, PolicyConfig } from '@/lib/types';
 import { calculateSupplement } from '@/lib/engine';
@@ -74,6 +75,30 @@ export default function Charts({ result, config }: ChartsProps) {
       income: Math.round(income / 1000) * 1000,
       supplement: calculateSupplement(income, config),
       ubi: config.ubiAnnualPerAdult,
+    });
+  }
+
+  // Revenue vs Obligations Stacked Bar Chart Data
+  const revenueObligationsData = [
+    {
+      category: 'Budget',
+      Revenue: result.revenue.totalRevenue / 1e12,
+      Obligations: result.obligations.totalObligations / 1e12,
+    },
+  ];
+
+  // UBI Cost as % of GDP (assuming GDP ~$28 trillion for US)
+  const assumedGDP = 28e12;
+  const ubiPercentageGDP = (result.obligations.ubiCost / assumedGDP) * 100;
+
+  // Token Tax Revenue Sensitivity Curve (varying token tax rate from 0.001 to 0.01)
+  const tokenTaxSensitivityData = [];
+  for (let rate = 0.001; rate <= 0.01; rate += 0.0009) {
+    // Revenue scales linearly with tax rate
+    const scaledRevenue = result.revenue.tokenTaxRevenue * (rate / config.tokenTaxRate);
+    tokenTaxSensitivityData.push({
+      rate: Math.round(rate * 10000) / 100, // Convert to basis points (0.1% = 10 bps)
+      revenue: scaledRevenue / 1e12,
     });
   }
 
@@ -216,6 +241,91 @@ export default function Charts({ result, config }: ChartsProps) {
               stroke="#8b5cf6"
               name="Supplement Bonus"
               strokeWidth={2}
+              isAnimationActive={false}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Policy-Level Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Revenue vs Obligations Stacked Bar */}
+        <div className="bg-white rounded-lg shadow-lg p-6 glow-border-purple">
+          <h3 className="text-lg font-bold text-slate-900 mb-4">Revenue vs Obligations</h3>
+          <p className="text-sm text-slate-600 mb-4">
+            Comparison of total revenue and total obligations in trillions.
+          </p>
+          <ResponsiveContainer width="100%" height={250}>
+            <BarChart data={revenueObligationsData} layout="vertical">
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis type="number" />
+              <YAxis dataKey="category" type="category" />
+              <Tooltip formatter={(value: any) => typeof value === 'number' ? `$${value.toFixed(2)}T` : ''} />
+              <Legend />
+              <Bar dataKey="Revenue" stackId="a" fill="#10b981" />
+              <Bar dataKey="Obligations" stackId="a" fill="#ef4444" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* UBI Cost as % of GDP */}
+        <div className="bg-white rounded-lg shadow-lg p-6 glow-border-green">
+          <h3 className="text-lg font-bold text-slate-900 mb-4">UBI Cost as % of GDP</h3>
+          <div className="space-y-4">
+            <p className="text-sm text-slate-600">
+              Estimated based on ~$28 trillion US GDP benchmark.
+            </p>
+            <div className="flex items-center gap-4">
+              <div className="flex-1">
+                <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+                  <div
+                    className="bg-blue-600 h-full rounded-full"
+                    style={{ width: `${Math.min(ubiPercentageGDP * 10, 100)}%` }}
+                  />
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-2xl font-bold text-blue-600">
+                  {ubiPercentageGDP.toFixed(2)}%
+                </p>
+                <p className="text-xs text-slate-600">of GDP</p>
+              </div>
+            </div>
+            <p className="text-sm text-slate-600">
+              Annual UBI Cost: {formatCurrency(result.obligations.ubiCost)}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Token Tax Revenue Sensitivity Curve */}
+      <div className="bg-white rounded-lg shadow-lg p-6 glow-border-blue">
+        <h3 className="text-lg font-bold text-slate-900 mb-4">Token Tax Revenue Sensitivity</h3>
+        <p className="text-sm text-slate-600 mb-4">
+          Shows how token tax revenue scales with different tax rates.
+        </p>
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart data={tokenTaxSensitivityData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+              dataKey="rate"
+              label={{ value: 'Token Tax Rate (%)', position: 'insideBottomRight', offset: -5 }}
+              tickFormatter={(value) => `${value.toFixed(2)}%`}
+            />
+            <YAxis
+              label={{ value: 'Revenue ($T)', angle: -90, position: 'insideLeft' }}
+              tickFormatter={(value) => `$${value.toFixed(2)}T`}
+            />
+            <Tooltip
+              formatter={(value: any) => [`$${value.toFixed(3)}T`, 'Revenue']}
+              labelFormatter={(label) => `${label.toFixed(2)}% rate`}
+            />
+            <Line
+              type="monotone"
+              dataKey="revenue"
+              stroke="#3b82f6"
+              strokeWidth={3}
+              name="Token Tax Revenue"
               isAnimationActive={false}
             />
           </LineChart>
