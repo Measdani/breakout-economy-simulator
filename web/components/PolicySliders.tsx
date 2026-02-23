@@ -367,59 +367,6 @@ export default function PolicySliders({
                 </p>
               </div>
             </div>
-
-            {/* Derived Metrics */}
-            <div className="pt-3 border-t border-border-slate">
-              {/* Fiscal Impact */}
-              <div className="mb-4">
-                <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-3">💰 Fiscal Impact</p>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-dimmed">Total Dependent UBI Cost</span>
-                    <span className="text-lg font-bold text-emerald-400">
-                      ${(
-                        (130000000 * (pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep) * ubiDependent1 +
-                        130000000 * (pctHouseholds2Dep + pctHouseholds3Dep) * ubiDependent2 +
-                        130000000 * pctHouseholds3Dep * ubiDependent3) / 1e9
-                      ).toFixed(0)}B
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-dimmed">% of Total UBI Budget</span>
-                    <span className="text-lg font-bold text-blue-400">
-                      {(
-                        ((130000000 * (pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep) * ubiDependent1 +
-                        130000000 * (pctHouseholds2Dep + pctHouseholds3Dep) * ubiDependent2 +
-                        130000000 * pctHouseholds3Dep * ubiDependent3) /
-                        (265000000 * ubiAnnualPerAdult +
-                        130000000 * (pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep) * ubiDependent1 +
-                        130000000 * (pctHouseholds2Dep + pctHouseholds3Dep) * ubiDependent2 +
-                        130000000 * pctHouseholds3Dep * ubiDependent3)) * 100
-                      ).toFixed(1)}%
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Demographic Output */}
-              <div className="border-t border-border-slate pt-4">
-                <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-3">👨‍👩‍👧 Demographic Output</p>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-dimmed">Average Dependents per Household</span>
-                    <span className="text-lg font-bold text-bright">
-                      {(pctHouseholds1Dep + 2 * pctHouseholds2Dep + 3 * pctHouseholds3Dep).toFixed(2)}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-dimmed">Total Dependent Population</span>
-                    <span className="text-lg font-bold text-purple-400">
-                      {((130000000 * (pctHouseholds1Dep + 2 * pctHouseholds2Dep + 3 * pctHouseholds3Dep)) / 1e6).toFixed(0)}M
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         )}
       </div>
