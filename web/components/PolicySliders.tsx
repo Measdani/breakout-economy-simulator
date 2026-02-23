@@ -233,6 +233,11 @@ export default function PolicySliders({
           <p className="text-sm font-semibold text-muted uppercase tracking-wide">
             {showHouseholdDetails ? '▼' : '▶'} Household Demographics Model
           </p>
+          {showHouseholdDetails && (
+            <p className="text-xs text-dimmed mt-2 italic">
+              Models household-dependent cost distribution to estimate real UBI burden under demographic variation.
+            </p>
+          )}
         </div>
 
         {showHouseholdDetails && (
@@ -284,57 +289,82 @@ export default function PolicySliders({
             <div>
               <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-4">📊 Household Composition Distribution</p>
               <div className="space-y-3">
+                {/* 0 Dependents - Auto Calculated */}
                 <div className="bg-darker-navy rounded-lg p-3 border border-border-slate opacity-75">
-                  <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center justify-between">
                     <label className="text-sm text-muted">Households with 0 Dependents</label>
                     <div className="flex items-center gap-2">
                       <span className="w-16 text-right font-semibold text-emerald-400">
                         {Math.round((1 - (pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep)) * 100)}%
                       </span>
-                      <span className="text-dimmed text-xs">(derived)</span>
+                      <span className="text-dimmed text-xs">(Auto)</span>
                     </div>
                   </div>
-                  <p className="text-xs text-dimmed italic">Automatically calculated to ensure total = 100%</p>
                 </div>
-                <div className="flex items-center justify-between">
-                  <label className="text-sm text-dimmed">Households with 1 Dependent</label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="number"
-                      value={Math.round(pctHouseholds1Dep * 100)}
-                      onChange={(e) => onPct1Change(Math.max(0, Math.min(100, parseInt(e.target.value) || 0)) / 100)}
-                      className="w-16 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
-                    />
-                    <span className="text-dimmed text-sm">%</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <label className="text-sm text-dimmed">Households with 2 Dependents</label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="number"
-                      value={Math.round(pctHouseholds2Dep * 100)}
-                      onChange={(e) => onPct2Change(Math.max(0, Math.min(100, parseInt(e.target.value) || 0)) / 100)}
-                      className="w-16 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
-                    />
-                    <span className="text-dimmed text-sm">%</span>
-                  </div>
-                </div>
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <label className="text-sm text-dimmed">Households with 3 or More Dependents</label>
+
+                {/* User Input Fields */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm text-dimmed">Households with 1 Dependent</label>
                     <div className="flex items-center gap-2">
                       <input
                         type="number"
-                        value={Math.round(pctHouseholds3Dep * 100)}
-                        onChange={(e) => onPct3Change(Math.max(0, Math.min(100, parseInt(e.target.value) || 0)) / 100)}
+                        value={Math.round(pctHouseholds1Dep * 100)}
+                        onChange={(e) => {
+                          const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 0));
+                          onPct1Change(val / 100);
+                        }}
                         className="w-16 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
                       />
                       <span className="text-dimmed text-sm">%</span>
                     </div>
                   </div>
-                  <p className="text-xs text-dimmed italic">Modeled as 3 dependents (cap) for simplicity</p>
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm text-dimmed">Households with 2 Dependents</label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        value={Math.round(pctHouseholds2Dep * 100)}
+                        onChange={(e) => {
+                          const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 0));
+                          onPct2Change(val / 100);
+                        }}
+                        className="w-16 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                      />
+                      <span className="text-dimmed text-sm">%</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="text-sm text-dimmed">Households with 3 or More Dependents</label>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="number"
+                          value={Math.round(pctHouseholds3Dep * 100)}
+                          onChange={(e) => {
+                            const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 0));
+                            onPct3Change(val / 100);
+                          }}
+                          className="w-16 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                        />
+                        <span className="text-dimmed text-sm">%</span>
+                      </div>
+                    </div>
+                    <p className="text-xs text-dimmed italic">For modeling: households with 3+ dependents capped at 3.</p>
+                  </div>
                 </div>
+
+                {/* Validation Message */}
+                {(pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep) > 1 && (
+                  <div className="bg-red-900 bg-opacity-30 border border-red-600 rounded px-3 py-2">
+                    <p className="text-xs text-red-400 font-semibold">⚠ Total exceeds 100%. Please adjust distribution.</p>
+                  </div>
+                )}
+
+                {/* Clarity Note */}
+                <p className="text-xs text-dimmed italic pt-2 border-t border-border-slate">
+                  Remaining percentage is automatically assigned to 0-dependent households.
+                </p>
               </div>
             </div>
 
