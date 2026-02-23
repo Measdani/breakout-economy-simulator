@@ -49,6 +49,16 @@ export default function AdminCharts({ submissions }: AdminChartsProps) {
     },
   ]
 
+  // ============ DEPENDENT UBI ANALYSIS ============
+  const avgDependent1 = submissions.reduce((sum, s) => sum + (s.config?.ubiDependent1 || 0), 0) / n / 1000
+  const avgDependent2 = submissions.reduce((sum, s) => sum + (s.config?.ubiDependent2 || 0), 0) / n / 1000
+  const avgDependent3 = submissions.reduce((sum, s) => sum + (s.config?.ubiDependent3 || 0), 0) / n / 1000
+  const totalDependentCost = submissions.reduce((sum, s) => sum + (s.result?.obligations?.dependentUBICost || 0), 0) / n / 1e9
+
+  const avgPctHouseholds1Dep = submissions.reduce((sum, s) => sum + (s.config?.pctHouseholds1Dep || 0), 0) / n
+  const avgPctHouseholds2Dep = submissions.reduce((sum, s) => sum + (s.config?.pctHouseholds2Dep || 0), 0) / n
+  const avgPctHouseholds3Dep = submissions.reduce((sum, s) => sum + (s.config?.pctHouseholds3Dep || 0), 0) / n
+
   // ============ WORK INCENTIVE DISTRIBUTION ============
   const getWorkIncentiveScore = (s: SubmissionRow): number => {
     const personas = s.result?.citizenModel?.personaOutcomes || []
@@ -333,6 +343,54 @@ export default function AdminCharts({ submissions }: AdminChartsProps) {
                 <Tooltip content={<CustomTooltip />} />
               </PieChart>
             </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+
+      {/* ============ DEPENDENT UBI ANALYTICS ============ */}
+      <div style={{ marginBottom: '2rem' }}>
+        <h2 style={{ color: '#e0e7ff', marginBottom: '1rem', fontSize: '1.25rem', fontWeight: 'bold' }}>Dependent UBI Strategy</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+          <div style={{ backgroundColor: '#0f1629', border: '1px solid rgba(168, 85, 247, 0.3)', borderRadius: '0.5rem', padding: '1.5rem' }}>
+            <p style={{ color: '#94a3b8', fontSize: '0.875rem', marginBottom: '0.5rem' }}>Avg Dependent Tier 1</p>
+            <p style={{ color: '#d8b4fe', fontSize: '2rem', fontWeight: 'bold' }}>${avgDependent1.toFixed(1)}K</p>
+            <p style={{ color: '#94a3b8', fontSize: '0.75rem', marginTop: '0.5rem' }}>First dependent annual</p>
+          </div>
+
+          <div style={{ backgroundColor: '#0f1629', border: '1px solid rgba(168, 85, 247, 0.3)', borderRadius: '0.5rem', padding: '1.5rem' }}>
+            <p style={{ color: '#94a3b8', fontSize: '0.875rem', marginBottom: '0.5rem' }}>Avg Dependent Tier 2</p>
+            <p style={{ color: '#d8b4fe', fontSize: '2rem', fontWeight: 'bold' }}>${avgDependent2.toFixed(1)}K</p>
+            <p style={{ color: '#94a3b8', fontSize: '0.75rem', marginTop: '0.5rem' }}>Second dependent annual</p>
+          </div>
+
+          <div style={{ backgroundColor: '#0f1629', border: '1px solid rgba(168, 85, 247, 0.3)', borderRadius: '0.5rem', padding: '1.5rem' }}>
+            <p style={{ color: '#94a3b8', fontSize: '0.875rem', marginBottom: '0.5rem' }}>Avg Dependent Tier 3+</p>
+            <p style={{ color: '#d8b4fe', fontSize: '2rem', fontWeight: 'bold' }}>${avgDependent3.toFixed(1)}K</p>
+            <p style={{ color: '#94a3b8', fontSize: '0.75rem', marginTop: '0.5rem' }}>Third+ dependents annual</p>
+          </div>
+
+          <div style={{ backgroundColor: '#0f1629', border: '1px solid rgba(168, 85, 247, 0.3)', borderRadius: '0.5rem', padding: '1.5rem' }}>
+            <p style={{ color: '#94a3b8', fontSize: '0.875rem', marginBottom: '0.5rem' }}>Avg Total Dependent Cost</p>
+            <p style={{ color: '#d8b4fe', fontSize: '2rem', fontWeight: 'bold' }}>${totalDependentCost.toFixed(1)}B</p>
+            <p style={{ color: '#94a3b8', fontSize: '0.75rem', marginTop: '0.5rem' }}>Annual budget</p>
+          </div>
+
+          <div style={{ backgroundColor: '#0f1629', border: '1px solid rgba(34, 197, 94, 0.3)', borderRadius: '0.5rem', padding: '1.5rem' }}>
+            <p style={{ color: '#94a3b8', fontSize: '0.875rem', marginBottom: '0.5rem' }}>Avg % HH w/ 1 Dependent</p>
+            <p style={{ color: '#22c55e', fontSize: '2rem', fontWeight: 'bold' }}>{(avgPctHouseholds1Dep * 100).toFixed(1)}%</p>
+            <p style={{ color: '#94a3b8', fontSize: '0.75rem', marginTop: '0.5rem' }}>Of total households</p>
+          </div>
+
+          <div style={{ backgroundColor: '#0f1629', border: '1px solid rgba(34, 197, 94, 0.3)', borderRadius: '0.5rem', padding: '1.5rem' }}>
+            <p style={{ color: '#94a3b8', fontSize: '0.875rem', marginBottom: '0.5rem' }}>Avg % HH w/ 2 Dependents</p>
+            <p style={{ color: '#22c55e', fontSize: '2rem', fontWeight: 'bold' }}>{(avgPctHouseholds2Dep * 100).toFixed(1)}%</p>
+            <p style={{ color: '#94a3b8', fontSize: '0.75rem', marginTop: '0.5rem' }}>Of total households</p>
+          </div>
+
+          <div style={{ backgroundColor: '#0f1629', border: '1px solid rgba(34, 197, 94, 0.3)', borderRadius: '0.5rem', padding: '1.5rem' }}>
+            <p style={{ color: '#94a3b8', fontSize: '0.875rem', marginBottom: '0.5rem' }}>Avg % HH w/ 3+ Dependents</p>
+            <p style={{ color: '#22c55e', fontSize: '2rem', fontWeight: 'bold' }}>{(avgPctHouseholds3Dep * 100).toFixed(1)}%</p>
+            <p style={{ color: '#94a3b8', fontSize: '0.75rem', marginTop: '0.5rem' }}>Of total households</p>
           </div>
         </div>
       </div>
