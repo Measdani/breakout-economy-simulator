@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Policy Flight Simulator',
-  description: 'Interactive UBI + Token Tax policy explorer',
+  title: 'The National AI Economy Resiliency Model (NAERM)',
+  description: 'Interactive UBI + Token Tax policy explorer for AI-era economic resilience',
 };
 
 export default function RootLayout({

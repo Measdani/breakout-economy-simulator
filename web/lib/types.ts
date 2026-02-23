@@ -1,5 +1,5 @@
 /**
- * Policy Flight Simulator - Type Definitions
+ * NAERM (National AI Economy Resiliency Model) - Type Definitions
  * Mirrored from ../src/types.ts for web client use
  */
 

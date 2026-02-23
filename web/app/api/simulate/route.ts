@@ -121,10 +121,10 @@ export async function POST(request: NextRequest) {
  */
 export async function GET() {
   return NextResponse.json({
-    api: 'Policy Flight Simulator API v1.0',
+    api: 'NAERM API v1.0 (National AI Economy Resiliency Model)',
     endpoint: '/api/simulate',
     methods: ['POST'],
-    description: 'Run fiscal policy simulations programmatically',
+    description: 'Run economic resilience policy simulations programmatically',
     documentation: {
       request: {
         method: 'POST',

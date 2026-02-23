@@ -1,5 +1,5 @@
 /**
- * Policy Flight Simulator - Math Engine (Browser Version)
+ * NAERM (National AI Economy Resiliency Model) - Math Engine (Browser Version)
  * Mirrored from ../src/engine.ts for client-side use
  */
 
