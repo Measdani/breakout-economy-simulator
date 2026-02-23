@@ -7,6 +7,7 @@ import { useAnimatedNumber, numberFormatters } from '../lib/hooks/useAnimatedNum
 import type { PolicyConfig, SimulationResult } from '../lib/types';
 import PolicySliders from './PolicySliders';
 import ResultsDisplay from './ResultsDisplay';
+import FiscalSustainabilityIndicator from './FiscalSustainabilityIndicator';
 import PersonaTable from './PersonaTable';
 import Charts from './Charts';
 import PersonaComparison from './PersonaComparison';
@@ -572,6 +573,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
             {/* Results Screen */}
             {activeScreen === 'results' && (
               <div className="space-y-6">
+                <FiscalSustainabilityIndicator result={result} />
                 <ResultsDisplay result={result} />
               </div>
             )}
