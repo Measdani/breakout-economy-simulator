@@ -171,6 +171,54 @@ export default function AdminCharts({ submissions }: AdminChartsProps) {
     netIncome: totals.count > 0 ? totals.netIncome / totals.count / 1000 : 0,
   }))
 
+  // ============ TOKEN TAX RATE DISTRIBUTION ============
+  const allTokenTaxRates = submissions.map(s => s.token_tax_rate)
+  const minTaxRate = Math.floor(Math.min(...allTokenTaxRates) * 10000) / 100
+  const maxTaxRate = Math.ceil(Math.max(...allTokenTaxRates) * 10000) / 100
+
+  const taxRateBuckets: Record<string, number> = {}
+  for (let v = minTaxRate; v <= maxTaxRate; v += 0.1) {
+    taxRateBuckets[`${v.toFixed(2)}%`] = 0
+  }
+  submissions.forEach(s => {
+    const rate = s.token_tax_rate * 100
+    const bucket = `${(Math.floor(rate * 10) / 10).toFixed(2)}%`
+    if (taxRateBuckets[bucket] !== undefined) taxRateBuckets[bucket]++
+  })
+  const taxRateData = Object.entries(taxRateBuckets)
+    .filter(([, count]) => count > 0)
+    .map(([range, count]) => ({ range, count }))
+
+  // ============ SOLVENCY OVER TIME ============
+  const sortedSubmissions = [...submissions].sort((a, b) =>
+    new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+  )
+  const solvencyTimeline: Array<{ date: string; solventPercent: number; deficitPercent: number }> = []
+  let solventCount = 0, totalCount = 0
+  sortedSubmissions.forEach(s => {
+    totalCount++
+    if (s.is_solvent) solventCount++
+    const date = new Date(s.created_at).toLocaleDateString()
+    solvencyTimeline.push({
+      date,
+      solventPercent: (solventCount / totalCount) * 100,
+      deficitPercent: ((totalCount - solventCount) / totalCount) * 100,
+    })
+  })
+  // Keep only unique dates for cleaner timeline
+  const uniqueSolvencyTimeline = solvencyTimeline.filter((item, idx, arr) =>
+    idx === 0 || item.date !== arr[idx - 1].date
+  ).slice(-20) // Last 20 unique dates
+
+  // ============ FISCAL SUSTAINABILITY INDICATORS ============
+  const sustainabilityMetrics = {
+    stableCount: submissions.filter(s => s.is_solvent && s.surplus_deficit > 0).length,
+    deficitCount: submissions.filter(s => !s.is_solvent).length,
+    avgUBIasPercentGDP: (submissions.reduce((sum, s) => sum + (s.result?.obligations?.ubiCost || 0), 0) / submissions.length) / 28e12 * 100,
+    avgTokenTaxPercent: (submissions.reduce((sum, s) => sum + (s.result?.revenue?.tokenTaxRevenue || 0), 0) /
+                         submissions.reduce((sum, s) => sum + (s.result?.revenue?.totalRevenue || 0), 0)) * 100 || 0,
+  }
+
   // ============ COLORS ============
   const COLORS = {
     tokenTax: '#3b82f6',
@@ -404,6 +452,89 @@ export default function AdminCharts({ submissions }: AdminChartsProps) {
           </ResponsiveContainer>
         </div>
       </div>
+
+      {/* ============ POLICY METRICS ============ */}
+      <div style={{ marginBottom: '2rem' }}>
+        <h2 style={{ color: '#e0e7ff', marginBottom: '1rem', fontSize: '1.25rem', fontWeight: 'bold' }}>Policy Effectiveness Metrics</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '1.5rem' }}>
+          <div style={{ backgroundColor: '#0f1629', border: '1px solid rgba(34, 197, 94, 0.3)', borderRadius: '0.5rem', padding: '1.5rem' }}>
+            <p style={{ color: '#94a3b8', fontSize: '0.875rem', marginBottom: '0.5rem' }}>Sustainable Models</p>
+            <p style={{ color: '#22c55e', fontSize: '2rem', fontWeight: 'bold' }}>{sustainabilityMetrics.stableCount}</p>
+            <p style={{ color: '#94a3b8', fontSize: '0.75rem', marginTop: '0.5rem' }}>({((sustainabilityMetrics.stableCount / n) * 100).toFixed(1)}% of total)</p>
+          </div>
+
+          <div style={{ backgroundColor: '#0f1629', border: '1px solid rgba(239, 68, 68, 0.3)', borderRadius: '0.5rem', padding: '1.5rem' }}>
+            <p style={{ color: '#94a3b8', fontSize: '0.875rem', marginBottom: '0.5rem' }}>Deficit Models</p>
+            <p style={{ color: '#ef4444', fontSize: '2rem', fontWeight: 'bold' }}>{sustainabilityMetrics.deficitCount}</p>
+            <p style={{ color: '#94a3b8', fontSize: '0.75rem', marginTop: '0.5rem' }}>({((sustainabilityMetrics.deficitCount / n) * 100).toFixed(1)}% of total)</p>
+          </div>
+
+          <div style={{ backgroundColor: '#0f1629', border: '1px solid rgba(59, 130, 246, 0.3)', borderRadius: '0.5rem', padding: '1.5rem' }}>
+            <p style={{ color: '#94a3b8', fontSize: '0.875rem', marginBottom: '0.5rem' }}>Avg UBI as % of GDP</p>
+            <p style={{ color: '#60a5fa', fontSize: '2rem', fontWeight: 'bold' }}>{sustainabilityMetrics.avgUBIasPercentGDP.toFixed(2)}%</p>
+            <p style={{ color: '#94a3b8', fontSize: '0.75rem', marginTop: '0.5rem' }}>Relative to $28T GDP</p>
+          </div>
+
+          <div style={{ backgroundColor: '#0f1629', border: '1px solid rgba(168, 85, 247, 0.3)', borderRadius: '0.5rem', padding: '1.5rem' }}>
+            <p style={{ color: '#94a3b8', fontSize: '0.875rem', marginBottom: '0.5rem' }}>Avg Token Tax Revenue %</p>
+            <p style={{ color: '#d8b4fe', fontSize: '2rem', fontWeight: 'bold' }}>{sustainabilityMetrics.avgTokenTaxPercent.toFixed(1)}%</p>
+            <p style={{ color: '#94a3b8', fontSize: '0.75rem', marginTop: '0.5rem' }}>Of total revenue</p>
+          </div>
+        </div>
+      </div>
+
+      {/* ============ TOKEN TAX DISTRIBUTION ============ */}
+      {taxRateData.length > 0 && (
+        <div style={{ marginBottom: '2rem' }}>
+          <h2 style={{ color: '#e0e7ff', marginBottom: '1rem', fontSize: '1.25rem', fontWeight: 'bold' }}>Token Tax Rate Distribution</h2>
+          <div style={{ backgroundColor: '#0f1629', border: '1px solid rgba(59, 130, 246, 0.3)', borderRadius: '0.5rem', padding: '1rem' }}>
+            <ResponsiveContainer width="100%" height={280}>
+              <BarChart data={taxRateData} margin={{ bottom: 40 }}>
+                <XAxis dataKey="range" angle={-45} textAnchor="end" height={80} tick={{ fill: '#94a3b8', fontSize: 12 }} />
+                <YAxis tick={{ fill: '#94a3b8', fontSize: 12 }} />
+                <Tooltip content={<DistributionTooltip />} />
+                <Bar dataKey="count" fill={COLORS.tokenTax} isAnimationActive={false} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
+
+      {/* ============ SOLVENCY TIMELINE ============ */}
+      {uniqueSolvencyTimeline.length > 1 && (
+        <div style={{ marginBottom: '2rem' }}>
+          <h2 style={{ color: '#e0e7ff', marginBottom: '1rem', fontSize: '1.25rem', fontWeight: 'bold' }}>Solvency Trend Over Time</h2>
+          <div style={{ backgroundColor: '#0f1629', border: '1px solid rgba(59, 130, 246, 0.3)', borderRadius: '0.5rem', padding: '1rem' }}>
+            <ResponsiveContainer width="100%" height={280}>
+              <LineChart data={uniqueSolvencyTimeline} margin={{ bottom: 40 }}>
+                <XAxis dataKey="date" tick={{ fill: '#94a3b8', fontSize: 12 }} />
+                <YAxis label={{ value: '%', angle: -90, position: 'insideLeft' }} tick={{ fill: '#94a3b8', fontSize: 12 }} />
+                <Tooltip
+                  formatter={(value: any) => `${(value as number).toFixed(1)}%`}
+                  contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '4px' }}
+                />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="solventPercent"
+                  stroke={COLORS.tokenTax}
+                  strokeWidth={2}
+                  name="Solvent %"
+                  isAnimationActive={false}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="deficitPercent"
+                  stroke={COLORS.govtOps}
+                  strokeWidth={2}
+                  name="Deficit %"
+                  isAnimationActive={false}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
