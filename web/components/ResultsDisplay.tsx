@@ -80,11 +80,27 @@ export default function ResultsDisplay({ result }: ResultsDisplayProps) {
         <h3 className="text-lg font-bold text-slate-900 mb-4">Obligations</h3>
         <div className="space-y-3">
           <div className="flex justify-between items-center pb-3 border-b">
-            <span className="text-slate-700">UBI Cost</span>
+            <span className="text-slate-700">UBI Cost (Total)</span>
             <span className="font-semibold text-slate-900">
               {formatCurrency(obligations.ubiCost)}
             </span>
           </div>
+          {(obligations.adultUBICost !== undefined || obligations.dependentUBICost !== undefined) && (
+            <>
+              <div className="flex justify-between items-center pb-2 pl-4 text-sm bg-gray-50 py-2 rounded">
+                <span className="text-slate-600">└─ Adult UBI</span>
+                <span className="font-semibold text-slate-700">
+                  {obligations.adultUBICost ? formatCurrency(obligations.adultUBICost) : '—'}
+                </span>
+              </div>
+              <div className="flex justify-between items-center pb-3 border-b pl-4 text-sm bg-gray-50 py-2 rounded">
+                <span className="text-slate-600">└─ Dependent UBI</span>
+                <span className="font-semibold text-slate-700">
+                  {obligations.dependentUBICost ? formatCurrency(obligations.dependentUBICost) : '$0'}
+                </span>
+              </div>
+            </>
+          )}
           <div className="flex justify-between items-center pb-3 border-b">
             <span className="text-slate-700">Government Operations</span>
             <span className="font-semibold text-slate-900">

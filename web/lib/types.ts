@@ -38,6 +38,8 @@ export interface Revenue {
 
 export interface Obligations {
   ubiCost: number;
+  adultUBICost?: number;
+  dependentUBICost?: number;
   govtOperatingRequirement: number;
   totalObligations: number;
 }

@@ -50,10 +50,17 @@ export default function Charts({ result, config }: ChartsProps) {
 
   // Obligations Chart Data
   const obligationsData = [
-    {
+    ...(result.obligations.adultUBICost ? [{
+      name: 'Adult UBI',
+      value: result.obligations.adultUBICost / 1e9,
+    }] : [{
       name: 'UBI Cost',
       value: result.obligations.ubiCost / 1e9,
-    },
+    }]),
+    ...(result.obligations.dependentUBICost && result.obligations.dependentUBICost > 0 ? [{
+      name: 'Dependent UBI',
+      value: result.obligations.dependentUBICost / 1e9,
+    }] : []),
     {
       name: 'Govt Operations',
       value: result.obligations.govtOperatingRequirement / 1e9,
@@ -71,7 +78,7 @@ export default function Charts({ result, config }: ChartsProps) {
   }
 
   const COLORS_REVENUE = ['#3b82f6', '#10b981', '#8b5cf6'];
-  const COLORS_OBLIGATIONS = ['#f59e0b', '#ef4444'];
+  const COLORS_OBLIGATIONS = ['#f59e0b', '#a78bfa', '#ef4444'];
 
   const revenueTooltip = (props: any) => {
     if (props.active && props.payload && props.payload.length) {
@@ -96,6 +103,8 @@ export default function Charts({ result, config }: ChartsProps) {
       const data = props.payload[0];
       const colors: { [key: string]: string } = {
         'UBI Cost': '#facc15',
+        'Adult UBI': '#facc15',
+        'Dependent UBI': '#d8b4fe',
         'Govt Operations': '#f87171'
       };
       return (

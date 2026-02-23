@@ -175,6 +175,8 @@ export function runSimulation(config: PolicyConfig): SimulationResult {
     },
     obligations: {
       ubiCost,
+      adultUBICost: config.ubiAnnualPerAdult * config.adultPopulation,
+      dependentUBICost: dependentCost,
       govtOperatingRequirement,
       totalObligations,
     },
