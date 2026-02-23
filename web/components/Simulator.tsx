@@ -60,6 +60,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [showGlossary, setShowGlossary] = useState(false);
+  const [showHouseholdImpact, setShowHouseholdImpact] = useState(false);
 
   const handlePresetSelectWithName = (presetName: string, presetConfig: Partial<PolicyConfig>) => {
     setCurrentConfig(presetName);
@@ -127,6 +128,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     setViewMode('revenue');
     setCurrentConfig('Default');
     setActiveScreen('controls');
+    setShowHouseholdImpact(false);
   };
 
   return (
@@ -620,91 +622,129 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                 <div className="col-span-2 overflow-y-auto">
                   <div className="bg-darker-slate rounded-lg p-6 border border-border-slate" style={{ height: '100%' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                      {/* Household Demographics Impact Section */}
-                      <div>
-                        <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#cbd5e1', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                          👨‍👩‍👧‍👦 Household Impact
-                        </h3>
-                        {(() => {
-                          // Calculate dependent metrics
-                          const numHH = 130000000;
-                          const tier1Count = numHH * (pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep);
-                          const tier2Count = numHH * (pctHouseholds2Dep + pctHouseholds3Dep);
-                          const tier3Count = numHH * pctHouseholds3Dep;
-                          const dependentCost = tier1Count * ubiDependent1 + tier2Count * ubiDependent2 + tier3Count * ubiDependent3;
-                          const totalDependentPopulation = numHH * (pctHouseholds1Dep + pctHouseholds2Dep * 2 + pctHouseholds3Dep * 3);
-                          const adultUBICost = ubiAnnualPerAdult * 265000000;
-                          const totalUBICost = adultUBICost + dependentCost;
-                          const percentOfBudget = (dependentCost / totalUBICost) * 100;
+                      {/* Household Demographics Impact Section - Conditional */}
+                      {(pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep) > 0 && (
+                        <div>
+                          <button
+                            onClick={() => setShowHouseholdImpact(!showHouseholdImpact)}
+                            style={{
+                              width: '100%',
+                              background: 'rgba(59, 130, 246, 0.1)',
+                              border: '1px solid rgba(59, 130, 246, 0.3)',
+                              borderRadius: '8px',
+                              padding: '12px',
+                              color: '#3b82f6',
+                              fontSize: '14px',
+                              fontWeight: '600',
+                              cursor: 'pointer',
+                              marginBottom: '12px',
+                              textAlign: 'left',
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
+                              transition: 'all 0.2s ease'
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.background = 'rgba(59, 130, 246, 0.2)';
+                              e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.5)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.background = 'rgba(59, 130, 246, 0.1)';
+                              e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.3)';
+                            }}
+                          >
+                            <span>👨‍👩‍👧‍👦 Household Impact</span>
+                            <span style={{ fontSize: '12px' }}>{showHouseholdImpact ? '▼' : '▶'}</span>
+                          </button>
 
-                          return (
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px' }}>
-                              {/* Dependent UBI Cost */}
-                              <div style={{
-                                background: 'rgba(34, 197, 94, 0.08)',
-                                border: '1px solid rgba(34, 197, 94, 0.3)',
-                                borderRadius: '8px',
-                                padding: '12px'
-                              }}>
-                                <p style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '500' }}>
-                                  Dependent UBI Cost
-                                </p>
-                                <p style={{ fontSize: '20px', fontWeight: '700', color: '#22c55e', margin: '0' }}>
-                                  ${(dependentCost / 1e12).toFixed(2)}T
-                                </p>
-                              </div>
+                          {showHouseholdImpact && (
+                            <div>
+                              <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#cbd5e1', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                                👨‍👩‍👧‍👦 Household Impact
+                              </h3>
+                              {(() => {
+                                // Calculate dependent metrics
+                                const numHH = 130000000;
+                                const tier1Count = numHH * (pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep);
+                                const tier2Count = numHH * (pctHouseholds2Dep + pctHouseholds3Dep);
+                                const tier3Count = numHH * pctHouseholds3Dep;
+                                const dependentCost = tier1Count * ubiDependent1 + tier2Count * ubiDependent2 + tier3Count * ubiDependent3;
+                                const totalDependentPopulation = numHH * (pctHouseholds1Dep + pctHouseholds2Dep * 2 + pctHouseholds3Dep * 3);
+                                const adultUBICost = ubiAnnualPerAdult * 265000000;
+                                const totalUBICost = adultUBICost + dependentCost;
+                                const percentOfBudget = (dependentCost / totalUBICost) * 100;
 
-                              {/* % of Total UBI Budget */}
-                              <div style={{
-                                background: 'rgba(59, 130, 246, 0.08)',
-                                border: '1px solid rgba(59, 130, 246, 0.3)',
-                                borderRadius: '8px',
-                                padding: '12px'
-                              }}>
-                                <p style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '500' }}>
-                                  % of Total UBI Budget
-                                </p>
-                                <p style={{ fontSize: '20px', fontWeight: '700', color: '#3b82f6', margin: '0' }}>
-                                  {percentOfBudget.toFixed(1)}%
-                                </p>
-                              </div>
+                                return (
+                                  <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px' }}>
+                                    {/* Dependent UBI Cost */}
+                                    <div style={{
+                                      background: 'rgba(34, 197, 94, 0.08)',
+                                      border: '1px solid rgba(34, 197, 94, 0.3)',
+                                      borderRadius: '8px',
+                                      padding: '12px'
+                                    }}>
+                                      <p style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '500' }}>
+                                        Dependent UBI Cost
+                                      </p>
+                                      <p style={{ fontSize: '20px', fontWeight: '700', color: '#22c55e', margin: '0' }}>
+                                        ${(dependentCost / 1e12).toFixed(2)}T
+                                      </p>
+                                    </div>
 
-                              {/* Total Dependent Population */}
-                              <div style={{
-                                background: 'rgba(168, 85, 247, 0.08)',
-                                border: '1px solid rgba(168, 85, 247, 0.3)',
-                                borderRadius: '8px',
-                                padding: '12px'
-                              }}>
-                                <p style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '500' }}>
-                                  Total Dependents
-                                </p>
-                                <p style={{ fontSize: '20px', fontWeight: '700', color: '#a855f7', margin: '0' }}>
-                                  {(totalDependentPopulation / 1e6).toFixed(1)}M
-                                </p>
-                              </div>
+                                    {/* % of Total UBI Budget */}
+                                    <div style={{
+                                      background: 'rgba(59, 130, 246, 0.08)',
+                                      border: '1px solid rgba(59, 130, 246, 0.3)',
+                                      borderRadius: '8px',
+                                      padding: '12px'
+                                    }}>
+                                      <p style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '500' }}>
+                                        % of Total UBI Budget
+                                      </p>
+                                      <p style={{ fontSize: '20px', fontWeight: '700', color: '#3b82f6', margin: '0' }}>
+                                        {percentOfBudget.toFixed(1)}%
+                                      </p>
+                                    </div>
 
-                              {/* Dependent Coverage Rate */}
-                              <div style={{
-                                background: 'rgba(251, 146, 60, 0.08)',
-                                border: '1px solid rgba(251, 146, 60, 0.3)',
-                                borderRadius: '8px',
-                                padding: '12px'
-                              }}>
-                                <p style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '500' }}>
-                                  Households w/ Dependents
-                                </p>
-                                <p style={{ fontSize: '20px', fontWeight: '700', color: '#fb923c', margin: '0' }}>
-                                  {((pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep) * 100).toFixed(1)}%
-                                </p>
-                              </div>
+                                    {/* Total Dependent Population */}
+                                    <div style={{
+                                      background: 'rgba(168, 85, 247, 0.08)',
+                                      border: '1px solid rgba(168, 85, 247, 0.3)',
+                                      borderRadius: '8px',
+                                      padding: '12px'
+                                    }}>
+                                      <p style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '500' }}>
+                                        Total Dependents
+                                      </p>
+                                      <p style={{ fontSize: '20px', fontWeight: '700', color: '#a855f7', margin: '0' }}>
+                                        {(totalDependentPopulation / 1e6).toFixed(1)}M
+                                      </p>
+                                    </div>
+
+                                    {/* Dependent Coverage Rate */}
+                                    <div style={{
+                                      background: 'rgba(251, 146, 60, 0.08)',
+                                      border: '1px solid rgba(251, 146, 60, 0.3)',
+                                      borderRadius: '8px',
+                                      padding: '12px'
+                                    }}>
+                                      <p style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '500' }}>
+                                        Households w/ Dependents
+                                      </p>
+                                      <p style={{ fontSize: '20px', fontWeight: '700', color: '#fb923c', margin: '0' }}>
+                                        {((pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep) * 100).toFixed(1)}%
+                                      </p>
+                                    </div>
+                                  </div>
+                                );
+                              })()}
                             </div>
-                          );
-                        })()}
-                      </div>
+                          )}
+                        </div>
+                      )}
 
                       {/* Policy Alerts Section */}
-                      <div style={{ borderTop: '1px solid #334155', paddingTop: '16px' }}>
+                      <div style={{ borderTop: (pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep) > 0 ? '1px solid #334155' : 'none', paddingTop: (pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep) > 0 ? '16px' : '0' }}>
                         <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#cbd5e1', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                           ⚡ Policy Alerts
                         </h3>
