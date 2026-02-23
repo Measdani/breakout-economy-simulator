@@ -56,6 +56,21 @@ const GLOSSARY_ITEMS = [
     definition: 'Different tax rates apply to different income brackets. Lower earners pay less, higher earners pay more.',
     example: '0% up to $60k, 19% from $60k-$135k, 29% above $135k',
   },
+  {
+    term: 'Dependent UBI',
+    definition: 'Additional UBI payments for dependents (children, elderly, disabled) on top of adult UBI. Paid in tiers: 1st dependent = $6k, 2nd = $4k, 3rd+ = $2k.',
+    example: 'Household with 2 children receives: $12k (adults) + $6k (1st child) + $4k (2nd child) = $22k total UBI',
+  },
+  {
+    term: 'Household Composition',
+    definition: 'The distribution of households by number of dependents (what % have 0, 1, 2, or 3+ dependents). Used to model total dependent population and costs.',
+    example: 'If 25% of households have 1 dependent, 15% have 2, 10% have 3+, then 50% have no dependents',
+  },
+  {
+    term: 'Household Demographics Impact',
+    definition: 'Real-time metrics showing fiscal impact of the dependent UBI structure: total dependent cost, % of budget, dependent population, and coverage rate.',
+    example: 'Toggled in right panel—shows that dependents might represent 8-12% of total UBI budget',
+  },
 ];
 
 export default function GlossaryPanel() {
