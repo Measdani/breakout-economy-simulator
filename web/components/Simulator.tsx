@@ -58,6 +58,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [showGlossary, setShowGlossary] = useState(false);
+  const [demographics, setDemographics] = useState({ ageRange: '', incomeLevel: '', region: '', affiliation: '' });
 
   const handlePresetSelectWithName = (presetName: string, presetConfig: Partial<PolicyConfig>) => {
     setCurrentConfig(presetName);
@@ -114,13 +115,13 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
 
   const screens: Array<typeof activeScreen> = ['engine', 'households', 'incentives', 'results', 'charts', 'alerts', 'submit'];
   const stepLabels: Record<string, string> = {
-    engine: 'Fiscal Engine',
-    households: 'Household Structure',
-    incentives: 'Work Incentives',
-    results: 'Fiscal Results',
-    charts: 'Charts & Scenarios',
+    engine: 'Revenue & Funding Model',
+    households: 'Demographic Assumptions',
+    incentives: 'Labor Incentive Modeling',
+    results: 'Budget Outcome Summary',
+    charts: 'Fiscal Composition & Scenario Analysis',
     alerts: 'Stability & Risk',
-    submit: 'Submit Model',
+    submit: 'Research Contribution',
   };
 
   const handleReset = () => {
@@ -619,6 +620,69 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                     </div>
                   </div>
                 </div>
+
+                {/* Anonymization & Privacy Notice */}
+                <div className="bg-blue-900 bg-opacity-20 border border-blue-600 rounded-lg p-4">
+                  <p className="text-xs text-blue-300 mb-2">
+                    <span className="font-semibold">🔒 Data Privacy</span>
+                  </p>
+                  <p className="text-xs text-dimmed leading-relaxed">
+                    Your configuration will be anonymized and aggregated into a public policy dataset. No personal information will be stored or disclosed.
+                  </p>
+                </div>
+
+                {/* Optional Demographics */}
+                <div className="bg-dark-slate rounded-lg p-5 border border-border-slate">
+                  <p className="text-sm font-semibold text-muted uppercase tracking-wide mb-4">Optional: Demographic Context</p>
+                  <p className="text-xs text-dimmed mb-4">Help us understand policy preferences across different populations (completely optional).</p>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="text-xs text-dimmed mb-1 block">Age Range</label>
+                      <select
+                        value={demographics.ageRange}
+                        onChange={(e) => setDemographics({ ...demographics, ageRange: e.target.value })}
+                        className="w-full px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright"
+                      >
+                        <option value="">Select (optional)</option>
+                        <option value="18-25">18-25</option>
+                        <option value="26-40">26-40</option>
+                        <option value="41-60">41-60</option>
+                        <option value="61+">61+</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-xs text-dimmed mb-1 block">Income Level</label>
+                      <select
+                        value={demographics.incomeLevel}
+                        onChange={(e) => setDemographics({ ...demographics, incomeLevel: e.target.value })}
+                        className="w-full px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright"
+                      >
+                        <option value="">Select (optional)</option>
+                        <option value="<25k">&lt;$25k</option>
+                        <option value="25k-50k">$25k-$50k</option>
+                        <option value="50k-100k">$50k-$100k</option>
+                        <option value="100k-250k">$100k-$250k</option>
+                        <option value=">250k">&gt;$250k</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-xs text-dimmed mb-1 block">Region</label>
+                      <select
+                        value={demographics.region}
+                        onChange={(e) => setDemographics({ ...demographics, region: e.target.value })}
+                        className="w-full px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright"
+                      >
+                        <option value="">Select (optional)</option>
+                        <option value="Northeast">Northeast</option>
+                        <option value="Midwest">Midwest</option>
+                        <option value="South">South</option>
+                        <option value="West">West</option>
+                        <option value="International">International</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
                 <div className="text-center space-y-4">
                   <button
                     onClick={() => setShowSubmitModal(true)}
