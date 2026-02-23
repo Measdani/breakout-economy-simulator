@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { runSimulation } from '../lib/engine';
 import { useAnimatedNumber, numberFormatters } from '../lib/hooks/useAnimatedNumber';
 import type { PolicyConfig, SimulationResult } from '../lib/types';
+import { exportConfigAsCSV } from '../lib/exportConfig';
 import PolicySliders from './PolicySliders';
 import ResultsDisplay from './ResultsDisplay';
 import FiscalSustainabilityIndicator from './FiscalSustainabilityIndicator';
@@ -687,25 +688,44 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                   </div>
                 </div>
 
-                <div className="text-center space-y-4">
-                  <button
-                    onClick={() => setShowSubmitModal(true)}
-                    className="px-8 py-4 rounded-lg font-bold text-white transition hover:shadow-lg"
-                    style={{
-                      background: 'linear-gradient(135deg, #A855F7, #D946EF)',
-                      fontSize: '16px',
-                      boxShadow: '0 0 20px rgba(168, 85, 247, 0.4)',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.boxShadow = '0 0 30px rgba(217, 70, 239, 0.6)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.boxShadow = '0 0 20px rgba(168, 85, 247, 0.4)';
-                    }}
-                  >
-                    📤 Submit This Configuration
-                  </button>
-                  <p className="text-xs text-dimmed">Contribute your configuration to the research dataset.</p>
+                <div className="space-y-4">
+                  <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+                    <button
+                      onClick={() => exportConfigAsCSV(config, result, currentConfig)}
+                      className="px-6 py-3 rounded-lg font-bold text-white transition hover:shadow-lg"
+                      style={{
+                        background: 'linear-gradient(135deg, #3B82F6, #2563EB)',
+                        fontSize: '15px',
+                        boxShadow: '0 0 15px rgba(59, 130, 246, 0.3)',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.boxShadow = '0 0 25px rgba(59, 130, 246, 0.5)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.boxShadow = '0 0 15px rgba(59, 130, 246, 0.3)';
+                      }}
+                    >
+                      ⬇️ Export as CSV
+                    </button>
+                    <button
+                      onClick={() => setShowSubmitModal(true)}
+                      className="px-8 py-3 rounded-lg font-bold text-white transition hover:shadow-lg"
+                      style={{
+                        background: 'linear-gradient(135deg, #A855F7, #D946EF)',
+                        fontSize: '15px',
+                        boxShadow: '0 0 20px rgba(168, 85, 247, 0.4)',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.boxShadow = '0 0 30px rgba(217, 70, 239, 0.6)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.boxShadow = '0 0 20px rgba(168, 85, 247, 0.4)';
+                      }}
+                    >
+                      📤 Submit This Configuration
+                    </button>
+                  </div>
+                  <p className="text-xs text-dimmed text-center">Export your configuration for backup/sharing, or submit to contribute to the research dataset.</p>
                 </div>
               </div>
             )}
