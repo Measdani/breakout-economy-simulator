@@ -8,13 +8,11 @@ import type { PolicyConfig, SimulationResult } from '../lib/types';
 import PolicySliders from './PolicySliders';
 import ResultsDisplay from './ResultsDisplay';
 import PersonaTable from './PersonaTable';
-import PresetScenarios from './PresetScenarios';
 import Charts from './Charts';
 import PersonaComparison from './PersonaComparison';
 import ProductivityBar from './ProductivityBar';
 import OnboardingTour from './OnboardingTour';
 import Warnings from './Warnings';
-import GlossaryPanel from './GlossaryPanel';
 import SubmitModal from './SubmitModal';
 import FeedbackModal from './FeedbackModal';
 import NavButtons from './NavButtons';
@@ -54,11 +52,10 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   const [pctHouseholds2Dep, setPctHouseholds2Dep] = useState(mergedConfig.pctHouseholds2Dep ?? 0.15);
   const [pctHouseholds3Dep, setPctHouseholds3Dep] = useState(mergedConfig.pctHouseholds3Dep ?? 0.10);
   const [showTour, setShowTour] = useState(false);
-  const [activeScreen, setActiveScreen] = useState<'engine' | 'households' | 'scenarios' | 'results' | 'charts' | 'personas'>('engine');
+  const [activeScreen, setActiveScreen] = useState<'engine' | 'households' | 'incentives' | 'results' | 'charts' | 'alerts' | 'submit'>('engine');
   const [currentConfig, setCurrentConfig] = useState<string>('Default');
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
-  const [showGlossary, setShowGlossary] = useState(false);
 
   const handlePresetSelectWithName = (presetName: string, presetConfig: Partial<PolicyConfig>) => {
     setCurrentConfig(presetName);
@@ -113,14 +110,15 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     if (presetConfig.breakoutPoint) setBreakoutPoint(presetConfig.breakoutPoint);
   };
 
-  const screens: Array<typeof activeScreen> = ['engine', 'households', 'scenarios', 'results', 'charts', 'personas'];
+  const screens: Array<typeof activeScreen> = ['engine', 'households', 'incentives', 'results', 'charts', 'alerts', 'submit'];
   const stepLabels: Record<string, string> = {
     engine: 'Fiscal Engine',
     households: 'Household Structure',
-    scenarios: 'Scenario Presets',
+    incentives: 'Work Incentives',
     results: 'Fiscal Results',
-    charts: 'Visual Model',
-    personas: 'Income Personas',
+    charts: 'Charts & Scenarios',
+    alerts: 'Stability & Risk',
+    submit: 'Submit Model',
   };
 
   const handleReset = () => {
@@ -174,8 +172,8 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
             {/* Step 1: Fiscal Engine Screen - Split Layout */}
             {activeScreen === 'engine' && (
               <div className="grid grid-cols-6 gap-6 h-full">
-                {/* LEFT: Configuration Sliders (33%) */}
-                <div className="col-span-2 overflow-y-auto pr-2">
+                {/* LEFT: Configuration Sliders */}
+                <div className="col-span-3 overflow-y-auto pr-2">
                   <PolicySliders
                     tokenTaxRate={tokenTaxRate}
                     onTokenTaxRateChange={setTokenTaxRate}
@@ -184,14 +182,12 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                     breakoutPoint={breakoutPoint}
                     onBreakoutPointChange={setBreakoutPoint}
                     onReset={handleReset}
-                    showGlossary={showGlossary}
-                    onGlossaryToggle={setShowGlossary}
                   />
                 </div>
 
-                {/* MIDDLE: Fiscal Status Panel */}
+                {/* RIGHT: Fiscal Status Panel */}
                 <div
-                  className={`col-span-2 rounded-lg p-8 text-white overflow-y-auto view-transition ${
+                  className={`col-span-3 rounded-lg p-8 text-white overflow-y-auto view-transition ${
                     result.balance.surplusDeficit >= 0
                       ? 'bg-dark-slate glow-border-green pulse-glow-green'
                       : 'bg-dark-slate glow-border-red pulse-glow-red'
@@ -301,28 +297,6 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                       </div>
                     </div>
                   )}
-                </div>
-
-                {/* RIGHT: Warnings & Alerts Panel (17%) */}
-                <div className="col-span-2 overflow-y-auto">
-                  <div className="bg-darker-slate rounded-lg p-6 border border-border-slate" style={{ height: '100%' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                      {/* Policy Alerts Section */}
-                      <div>
-                        <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#cbd5e1', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                          ⚡ Policy Alerts
-                        </h3>
-                        <Warnings result={result} config={config} />
-                      </div>
-
-                      {/* Glossary Section - Conditional */}
-                      {showGlossary && (
-                        <div style={{ borderTop: '1px solid #334155', paddingTop: '16px' }}>
-                          <GlossaryPanel />
-                        </div>
-                      )}
-                    </div>
-                  </div>
                 </div>
               </div>
             )}
@@ -575,19 +549,11 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
               </div>
             )}
 
-            {/* Scenarios Screen */}
-            {activeScreen === 'scenarios' && (
+            {/* Step 3: Work Incentives Screen */}
+            {activeScreen === 'incentives' && (
               <div className="space-y-6">
-                <PresetScenarios onSelectPreset={(config, presetName) => {
-                  if (presetName) setCurrentConfig(presetName);
-
-
-
-
-
-
-                  handlePresetSelect(config);
-                }} />
+                <ProductivityBar personas={result.citizenModel.personaOutcomes} />
+                <PersonaComparison personas={result.citizenModel.personaOutcomes} />
               </div>
             )}
 
@@ -605,11 +571,60 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
               </div>
             )}
 
-            {/* Personas Screen */}
-            {activeScreen === 'personas' && (
-              <div className="space-y-6">
-                <ProductivityBar personas={result.citizenModel.personaOutcomes} />
-                <PersonaComparison personas={result.citizenModel.personaOutcomes} />
+            {/* Step 6: Stability & Risk Screen */}
+            {activeScreen === 'alerts' && (
+              <div className="max-w-2xl mx-auto space-y-6">
+                <div>
+                  <p className="text-xs font-semibold text-muted uppercase tracking-wider mb-1">Stability & Risk</p>
+                  <p className="text-sm text-dimmed">Structural deficit detection and macro-economic financing assumptions.</p>
+                </div>
+                <Warnings result={result} config={config} />
+              </div>
+            )}
+
+            {/* Step 7: Submit Model Screen */}
+            {activeScreen === 'submit' && (
+              <div className="max-w-2xl mx-auto space-y-6">
+                <div className="bg-dark-slate rounded-lg p-6 border border-border-slate">
+                  <h3 className="text-sm font-semibold text-muted uppercase tracking-wide mb-4">Current Configuration</h3>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-dimmed">Token Tax Rate</span>
+                      <span className="text-bright font-semibold">{(tokenTaxRate * 100).toFixed(2)}%</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-dimmed">Adult UBI</span>
+                      <span className="text-bright font-semibold">${ubiAnnualPerAdult.toLocaleString()}/yr</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-dimmed">Breakout Point</span>
+                      <span className="text-bright font-semibold">${breakoutPoint.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-dimmed">Fiscal Status</span>
+                      <span className={`font-semibold ${result.balance.isSolvent ? 'text-green-400' : 'text-red-400'}`}>
+                        {result.balance.isSolvent ? '✓ Solvent' : '✗ Deficit'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="text-center space-y-4">
+                  <button
+                    onClick={() => setShowSubmitModal(true)}
+                    className="px-8 py-4 rounded-lg font-bold text-white"
+                    style={{ background: 'linear-gradient(135deg, #3B82F6, #2563EB)', fontSize: '16px' }}
+                  >
+                    Submit This Configuration
+                  </button>
+                  <p className="text-xs text-dimmed">Contribute your configuration to the research dataset.</p>
+                  <button
+                    onClick={() => setShowFeedbackModal(true)}
+                    className="text-xs text-muted"
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}
+                  >
+                    Give feedback on this model
+                  </button>
+                </div>
               </div>
             )}
           </div>
@@ -617,7 +632,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
           {/* Footer Navigation - Enhanced */}
           <div className="px-5 py-5 border-t border-border-slate bg-bg-dark-slate flex justify-between items-center gap-4" style={{ background: '#1E293B' }}>
             {(() => {
-              const screensArray: Array<typeof activeScreen> = ['engine', 'households', 'scenarios', 'results', 'charts', 'personas'];
+              const screensArray: Array<typeof activeScreen> = ['engine', 'households', 'incentives', 'results', 'charts', 'alerts', 'submit'];
               const current = screensArray.indexOf(activeScreen);
               return current > 0 ? (
                 <button
@@ -641,8 +656,8 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
             })()}
             <div className="flex flex-col items-center gap-2">
               <div className="flex gap-2 items-center">
-                {['engine', 'households', 'scenarios', 'results', 'charts', 'personas'].map((screen, idx) => {
-                  const isActive = activeScreen === screen || ['engine', 'households', 'scenarios', 'results', 'charts', 'personas'].indexOf(activeScreen) > idx;
+                {['engine', 'households', 'incentives', 'results', 'charts', 'alerts', 'submit'].map((screen, idx) => {
+                  const isActive = activeScreen === screen || ['engine', 'households', 'incentives', 'results', 'charts', 'alerts', 'submit'].indexOf(activeScreen) > idx;
                   return (
                     <span
                       key={screen}
@@ -655,20 +670,13 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                 })}
               </div>
               <span className="text-sm text-white font-bold">
-                Step {['engine', 'households', 'scenarios', 'results', 'charts', 'personas'].indexOf(activeScreen) + 1} — {
-                  activeScreen === 'engine' ? 'Fiscal Engine' :
-                  activeScreen === 'households' ? 'Household Structure' :
-                  activeScreen === 'scenarios' ? 'Scenario Presets' :
-                  activeScreen === 'results' ? 'Fiscal Results' :
-                  activeScreen === 'charts' ? 'Visual Model' :
-                  'Compare Personas'
-                }
+                Step {['engine', 'households', 'incentives', 'results', 'charts', 'alerts', 'submit'].indexOf(activeScreen) + 1} of 7 — {stepLabels[activeScreen]}
               </span>
             </div>
-            {activeScreen !== 'personas' && (
+            {activeScreen !== 'submit' && (
               <button
                 onClick={() => {
-                  const screens = ['engine', 'households', 'scenarios', 'results', 'charts', 'personas'] as const;
+                  const screens = ['engine', 'households', 'incentives', 'results', 'charts', 'alerts', 'submit'] as const;
                   const current = screens.indexOf(activeScreen as any);
                   if (current < screens.length - 1) setActiveScreen(screens[current + 1] as typeof activeScreen);
                 }}
@@ -686,10 +694,10 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                 Next →
               </button>
             )}
-            {activeScreen === 'personas' && <div style={{ width: '90px' }} />}
+            {activeScreen === 'submit' && <div style={{ width: '90px' }} />}
           </div>
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-              {activeScreen === 'personas' && (
+              {activeScreen === 'submit' && (
                 <button
                   onClick={() => setShowSubmitModal(true)}
                   className="px-5 py-3 rounded transition hover:shadow-lg"

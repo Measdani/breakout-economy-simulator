@@ -11,8 +11,6 @@ interface PolicySlidersProps {
   breakoutPoint: number;
   onBreakoutPointChange: (value: number) => void;
   onReset: () => void;
-  showGlossary?: boolean;
-  onGlossaryToggle?: (show: boolean) => void;
 }
 
 export default function PolicySliders({
@@ -23,8 +21,6 @@ export default function PolicySliders({
   breakoutPoint,
   onBreakoutPointChange,
   onReset,
-  showGlossary = false,
-  onGlossaryToggle = () => {},
 }: PolicySlidersProps) {
   const formatPercent = (value: number) => {
     return `${(value * 100).toFixed(2)}%`;
@@ -210,55 +206,31 @@ export default function PolicySliders({
         tooltipText="Breakout Point = income level where supplemental support fully phases out."
       />
 
-      {/* Reset Link + Glossary Button */}
-      <div style={{ display: 'flex', gap: '16px', marginTop: '12px', alignItems: 'center' }}>
-        <button
-          onClick={onReset}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: '#64748b',
-            fontSize: '13px',
-            cursor: 'pointer',
-            padding: '0',
-            transition: 'color 0.2s ease',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.color = '#94a3b8';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.color = '#64748b';
-          }}
-        >
-          ↺ Reset to Default
-        </button>
-        <button
-          onClick={() => onGlossaryToggle(!showGlossary)}
-          style={{
-            background: 'rgba(51, 65, 85, 0.6)',
-            border: '1px solid #475569',
-            color: '#cbd5e1',
-            fontSize: '13px',
-            cursor: 'pointer',
-            padding: '6px 12px',
-            borderRadius: '6px',
-            transition: 'all 0.2s ease',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'rgba(71, 85, 105, 0.8)';
-            e.currentTarget.style.color = '#f1f5f9';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'rgba(51, 65, 85, 0.6)';
-            e.currentTarget.style.color = '#cbd5e1';
-          }}
-        >
-          ? Glossary
-        </button>
-      </div>
+      {/* Reset Button */}
+      <button
+        onClick={onReset}
+        style={{
+          background: 'none',
+          border: 'none',
+          color: '#64748b',
+          fontSize: '13px',
+          cursor: 'pointer',
+          padding: '0',
+          transition: 'color 0.2s ease',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '4px',
+          marginTop: '12px',
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.color = '#94a3b8';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.color = '#64748b';
+        }}
+      >
+        ↺ Reset to Default
+      </button>
     </div>
   );
 }
