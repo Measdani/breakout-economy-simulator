@@ -1,7 +1,6 @@
 'use client';
 
-// Version marker: v1.1 - Floating label removed - Build 2026-02-20
-import { useState } from 'react';
+// Version marker: v1.1 - Household & viewMode removed - Build 2026-02-23
 import Tooltip from './Tooltip';
 
 interface PolicySlidersProps {
@@ -11,20 +10,6 @@ interface PolicySlidersProps {
   onUbiChange: (value: number) => void;
   breakoutPoint: number;
   onBreakoutPointChange: (value: number) => void;
-  ubiDependent1: number;
-  onUbiDep1Change: (value: number) => void;
-  ubiDependent2: number;
-  onUbiDep2Change: (value: number) => void;
-  ubiDependent3: number;
-  onUbiDep3Change: (value: number) => void;
-  pctHouseholds1Dep: number;
-  onPct1Change: (value: number) => void;
-  pctHouseholds2Dep: number;
-  onPct2Change: (value: number) => void;
-  pctHouseholds3Dep: number;
-  onPct3Change: (value: number) => void;
-  viewMode: 'revenue' | 'social' | 'incentives';
-  onViewModeChange: (mode: 'revenue' | 'social' | 'incentives') => void;
   onReset: () => void;
   showGlossary?: boolean;
   onGlossaryToggle?: (show: boolean) => void;
@@ -37,25 +22,10 @@ export default function PolicySliders({
   onUbiChange,
   breakoutPoint,
   onBreakoutPointChange,
-  ubiDependent1,
-  onUbiDep1Change,
-  ubiDependent2,
-  onUbiDep2Change,
-  ubiDependent3,
-  onUbiDep3Change,
-  pctHouseholds1Dep,
-  onPct1Change,
-  pctHouseholds2Dep,
-  onPct2Change,
-  pctHouseholds3Dep,
-  onPct3Change,
-  viewMode,
-  onViewModeChange,
   onReset,
   showGlossary = false,
   onGlossaryToggle = () => {},
 }: PolicySlidersProps) {
-  const [showHouseholdDetails, setShowHouseholdDetails] = useState(false);
   const formatPercent = (value: number) => {
     return `${(value * 100).toFixed(2)}%`;
   };
@@ -86,15 +56,9 @@ export default function PolicySliders({
   };
 
   const getUBIContext = () => {
-    const numHH = 130000000; // default households
-    const tier1Count = numHH * (pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep);
-    const tier2Count = numHH * (pctHouseholds2Dep + pctHouseholds3Dep);
-    const tier3Count = numHH * pctHouseholds3Dep;
-    const dependentCost = tier1Count * ubiDependent1 + tier2Count * ubiDependent2 + tier3Count * ubiDependent3;
-    const totalUBICost = estimatedUBICost + dependentCost;
-    const cost = totalUBICost / 1e12;
+    const cost = estimatedUBICost / 1e12;
     return {
-      label: 'Total UBI Cost (Adults + Dependents)',
+      label: 'Adult UBI Cost',
       value: `$${cost.toFixed(2)}T`
     };
   };
@@ -227,151 +191,7 @@ export default function PolicySliders({
         tooltipText="Designed to provide income stability while preserving work incentives."
       />
 
-      {/* Expandable Household Demographics Model */}
-      <div className="bg-dark-slate rounded-lg p-5 glow-border-slate" style={{ transition: 'all 0.3s ease' }}>
-        <div className="mb-4 cursor-pointer" onClick={() => setShowHouseholdDetails(!showHouseholdDetails)}>
-          <p className="text-sm font-semibold text-muted uppercase tracking-wide">
-            {showHouseholdDetails ? '▼' : '▶'} Household Demographics Model
-          </p>
-          {showHouseholdDetails && (
-            <p className="text-xs text-dimmed mt-2 italic">
-              Models household-dependent cost distribution to estimate real UBI burden under demographic variation.
-            </p>
-          )}
-        </div>
-
-        {showHouseholdDetails && (
-          <div className="space-y-6 pt-4 border-t border-border-slate">
-            {/* Tiered Dependent Support */}
-            <div>
-              <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-4">💰 Tiered Dependent Support</p>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <label className="text-sm text-dimmed">1st Dependent per Household</label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="number"
-                      value={ubiDependent1}
-                      onChange={(e) => onUbiDep1Change(Math.max(0, parseInt(e.target.value) || 0))}
-                      className="w-24 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright"
-                    />
-                    <span className="text-dimmed text-sm">USD</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <label className="text-sm text-dimmed">2nd Dependent per Household</label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="number"
-                      value={ubiDependent2}
-                      onChange={(e) => onUbiDep2Change(Math.max(0, parseInt(e.target.value) || 0))}
-                      className="w-24 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright"
-                    />
-                    <span className="text-dimmed text-sm">USD</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <label className="text-sm text-dimmed">3rd and Additional Dependent (Per Household)</label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="number"
-                      value={ubiDependent3}
-                      onChange={(e) => onUbiDep3Change(Math.max(0, parseInt(e.target.value) || 0))}
-                      className="w-24 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright"
-                    />
-                    <span className="text-dimmed text-sm">USD</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Household Composition Distribution */}
-            <div>
-              <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-4">📊 Household Composition Distribution</p>
-              <div className="space-y-3">
-                {/* 0 Dependents - Auto Calculated */}
-                <div className="bg-darker-navy rounded-lg p-3 border border-border-slate opacity-75">
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm text-muted">Households with 0 Dependents</label>
-                    <div className="flex items-center gap-2">
-                      <span className="w-16 text-right font-semibold text-emerald-400">
-                        {Math.round((1 - (pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep)) * 100)}%
-                      </span>
-                      <span className="text-dimmed text-xs">(Auto)</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* User Input Fields */}
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm text-dimmed">Households with 1 Dependent</label>
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="number"
-                        value={Math.round(pctHouseholds1Dep * 100)}
-                        onChange={(e) => {
-                          const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 0));
-                          onPct1Change(val / 100);
-                        }}
-                        className="w-16 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
-                      />
-                      <span className="text-dimmed text-sm">%</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm text-dimmed">Households with 2 Dependents</label>
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="number"
-                        value={Math.round(pctHouseholds2Dep * 100)}
-                        onChange={(e) => {
-                          const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 0));
-                          onPct2Change(val / 100);
-                        }}
-                        className="w-16 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
-                      />
-                      <span className="text-dimmed text-sm">%</span>
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <label className="text-sm text-dimmed">Households with 3 or More Dependents</label>
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="number"
-                          value={Math.round(pctHouseholds3Dep * 100)}
-                          onChange={(e) => {
-                            const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 0));
-                            onPct3Change(val / 100);
-                          }}
-                          className="w-16 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
-                        />
-                        <span className="text-dimmed text-sm">%</span>
-                      </div>
-                    </div>
-                    <p className="text-xs text-dimmed italic">For modeling: households with 3+ dependents capped at 3.</p>
-                  </div>
-                </div>
-
-                {/* Validation Message */}
-                {(pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep) > 1 && (
-                  <div className="bg-red-900 bg-opacity-30 border border-red-600 rounded px-3 py-2">
-                    <p className="text-xs text-red-400 font-semibold">⚠ Total exceeds 100%. Please adjust distribution.</p>
-                  </div>
-                )}
-
-                {/* Clarity Note */}
-                <p className="text-xs text-dimmed italic pt-2 border-t border-border-slate">
-                  Remaining percentage is automatically assigned to 0-dependent households.
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Breakout Point - Incentive Structure */}
+{/* Breakout Point - Incentive Structure */}
       <SliderSection
         title="Incentive Structure"
         subtitle="Breakout Point"
@@ -390,104 +210,54 @@ export default function PolicySliders({
         tooltipText="Breakout Point = income level where supplemental support fully phases out."
       />
 
-      {/* Mode Toggle Cards - Compact 3-column */}
-      <div className="pb-8 mt-12 pt-8">
-        {/* Reset Link + Glossary Button */}
-        <div style={{ display: 'flex', gap: '16px', marginBottom: '12px', alignItems: 'center' }}>
-          <button
-            onClick={onReset}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#64748b',
-              fontSize: '13px',
-              cursor: 'pointer',
-              padding: '0',
-              transition: 'color 0.2s ease',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = '#94a3b8';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = '#64748b';
-            }}
-          >
-            ↺ Reset to Default
-          </button>
-          <button
-            onClick={() => onGlossaryToggle(!showGlossary)}
-            style={{
-              background: 'rgba(51, 65, 85, 0.6)',
-              border: '1px solid #475569',
-              color: '#cbd5e1',
-              fontSize: '13px',
-              cursor: 'pointer',
-              padding: '6px 12px',
-              borderRadius: '6px',
-              transition: 'all 0.2s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(71, 85, 105, 0.8)';
-              e.currentTarget.style.color = '#f1f5f9';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(51, 65, 85, 0.6)';
-              e.currentTarget.style.color = '#cbd5e1';
-            }}
-          >
-            ? Glossary
-          </button>
-        </div>
-        <div className="grid grid-cols-3 gap-4">
-          <button
-            onClick={() => onViewModeChange('revenue')}
-            className="text-center p-4 rounded-lg border transition-all duration-300"
-            style={{
-              background: viewMode === 'revenue' ? 'linear-gradient(135deg, #3B82F6, #2563EB)' : '#1a2332',
-              border: viewMode === 'revenue' ? '2px solid #60A5FA' : '2px solid #334155',
-              color: 'white',
-              cursor: 'pointer',
-              opacity: viewMode === 'revenue' ? 1 : 0.6,
-              boxShadow: viewMode === 'revenue' ? '0 0 20px rgba(59, 130, 246, 0.6)' : 'none',
-            }}
-          >
-            <div className="text-3xl mb-3">💰</div>
-            <p className="text-sm font-semibold">Revenue</p>
-          </button>
-          <button
-            onClick={() => onViewModeChange('social')}
-            className="text-center p-4 rounded-lg border transition-all duration-300"
-            style={{
-              background: viewMode === 'social' ? 'linear-gradient(135deg, #10B981, #059669)' : '#1a2332',
-              border: viewMode === 'social' ? '2px solid #34D399' : '2px solid #334155',
-              color: 'white',
-              cursor: 'pointer',
-              opacity: viewMode === 'social' ? 1 : 0.6,
-              boxShadow: viewMode === 'social' ? '0 0 20px rgba(16, 185, 129, 0.6)' : 'none',
-            }}
-          >
-            <div className="text-3xl mb-3">📊</div>
-            <p className="text-sm font-semibold">Social Floor</p>
-          </button>
-          <button
-            onClick={() => onViewModeChange('incentives')}
-            className="text-center p-4 rounded-lg border transition-all duration-300"
-            style={{
-              background: viewMode === 'incentives' ? 'linear-gradient(135deg, #A855F7, #9333EA)' : '#1a2332',
-              border: viewMode === 'incentives' ? '2px solid #C084FC' : '2px solid #334155',
-              color: 'white',
-              cursor: 'pointer',
-              opacity: viewMode === 'incentives' ? 1 : 0.6,
-              boxShadow: viewMode === 'incentives' ? '0 0 20px rgba(168, 85, 247, 0.6)' : 'none',
-            }}
-          >
-            <div className="text-3xl mb-3">🎯</div>
-            <p className="text-sm font-semibold">Incentives</p>
-          </button>
-        </div>
+      {/* Reset Link + Glossary Button */}
+      <div style={{ display: 'flex', gap: '16px', marginTop: '12px', alignItems: 'center' }}>
+        <button
+          onClick={onReset}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: '#64748b',
+            fontSize: '13px',
+            cursor: 'pointer',
+            padding: '0',
+            transition: 'color 0.2s ease',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = '#94a3b8';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = '#64748b';
+          }}
+        >
+          ↺ Reset to Default
+        </button>
+        <button
+          onClick={() => onGlossaryToggle(!showGlossary)}
+          style={{
+            background: 'rgba(51, 65, 85, 0.6)',
+            border: '1px solid #475569',
+            color: '#cbd5e1',
+            fontSize: '13px',
+            cursor: 'pointer',
+            padding: '6px 12px',
+            borderRadius: '6px',
+            transition: 'all 0.2s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = 'rgba(71, 85, 105, 0.8)';
+            e.currentTarget.style.color = '#f1f5f9';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'rgba(51, 65, 85, 0.6)';
+            e.currentTarget.style.color = '#cbd5e1';
+          }}
+        >
+          ? Glossary
+        </button>
       </div>
     </div>
   );

@@ -54,13 +54,11 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   const [pctHouseholds2Dep, setPctHouseholds2Dep] = useState(mergedConfig.pctHouseholds2Dep ?? 0.15);
   const [pctHouseholds3Dep, setPctHouseholds3Dep] = useState(mergedConfig.pctHouseholds3Dep ?? 0.10);
   const [showTour, setShowTour] = useState(false);
-  const [activeScreen, setActiveScreen] = useState<'controls' | 'scenarios' | 'results' | 'charts' | 'personas'>('controls');
+  const [activeScreen, setActiveScreen] = useState<'engine' | 'households' | 'scenarios' | 'results' | 'charts' | 'personas'>('engine');
   const [currentConfig, setCurrentConfig] = useState<string>('Default');
-  const [viewMode, setViewMode] = useState<'revenue' | 'social' | 'incentives'>('revenue');
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [showGlossary, setShowGlossary] = useState(false);
-  const [showHouseholdImpact, setShowHouseholdImpact] = useState(false);
 
   const handlePresetSelectWithName = (presetName: string, presetConfig: Partial<PolicyConfig>) => {
     setCurrentConfig(presetName);
@@ -115,6 +113,16 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     if (presetConfig.breakoutPoint) setBreakoutPoint(presetConfig.breakoutPoint);
   };
 
+  const screens: Array<typeof activeScreen> = ['engine', 'households', 'scenarios', 'results', 'charts', 'personas'];
+  const stepLabels: Record<string, string> = {
+    engine: 'Fiscal Engine',
+    households: 'Household Structure',
+    scenarios: 'Scenario Presets',
+    results: 'Fiscal Results',
+    charts: 'Visual Model',
+    personas: 'Income Personas',
+  };
+
   const handleReset = () => {
     setTokenTaxRate(DEFAULT_CONFIG.tokenTaxRate);
     setUbiAnnualPerAdult(DEFAULT_CONFIG.ubiAnnualPerAdult);
@@ -125,10 +133,8 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     setPctHouseholds1Dep(0.25);
     setPctHouseholds2Dep(0.15);
     setPctHouseholds3Dep(0.10);
-    setViewMode('revenue');
     setCurrentConfig('Default');
-    setActiveScreen('controls');
-    setShowHouseholdImpact(false);
+    setActiveScreen('engine');
   };
 
   return (
@@ -150,74 +156,23 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
 
             <div className="border-t border-border-slate pt-5">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className={`w-2 h-2 rounded-full ${tokenTaxRate > ubiAnnualPerAdult / 1000000 ? 'bg-green-500' : 'bg-slate-600'}`}></div>
-                  <span className="text-xs text-muted">Configuration:</span>
-                  <span className="text-xs font-medium text-bright bg-darker-slate px-2.5 py-1 rounded-full border border-border-slate">{currentConfig}</span>
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center gap-2">
+                    <div className={`w-2 h-2 rounded-full ${tokenTaxRate > ubiAnnualPerAdult / 1000000 ? 'bg-green-500' : 'bg-slate-600'}`}></div>
+                    <span className="text-xs text-muted">Configuration:</span>
+                    <span className="text-xs font-medium text-bright bg-darker-slate px-2.5 py-1 rounded-full border border-border-slate">{currentConfig}</span>
+                  </div>
+                  <p className="text-xs text-muted">Step {screens.indexOf(activeScreen) + 1} of 6 — {stepLabels[activeScreen]}</p>
                 </div>
                 <NavButtons />
               </div>
             </div>
           </div>
 
-          {/* Simple Tab Navigation */}
-          <div className="flex border-b border-border-slate px-2 bg-darker-slate">
-            <button
-              onClick={() => setActiveScreen('controls')}
-              className={`py-3 px-4 text-lg transition border-b-2 ${
-                activeScreen === 'controls'
-                  ? 'border-blue-500 text-blue-400'
-                  : 'border-transparent text-white hover:text-white'
-              }`}
-            >
-              ⚙️
-            </button>
-            <button
-              onClick={() => setActiveScreen('scenarios')}
-              className={`py-3 px-4 text-lg transition border-b-2 ${
-                activeScreen === 'scenarios'
-                  ? 'border-purple-600 text-purple-400'
-                  : 'border-transparent text-white hover:text-white'
-              }`}
-            >
-              ⚡
-            </button>
-            <button
-              onClick={() => setActiveScreen('results')}
-              className={`py-3 px-4 text-lg transition border-b-2 ${
-                activeScreen === 'results'
-                  ? 'border-purple-600 text-purple-400'
-                  : 'border-transparent text-white hover:text-white'
-              }`}
-            >
-              📊
-            </button>
-            <button
-              onClick={() => setActiveScreen('charts')}
-              className={`py-3 px-4 text-lg transition border-b-2 ${
-                activeScreen === 'charts'
-                  ? 'border-purple-600 text-purple-400'
-                  : 'border-transparent text-white hover:text-white'
-              }`}
-            >
-              📈
-            </button>
-            <button
-              onClick={() => setActiveScreen('personas')}
-              className={`py-3 px-4 text-lg transition border-b-2 ${
-                activeScreen === 'personas'
-                  ? 'border-purple-600 text-purple-400'
-                  : 'border-transparent text-white hover:text-white'
-              }`}
-            >
-              👥
-            </button>
-          </div>
-
           {/* Screen Content - With Background */}
           <div className="p-6 flex-1 bg-darker-navy overflow-y-auto">
-            {/* Controls Screen - Split Layout */}
-            {activeScreen === 'controls' && (
+            {/* Step 1: Fiscal Engine Screen - Split Layout */}
+            {activeScreen === 'engine' && (
               <div className="grid grid-cols-6 gap-6 h-full">
                 {/* LEFT: Configuration Sliders (33%) */}
                 <div className="col-span-2 overflow-y-auto pr-2">
@@ -228,37 +183,22 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                     onUbiChange={setUbiAnnualPerAdult}
                     breakoutPoint={breakoutPoint}
                     onBreakoutPointChange={setBreakoutPoint}
-                    ubiDependent1={ubiDependent1}
-                    onUbiDep1Change={setUbiDependent1}
-                    ubiDependent2={ubiDependent2}
-                    onUbiDep2Change={setUbiDependent2}
-                    ubiDependent3={ubiDependent3}
-                    onUbiDep3Change={setUbiDependent3}
-                    pctHouseholds1Dep={pctHouseholds1Dep}
-                    onPct1Change={setPctHouseholds1Dep}
-                    pctHouseholds2Dep={pctHouseholds2Dep}
-                    onPct2Change={setPctHouseholds2Dep}
-                    pctHouseholds3Dep={pctHouseholds3Dep}
-                    onPct3Change={setPctHouseholds3Dep}
-                    viewMode={viewMode}
-                    onViewModeChange={setViewMode}
                     onReset={handleReset}
                     showGlossary={showGlossary}
                     onGlossaryToggle={setShowGlossary}
                   />
                 </div>
 
-                {/* MIDDLE: Mode-Specific Fiscal Status Panel (50%) */}
+                {/* MIDDLE: Fiscal Status Panel */}
                 <div
                   className={`col-span-2 rounded-lg p-8 text-white overflow-y-auto view-transition ${
                     result.balance.surplusDeficit >= 0
                       ? 'bg-dark-slate glow-border-green pulse-glow-green'
                       : 'bg-dark-slate glow-border-red pulse-glow-red'
                   }`}
-                  key={viewMode}
                 >
-                  {/* REVENUE MODE VIEW */}
-                  {viewMode === 'revenue' && (
+                  {/* FISCAL ENGINE VIEW */}
+                  {(
                     <div className="space-y-8">
                       {/* Status Indicator - HERO DISPLAY */}
                       <div>
@@ -361,390 +301,14 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                       </div>
                     </div>
                   )}
-
-                  {/* SOCIAL FLOOR MODE VIEW */}
-                  {viewMode === 'social' && (
-                    <div className="space-y-8">
-                      {/* Income Floor Hero */}
-                      <div>
-                        <p className="text-sm font-semibold text-muted uppercase tracking-wider mb-3">
-                          Guaranteed Income Floor
-                        </p>
-                        <p
-                          className="font-bold leading-none"
-                          style={{
-                            fontSize: '60px',
-                            color: '#10B981',
-                            textShadow: '0 0 20px rgba(16, 185, 129, 0.5)'
-                          }}
-                        >
-                          ${((result.citizenModel.personaOutcomes[0].ubi + result.citizenModel.personaOutcomes[0].supplement) / 1000).toFixed(1)}K
-                        </p>
-                        <p className="text-xs text-dimmed mt-2 uppercase tracking-wide">
-                          Minimum annual income (UBI + Supplement at $0 earned)
-                        </p>
-
-                        {/* Real Purchasing Power Hero Indicator */}
-                        {result.balance.surplusDeficit < 0 && (
-                          <div style={{
-                            marginTop: '16px',
-                            padding: '12px',
-                            background: 'rgba(249, 115, 22, 0.15)',
-                            borderRadius: '8px',
-                            border: '1px solid #FB923C'
-                          }}>
-                            <p style={{ fontSize: '10px', color: '#FB923C', fontWeight: '700', margin: '0 0 6px 0', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                              Real Purchasing Power (Adjusted)
-                            </p>
-                            <p style={{
-                              fontSize: '28px',
-                              fontWeight: '700',
-                              color: '#FB923C',
-                              margin: '0'
-                            }}>
-                              ${(((result.citizenModel.personaOutcomes[0].ubi + result.citizenModel.personaOutcomes[0].supplement) * (1 - Math.abs(result.balance.surplusDeficit) / result.obligations.totalObligations)) / 1000).toFixed(1)}K
-                            </p>
-                            <p style={{ fontSize: '10px', color: '#94a3b8', margin: '4px 0 0 0' }}>
-                              if deficit sustained via money creation
-                            </p>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* UBI Cost and Details */}
-                      <div className="border-t border-border-slate pt-6">
-                        <p className="text-sm text-muted uppercase tracking-wide mb-4">📊 Social Floor Details</p>
-                        <div className="space-y-3">
-                          <div className="flex justify-between">
-                            <span className="text-sm text-muted">Base UBI (per adult)</span>
-                            <span className="font-semibold text-green-400">
-                              ${(ubiAnnualPerAdult / 1000).toFixed(1)}K
-                            </span>
-                          </div>
-
-                          {/* Real Purchasing Power Indicator */}
-                          {result.balance.surplusDeficit < 0 && (
-                            <div style={{
-                              padding: '12px',
-                              background: 'rgba(249, 115, 22, 0.1)',
-                              borderRadius: '6px',
-                              border: '1px solid #FB923C',
-                              marginTop: '8px'
-                            }}>
-                              <p style={{ fontSize: '11px', color: '#FB923C', fontWeight: '600', margin: '0 0 6px 0', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                                Real Purchasing Power (Inflation-Adjusted)
-                              </p>
-                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                                <span style={{ fontSize: '12px', color: '#cbd5e1' }}>If deficit sustained:</span>
-                                <span style={{
-                                  fontSize: '18px',
-                                  fontWeight: '700',
-                                  color: '#FB923C'
-                                }}>
-                                  ${(ubiAnnualPerAdult * (1 - Math.abs(result.balance.surplusDeficit) / result.obligations.totalObligations) / 1000).toFixed(1)}K
-                                </span>
-                              </div>
-                              <p style={{ fontSize: '10px', color: '#94a3b8', margin: '6px 0 0 0', fontStyle: 'italic' }}>
-                                Nominal value eroded by {(Math.abs(result.balance.surplusDeficit) / result.obligations.totalObligations * 100).toFixed(1)}% estimated inflation
-                              </p>
-                            </div>
-                          )}
-
-                          <div className="flex justify-between">
-                            <span className="text-sm text-muted">Max Supplement Bonus</span>
-                            <span className="font-semibold text-purple-400">
-                              ${(result.citizenModel.personaOutcomes[0].supplement / 1000).toFixed(1)}K
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-sm text-muted">Total UBI Cost</span>
-                            <span className="font-semibold text-orange-400">
-                              ${animatedUbiCost}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Impact on Lowest Earners */}
-                      <div className="border-t border-border-slate pt-6">
-                        <p className="text-sm text-muted uppercase tracking-wide mb-4">💝 Impact on Lowest Earners</p>
-                        <div className="bg-darker-navy rounded-lg p-5 border border-green-900">
-                          <p className="text-xs text-muted mb-2">Net Income Increase for Gig Worker</p>
-                          <p className="text-4xl font-bold text-green-400">
-                            +{(((result.citizenModel.personaOutcomes[0].netIncome / result.citizenModel.personaOutcomes[0].earnedIncome) - 1) * 100).toFixed(0)}%
-                          </p>
-                          <p className="text-xs text-dimmed mt-2">
-                            From ${(result.citizenModel.personaOutcomes[0].earnedIncome / 1000).toFixed(0)}K earned
-                            to ${(result.citizenModel.personaOutcomes[0].netIncome / 1000).toFixed(0)}K take-home
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Visual Income Floor Bar */}
-                      <div className="border-t border-border-slate pt-6">
-                        <p className="text-sm text-muted uppercase tracking-wide mb-3">Income Floor Visualization</p>
-                        <div className="space-y-3">
-                          <div>
-                            <div className="flex justify-between mb-2">
-                              <span className="text-xs text-muted">Earned Income</span>
-                              <span className="text-xs text-bright">${(result.citizenModel.personaOutcomes[0].earnedIncome / 1000).toFixed(0)}K</span>
-                            </div>
-                            <div className="relative w-full bg-darker-navy rounded-full h-3 overflow-hidden border border-blue-900">
-                              <div
-                                className="bg-gradient-to-r from-blue-600 to-blue-400 h-full rounded-full"
-                                style={{ width: '40%' }}
-                              />
-                            </div>
-                          </div>
-                          <div>
-                            <div className="flex justify-between mb-2">
-                              <span className="text-xs text-muted">Net Income (with UBI+Supplement)</span>
-                              <span className="text-xs text-bright">${(result.citizenModel.personaOutcomes[0].netIncome / 1000).toFixed(0)}K</span>
-                            </div>
-                            <div className="relative w-full bg-darker-navy rounded-full h-3 overflow-hidden border border-green-900">
-                              <div
-                                className="bg-gradient-to-r from-green-600 to-green-400 h-full rounded-full slider-track-glow-green"
-                                style={{
-                                  width: `${Math.min(100, (result.citizenModel.personaOutcomes[0].netIncome / result.citizenModel.personaOutcomes[0].earnedIncome) * 40)}%`
-                                }}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* INCENTIVES MODE VIEW */}
-                  {viewMode === 'incentives' && (
-                    <div className="space-y-8">
-                      {/* Work Incentive Score Hero */}
-                      <div>
-                        <p className="text-sm font-semibold text-muted uppercase tracking-wider mb-3">
-                          Work Incentive Score
-                        </p>
-                        <p
-                          className="font-bold leading-none"
-                          style={{
-                            fontSize: '60px',
-                            color: (() => {
-                              const personas = result.citizenModel.personaOutcomes;
-                              let totalRetention = 0;
-                              let count = 0;
-                              for (let i = 0; i < personas.length - 1; i++) {
-                                const incomeDiff = personas[i + 1].earnedIncome - personas[i].earnedIncome;
-                                const netDiff = personas[i + 1].netIncome - personas[i].netIncome;
-                                if (incomeDiff > 0) {
-                                  totalRetention += (netDiff / incomeDiff) * 100;
-                                  count++;
-                                }
-                              }
-                              const score = count > 0 ? totalRetention / count : 0;
-                              return score >= 80 ? '#10b981' : score >= 60 ? '#06b6d4' : score >= 40 ? '#f59e0b' : '#ef4444';
-                            })(),
-                            textShadow: '0 0 20px rgba(16, 185, 129, 0.5)'
-                          }}
-                        >
-                          {(() => {
-                            const personas = result.citizenModel.personaOutcomes;
-                            let totalRetention = 0;
-                            let count = 0;
-                            for (let i = 0; i < personas.length - 1; i++) {
-                              const incomeDiff = personas[i + 1].earnedIncome - personas[i].earnedIncome;
-                              const netDiff = personas[i + 1].netIncome - personas[i].netIncome;
-                              if (incomeDiff > 0) {
-                                totalRetention += (netDiff / incomeDiff) * 100;
-                                count++;
-                              }
-                            }
-                            const score = count > 0 ? totalRetention / count : 0;
-                            return score.toFixed(0);
-                          })()}%
-                        </p>
-                        <p className="text-xs text-dimmed mt-2 uppercase tracking-wide">
-                          Average income retention across career transitions
-                        </p>
-                      </div>
-
-                      {/* Retention by Transition */}
-                      <div className="border-t border-border-slate pt-6">
-                        <p className="text-sm text-muted uppercase tracking-wide mb-4">📈 Retention by Transition</p>
-                        <div className="space-y-3">
-                          {result.citizenModel.personaOutcomes.map((persona, idx) => {
-                            const nextPersona = result.citizenModel.personaOutcomes[idx + 1];
-                            if (!nextPersona) return null;
-                            const incomeDiff = nextPersona.earnedIncome - persona.earnedIncome;
-                            const netDiff = nextPersona.netIncome - persona.netIncome;
-                            const retention = (netDiff / incomeDiff) * 100;
-                            return (
-                              <div key={persona.label} className="bg-darker-navy rounded-lg p-3">
-                                <div className="flex items-center justify-between mb-2">
-                                  <span className="text-xs font-bold text-bright">
-                                    {persona.label} → {nextPersona.label}
-                                  </span>
-                                  <span className="text-sm font-bold text-blue-400">
-                                    {retention.toFixed(0)}%
-                                  </span>
-                                </div>
-                                <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
-                                  <div
-                                    className="h-full rounded-full transition-all duration-500"
-                                    style={{
-                                      width: `${Math.max(0, retention)}%`,
-                                      background: 'linear-gradient(to right, #3b82f6, #10b981)'
-                                    }}
-                                  />
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-
-                      {/* Breakout Point Explanation */}
-                      <div className="border-t border-border-slate pt-6">
-                        <p className="text-sm text-muted uppercase tracking-wide mb-4">🎯 Breakout Point Impact</p>
-                        <div className="bg-darker-navy rounded-lg p-5 border border-purple-900">
-                          <p className="text-xs text-muted mb-2">Supplement phases out at</p>
-                          <p className="text-3xl font-bold text-purple-400">
-                            ${(breakoutPoint / 1000).toFixed(0)}K
-                          </p>
-                          <p className="text-xs text-dimmed mt-2">
-                            earned income, ensuring smooth transition to self-sufficiency
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </div>
 
                 {/* RIGHT: Warnings & Alerts Panel (17%) */}
                 <div className="col-span-2 overflow-y-auto">
                   <div className="bg-darker-slate rounded-lg p-6 border border-border-slate" style={{ height: '100%' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                      {/* Household Demographics Impact Section - Conditional */}
-                      {(pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep) > 0 && (
-                        <div>
-                          <button
-                            onClick={() => setShowHouseholdImpact(!showHouseholdImpact)}
-                            style={{
-                              width: '100%',
-                              background: 'rgba(59, 130, 246, 0.1)',
-                              border: '1px solid rgba(59, 130, 246, 0.3)',
-                              borderRadius: '8px',
-                              padding: '12px',
-                              color: '#3b82f6',
-                              fontSize: '14px',
-                              fontWeight: '600',
-                              cursor: 'pointer',
-                              marginBottom: '12px',
-                              textAlign: 'left',
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              alignItems: 'center',
-                              transition: 'all 0.2s ease'
-                            }}
-                            onMouseEnter={(e) => {
-                              e.currentTarget.style.background = 'rgba(59, 130, 246, 0.2)';
-                              e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.5)';
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.background = 'rgba(59, 130, 246, 0.1)';
-                              e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.3)';
-                            }}
-                          >
-                            <span>👨‍👩‍👧‍👦 Household Impact</span>
-                            <span style={{ fontSize: '12px' }}>{showHouseholdImpact ? '▼' : '▶'}</span>
-                          </button>
-
-                          {showHouseholdImpact && (
-                            <div>
-                              <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#cbd5e1', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                                👨‍👩‍👧‍👦 Household Impact
-                              </h3>
-                              {(() => {
-                                // Calculate dependent metrics
-                                const numHH = 130000000;
-                                const tier1Count = numHH * (pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep);
-                                const tier2Count = numHH * (pctHouseholds2Dep + pctHouseholds3Dep);
-                                const tier3Count = numHH * pctHouseholds3Dep;
-                                const dependentCost = tier1Count * ubiDependent1 + tier2Count * ubiDependent2 + tier3Count * ubiDependent3;
-                                const totalDependentPopulation = numHH * (pctHouseholds1Dep + pctHouseholds2Dep * 2 + pctHouseholds3Dep * 3);
-                                const adultUBICost = ubiAnnualPerAdult * 265000000;
-                                const totalUBICost = adultUBICost + dependentCost;
-                                const percentOfBudget = (dependentCost / totalUBICost) * 100;
-
-                                return (
-                                  <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px' }}>
-                                    {/* Dependent UBI Cost */}
-                                    <div style={{
-                                      background: 'rgba(34, 197, 94, 0.08)',
-                                      border: '1px solid rgba(34, 197, 94, 0.3)',
-                                      borderRadius: '8px',
-                                      padding: '12px'
-                                    }}>
-                                      <p style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '500' }}>
-                                        Dependent UBI Cost
-                                      </p>
-                                      <p style={{ fontSize: '20px', fontWeight: '700', color: '#22c55e', margin: '0' }}>
-                                        ${(dependentCost / 1e12).toFixed(2)}T
-                                      </p>
-                                    </div>
-
-                                    {/* % of Total UBI Budget */}
-                                    <div style={{
-                                      background: 'rgba(59, 130, 246, 0.08)',
-                                      border: '1px solid rgba(59, 130, 246, 0.3)',
-                                      borderRadius: '8px',
-                                      padding: '12px'
-                                    }}>
-                                      <p style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '500' }}>
-                                        % of Total UBI Budget
-                                      </p>
-                                      <p style={{ fontSize: '20px', fontWeight: '700', color: '#3b82f6', margin: '0' }}>
-                                        {percentOfBudget.toFixed(1)}%
-                                      </p>
-                                    </div>
-
-                                    {/* Total Dependent Population */}
-                                    <div style={{
-                                      background: 'rgba(168, 85, 247, 0.08)',
-                                      border: '1px solid rgba(168, 85, 247, 0.3)',
-                                      borderRadius: '8px',
-                                      padding: '12px'
-                                    }}>
-                                      <p style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '500' }}>
-                                        Total Dependents
-                                      </p>
-                                      <p style={{ fontSize: '20px', fontWeight: '700', color: '#a855f7', margin: '0' }}>
-                                        {(totalDependentPopulation / 1e6).toFixed(1)}M
-                                      </p>
-                                    </div>
-
-                                    {/* Dependent Coverage Rate */}
-                                    <div style={{
-                                      background: 'rgba(251, 146, 60, 0.08)',
-                                      border: '1px solid rgba(251, 146, 60, 0.3)',
-                                      borderRadius: '8px',
-                                      padding: '12px'
-                                    }}>
-                                      <p style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '500' }}>
-                                        Households w/ Dependents
-                                      </p>
-                                      <p style={{ fontSize: '20px', fontWeight: '700', color: '#fb923c', margin: '0' }}>
-                                        {((pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep) * 100).toFixed(1)}%
-                                      </p>
-                                    </div>
-                                  </div>
-                                );
-                              })()}
-                            </div>
-                          )}
-                        </div>
-                      )}
-
                       {/* Policy Alerts Section */}
-                      <div style={{ borderTop: (pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep) > 0 ? '1px solid #334155' : 'none', paddingTop: (pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep) > 0 ? '16px' : '0' }}>
+                      <div>
                         <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#cbd5e1', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                           ⚡ Policy Alerts
                         </h3>
@@ -759,6 +323,254 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                       )}
                     </div>
                   </div>
+                </div>
+              </div>
+            )}
+
+            {/* Step 2: Household Structure Screen - Split Layout */}
+            {activeScreen === 'households' && (
+              <div className="grid grid-cols-6 gap-6 h-full">
+                {/* LEFT: Household Inputs */}
+                <div className="col-span-2 overflow-y-auto pr-2 space-y-6">
+                  {/* Dependent UBI Rates */}
+                  <div className="bg-dark-slate rounded-lg p-5 glow-border-slate" style={{ transition: 'all 0.3s ease' }}>
+                    <p className="text-sm font-semibold text-muted uppercase tracking-wide mb-4">
+                      💰 Tiered Dependent Support
+                    </p>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <label className="text-sm text-dimmed">1st Dependent</label>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-muted">$</span>
+                          <input
+                            type="number"
+                            value={ubiDependent1}
+                            onChange={(e) => setUbiDependent1(Math.max(0, parseInt(e.target.value) || 0))}
+                            className="w-24 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                          />
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <label className="text-sm text-dimmed">2nd Dependent</label>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-muted">$</span>
+                          <input
+                            type="number"
+                            value={ubiDependent2}
+                            onChange={(e) => setUbiDependent2(Math.max(0, parseInt(e.target.value) || 0))}
+                            className="w-24 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                          />
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <label className="text-sm text-dimmed">3rd+ Dependents</label>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-muted">$</span>
+                          <input
+                            type="number"
+                            value={ubiDependent3}
+                            onChange={(e) => setUbiDependent3(Math.max(0, parseInt(e.target.value) || 0))}
+                            className="w-24 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Household Distribution */}
+                  <div className="bg-dark-slate rounded-lg p-5 glow-border-slate" style={{ transition: 'all 0.3s ease' }}>
+                    <p className="text-sm font-semibold text-muted uppercase tracking-wide mb-4">
+                      📊 Household Distribution
+                    </p>
+                    <div className="space-y-3">
+                      {/* 0 Dependents - Auto Calculated */}
+                      <div className="bg-darker-navy rounded-lg p-3 border border-border-slate opacity-75">
+                        <div className="flex items-center justify-between">
+                          <label className="text-sm text-muted">0 Dependents</label>
+                          <div className="flex items-center gap-2">
+                            <span className="w-12 text-right font-semibold text-emerald-400 text-sm">
+                              {Math.round((1 - (pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep)) * 100)}%
+                            </span>
+                            <span className="text-dimmed text-xs">(Auto)</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* User Input Fields */}
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <label className="text-sm text-dimmed">1 Dependent</label>
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="number"
+                              value={Math.round(pctHouseholds1Dep * 100)}
+                              onChange={(e) => {
+                                const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 0));
+                                setPctHouseholds1Dep(val / 100);
+                              }}
+                              className="w-16 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                            />
+                            <span className="text-dimmed text-sm">%</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <label className="text-sm text-dimmed">2 Dependents</label>
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="number"
+                              value={Math.round(pctHouseholds2Dep * 100)}
+                              onChange={(e) => {
+                                const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 0));
+                                setPctHouseholds2Dep(val / 100);
+                              }}
+                              className="w-16 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                            />
+                            <span className="text-dimmed text-sm">%</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <label className="text-sm text-dimmed">3+ Dependents</label>
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="number"
+                              value={Math.round(pctHouseholds3Dep * 100)}
+                              onChange={(e) => {
+                                const val = Math.max(0, Math.min(100, parseInt(e.target.value) || 0));
+                                setPctHouseholds3Dep(val / 100);
+                              }}
+                              className="w-16 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                            />
+                            <span className="text-dimmed text-sm">%</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Validation Message */}
+                      {(pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep) > 1 && (
+                        <div className="bg-red-900 bg-opacity-30 border border-red-600 rounded px-3 py-2">
+                          <p className="text-xs text-red-400 font-semibold">⚠ Total exceeds 100%. Please adjust.</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* MIDDLE: UBI Program Cost Display */}
+                <div className="col-span-2 rounded-lg p-8 bg-dark-slate glow-border-blue overflow-y-auto">
+                  <div className="space-y-6">
+                    {/* UBI Program Cost Hero */}
+                    <div>
+                      <p className="text-sm font-semibold text-muted uppercase tracking-wider mb-3">UBI Program Cost</p>
+                      <p
+                        className="font-bold leading-none"
+                        style={{
+                          fontSize: '48px',
+                          color: '#60A5FA',
+                          textShadow: '0 0 20px rgba(96, 165, 250, 0.5)'
+                        }}
+                      >
+                        ${(result.obligations.ubiCost / 1e12).toFixed(2)}T
+                      </p>
+                    </div>
+
+                    {/* Breakdown */}
+                    <div className="border-t border-border-slate pt-6 space-y-3">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-muted">Adult UBI</span>
+                        <span className="font-semibold text-green-400">
+                          ${(result.obligations.adultUBICost ? result.obligations.adultUBICost / 1e12 : 0).toFixed(2)}T
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-muted">Dependent UBI</span>
+                        <span className="font-semibold text-purple-400">
+                          ${(result.obligations.dependentUBICost ? result.obligations.dependentUBICost / 1e12 : 0).toFixed(2)}T
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Dependent Percentage Bar */}
+                    <div className="border-t border-border-slate pt-6">
+                      <p className="text-xs text-muted mb-3 uppercase tracking-wide">Dependent % of UBI</p>
+                      <div className="w-full h-4 bg-darker-slate rounded-full overflow-hidden border border-border-slate">
+                        <div
+                          className="h-full bg-gradient-to-r from-purple-500 to-purple-400"
+                          style={{
+                            width: result.obligations.ubiCost > 0
+                              ? `${((result.obligations.dependentUBICost || 0) / result.obligations.ubiCost * 100).toFixed(1)}%`
+                              : '0%'
+                          }}
+                        />
+                      </div>
+                      <p className="text-xs text-dimmed mt-2">
+                        {((result.obligations.dependentUBICost || 0) / result.obligations.ubiCost * 100).toFixed(1)}% dependent
+                      </p>
+                    </div>
+
+                    {/* Solvency Badge */}
+                    <div className="border-t border-border-slate pt-6">
+                      <div
+                        className={`rounded-lg p-4 text-center ${
+                          result.balance.isSolvent ? 'bg-green-900 bg-opacity-30 border border-green-600' : 'bg-red-900 bg-opacity-30 border border-red-600'
+                        }`}
+                      >
+                        <p className="text-xs text-muted mb-1 uppercase tracking-wide">Fiscal Status</p>
+                        <p className={`text-sm font-bold ${result.balance.isSolvent ? 'text-green-400' : 'text-red-400'}`}>
+                          {result.balance.isSolvent ? '✓ Solvent' : '✗ Deficit'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* RIGHT: Summary Cards */}
+                <div className="col-span-2 overflow-y-auto space-y-4 pr-2">
+                  {/* Calculate metrics */}
+                  {(() => {
+                    const numHH = 130000000;
+                    const tier1Count = numHH * (pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep);
+                    const tier2Count = numHH * (pctHouseholds2Dep + pctHouseholds3Dep);
+                    const tier3Count = numHH * pctHouseholds3Dep;
+                    const dependentCost = tier1Count * ubiDependent1 + tier2Count * ubiDependent2 + tier3Count * ubiDependent3;
+                    const totalDependents = tier1Count + tier2Count + tier3Count;
+                    const hhWithDeps = pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep;
+
+                    return (
+                      <>
+                        {/* Card 1: Dependent UBI Cost */}
+                        <div className="bg-dark-slate rounded-lg p-5 border-l-4 border-emerald-500 glow-border-slate">
+                          <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-2">Dependent UBI Cost</p>
+                          <p className="text-2xl font-bold text-emerald-400">
+                            ${(dependentCost / 1e12).toFixed(2)}T
+                          </p>
+                        </div>
+
+                        {/* Card 2: % of UBI Budget */}
+                        <div className="bg-dark-slate rounded-lg p-5 border-l-4 border-blue-500 glow-border-slate">
+                          <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-2">% of UBI Budget</p>
+                          <p className="text-2xl font-bold text-blue-400">
+                            {result.obligations.ubiCost > 0 ? ((dependentCost / result.obligations.ubiCost) * 100).toFixed(1) : '0'}%
+                          </p>
+                        </div>
+
+                        {/* Card 3: Total Dependents */}
+                        <div className="bg-dark-slate rounded-lg p-5 border-l-4 border-purple-500 glow-border-slate">
+                          <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-2">Total Dependents</p>
+                          <p className="text-2xl font-bold text-purple-400">
+                            {(totalDependents / 1e6).toFixed(1)}M
+                          </p>
+                        </div>
+
+                        {/* Card 4: HH with Dependents */}
+                        <div className="bg-dark-slate rounded-lg p-5 border-l-4 border-orange-500 glow-border-slate">
+                          <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-2">HH with Dependents</p>
+                          <p className="text-2xl font-bold text-orange-400">
+                            {(hhWithDeps * 100).toFixed(1)}%
+                          </p>
+                        </div>
+                      </>
+                    );
+                  })()}
                 </div>
               </div>
             )}
@@ -805,12 +617,12 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
           {/* Footer Navigation - Enhanced */}
           <div className="px-5 py-5 border-t border-border-slate bg-bg-dark-slate flex justify-between items-center gap-4" style={{ background: '#1E293B' }}>
             {(() => {
-              const screens: Array<typeof activeScreen> = ['controls', 'scenarios', 'results', 'charts', 'personas'];
-              const current = screens.indexOf(activeScreen);
+              const screensArray: Array<typeof activeScreen> = ['engine', 'households', 'scenarios', 'results', 'charts', 'personas'];
+              const current = screensArray.indexOf(activeScreen);
               return current > 0 ? (
                 <button
                   onClick={() => {
-                    if (current > 0) setActiveScreen(screens[current - 1]);
+                    if (current > 0) setActiveScreen(screensArray[current - 1]);
                   }}
                   className="px-5 py-3 rounded transition"
                   style={{
@@ -829,8 +641,8 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
             })()}
             <div className="flex flex-col items-center gap-2">
               <div className="flex gap-2 items-center">
-                {['controls', 'scenarios', 'results', 'charts', 'personas'].map((screen, idx) => {
-                  const isActive = activeScreen === screen || ['controls', 'scenarios', 'results', 'charts', 'personas'].indexOf(activeScreen) > idx;
+                {['engine', 'households', 'scenarios', 'results', 'charts', 'personas'].map((screen, idx) => {
+                  const isActive = activeScreen === screen || ['engine', 'households', 'scenarios', 'results', 'charts', 'personas'].indexOf(activeScreen) > idx;
                   return (
                     <span
                       key={screen}
@@ -843,11 +655,12 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                 })}
               </div>
               <span className="text-sm text-white font-bold">
-                Step {['controls', 'scenarios', 'results', 'charts', 'personas'].indexOf(activeScreen) + 1} — {
-                  activeScreen === 'controls' ? 'Configure' :
-                  activeScreen === 'scenarios' ? 'Quick Scenarios' :
-                  activeScreen === 'results' ? 'Results' :
-                  activeScreen === 'charts' ? 'Visualize' :
+                Step {['engine', 'households', 'scenarios', 'results', 'charts', 'personas'].indexOf(activeScreen) + 1} — {
+                  activeScreen === 'engine' ? 'Fiscal Engine' :
+                  activeScreen === 'households' ? 'Household Structure' :
+                  activeScreen === 'scenarios' ? 'Scenario Presets' :
+                  activeScreen === 'results' ? 'Fiscal Results' :
+                  activeScreen === 'charts' ? 'Visual Model' :
                   'Compare Personas'
                 }
               </span>
@@ -855,7 +668,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
             {activeScreen !== 'personas' && (
               <button
                 onClick={() => {
-                  const screens = ['controls', 'scenarios', 'results', 'charts', 'personas'] as const;
+                  const screens = ['engine', 'households', 'scenarios', 'results', 'charts', 'personas'] as const;
                   const current = screens.indexOf(activeScreen as any);
                   if (current < screens.length - 1) setActiveScreen(screens[current + 1] as typeof activeScreen);
                 }}
