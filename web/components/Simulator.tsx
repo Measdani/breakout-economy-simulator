@@ -17,6 +17,7 @@ import Warnings from './Warnings';
 import GlossaryPanel from './GlossaryPanel';
 import SubmitModal from './SubmitModal';
 import FeedbackModal from './FeedbackModal';
+import AssumptionsPanel from './AssumptionsPanel';
 import NavButtons from './NavButtons';
 
 const DEFAULT_CONFIG: PolicyConfig = {
@@ -59,6 +60,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [showGlossary, setShowGlossary] = useState(false);
+  const [showAssumptionsPanel, setShowAssumptionsPanel] = useState(false);
   const [demographics, setDemographics] = useState({ ageRange: '', incomeLevel: '', region: '', affiliation: '' });
 
   const handlePresetSelectWithName = (presetName: string, presetConfig: Partial<PolicyConfig>) => {
@@ -778,6 +780,29 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
           </div>
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
               <button
+                onClick={() => setShowAssumptionsPanel(true)}
+                className="px-5 py-3 rounded transition hover:shadow-lg"
+                style={{
+                  background: '#0F172A',
+                  color: '#00D9FF',
+                  border: '2px solid #00D9FF',
+                  fontSize: '16px',
+                  fontWeight: '700',
+                  letterSpacing: '0.3px',
+                  textShadow: '0 0 8px rgba(0, 217, 255, 0.6)',
+                  boxShadow: '0 0 12px rgba(0, 217, 255, 0.4), inset 0 0 12px rgba(0, 217, 255, 0.1)',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.boxShadow = '0 0 20px rgba(0, 217, 255, 0.6), inset 0 0 12px rgba(0, 217, 255, 0.2)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.boxShadow = '0 0 12px rgba(0, 217, 255, 0.4), inset 0 0 12px rgba(0, 217, 255, 0.1)';
+                }}
+              >
+                ⚙ Assumptions
+              </button>
+              <button
                 onClick={() => setShowFeedbackModal(true)}
                 className="px-5 py-3 rounded transition hover:shadow-lg"
                 style={{
@@ -822,6 +847,14 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
         onClose={() => setShowFeedbackModal(false)}
         configName={currentConfig}
       />
+
+      {/* Assumptions Panel */}
+      {showAssumptionsPanel && (
+        <AssumptionsPanel
+          config={config}
+          onClose={() => setShowAssumptionsPanel(false)}
+        />
+      )}
     </div>
   );
 }
