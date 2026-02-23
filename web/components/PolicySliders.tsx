@@ -266,7 +266,7 @@ export default function PolicySliders({
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <label className="text-sm text-dimmed">3rd+ Dependent per Household</label>
+                  <label className="text-sm text-dimmed">3rd and Additional Dependent (Per Household)</label>
                   <div className="flex items-center gap-2">
                     <input
                       type="number"
@@ -284,14 +284,17 @@ export default function PolicySliders({
             <div>
               <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-4">📊 Household Composition Distribution</p>
               <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <label className="text-sm text-dimmed">Households with 0 Dependents</label>
-                  <div className="flex items-center gap-2">
-                    <span className="w-16 text-right font-semibold text-green-400">
-                      {Math.round((1 - (pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep)) * 100)}%
-                    </span>
-                    <span className="text-dimmed text-sm">(auto)</span>
+                <div className="bg-darker-navy rounded-lg p-3 border border-border-slate opacity-75">
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-sm text-muted">Households with 0 Dependents</label>
+                    <div className="flex items-center gap-2">
+                      <span className="w-16 text-right font-semibold text-emerald-400">
+                        {Math.round((1 - (pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep)) * 100)}%
+                      </span>
+                      <span className="text-dimmed text-xs">(derived)</span>
+                    </div>
                   </div>
+                  <p className="text-xs text-dimmed italic">Automatically calculated to ensure total = 100%</p>
                 </div>
                 <div className="flex items-center justify-between">
                   <label className="text-sm text-dimmed">Households with 1 Dependent</label>
@@ -317,46 +320,73 @@ export default function PolicySliders({
                     <span className="text-dimmed text-sm">%</span>
                   </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <label className="text-sm text-dimmed">Households with 3+ Dependents</label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="number"
-                      value={Math.round(pctHouseholds3Dep * 100)}
-                      onChange={(e) => onPct3Change(Math.max(0, Math.min(100, parseInt(e.target.value) || 0)) / 100)}
-                      className="w-16 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
-                    />
-                    <span className="text-dimmed text-sm">%</span>
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-sm text-dimmed">Households with 3 or More Dependents</label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        value={Math.round(pctHouseholds3Dep * 100)}
+                        onChange={(e) => onPct3Change(Math.max(0, Math.min(100, parseInt(e.target.value) || 0)) / 100)}
+                        className="w-16 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                      />
+                      <span className="text-dimmed text-sm">%</span>
+                    </div>
                   </div>
+                  <p className="text-xs text-dimmed italic">Modeled as 3 dependents (cap) for simplicity</p>
                 </div>
               </div>
             </div>
 
             {/* Derived Metrics */}
             <div className="pt-3 border-t border-border-slate">
-              <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-3">📈 Derived Metrics</p>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-dimmed">Average Dependents per Household</span>
-                  <span className="text-lg font-bold text-bright">
-                    {(pctHouseholds1Dep + 2 * pctHouseholds2Dep + 3 * pctHouseholds3Dep).toFixed(2)}
-                  </span>
+              {/* Fiscal Impact */}
+              <div className="mb-4">
+                <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-3">💰 Fiscal Impact</p>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-dimmed">Total Dependent UBI Cost</span>
+                    <span className="text-lg font-bold text-emerald-400">
+                      ${(
+                        (130000000 * (pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep) * ubiDependent1 +
+                        130000000 * (pctHouseholds2Dep + pctHouseholds3Dep) * ubiDependent2 +
+                        130000000 * pctHouseholds3Dep * ubiDependent3) / 1e9
+                      ).toFixed(0)}B
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-dimmed">% of Total UBI Budget</span>
+                    <span className="text-lg font-bold text-blue-400">
+                      {(
+                        ((130000000 * (pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep) * ubiDependent1 +
+                        130000000 * (pctHouseholds2Dep + pctHouseholds3Dep) * ubiDependent2 +
+                        130000000 * pctHouseholds3Dep * ubiDependent3) /
+                        (265000000 * ubiAnnualPerAdult +
+                        130000000 * (pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep) * ubiDependent1 +
+                        130000000 * (pctHouseholds2Dep + pctHouseholds3Dep) * ubiDependent2 +
+                        130000000 * pctHouseholds3Dep * ubiDependent3)) * 100
+                      ).toFixed(1)}%
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-dimmed">Total Dependent Population</span>
-                  <span className="text-lg font-bold text-blue-400">
-                    {((130000000 * (pctHouseholds1Dep + 2 * pctHouseholds2Dep + 3 * pctHouseholds3Dep)) / 1e6).toFixed(0)}M
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-dimmed">Total Dependent UBI Cost</span>
-                  <span className="text-lg font-bold text-emerald-400">
-                    ${(
-                      (130000000 * (pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep) * ubiDependent1 +
-                      130000000 * (pctHouseholds2Dep + pctHouseholds3Dep) * ubiDependent2 +
-                      130000000 * pctHouseholds3Dep * ubiDependent3) / 1e9
-                    ).toFixed(0)}B
-                  </span>
+              </div>
+
+              {/* Demographic Output */}
+              <div className="border-t border-border-slate pt-4">
+                <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-3">👨‍👩‍👧 Demographic Output</p>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-dimmed">Average Dependents per Household</span>
+                    <span className="text-lg font-bold text-bright">
+                      {(pctHouseholds1Dep + 2 * pctHouseholds2Dep + 3 * pctHouseholds3Dep).toFixed(2)}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-dimmed">Total Dependent Population</span>
+                    <span className="text-lg font-bold text-purple-400">
+                      {((130000000 * (pctHouseholds1Dep + 2 * pctHouseholds2Dep + 3 * pctHouseholds3Dep)) / 1e6).toFixed(0)}M
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
