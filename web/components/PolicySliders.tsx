@@ -75,8 +75,8 @@ export default function PolicySliders({
     const tenYearVolume = 1e15 * Math.pow(1 + transactionVolumeGrowthRate, 10);
     const projectedRevenue = tenYearVolume * 0.0035; // default rate for estimation
     return {
-      label: '10-Year Cumulative Impact',
-      value: `Volume → $${(tenYearVolume / 1e15).toFixed(2)}Q ($${(projectedRevenue / 1e12).toFixed(1)}T annual)`
+      label: '10-Year Transaction Volume Projection',
+      value: `Year 10: $${(tenYearVolume / 1e15).toFixed(2)}Q | Est. Annual Revenue: $${(projectedRevenue / 1e12).toFixed(1)}T`
     };
   };
 
@@ -238,7 +238,7 @@ export default function PolicySliders({
           {/* Capital Flight Rate */}
           <SliderSection
             title="Transaction Volume Migration"
-            subtitle="Offshore Risk Premium"
+            subtitle="Offshore Migration Risk (%)"
             icon="⚠️"
             color="purple"
             value={capitalFlightRate}

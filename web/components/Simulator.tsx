@@ -72,6 +72,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [showGlossary, setShowGlossary] = useState(false);
   const [showAssumptionsPanel, setShowAssumptionsPanel] = useState(false);
+  const [showFrictionTaxAssumptions, setShowFrictionTaxAssumptions] = useState(false);
   const [demographics, setDemographics] = useState({ ageRange: '', incomeLevel: '', region: '', affiliation: '' });
 
   const handlePresetSelectWithName = (presetName: string, presetConfig: Partial<PolicyConfig>) => {
@@ -276,7 +277,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         <p className="text-sm text-muted uppercase tracking-wide mb-4">💰 Revenue Sources</p>
                         <div className="space-y-3">
                           <div className="flex justify-between">
-                            <span className="text-sm text-muted">Primary: Friction Tax</span>
+                            <span className="text-sm text-muted">Electronic Transaction Tax</span>
                             <span className="font-semibold text-blue-400">
                               ${((result.revenue.frictionTaxRevenue ?? 0) / 1e12).toFixed(2)}T
                             </span>
@@ -374,6 +375,38 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                             <span className="text-xs text-dimmed">(primary metric)</span>
                           </div>
                         </div>
+                      </div>
+
+                      {/* Model Assumptions (Collapsible) */}
+                      <div className="border-t border-border-slate pt-6">
+                        <button
+                          onClick={() => setShowFrictionTaxAssumptions(!showFrictionTaxAssumptions)}
+                          className="flex items-center justify-between w-full mb-3 hover:opacity-80 transition"
+                        >
+                          <p className="text-sm text-muted uppercase tracking-wide">📘 Model Assumptions</p>
+                          <span className="text-xs text-dimmed">{showFrictionTaxAssumptions ? '▼' : '▶'}</span>
+                        </button>
+
+                        {showFrictionTaxAssumptions && (
+                          <div className="space-y-2 text-xs bg-darker-navy rounded p-3 border border-border-slate">
+                            <div className="flex justify-between">
+                              <span className="text-dimmed">Base Transaction Volume:</span>
+                              <span className="text-bright font-semibold">$1.0 Quadrillion</span>
+                            </div>
+                            <p className="text-dimmed text-xs mt-1">Applied to electronic settlement layer</p>
+
+                            <div className="flex justify-between pt-2 border-t border-border-slate">
+                              <span className="text-dimmed">Growth Rate Compounding:</span>
+                              <span className="text-bright font-semibold">Annual</span>
+                            </div>
+
+                            <div className="flex justify-between pt-2 border-t border-border-slate">
+                              <span className="text-dimmed">Sensitivity Analysis:</span>
+                              <span className="text-bright font-semibold">Static Volume</span>
+                            </div>
+                            <p className="text-dimmed text-xs mt-1">±0.1% rate changes assume constant transaction volume</p>
+                          </div>
+                        )}
                       </div>
                     </div>
                   )}
