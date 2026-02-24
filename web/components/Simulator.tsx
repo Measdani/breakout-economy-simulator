@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { runSimulation } from '../lib/engine';
+import { runSimulation, calculateFrictionTaxSensitivity } from '../lib/engine';
 import { useAnimatedNumber, numberFormatters } from '../lib/hooks/useAnimatedNumber';
 import type { PolicyConfig, SimulationResult } from '../lib/types';
 import PolicySliders from './PolicySliders';
@@ -35,6 +35,12 @@ const DEFAULT_CONFIG: PolicyConfig = {
   supplementApexIncome: 24000,
   supplementApexBonus: 6000,
   personaWeights: [0.25, 0.25, 0.25, 0.25],
+  // Friction Tax defaults
+  frictionTaxRate: 0.0035,
+  baseTransactionVolume: 1e15,
+  transactionVolumeGrowthRate: 0.05,
+  capitalFlightRate: 0,
+  marketMakerExempt: false,
 };
 
 interface SimulatorProps {
@@ -54,6 +60,11 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   const [pctHouseholds1Dep, setPctHouseholds1Dep] = useState(mergedConfig.pctHouseholds1Dep ?? 0.25);
   const [pctHouseholds2Dep, setPctHouseholds2Dep] = useState(mergedConfig.pctHouseholds2Dep ?? 0.15);
   const [pctHouseholds3Dep, setPctHouseholds3Dep] = useState(mergedConfig.pctHouseholds3Dep ?? 0.10);
+  // Friction Tax state
+  const [frictionTaxRate, setFrictionTaxRate] = useState(mergedConfig.frictionTaxRate ?? 0.0035);
+  const [baseTransactionVolume, setBaseTransactionVolume] = useState(mergedConfig.baseTransactionVolume ?? 1e15);
+  const [transactionVolumeGrowthRate, setTransactionVolumeGrowthRate] = useState(mergedConfig.transactionVolumeGrowthRate ?? 0.05);
+  const [capitalFlightRate, setCapitalFlightRate] = useState(mergedConfig.capitalFlightRate ?? 0);
   const [showTour, setShowTour] = useState(false);
   const [activeScreen, setActiveScreen] = useState<'engine' | 'households' | 'incentives' | 'results' | 'charts' | 'alerts' | 'submit'>('engine');
   const [currentConfig, setCurrentConfig] = useState<string>('Default');
@@ -79,9 +90,23 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     pctHouseholds1Dep,
     pctHouseholds2Dep,
     pctHouseholds3Dep,
+    frictionTaxRate,
+    baseTransactionVolume,
+    transactionVolumeGrowthRate,
+    capitalFlightRate,
   };
 
   const result: SimulationResult = useMemo(() => runSimulation(config), [config]);
+
+  // Friction Tax Sensitivity Analysis
+  const frictionTaxSensitivityUp = useMemo(() =>
+    calculateFrictionTaxSensitivity(baseTransactionVolume, frictionTaxRate, capitalFlightRate, 0.001),
+    [baseTransactionVolume, frictionTaxRate, capitalFlightRate]
+  );
+  const frictionTaxSensitivityDown = useMemo(() =>
+    calculateFrictionTaxSensitivity(baseTransactionVolume, frictionTaxRate, capitalFlightRate, -0.001),
+    [baseTransactionVolume, frictionTaxRate, capitalFlightRate]
+  );
 
   // Animated number displays for hero panel
   const animatedBalance = useAnimatedNumber(
@@ -137,6 +162,10 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     setPctHouseholds1Dep(0.25);
     setPctHouseholds2Dep(0.15);
     setPctHouseholds3Dep(0.10);
+    setFrictionTaxRate(DEFAULT_CONFIG.frictionTaxRate ?? 0.0035);
+    setBaseTransactionVolume(DEFAULT_CONFIG.baseTransactionVolume ?? 1e15);
+    setTransactionVolumeGrowthRate(DEFAULT_CONFIG.transactionVolumeGrowthRate ?? 0.05);
+    setCapitalFlightRate(DEFAULT_CONFIG.capitalFlightRate ?? 0);
     setCurrentConfig('Default');
     setActiveScreen('engine');
   };
@@ -187,6 +216,12 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                     onUbiChange={setUbiAnnualPerAdult}
                     breakoutPoint={breakoutPoint}
                     onBreakoutPointChange={setBreakoutPoint}
+                    frictionTaxRate={frictionTaxRate}
+                    onFrictionTaxRateChange={setFrictionTaxRate}
+                    transactionVolumeGrowthRate={transactionVolumeGrowthRate}
+                    onTransactionVolumeGrowthRateChange={setTransactionVolumeGrowthRate}
+                    capitalFlightRate={capitalFlightRate}
+                    onCapitalFlightRateChange={setCapitalFlightRate}
                     onReset={handleReset}
                     showGlossary={showGlossary}
                     onGlossaryToggle={setShowGlossary}
@@ -241,8 +276,14 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         <p className="text-sm text-muted uppercase tracking-wide mb-4">💰 Revenue Sources</p>
                         <div className="space-y-3">
                           <div className="flex justify-between">
-                            <span className="text-sm text-muted">Token Tax</span>
+                            <span className="text-sm text-muted">Friction Tax</span>
                             <span className="font-semibold text-blue-400">
+                              ${((result.revenue.frictionTaxRevenue ?? 0) / 1e12).toFixed(2)}T
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-sm text-muted">Token Tax</span>
+                            <span className="font-semibold text-cyan-400">
                               ${animatedTokenTax}
                             </span>
                           </div>
@@ -301,6 +342,42 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                               boxShadow: '0 2px 12px rgba(251, 146, 60, 0.4)'
                             }}
                           />
+                        </div>
+                      </div>
+
+                      {/* Friction Tax Sensitivity Analysis */}
+                      <div className="border-t border-border-slate pt-6">
+                        <p className="text-sm text-muted uppercase tracking-wide mb-4">📊 Friction Tax Sensitivity</p>
+                        <div className="space-y-2 text-xs">
+                          <div className="flex justify-between">
+                            <span className="text-muted">+0.10% rate</span>
+                            <span className="text-green-400">
+                              +${(frictionTaxSensitivityUp.deltaRevenue / 1e9).toFixed(1)}B ({frictionTaxSensitivityUp.deltaPercent.toFixed(1)}%)
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted">-0.10% rate</span>
+                            <span className="text-red-400">
+                              -${(Math.abs(frictionTaxSensitivityDown.deltaRevenue) / 1e9).toFixed(1)}B ({frictionTaxSensitivityDown.deltaPercent.toFixed(1)}%)
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Revenue Composition */}
+                      <div className="border-t border-border-slate pt-6">
+                        <p className="text-sm text-muted uppercase tracking-wide mb-3">📈 Revenue Composition</p>
+                        <div className="space-y-2 text-xs">
+                          <div className="flex justify-between">
+                            <span className="text-muted">Friction Tax Share</span>
+                            <span className="font-semibold text-blue-400">
+                              {((((result.revenue.frictionTaxRevenue ?? 0) / result.revenue.totalRevenue) * 100) || 0).toFixed(1)}%
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted">of Model Revenue</span>
+                            <span className="text-xs text-dimmed">(primary metric)</span>
+                          </div>
                         </div>
                       </div>
                     </div>

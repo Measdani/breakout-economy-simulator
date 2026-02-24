@@ -10,6 +10,12 @@ interface PolicySlidersProps {
   onUbiChange: (value: number) => void;
   breakoutPoint: number;
   onBreakoutPointChange: (value: number) => void;
+  frictionTaxRate: number;
+  onFrictionTaxRateChange: (value: number) => void;
+  transactionVolumeGrowthRate: number;
+  onTransactionVolumeGrowthRateChange: (value: number) => void;
+  capitalFlightRate: number;
+  onCapitalFlightRateChange: (value: number) => void;
   onReset: () => void;
   showGlossary?: boolean;
   onGlossaryToggle?: (show: boolean) => void;
@@ -22,6 +28,12 @@ export default function PolicySliders({
   onUbiChange,
   breakoutPoint,
   onBreakoutPointChange,
+  frictionTaxRate,
+  onFrictionTaxRateChange,
+  transactionVolumeGrowthRate,
+  onTransactionVolumeGrowthRateChange,
+  capitalFlightRate,
+  onCapitalFlightRateChange,
   onReset,
   showGlossary = false,
   onGlossaryToggle = () => {},
@@ -39,13 +51,40 @@ export default function PolicySliders({
   };
 
   // Calculate thumb positions (0-100%)
+  const frictionTaxPosition = ((frictionTaxRate - 0.001) / (0.01 - 0.001)) * 100;
+  const growthRatePosition = (transactionVolumeGrowthRate / 0.15) * 100;
+  const capitalFlightPosition = (capitalFlightRate / 0.05) * 100;
   const tokenTaxPosition = ((tokenTaxRate - 0.001) / (0.01 - 0.001)) * 100;
   const ubiPosition = (ubiAnnualPerAdult / 20000) * 100;
   const breakoutPosition = ((breakoutPoint - 30000) / (100000 - 30000)) * 100;
 
   // Calculate estimated values for context
+  const estimatedFrictionTaxRevenue = frictionTaxRate * 1e15 * (1 - capitalFlightRate);
   const estimatedTokenTaxRevenue = tokenTaxRate * 1e15;
   const estimatedUBICost = ubiAnnualPerAdult * 265000000;
+
+  const getFrictionTaxContext = () => {
+    const revenue = estimatedFrictionTaxRevenue / 1e12;
+    return {
+      label: 'Estimated Annual Revenue',
+      value: `$${revenue.toFixed(2)}T`
+    };
+  };
+
+  const getGrowthRateContext = () => {
+    return {
+      label: 'Year-over-year transaction growth',
+      value: `${(transactionVolumeGrowthRate * 100).toFixed(1)}%`
+    };
+  };
+
+  const getCapitalFlightContext = () => {
+    const volumeLoss = (capitalFlightRate * 100).toFixed(1);
+    return {
+      label: 'Transaction volume reduction',
+      value: `${volumeLoss}%`
+    };
+  };
 
   const getTokenTaxContext = () => {
     const revenue = estimatedTokenTaxRevenue / 1e12;
@@ -152,9 +191,75 @@ export default function PolicySliders({
 
   return (
     <div className="space-y-6">
-      {/* Policy Controls Section */}
-      {/* Token Tax Rate - Revenue Driver */}
-      <SliderSection
+      {/* Section A: Friction Tax Engine */}
+      <div>
+        <p className="text-xs font-bold text-muted uppercase tracking-widest mb-3">SECTION A: Friction Tax Engine</p>
+        <div className="space-y-6">
+          {/* Friction Tax Rate */}
+          <SliderSection
+            title="Friction Tax Rate"
+            subtitle="Electronic Transaction Tax"
+            icon="💳"
+            color="blue"
+            value={frictionTaxRate}
+            onChange={(e: any) => onFrictionTaxRateChange(parseFloat(e.target.value))}
+            min={0.001}
+            max={0.01}
+            step={0.0005}
+            minLabel="0.1%"
+            maxLabel="1.0%"
+            formattedValue={formatPercent(frictionTaxRate)}
+            position={frictionTaxPosition}
+            context={getFrictionTaxContext()}
+            tooltipText="Tax applied to annual electronic transaction volume, adjusted for capital flight."
+          />
+
+          {/* Transaction Volume Growth Rate */}
+          <SliderSection
+            title="Growth Rate"
+            subtitle="Annual Transaction Volume Growth"
+            icon="📈"
+            color="green"
+            value={transactionVolumeGrowthRate}
+            onChange={(e: any) => onTransactionVolumeGrowthRateChange(parseFloat(e.target.value))}
+            min={0}
+            max={0.15}
+            step={0.01}
+            minLabel="0%"
+            maxLabel="15%"
+            formattedValue={`${(transactionVolumeGrowthRate * 100).toFixed(1)}%`}
+            position={growthRatePosition}
+            context={getGrowthRateContext()}
+            tooltipText="Expected annual growth in electronic transaction volume (10-year projection basis)."
+          />
+
+          {/* Capital Flight Rate */}
+          <SliderSection
+            title="Capital Flight Risk"
+            subtitle="Sensitivity to Migration"
+            icon="⚠️"
+            color="purple"
+            value={capitalFlightRate}
+            onChange={(e: any) => onCapitalFlightRateChange(parseFloat(e.target.value))}
+            min={0}
+            max={0.05}
+            step={0.001}
+            minLabel="0%"
+            maxLabel="5%"
+            formattedValue={`${(capitalFlightRate * 100).toFixed(2)}%`}
+            position={capitalFlightPosition}
+            context={getCapitalFlightContext()}
+            tooltipText="Expected % of transaction volume that may migrate offshore if tax rate increases."
+          />
+        </div>
+      </div>
+
+      {/* Section B: Income Tax & Revenue Sources */}
+      <div>
+        <p className="text-xs font-bold text-muted uppercase tracking-widest mb-3">SECTION B: Income Tax & Social Floor</p>
+        <div className="space-y-6">
+          {/* Token Tax Rate - Revenue Driver */}
+          <SliderSection
         title="Revenue Driver"
         subtitle="Token Tax"
         icon="💰"
@@ -209,6 +314,8 @@ export default function PolicySliders({
         context={getBreakoutContext()}
         tooltipText="Breakout Point = income level where supplemental support fully phases out."
       />
+        </div>
+      </div>
 
       {/* Reset Link + Glossary Button */}
       <div style={{ display: 'flex', gap: '16px', marginTop: '12px', alignItems: 'center' }}>

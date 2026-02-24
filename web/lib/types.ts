@@ -27,10 +27,17 @@ export interface PolicyConfig {
   pctHouseholds1Dep?: number;
   pctHouseholds2Dep?: number;
   pctHouseholds3Dep?: number;
+  // Friction Tax (new)
+  frictionTaxRate?: number;
+  baseTransactionVolume?: number;
+  transactionVolumeGrowthRate?: number;
+  capitalFlightRate?: number;
+  marketMakerExempt?: boolean;
 }
 
 export interface Revenue {
   tokenTaxRevenue: number;
+  frictionTaxRevenue?: number;
   incomeTaxRevenue: number;
   welfareSavingsCredit: number;
   totalRevenue: number;

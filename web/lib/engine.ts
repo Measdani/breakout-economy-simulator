@@ -17,6 +17,55 @@ export function calculateTokenTaxRevenue(
   return flowBaseAnnual * tokenTaxRate;
 }
 
+export function calculateFrictionTaxRevenue(
+  baseTransactionVolume: number,
+  frictionTaxRate: number,
+  capitalFlightRate: number
+): number {
+  const adjustedVolume = baseTransactionVolume * (1 - capitalFlightRate);
+  return adjustedVolume * frictionTaxRate;
+}
+
+export function calculate10YearFrictionProjection(
+  baseTransactionVolume: number,
+  frictionTaxRate: number,
+  capitalFlightRate: number,
+  growthRate: number
+): number {
+  let totalProjection = 0;
+  for (let year = 0; year < 10; year++) {
+    const projectedVolume = baseTransactionVolume * Math.pow(1 + growthRate, year);
+    const annualRevenue = calculateFrictionTaxRevenue(
+      projectedVolume,
+      frictionTaxRate,
+      capitalFlightRate
+    );
+    totalProjection += annualRevenue;
+  }
+  return totalProjection;
+}
+
+export function calculateFrictionTaxSensitivity(
+  baseTransactionVolume: number,
+  frictionTaxRate: number,
+  capitalFlightRate: number,
+  rateChange: number
+): { deltaRevenue: number; deltaPercent: number } {
+  const baseRevenue = calculateFrictionTaxRevenue(
+    baseTransactionVolume,
+    frictionTaxRate,
+    capitalFlightRate
+  );
+  const newRevenue = calculateFrictionTaxRevenue(
+    baseTransactionVolume,
+    frictionTaxRate + rateChange,
+    capitalFlightRate
+  );
+  const deltaRevenue = newRevenue - baseRevenue;
+  const deltaPercent = (deltaRevenue / baseRevenue) * 100;
+  return { deltaRevenue, deltaPercent };
+}
+
 export function calculateIncomeTax(
   earnedIncome: number,
   config: PolicyConfig
@@ -117,9 +166,20 @@ export function runSimulation(config: PolicyConfig): SimulationResult {
     config.flowBaseAnnual,
     config.tokenTaxRate
   );
+
+  // Friction Tax (optional, defaults to 0 if not provided)
+  const frictionTaxRate = config.frictionTaxRate ?? 0.0035;
+  const baseTransactionVolume = config.baseTransactionVolume ?? 1e15;
+  const capitalFlightRate = config.capitalFlightRate ?? 0;
+  const frictionTaxRevenue = calculateFrictionTaxRevenue(
+    baseTransactionVolume,
+    frictionTaxRate,
+    capitalFlightRate
+  );
+
   const incomeTaxRevenue = calculateAggregateIncomeTax(config);
   const welfareSavingsCredit = config.welfareSavingsCredit;
-  const totalRevenue = tokenTaxRevenue + incomeTaxRevenue + welfareSavingsCredit;
+  const totalRevenue = tokenTaxRevenue + frictionTaxRevenue + incomeTaxRevenue + welfareSavingsCredit;
 
   // Calculate UBI cost: adults + tiered dependents
   const dep1Rate = config.ubiDependent1 ?? 6000;
@@ -169,6 +229,7 @@ export function runSimulation(config: PolicyConfig): SimulationResult {
   return {
     revenue: {
       tokenTaxRevenue,
+      frictionTaxRevenue,
       incomeTaxRevenue,
       welfareSavingsCredit,
       totalRevenue,
