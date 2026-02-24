@@ -383,7 +383,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                           onClick={() => setShowFrictionTaxAssumptions(!showFrictionTaxAssumptions)}
                           className="flex items-center justify-between w-full mb-3 hover:opacity-80 transition"
                         >
-                          <p className="text-sm text-muted uppercase tracking-wide">📘 Model Assumptions</p>
+                          <p className="text-sm text-bright uppercase tracking-wide font-semibold">📘 Model Assumptions</p>
                           <span className="text-xs text-dimmed">{showFrictionTaxAssumptions ? '▼' : '▶'}</span>
                         </button>
 
