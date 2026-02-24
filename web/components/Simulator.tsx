@@ -65,6 +65,10 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   const [baseTransactionVolume, setBaseTransactionVolume] = useState(mergedConfig.baseTransactionVolume ?? 1e15);
   const [transactionVolumeGrowthRate, setTransactionVolumeGrowthRate] = useState(mergedConfig.transactionVolumeGrowthRate ?? 0.05);
   const [capitalFlightRate, setCapitalFlightRate] = useState(mergedConfig.capitalFlightRate ?? 0);
+  // Revenue Architecture state
+  const [revenueArchitectureMode, setRevenueArchitectureMode] = useState<'hybrid' | 'friction_dominant' | 'friction_only'>('hybrid');
+  const [incomeTaxMultiplier, setIncomeTaxMultiplier] = useState(1.0);
+  const [toastVisible, setToastVisible] = useState(false);
   const [showTour, setShowTour] = useState(false);
   const [activeScreen, setActiveScreen] = useState<'engine' | 'households' | 'incentives' | 'results' | 'charts' | 'alerts' | 'submit'>('engine');
   const [currentConfig, setCurrentConfig] = useState<string>('Default');
@@ -78,6 +82,23 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   const handlePresetSelectWithName = (presetName: string, presetConfig: Partial<PolicyConfig>) => {
     setCurrentConfig(presetName);
     handlePresetSelect(presetConfig);
+  };
+
+  // Derive the effective multiplier based on mode
+  const effectiveIncomeTaxMultiplier =
+    revenueArchitectureMode === 'friction_only'
+      ? 0
+      : revenueArchitectureMode === 'friction_dominant'
+      ? 0.5
+      : incomeTaxMultiplier;
+
+  const handleRevenueArchitectureModeChange = (mode: 'hybrid' | 'friction_dominant' | 'friction_only') => {
+    setRevenueArchitectureMode(mode);
+    if (mode === 'friction_dominant') setIncomeTaxMultiplier(0.5);
+    else if (mode === 'friction_only') setIncomeTaxMultiplier(0);
+    else setIncomeTaxMultiplier(1.0);
+    setToastVisible(true);
+    setTimeout(() => setToastVisible(false), 3000);
   };
 
   const config: PolicyConfig = {
@@ -95,6 +116,8 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     baseTransactionVolume,
     transactionVolumeGrowthRate,
     capitalFlightRate,
+    revenueArchitectureMode,
+    incomeTaxMultiplier: effectiveIncomeTaxMultiplier,
   };
 
   const result: SimulationResult = useMemo(() => runSimulation(config), [config]);
@@ -167,12 +190,37 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     setBaseTransactionVolume(DEFAULT_CONFIG.baseTransactionVolume ?? 1e15);
     setTransactionVolumeGrowthRate(DEFAULT_CONFIG.transactionVolumeGrowthRate ?? 0.05);
     setCapitalFlightRate(DEFAULT_CONFIG.capitalFlightRate ?? 0);
+    setRevenueArchitectureMode('hybrid');
+    setIncomeTaxMultiplier(1.0);
     setCurrentConfig('Default');
     setActiveScreen('engine');
   };
 
   return (
     <div className="min-h-screen bg-deep-navy px-4 py-8 flex items-center justify-center">
+      {/* Toast Notification */}
+      {toastVisible && (
+        <div
+          style={{
+            position: 'fixed',
+            bottom: '32px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: 'rgba(30, 41, 59, 0.97)',
+            border: '1px solid #334155',
+            borderRadius: '8px',
+            padding: '10px 20px',
+            color: '#e2e8f0',
+            fontSize: '13px',
+            zIndex: 9999,
+            boxShadow: '0 4px 24px rgba(0,0,0,0.4)',
+            pointerEvents: 'none',
+          }}
+        >
+          Architecture updated — results recalculated.
+        </div>
+      )}
+
       <div className="w-full h-screen flex items-center" style={{ maxWidth: '1000px' }}>
         {/* Onboarding Tour */}
         {showTour && <OnboardingTour onComplete={() => setShowTour(false)} />}
@@ -226,6 +274,10 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                     onReset={handleReset}
                     showGlossary={showGlossary}
                     onGlossaryToggle={setShowGlossary}
+                    revenueArchitectureMode={revenueArchitectureMode}
+                    onRevenueArchitectureModeChange={handleRevenueArchitectureModeChange}
+                    incomeTaxMultiplier={incomeTaxMultiplier}
+                    onIncomeTaxMultiplierChange={setIncomeTaxMultiplier}
                   />
                 </div>
 
@@ -410,6 +462,52 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                       </div>
                     </div>
                   )}
+
+                  {/* Revenue Architecture Summary (visible when not using defaults) */}
+                  {revenueArchitectureMode !== 'hybrid' || incomeTaxMultiplier !== 1.0 ? (
+                    <div className="border-t border-border-slate pt-6">
+                      <p className="text-sm text-muted uppercase tracking-wide mb-3">
+                        ⚙ Revenue Architecture
+                      </p>
+                      <div className="space-y-2 text-xs bg-darker-navy rounded p-3 border border-border-slate">
+                        <div className="flex justify-between">
+                          <span className="text-dimmed">Mode:</span>
+                          <span className="text-bright font-semibold">
+                            {revenueArchitectureMode === 'hybrid'
+                              ? 'Hybrid'
+                              : revenueArchitectureMode === 'friction_dominant'
+                              ? 'Friction-Dominant'
+                              : 'Friction-Only'}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-dimmed">Income Tax Multiplier:</span>
+                          <span className="text-bright font-semibold">
+                            {Math.round(effectiveIncomeTaxMultiplier * 100)}%
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-dimmed">Primary Funding Source:</span>
+                          <span className="text-blue-400 font-semibold">
+                            {revenueArchitectureMode === 'friction_only'
+                              ? 'Friction Tax'
+                              : revenueArchitectureMode === 'friction_dominant'
+                              ? 'Friction Tax (dominant)'
+                              : 'Hybrid (Friction + Income)'}
+                          </span>
+                        </div>
+                        <div className="pt-2 border-t border-border-slate">
+                          <p className="text-dimmed leading-relaxed">
+                            {revenueArchitectureMode === 'friction_only'
+                              ? 'Higher sensitivity to transaction volume and migration assumptions.'
+                              : revenueArchitectureMode === 'friction_dominant'
+                              ? 'Intermediate stability; income tax provides partial backstop during volume fluctuations.'
+                              : 'Most stable under current revenue conditions.'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ) : null}
 
                   {/* Glossary Section - Conditional */}
                   {showGlossary && (

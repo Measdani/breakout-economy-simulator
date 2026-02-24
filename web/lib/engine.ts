@@ -177,7 +177,9 @@ export function runSimulation(config: PolicyConfig): SimulationResult {
     capitalFlightRate
   );
 
-  const incomeTaxRevenue = calculateAggregateIncomeTax(config);
+  const rawIncomeTaxRevenue = calculateAggregateIncomeTax(config);
+  const incomeTaxMultiplier = config.incomeTaxMultiplier ?? 1.0;
+  const incomeTaxRevenue = rawIncomeTaxRevenue * incomeTaxMultiplier;
   const welfareSavingsCredit = config.welfareSavingsCredit;
   const totalRevenue = tokenTaxRevenue + frictionTaxRevenue + incomeTaxRevenue + welfareSavingsCredit;
 

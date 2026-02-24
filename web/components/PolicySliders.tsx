@@ -1,6 +1,7 @@
 'use client';
 
 // Version marker: v1.1 - Household & viewMode removed - Build 2026-02-23
+import { useState } from 'react';
 import Tooltip from './Tooltip';
 
 interface PolicySlidersProps {
@@ -19,6 +20,10 @@ interface PolicySlidersProps {
   onReset: () => void;
   showGlossary?: boolean;
   onGlossaryToggle?: (show: boolean) => void;
+  revenueArchitectureMode: 'hybrid' | 'friction_dominant' | 'friction_only';
+  onRevenueArchitectureModeChange: (mode: 'hybrid' | 'friction_dominant' | 'friction_only') => void;
+  incomeTaxMultiplier: number;
+  onIncomeTaxMultiplierChange: (value: number) => void;
 }
 
 export default function PolicySliders({
@@ -37,6 +42,10 @@ export default function PolicySliders({
   onReset,
   showGlossary = false,
   onGlossaryToggle = () => {},
+  revenueArchitectureMode,
+  onRevenueArchitectureModeChange,
+  incomeTaxMultiplier,
+  onIncomeTaxMultiplierChange,
 }: PolicySlidersProps) {
   const formatPercent = (value: number) => {
     return `${(value * 100).toFixed(2)}%`;
@@ -110,6 +119,8 @@ export default function PolicySliders({
       value: formatCurrency(breakoutPoint)
     };
   };
+
+  const [showAdvancedRevenue, setShowAdvancedRevenue] = useState(false);
 
   const SliderSection = ({
     title,
@@ -317,6 +328,129 @@ export default function PolicySliders({
         tooltipText="Breakout Point = income level where supplemental support fully phases out."
       />
         </div>
+      </div>
+
+      {/* Advanced Revenue Options (Collapsible) */}
+      <div>
+        <button
+          onClick={() => setShowAdvancedRevenue(!showAdvancedRevenue)}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: '#64748b',
+            fontSize: '12px',
+            cursor: 'pointer',
+            padding: '0',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            transition: 'color 0.2s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = '#94a3b8';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = '#64748b';
+          }}
+        >
+          <span>⚙</span> Advanced Revenue Options
+          <span style={{ fontSize: '10px' }}>{showAdvancedRevenue ? '▼' : '▶'}</span>
+        </button>
+
+        {showAdvancedRevenue && (
+          <div className="bg-dark-slate rounded-lg p-5 glow-border-slate mt-3" style={{ transition: 'all 0.3s ease' }}>
+            <p className="text-xs font-bold text-muted uppercase tracking-widest mb-4">
+              Revenue Architecture
+            </p>
+            <p className="text-xs text-dimmed mb-5">Compare funding structures and stress-test the model.</p>
+
+            {/* Radio Group — Funding Structure */}
+            <div className="space-y-3 mb-5">
+              {[
+                { value: 'hybrid' as const, label: 'Hybrid (Friction + Income Tax)', sub: 'Most realistic today' },
+                { value: 'friction_dominant' as const, label: 'Friction-Dominant (Reduced Income Tax)', sub: 'Transition scenario' },
+                { value: 'friction_only' as const, label: 'Friction-Only (No Income Tax)', sub: 'Full replacement scenario' },
+              ].map((option) => (
+                <label
+                  key={option.value}
+                  className="flex items-start gap-3 cursor-pointer group"
+                >
+                  <input
+                    type="radio"
+                    name="revenueArchitectureMode"
+                    value={option.value}
+                    checked={revenueArchitectureMode === option.value}
+                    onChange={() => onRevenueArchitectureModeChange(option.value)}
+                    className="mt-0.5 accent-blue-400"
+                  />
+                  <div>
+                    <p className="text-sm text-bright">{option.label}</p>
+                    <p className="text-xs text-dimmed">{option.sub}</p>
+                  </div>
+                </label>
+              ))}
+            </div>
+
+            {/* Conditional Income Tax Multiplier Slider — hidden for friction_only */}
+            {revenueArchitectureMode !== 'friction_only' && (
+              <div className="border-t border-border-slate pt-4 space-y-3">
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-sm text-muted">Income Tax Multiplier</p>
+                  <p className="text-sm font-bold text-bright">
+                    {revenueArchitectureMode === 'friction_dominant'
+                      ? '50%'
+                      : `${Math.round(incomeTaxMultiplier * 100)}%`}
+                  </p>
+                </div>
+
+                {revenueArchitectureMode === 'hybrid' && (
+                  <input
+                    type="range"
+                    min={0}
+                    max={1}
+                    step={0.01}
+                    value={incomeTaxMultiplier}
+                    onChange={(e) => onIncomeTaxMultiplierChange(parseFloat(e.target.value))}
+                    className="slider slider-blue w-full h-2 rounded-full appearance-none cursor-pointer"
+                    style={{
+                      background: `linear-gradient(to right, #3B82F6 0%, #60A5FA ${incomeTaxMultiplier * 100}%, #334155 ${incomeTaxMultiplier * 100}%, #1a2332 100%)`,
+                    }}
+                  />
+                )}
+
+                {revenueArchitectureMode === 'friction_dominant' && (
+                  <p className="text-xs text-dimmed italic">Auto-set to 50% in transition scenario</p>
+                )}
+              </div>
+            )}
+
+            {/* Reset to Default link */}
+            <div className="border-t border-border-slate pt-3 mt-4">
+              <button
+                onClick={() => {
+                  onRevenueArchitectureModeChange('hybrid');
+                  onIncomeTaxMultiplierChange(1.0);
+                }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#64748b',
+                  fontSize: '12px',
+                  cursor: 'pointer',
+                  padding: '0',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = '#94a3b8';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = '#64748b';
+                }}
+              >
+                ↺ Reset to Default
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Reset Link + Glossary Button */}

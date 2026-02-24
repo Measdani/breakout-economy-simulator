@@ -33,6 +33,9 @@ export interface PolicyConfig {
   transactionVolumeGrowthRate?: number;
   capitalFlightRate?: number;
   marketMakerExempt?: boolean;
+  // Revenue Architecture Mode
+  revenueArchitectureMode?: 'hybrid' | 'friction_dominant' | 'friction_only';
+  incomeTaxMultiplier?: number; // 0.0–1.0, default 1.0
 }
 
 export interface Revenue {
