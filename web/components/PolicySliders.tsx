@@ -333,6 +333,7 @@ export default function PolicySliders({
       {/* Advanced Revenue Options (Collapsible) */}
       <div>
         <button
+          type="button"
           onClick={() => setShowAdvancedRevenue(!showAdvancedRevenue)}
           style={{
             background: 'none',
@@ -427,6 +428,7 @@ export default function PolicySliders({
             {/* Reset to Default link */}
             <div className="border-t border-border-slate pt-3 mt-4">
               <button
+                type="button"
                 onClick={() => {
                   onRevenueArchitectureModeChange('hybrid');
                   onIncomeTaxMultiplierChange(1.0);

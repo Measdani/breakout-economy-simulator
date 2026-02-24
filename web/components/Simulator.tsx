@@ -432,6 +432,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                       {/* Model Assumptions (Collapsible) */}
                       <div className="border-t border-border-slate pt-6">
                         <button
+                          type="button"
                           onClick={() => setShowFrictionTaxAssumptions(!showFrictionTaxAssumptions)}
                           className="flex items-center justify-between w-full mb-3 hover:opacity-80 transition bg-darker-slate rounded px-3 py-2 border border-border-slate"
                         >
