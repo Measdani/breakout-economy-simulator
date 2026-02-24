@@ -448,6 +448,17 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
 
                         {showFrictionTaxAssumptions && (
                           <div className="space-y-2 text-xs bg-darker-navy rounded p-3 border border-border-slate">
+                            <div className="flex justify-between items-center mb-2">
+                              <span></span>
+                              <button
+                                type="button"
+                                onClick={() => setShowFrictionTaxAssumptions(false)}
+                                className="text-dimmed hover:text-bright transition"
+                                style={{ cursor: 'pointer', fontSize: '16px', lineHeight: '1' }}
+                              >
+                                ✕
+                              </button>
+                            </div>
                             <div className="flex justify-between">
                               <span className="text-dimmed">Base Transaction Volume:</span>
                               <span className="text-bright font-semibold">$1.0 Quadrillion</span>
