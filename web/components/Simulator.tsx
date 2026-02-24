@@ -276,15 +276,9 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         <p className="text-sm text-muted uppercase tracking-wide mb-4">💰 Revenue Sources</p>
                         <div className="space-y-3">
                           <div className="flex justify-between">
-                            <span className="text-sm text-muted">Friction Tax</span>
+                            <span className="text-sm text-muted">Primary: Friction Tax</span>
                             <span className="font-semibold text-blue-400">
                               ${((result.revenue.frictionTaxRevenue ?? 0) / 1e12).toFixed(2)}T
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-sm text-muted">Token Tax</span>
-                            <span className="font-semibold text-cyan-400">
-                              ${animatedTokenTax}
                             </span>
                           </div>
                           <div className="flex justify-between">
@@ -347,7 +341,8 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
 
                       {/* Friction Tax Sensitivity Analysis */}
                       <div className="border-t border-border-slate pt-6">
-                        <p className="text-sm text-muted uppercase tracking-wide mb-4">📊 Friction Tax Sensitivity</p>
+                        <p className="text-sm text-muted uppercase tracking-wide mb-3">📊 Rate Sensitivity</p>
+                        <p className="text-xs text-dimmed mb-3">(Static volume assumption)</p>
                         <div className="space-y-2 text-xs">
                           <div className="flex justify-between">
                             <span className="text-muted">+0.10% rate</span>

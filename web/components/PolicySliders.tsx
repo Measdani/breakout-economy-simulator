@@ -72,9 +72,11 @@ export default function PolicySliders({
   };
 
   const getGrowthRateContext = () => {
+    const tenYearVolume = 1e15 * Math.pow(1 + transactionVolumeGrowthRate, 10);
+    const projectedRevenue = tenYearVolume * 0.0035; // default rate for estimation
     return {
-      label: 'Year-over-year transaction growth',
-      value: `${(transactionVolumeGrowthRate * 100).toFixed(1)}%`
+      label: '10-Year Cumulative Impact',
+      value: `Volume → $${(tenYearVolume / 1e15).toFixed(2)}Q ($${(projectedRevenue / 1e12).toFixed(1)}T annual)`
     };
   };
 
@@ -235,8 +237,8 @@ export default function PolicySliders({
 
           {/* Capital Flight Rate */}
           <SliderSection
-            title="Capital Flight Risk"
-            subtitle="Sensitivity to Migration"
+            title="Transaction Volume Migration"
+            subtitle="Offshore Risk Premium"
             icon="⚠️"
             color="purple"
             value={capitalFlightRate}
@@ -249,7 +251,7 @@ export default function PolicySliders({
             formattedValue={`${(capitalFlightRate * 100).toFixed(2)}%`}
             position={capitalFlightPosition}
             context={getCapitalFlightContext()}
-            tooltipText="Expected % of transaction volume that may migrate offshore if tax rate increases."
+            tooltipText="% of transaction volume expected to migrate offshore in response to friction tax rate increase."
           />
         </div>
       </div>

@@ -40,6 +40,7 @@ export const FrictionTaxEngineSpecs = {
     tooltip: 'Estimated annual electronic transaction volume in the US economy.',
     rationale: 'Conservative estimate: 2023 US card transactions ~$9T; all electronic (ACH, wire, crypto, etc.) estimated 50-100x larger.',
     derivation: 'Fed data + industry estimates (2024-2026)',
+    criticalNote: 'This is the BASE for all revenue calculations. Default: $1 Quadrillion. Formula: Revenue = Volume × TaxRate (adjusted for capital flight). Users should verify this assumption against their baseline data.',
   },
 
   transactionVolumeGrowthRate: {
