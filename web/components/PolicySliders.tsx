@@ -359,18 +359,20 @@ export default function PolicySliders({
         </button>
 
         {showAdvancedRevenue && (
-          <div className="bg-dark-slate rounded-lg p-5 glow-border-slate mt-3" style={{ transition: 'all 0.3s ease' }}>
-            <p className="text-xs font-bold text-muted uppercase tracking-widest mb-4">
-              Revenue Architecture
-            </p>
-            <p className="text-xs text-dimmed mb-5">Compare funding structures and stress-test the model.</p>
+          <div className="space-y-3 mt-3">
+            <p className="text-xs text-dimmed italic">Advanced Mode allows structural tax architecture comparison.</p>
+            <div className="bg-dark-slate rounded-lg p-5 glow-border-slate" style={{ transition: 'all 0.3s ease' }}>
+              <p className="text-xs font-bold text-muted uppercase tracking-widest mb-4">
+                Revenue Architecture
+              </p>
+              <p className="text-xs text-dimmed mb-5">Compare funding structures and stress-test the model.</p>
 
             {/* Radio Group — Funding Structure */}
             <div className="space-y-3 mb-5">
               {[
                 { value: 'hybrid' as const, label: 'Hybrid (Friction + Income Tax)', sub: 'Most realistic today' },
                 { value: 'friction_dominant' as const, label: 'Friction-Dominant (Reduced Income Tax)', sub: 'Transition scenario' },
-                { value: 'friction_only' as const, label: 'Friction-Only (No Income Tax)', sub: 'Full replacement scenario' },
+                { value: 'friction_only' as const, label: 'Friction-Only (Income Tax Eliminated)', sub: 'Full replacement model — high structural shift' },
               ].map((option) => (
                 <label
                   key={option.value}
@@ -450,6 +452,7 @@ export default function PolicySliders({
               >
                 ↺ Reset to Default
               </button>
+            </div>
             </div>
           </div>
         )}

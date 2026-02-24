@@ -322,6 +322,12 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         <p className="text-xs text-dimmed mt-2 uppercase tracking-wide">
                           Fiscal Balance
                         </p>
+                        {revenueArchitectureMode === 'friction_only' && (
+                          <p className="text-xs text-amber-400 mt-3 flex items-start gap-2">
+                            <span>⚠</span>
+                            <span>Structural transition scenario — significant institutional reform required.</span>
+                          </p>
+                        )}
                       </div>
 
                       {/* Revenue Breakdown */}
