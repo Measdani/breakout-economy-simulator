@@ -337,7 +337,7 @@ export default function PolicySliders({
           style={{
             background: 'none',
             border: 'none',
-            color: '#64748b',
+            color: '#cbd5e1',
             fontSize: '12px',
             cursor: 'pointer',
             padding: '0',
@@ -347,10 +347,10 @@ export default function PolicySliders({
             transition: 'color 0.2s ease',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.color = '#94a3b8';
+            e.currentTarget.style.color = '#f1f5f9';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.color = '#64748b';
+            e.currentTarget.style.color = '#cbd5e1';
           }}
         >
           <span>⚙</span> Advanced Revenue Options
