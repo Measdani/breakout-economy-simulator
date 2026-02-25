@@ -723,7 +723,8 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                           <select
                             value={retirementMode}
                             onChange={(e) => setRetirementMode(e.target.value as 'replace_ss' | 'layer_on_ss')}
-                            className="w-full px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright"
+                            className="w-full px-3 py-2 border border-border-slate rounded text-sm text-bright"
+                            style={{ backgroundColor: '#0f172a', color: '#e2e8f0' }}
                           >
                             <option value="replace_ss">Replace Social Security</option>
                             <option value="layer_on_ss">Layer on Social Security</option>
@@ -790,7 +791,8 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                           <select
                             value={salaryBasis}
                             onChange={(e) => setSalaryBasis(e.target.value as 'final_3yr' | 'final_5yr' | 'career_avg')}
-                            className="w-full px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright"
+                            className="w-full px-3 py-2 border border-border-slate rounded text-sm text-bright"
+                            style={{ backgroundColor: '#0f172a', color: '#e2e8f0' }}
                           >
                             <option value="final_3yr">Final 3 Years</option>
                             <option value="final_5yr">Final 5 Years</option>
