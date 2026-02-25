@@ -69,6 +69,18 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   const [revenueArchitectureMode, setRevenueArchitectureMode] = useState<'hybrid' | 'friction_dominant' | 'friction_only'>('hybrid');
   const [incomeTaxMultiplier, setIncomeTaxMultiplier] = useState(1.0);
   const [toastVisible, setToastVisible] = useState(false);
+  // Retirement Program state
+  const [retirementEnabled, setRetirementEnabled] = useState(false);
+  const [retirementMode, setRetirementMode] = useState<'replace_ss' | 'layer_on_ss'>('replace_ss');
+  const [retirementEligibilityAge, setRetirementEligibilityAge] = useState(67);
+  const [replacementRate, setReplacementRate] = useState(80);        // displayed as %
+  const [pensionableSalaryCap, setPensionableSalaryCap] = useState(250000);
+  const [payoutDurationYears, setPayoutDurationYears] = useState(25);
+  const [salaryBasis, setSalaryBasis] = useState<'final_3yr' | 'final_5yr' | 'career_avg'>('final_3yr');
+  const [retireesCount, setRetireesCount] = useState(54000000);
+  const [avgFinal3yrSalary, setAvgFinal3yrSalary] = useState(75000);
+  const [ssBaseline, setSsBaseline] = useState(1.3e12);
+  const [showRetirementAdminBaseline, setShowRetirementAdminBaseline] = useState(false);
   const [showTour, setShowTour] = useState(false);
   const [activeScreen, setActiveScreen] = useState<'engine' | 'households' | 'incentives' | 'results' | 'charts' | 'alerts' | 'submit'>('engine');
   const [currentConfig, setCurrentConfig] = useState<string>('Default');
@@ -118,6 +130,16 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     capitalFlightRate,
     revenueArchitectureMode,
     incomeTaxMultiplier: effectiveIncomeTaxMultiplier,
+    retirementEnabled,
+    retirementMode,
+    retirementEligibilityAge,
+    replacementRate: replacementRate / 100,  // % → decimal for engine
+    pensionableSalaryCap,
+    payoutDurationYears,
+    salaryBasis,
+    retireesCount,
+    avgFinal3yrSalary,
+    ssBaseline,
   };
 
   const result: SimulationResult = useMemo(() => runSimulation(config), [config]);
@@ -192,6 +214,17 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     setCapitalFlightRate(DEFAULT_CONFIG.capitalFlightRate ?? 0);
     setRevenueArchitectureMode('hybrid');
     setIncomeTaxMultiplier(1.0);
+    setRetirementEnabled(false);
+    setRetirementMode('replace_ss');
+    setRetirementEligibilityAge(67);
+    setReplacementRate(80);
+    setPensionableSalaryCap(250000);
+    setPayoutDurationYears(25);
+    setSalaryBasis('final_3yr');
+    setRetireesCount(54000000);
+    setAvgFinal3yrSalary(75000);
+    setSsBaseline(1.3e12);
+    setShowRetirementAdminBaseline(false);
     setCurrentConfig('Default');
     setActiveScreen('engine');
   };
@@ -664,6 +697,164 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                       )}
                     </div>
                   </div>
+
+                  {/* Retirement Program */}
+                  <div className="bg-dark-slate rounded-lg p-5 glow-border-slate" style={{ transition: 'all 0.3s ease' }}>
+                    <div className="flex items-center justify-between mb-4">
+                      <p className="text-sm font-semibold text-muted uppercase tracking-wide">
+                        🏦 Retirement Program
+                      </p>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={retirementEnabled}
+                          onChange={(e) => setRetirementEnabled(e.target.checked)}
+                          className="w-4 h-4 rounded border-border-slate"
+                        />
+                        <span className="text-xs text-dimmed">{retirementEnabled ? 'Enabled' : 'Disabled'}</span>
+                      </label>
+                    </div>
+
+                    {retirementEnabled ? (
+                      <div className="space-y-4">
+                        {/* Mode Selection */}
+                        <div>
+                          <p className="text-xs text-muted mb-2">Mode</p>
+                          <select
+                            value={retirementMode}
+                            onChange={(e) => setRetirementMode(e.target.value as 'replace_ss' | 'layer_on_ss')}
+                            className="w-full px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright"
+                          >
+                            <option value="replace_ss">Replace Social Security</option>
+                            <option value="layer_on_ss">Layer on Social Security</option>
+                          </select>
+                        </div>
+
+                        {/* Eligibility Age */}
+                        <div className="flex items-center justify-between">
+                          <label className="text-sm text-dimmed">Eligibility Age</label>
+                          <input
+                            type="number"
+                            value={retirementEligibilityAge}
+                            onChange={(e) => setRetirementEligibilityAge(Math.max(55, parseInt(e.target.value) || 67))}
+                            className="w-24 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                          />
+                        </div>
+
+                        {/* Replacement Rate */}
+                        <div className="flex items-center justify-between">
+                          <label className="text-sm text-dimmed">Replacement Rate</label>
+                          <div className="flex items-center gap-1">
+                            <input
+                              type="number"
+                              value={replacementRate}
+                              onChange={(e) => setReplacementRate(Math.max(0, Math.min(100, parseInt(e.target.value) || 80)))}
+                              className="w-20 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                            />
+                            <span className="text-xs text-muted">%</span>
+                          </div>
+                        </div>
+
+                        {/* Pensionable Salary Cap */}
+                        <div className="flex items-center justify-between">
+                          <label className="text-sm text-dimmed">Salary Cap</label>
+                          <div className="flex items-center gap-1">
+                            <span className="text-xs text-muted">$</span>
+                            <input
+                              type="number"
+                              value={pensionableSalaryCap}
+                              onChange={(e) => setPensionableSalaryCap(Math.max(0, parseInt(e.target.value) || 250000))}
+                              className="w-24 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                            />
+                            <span className="text-xs text-muted">k</span>
+                          </div>
+                        </div>
+
+                        {/* Payout Duration */}
+                        <div className="flex items-center justify-between">
+                          <label className="text-sm text-dimmed">Payout Duration</label>
+                          <div className="flex items-center gap-1">
+                            <input
+                              type="number"
+                              value={payoutDurationYears}
+                              onChange={(e) => setPayoutDurationYears(Math.max(1, parseInt(e.target.value) || 25))}
+                              className="w-16 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                            />
+                            <span className="text-xs text-muted">yrs</span>
+                          </div>
+                        </div>
+
+                        {/* Salary Basis */}
+                        <div>
+                          <p className="text-xs text-muted mb-2">Salary Basis</p>
+                          <select
+                            value={salaryBasis}
+                            onChange={(e) => setSalaryBasis(e.target.value as 'final_3yr' | 'final_5yr' | 'career_avg')}
+                            className="w-full px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright"
+                          >
+                            <option value="final_3yr">Final 3 Years</option>
+                            <option value="final_5yr">Final 5 Years</option>
+                            <option value="career_avg">Career Average</option>
+                          </select>
+                        </div>
+
+                        {/* Admin Baseline - Collapsible */}
+                        <div className="border-t border-border-slate pt-4">
+                          <button
+                            onClick={() => setShowRetirementAdminBaseline(!showRetirementAdminBaseline)}
+                            className="text-xs text-blue-400 hover:text-blue-300 font-semibold uppercase tracking-wide"
+                          >
+                            {showRetirementAdminBaseline ? '▼' : '▶'} Admin Baseline Assumptions
+                          </button>
+                          {showRetirementAdminBaseline && (
+                            <div className="space-y-3 mt-4">
+                              <div className="flex items-center justify-between">
+                                <label className="text-sm text-dimmed">Retirees</label>
+                                <div className="flex items-center gap-1">
+                                  <input
+                                    type="number"
+                                    value={retireesCount}
+                                    onChange={(e) => setRetireesCount(Math.max(0, parseInt(e.target.value) || 54000000))}
+                                    className="w-24 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                                  />
+                                  <span className="text-xs text-muted">M</span>
+                                </div>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <label className="text-sm text-dimmed">Avg Final 3yr Salary</label>
+                                <div className="flex items-center gap-1">
+                                  <span className="text-xs text-muted">$</span>
+                                  <input
+                                    type="number"
+                                    value={avgFinal3yrSalary}
+                                    onChange={(e) => setAvgFinal3yrSalary(Math.max(0, parseInt(e.target.value) || 75000))}
+                                    className="w-24 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                                  />
+                                  <span className="text-xs text-muted">k</span>
+                                </div>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <label className="text-sm text-dimmed">SS Baseline Cost</label>
+                                <div className="flex items-center gap-1">
+                                  <span className="text-xs text-muted">$</span>
+                                  <input
+                                    type="number"
+                                    value={ssBaseline / 1e12}
+                                    onChange={(e) => setSsBaseline((parseFloat(e.target.value) || 1.3) * 1e12)}
+                                    step="0.1"
+                                    className="w-16 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                                  />
+                                  <span className="text-xs text-muted">T</span>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-sm text-muted italic">Enable to configure retirement program parameters</p>
+                    )}
+                  </div>
                 </div>
 
                 {/* MIDDLE: UBI Program Cost Display */}
@@ -779,6 +970,58 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                             {(hhWithDeps * 100).toFixed(1)}%
                           </p>
                         </div>
+
+                        {/* Retirement Program Cards (Conditional) */}
+                        {retirementEnabled && (
+                          <>
+                            {/* Card 5: Individual Benefit (Illustrative) */}
+                            <div className="bg-dark-slate rounded-lg p-5 border-l-4 border-cyan-500 glow-border-slate">
+                              <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-2">Individual Benefit</p>
+                              <p className="text-2xl font-bold text-cyan-400">
+                                ${((Math.min(avgFinal3yrSalary, pensionableSalaryCap) * replacementRate / 100) / 1000).toFixed(1)}k/yr
+                              </p>
+                              <p className="text-xs text-dimmed mt-2">(Illustrative)</p>
+                            </div>
+
+                            {/* Card 6: National Retirement Cost */}
+                            <div className="bg-dark-slate rounded-lg p-5 border-l-4 border-sky-500 glow-border-slate space-y-3">
+                              <p className="text-xs font-semibold text-muted uppercase tracking-wide">National Retirement Cost</p>
+                              <div>
+                                <p className="text-xs text-dimmed mb-1">Annual</p>
+                                <p className="text-2xl font-bold text-sky-400">
+                                  ${(result.obligations.retirementProgramCost ? result.obligations.retirementProgramCost / 1e12 : 0).toFixed(2)}T
+                                </p>
+                              </div>
+                              <div className="border-t border-border-slate pt-3">
+                                <p className="text-xs text-dimmed mb-1">{payoutDurationYears}-Year Obligation</p>
+                                <p className="text-lg font-bold text-sky-300">
+                                  ${(result.obligations.retirement25yrTotal ? result.obligations.retirement25yrTotal / 1e12 : 0).toFixed(1)}T
+                                </p>
+                              </div>
+                              <div className="border-t border-border-slate pt-3">
+                                <p className="text-xs text-dimmed mb-1">% of Total Obligations</p>
+                                <p className="text-lg font-bold text-sky-300">
+                                  {result.obligations.totalObligations > 0 ? ((result.obligations.retirementProgramCost || 0) / result.obligations.totalObligations * 100).toFixed(1) : '0'}%
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* Card 7: Net Impact vs SS (Only for replace_ss mode) */}
+                            {retirementMode === 'replace_ss' && (
+                              <div className={`bg-dark-slate rounded-lg p-5 border-l-4 glow-border-slate ${
+                                (result.obligations.netChangeVsSS ?? 0) >= 0 ? 'border-red-500' : 'border-green-500'
+                              }`}>
+                                <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-2">Net Impact vs SS</p>
+                                <p className={`text-2xl font-bold ${(result.obligations.netChangeVsSS ?? 0) >= 0 ? 'text-red-400' : 'text-green-400'}`}>
+                                  {(result.obligations.netChangeVsSS ?? 0) >= 0 ? '+' : ''} ${((Math.abs(result.obligations.netChangeVsSS ?? 0)) / 1e12).toFixed(2)}T
+                                </p>
+                                <p className="text-xs text-dimmed mt-2">
+                                  {(result.obligations.netChangeVsSS ?? 0) >= 0 ? 'More expensive' : 'Saves cost'} vs baseline SS
+                                </p>
+                              </div>
+                            )}
+                          </>
+                        )}
                       </>
                     );
                   })()}

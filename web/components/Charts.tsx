@@ -66,6 +66,10 @@ export default function Charts({ result, config }: ChartsProps) {
       name: 'Govt Operations',
       value: result.obligations.govtOperatingRequirement / 1e9,
     },
+    ...(result.obligations.retirementProgramCost && result.obligations.retirementProgramCost > 0 ? [{
+      name: 'Retirement Program',
+      value: result.obligations.retirementProgramCost / 1e9,
+    }] : []),
   ];
 
   // Supplement Curve Data
@@ -103,7 +107,7 @@ export default function Charts({ result, config }: ChartsProps) {
   }
 
   const COLORS_REVENUE = ['#3b82f6', '#10b981', '#8b5cf6'];
-  const COLORS_OBLIGATIONS = ['#f59e0b', '#a78bfa', '#ef4444'];
+  const COLORS_OBLIGATIONS = ['#f59e0b', '#a78bfa', '#ef4444', '#38bdf8'];
 
   const revenueTooltip = (props: any) => {
     if (props.active && props.payload && props.payload.length) {
@@ -130,7 +134,8 @@ export default function Charts({ result, config }: ChartsProps) {
         'UBI Cost': '#facc15',
         'Adult UBI': '#facc15',
         'Dependent UBI': '#d8b4fe',
-        'Govt Operations': '#f87171'
+        'Govt Operations': '#f87171',
+        'Retirement Program': '#38bdf8'
       };
       return (
         <div style={{ background: '#1e293b', color: 'white', padding: '12px', borderRadius: '8px', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)', fontSize: '14px', border: '1px solid #334155' }}>

@@ -36,6 +36,17 @@ export interface PolicyConfig {
   // Revenue Architecture Mode
   revenueArchitectureMode?: 'hybrid' | 'friction_dominant' | 'friction_only';
   incomeTaxMultiplier?: number; // 0.0–1.0, default 1.0
+  // Retirement Program
+  retirementEnabled?: boolean;
+  retirementMode?: 'replace_ss' | 'layer_on_ss';
+  retirementEligibilityAge?: number;
+  replacementRate?: number;           // decimal: 0.80 = 80%
+  pensionableSalaryCap?: number;      // default 250_000
+  payoutDurationYears?: number;       // default 25
+  salaryBasis?: 'final_3yr' | 'final_5yr' | 'career_avg';
+  retireesCount?: number;             // default 54_000_000
+  avgFinal3yrSalary?: number;         // default 75_000
+  ssBaseline?: number;                // default 1.3e12
 }
 
 export interface Revenue {
@@ -52,6 +63,10 @@ export interface Obligations {
   dependentUBICost?: number;
   govtOperatingRequirement: number;
   totalObligations: number;
+  retirementProgramCost?: number;
+  retirementAnnualBenefit?: number;
+  retirement25yrTotal?: number;
+  netChangeVsSS?: number | null;
 }
 
 export interface Balance {

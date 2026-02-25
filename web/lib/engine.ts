@@ -199,7 +199,26 @@ export function runSimulation(config: PolicyConfig): SimulationResult {
   const dependentCost = tier1Count * dep1Rate + tier2Count * dep2Rate + tier3Count * dep3Rate;
   const ubiCost = config.ubiAnnualPerAdult * config.adultPopulation + dependentCost;
   const govtOperatingRequirement = config.govtOperatingRequirement;
-  const totalObligations = ubiCost + govtOperatingRequirement;
+
+  // Retirement Program calculations
+  const retirementEnabled   = config.retirementEnabled ?? false;
+  const retireesCount        = config.retireesCount ?? 54_000_000;
+  const avgFinal3yrSalary    = config.avgFinal3yrSalary ?? 75_000;
+  const pensionableSalaryCap = config.pensionableSalaryCap ?? 250_000;
+  const replacementRate      = config.replacementRate ?? 0.80;
+  const payoutDurationYears  = config.payoutDurationYears ?? 25;
+  const ssBaseline           = config.ssBaseline ?? 1.3e12;
+  const retirementMode       = config.retirementMode ?? 'replace_ss';
+
+  const avgPensionableSalary  = Math.min(avgFinal3yrSalary, pensionableSalaryCap);
+  const avgAnnualBenefit      = avgPensionableSalary * replacementRate;
+  const annualRetirementCost  = retirementEnabled ? retireesCount * avgAnnualBenefit : 0;
+  const retirement25yrTotal   = annualRetirementCost * payoutDurationYears;
+  const netChangeVsSS         = retirementEnabled && retirementMode === 'replace_ss'
+    ? annualRetirementCost - ssBaseline
+    : null;
+
+  const totalObligations = ubiCost + govtOperatingRequirement + annualRetirementCost;
 
   const surplusDeficit = totalRevenue - totalObligations;
   const isSolvent = surplusDeficit >= 0;
@@ -242,6 +261,10 @@ export function runSimulation(config: PolicyConfig): SimulationResult {
       dependentUBICost: dependentCost,
       govtOperatingRequirement,
       totalObligations,
+      retirementProgramCost: annualRetirementCost,
+      retirementAnnualBenefit: avgAnnualBenefit,
+      retirement25yrTotal,
+      netChangeVsSS,
     },
     balance: {
       surplusDeficit,
