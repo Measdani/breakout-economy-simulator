@@ -29,6 +29,10 @@ export default function AdminSettingsForm({ currentConfig, history }: Props) {
   const [adultPopulation, setAdultPopulation] = useState(currentConfig.adultPopulation)
   const [govtOperatingRequirement, setGovtOperatingRequirement] = useState(currentConfig.govtOperatingRequirement)
   const [welfareSavingsCredit, setWelfareSavingsCredit] = useState(currentConfig.welfareSavingsCredit)
+  // Retirement Program baseline
+  const [retireesCount, setRetireesCount] = useState(currentConfig.retireesCount ?? 60000000)
+  const [avgFinal3yrSalary, setAvgFinal3yrSalary] = useState(currentConfig.avgFinal3yrSalary ?? 60000)
+  const [ssBaseline, setSsBaseline] = useState(currentConfig.ssBaseline ?? 1.4e12)
 
   // Preview state
   const [showPreview, setShowPreview] = useState(false)
@@ -47,6 +51,9 @@ export default function AdminSettingsForm({ currentConfig, history }: Props) {
     supplementApexIncome: currentConfig.supplementApexIncome,
     supplementApexBonus: currentConfig.supplementApexBonus,
     personaWeights: currentConfig.personaWeights,
+    retireesCount,
+    avgFinal3yrSalary,
+    ssBaseline,
   }
 
   const previewResult: SimulationResult | null = useMemo(() => {
@@ -359,6 +366,84 @@ export default function AdminSettingsForm({ currentConfig, history }: Props) {
                   }}
                 />
                 <span style={{ color: '#94a3b8', fontSize: '0.875rem', minWidth: '60px' }}>${(welfareSavingsCredit / 1e9).toFixed(0)}B</span>
+              </div>
+            </div>
+
+            {/* Total Retirees */}
+            <div>
+              <label style={{ display: 'block', fontSize: '0.875rem', color: '#e0e7ff', marginBottom: '0.5rem', fontWeight: '600' }}>🏦 Total Retired Population</label>
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                <input
+                  type="number"
+                  value={retireesCount}
+                  onChange={(e) => setRetireesCount(Number(e.target.value))}
+                  step="1000000"
+                  min="1000000"
+                  max="200000000"
+                  style={{
+                    flex: 1,
+                    padding: '0.5rem',
+                    backgroundColor: '#1e293b',
+                    border: '1px solid rgba(59, 130, 246, 0.3)',
+                    borderRadius: '0.25rem',
+                    color: '#e0e7ff',
+                    fontSize: '0.875rem',
+                    boxSizing: 'border-box',
+                  }}
+                />
+                <span style={{ color: '#94a3b8', fontSize: '0.875rem', minWidth: '60px' }}>{(retireesCount / 1000000).toFixed(0)}M</span>
+              </div>
+            </div>
+
+            {/* Average Final 3-Year Salary */}
+            <div>
+              <label style={{ display: 'block', fontSize: '0.875rem', color: '#e0e7ff', marginBottom: '0.5rem', fontWeight: '600' }}>Avg Final 3-Year Salary</label>
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                <input
+                  type="number"
+                  value={avgFinal3yrSalary}
+                  onChange={(e) => setAvgFinal3yrSalary(Number(e.target.value))}
+                  step="1000"
+                  min="20000"
+                  max="200000"
+                  style={{
+                    flex: 1,
+                    padding: '0.5rem',
+                    backgroundColor: '#1e293b',
+                    border: '1px solid rgba(59, 130, 246, 0.3)',
+                    borderRadius: '0.25rem',
+                    color: '#e0e7ff',
+                    fontSize: '0.875rem',
+                    boxSizing: 'border-box',
+                  }}
+                />
+                <span style={{ color: '#94a3b8', fontSize: '0.875rem', minWidth: '60px' }}>${(avgFinal3yrSalary / 1000).toFixed(0)}K</span>
+              </div>
+            </div>
+
+            {/* Current Social Security Baseline */}
+            <div>
+              <label style={{ display: 'block', fontSize: '0.875rem', color: '#e0e7ff', marginBottom: '0.5rem', fontWeight: '600' }}>Annual SS Expenditure (Baseline)</label>
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                <input
+                  type="number"
+                  value={ssBaseline}
+                  onChange={(e) => setSsBaseline(Number(e.target.value))}
+                  step="100000000000"
+                  min="500000000000"
+                  max="5000000000000"
+                  style={{
+                    flex: 1,
+                    padding: '0.5rem',
+                    backgroundColor: '#1e293b',
+                    border: '1px solid rgba(59, 130, 246, 0.3)',
+                    borderRadius: '0.25rem',
+                    color: '#e0e7ff',
+                    fontSize: '0.875rem',
+                    boxSizing: 'border-box',
+                  }}
+                />
+                <span style={{ color: '#94a3b8', fontSize: '0.875rem', minWidth: '60px' }}>${(ssBaseline / 1e12).toFixed(2)}T</span>
               </div>
             </div>
           </div>
