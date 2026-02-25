@@ -453,8 +453,9 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                               <button
                                 type="button"
                                 onClick={() => setShowFrictionTaxAssumptions(false)}
-                                className="text-dimmed hover:text-bright transition"
-                                style={{ cursor: 'pointer', fontSize: '16px', lineHeight: '1' }}
+                                style={{ cursor: 'pointer', fontSize: '18px', lineHeight: '1', color: '#cbd5e1', background: 'none', border: 'none', padding: '0', transition: 'color 0.2s ease' }}
+                                onMouseEnter={(e) => { e.currentTarget.style.color = '#f1f5f9'; }}
+                                onMouseLeave={(e) => { e.currentTarget.style.color = '#cbd5e1'; }}
                               >
                                 ✕
                               </button>
