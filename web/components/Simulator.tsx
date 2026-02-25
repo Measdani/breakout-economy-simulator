@@ -802,7 +802,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         <div className="border-t border-border-slate pt-4">
                           <button
                             onClick={() => setShowRetirementAdminBaseline(!showRetirementAdminBaseline)}
-                            className="text-xs text-muted hover:text-bright font-semibold uppercase tracking-wide"
+                            className="text-xs text-bright hover:text-sky-300 font-semibold uppercase tracking-wide w-full text-left px-2 py-1"
                           >
                             {showRetirementAdminBaseline ? '▼' : '▶'} Admin Baseline Assumptions
                           </button>
