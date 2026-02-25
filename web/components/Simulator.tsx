@@ -725,7 +725,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                             onChange={(e) => setRetirementMode(e.target.value as 'replace_ss' | 'layer_on_ss')}
                             className="w-full px-3 py-2 border border-border-slate rounded text-sm font-semibold"
                             style={{
-                              backgroundColor: '#0f172a',
+                              backgroundColor: '#000000',
                               color: '#ffffff',
                               textShadow: '0 0 2px rgba(0,0,0,0.8)'
                             }}
@@ -797,7 +797,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                             onChange={(e) => setSalaryBasis(e.target.value as 'final_3yr' | 'final_5yr' | 'career_avg')}
                             className="w-full px-3 py-2 border border-border-slate rounded text-sm font-semibold"
                             style={{
-                              backgroundColor: '#0f172a',
+                              backgroundColor: '#000000',
                               color: '#ffffff',
                               textShadow: '0 0 2px rgba(0,0,0,0.8)'
                             }}
