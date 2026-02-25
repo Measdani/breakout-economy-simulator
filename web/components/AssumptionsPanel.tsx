@@ -46,8 +46,11 @@ export default function AssumptionsPanel({ config, onClose }: AssumptionsPanelPr
             </p>
           </div>
           <button
+            type="button"
             onClick={onClose}
-            className="text-muted hover:text-bright transition-colors text-2xl font-light"
+            style={{ cursor: 'pointer', fontSize: '28px', color: '#cbd5e1', background: 'none', border: 'none', padding: '0', transition: 'color 0.2s ease' }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = '#f1f5f9'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = '#cbd5e1'; }}
           >
             ×
           </button>
