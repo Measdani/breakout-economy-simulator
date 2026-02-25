@@ -38,7 +38,7 @@ export interface PolicyConfig {
   incomeTaxMultiplier?: number; // 0.0–1.0, default 1.0
   // Retirement Program
   retirementEnabled?: boolean;
-  retirementMode?: 'replace_ss' | 'layer_on_ss';
+  retirementMode?: 'replace_ss' | 'supplement' | 'baseline_only';
   retirementEligibilityAge?: number;
   replacementRate?: number;           // decimal: 0.80 = 80%
   benefitAdjustmentFactor?: number;   // decimal: 0.70 = accounts for mixed demographics

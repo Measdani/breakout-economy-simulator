@@ -215,7 +215,7 @@ export function runSimulation(config: PolicyConfig): SimulationResult {
   const avgAnnualBenefit      = avgPensionableSalary * replacementRate * benefitAdjustmentFactor;
   const annualRetirementCost  = retirementEnabled ? retireesCount * avgAnnualBenefit : 0;
   const retirement25yrTotal   = annualRetirementCost * payoutDurationYears;
-  const netChangeVsSS         = retirementEnabled && retirementMode === 'replace_ss'
+  const netChangeVsSS         = retirementEnabled && (retirementMode === 'replace_ss' || retirementMode === 'supplement')
     ? annualRetirementCost - ssBaseline
     : null;
 

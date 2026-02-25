@@ -71,7 +71,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   const [toastVisible, setToastVisible] = useState(false);
   // Retirement Program state
   const [retirementEnabled, setRetirementEnabled] = useState(false);
-  const [retirementMode, setRetirementMode] = useState<'replace_ss' | 'layer_on_ss'>('replace_ss');
+  const [retirementMode, setRetirementMode] = useState<'replace_ss' | 'supplement' | 'baseline_only'>('replace_ss');
   const [retirementEligibilityAge, setRetirementEligibilityAge] = useState(67);
   const [replacementRate, setReplacementRate] = useState(80);        // displayed as %
   const [benefitAdjustmentFactor, setBenefitAdjustmentFactor] = useState(70);  // displayed as %
@@ -83,7 +83,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   const [ssBaseline, setSsBaseline] = useState(1.3e12);
   const [showRetirementAdminBaseline, setShowRetirementAdminBaseline] = useState(false);
   const [showTour, setShowTour] = useState(false);
-  const [activeScreen, setActiveScreen] = useState<'engine' | 'households' | 'incentives' | 'results' | 'charts' | 'alerts' | 'submit'>('engine');
+  const [activeScreen, setActiveScreen] = useState<'engine' | 'households' | 'programs' | 'incentives' | 'results' | 'charts' | 'alerts' | 'submit'>('engine');
   const [currentConfig, setCurrentConfig] = useState<string>('Default');
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
@@ -189,10 +189,11 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     if (presetConfig.breakoutPoint) setBreakoutPoint(presetConfig.breakoutPoint);
   };
 
-  const screens: Array<typeof activeScreen> = ['engine', 'households', 'incentives', 'results', 'charts', 'alerts', 'submit'];
+  const screens: Array<typeof activeScreen> = ['engine', 'households', 'programs', 'incentives', 'results', 'charts', 'alerts', 'submit'];
   const stepLabels: Record<string, string> = {
     engine: 'Revenue & Funding Model',
-    households: 'Demographic Assumptions',
+    households: 'Demographics',
+    programs: 'National Social Programs',
     incentives: 'Labor Incentive Modeling',
     results: 'Budget Outcome Summary',
     charts: 'Fiscal Composition & Scenario Analysis',
@@ -280,7 +281,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                     <span className="text-xs text-muted">Configuration:</span>
                     <span className="text-xs font-medium text-bright bg-darker-slate px-2.5 py-1 rounded-full border border-border-slate">{currentConfig}</span>
                   </div>
-                  <p className="text-xs text-muted">Step {screens.indexOf(activeScreen) + 1} of 6 — {stepLabels[activeScreen]}</p>
+                  <p className="text-xs text-muted">Step {screens.indexOf(activeScreen) + 1} of {screens.length} — {stepLabels[activeScreen]}</p>
                 </div>
                 <NavButtons />
               </div>
@@ -700,178 +701,6 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                       )}
                     </div>
                   </div>
-
-                  {/* Retirement Program */}
-                  <div className="bg-dark-slate rounded-lg p-5 glow-border-slate" style={{ transition: 'all 0.3s ease' }}>
-                    <div className="flex items-center justify-between mb-4">
-                      <p className="text-sm font-semibold text-muted uppercase tracking-wide">
-                        🏦 Retirement Program
-                      </p>
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={retirementEnabled}
-                          onChange={(e) => setRetirementEnabled(e.target.checked)}
-                          className="w-4 h-4 rounded border-border-slate"
-                        />
-                        <span className="text-xs text-dimmed">{retirementEnabled ? 'Enabled' : 'Disabled'}</span>
-                      </label>
-                    </div>
-
-                    {retirementEnabled ? (
-                      <div className="space-y-4">
-                        {/* Mode Selection */}
-                        <div>
-                          <p className="text-xs text-muted mb-2">Mode</p>
-                          <select
-                            value={retirementMode}
-                            onChange={(e) => setRetirementMode(e.target.value as 'replace_ss' | 'layer_on_ss')}
-                            className="w-full px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright"
-                          >
-                            <option value="replace_ss">Replace Social Security</option>
-                            <option value="layer_on_ss">Layer on Social Security</option>
-                          </select>
-                        </div>
-
-                        {/* Eligibility Age */}
-                        <div className="flex items-center justify-between">
-                          <label className="text-sm text-dimmed">Eligibility Age</label>
-                          <input
-                            type="number"
-                            value={retirementEligibilityAge}
-                            onChange={(e) => setRetirementEligibilityAge(Math.max(55, parseInt(e.target.value) || 67))}
-                            className="w-24 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
-                          />
-                        </div>
-
-                        {/* Replacement Rate */}
-                        <div className="flex items-center justify-between">
-                          <label className="text-sm text-dimmed">Replacement Rate</label>
-                          <div className="flex items-center gap-1">
-                            <input
-                              type="number"
-                              value={replacementRate}
-                              onChange={(e) => setReplacementRate(Math.max(0, Math.min(100, parseInt(e.target.value) || 80)))}
-                              className="w-20 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
-                            />
-                            <span className="text-xs text-muted">%</span>
-                          </div>
-                        </div>
-
-                        {/* Benefit Adjustment Factor */}
-                        <div className="flex items-center justify-between">
-                          <label className="text-sm text-dimmed">Benefit Adjustment Factor</label>
-                          <div className="flex items-center gap-1">
-                            <input
-                              type="number"
-                              value={benefitAdjustmentFactor}
-                              onChange={(e) => setBenefitAdjustmentFactor(Math.max(0, Math.min(100, parseInt(e.target.value) || 70)))}
-                              className="w-20 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
-                            />
-                            <span className="text-xs text-muted">%</span>
-                          </div>
-                        </div>
-
-                        {/* Pensionable Salary Cap */}
-                        <div className="flex items-center justify-between">
-                          <label className="text-sm text-dimmed">Salary Cap</label>
-                          <div className="flex items-center gap-1">
-                            <span className="text-xs text-muted">$</span>
-                            <input
-                              type="number"
-                              value={pensionableSalaryCap}
-                              onChange={(e) => setPensionableSalaryCap(Math.max(0, parseInt(e.target.value) || 250000))}
-                              className="w-24 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
-                            />
-                            <span className="text-xs text-muted">k</span>
-                          </div>
-                        </div>
-
-                        {/* Payout Duration */}
-                        <div className="flex items-center justify-between">
-                          <label className="text-sm text-dimmed">Payout Duration</label>
-                          <div className="flex items-center gap-1">
-                            <input
-                              type="number"
-                              value={payoutDurationYears}
-                              onChange={(e) => setPayoutDurationYears(Math.max(1, parseInt(e.target.value) || 25))}
-                              className="w-16 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
-                            />
-                            <span className="text-xs text-muted">yrs</span>
-                          </div>
-                        </div>
-
-                        {/* Salary Basis */}
-                        <div>
-                          <p className="text-xs text-muted mb-2">Salary Basis</p>
-                          <select
-                            value={salaryBasis}
-                            onChange={(e) => setSalaryBasis(e.target.value as 'final_3yr' | 'final_5yr' | 'career_avg')}
-                            className="w-full px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright"
-                          >
-                            <option value="final_3yr">Final 3 Years</option>
-                            <option value="final_5yr">Final 5 Years</option>
-                            <option value="career_avg">Career Average</option>
-                          </select>
-                        </div>
-
-                        {/* Admin Baseline - Collapsible */}
-                        <div className="border-t border-border-slate pt-4">
-                          <button
-                            onClick={() => setShowRetirementAdminBaseline(!showRetirementAdminBaseline)}
-                            className="text-xs text-bright hover:text-sky-300 font-semibold uppercase tracking-wide w-full text-left px-2 py-1 bg-transparent border-none"
-                          >
-                            {showRetirementAdminBaseline ? '▼' : '▶'} Admin Baseline Assumptions
-                          </button>
-                          {showRetirementAdminBaseline && (
-                            <div className="space-y-3 mt-4">
-                              <div className="flex items-center justify-between">
-                                <label className="text-sm text-dimmed">Retirees</label>
-                                <div className="flex items-center gap-1">
-                                  <input
-                                    type="number"
-                                    value={retireesCount}
-                                    onChange={(e) => setRetireesCount(Math.max(0, parseInt(e.target.value) || 54000000))}
-                                    className="w-24 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
-                                  />
-                                  <span className="text-xs text-muted">M</span>
-                                </div>
-                              </div>
-                              <div className="flex items-center justify-between">
-                                <label className="text-sm text-dimmed">Avg Final 3yr Salary</label>
-                                <div className="flex items-center gap-1">
-                                  <span className="text-xs text-muted">$</span>
-                                  <input
-                                    type="number"
-                                    value={avgFinal3yrSalary}
-                                    onChange={(e) => setAvgFinal3yrSalary(Math.max(0, parseInt(e.target.value) || 75000))}
-                                    className="w-24 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
-                                  />
-                                  <span className="text-xs text-muted">k</span>
-                                </div>
-                              </div>
-                              <div className="flex items-center justify-between">
-                                <label className="text-sm text-dimmed">SS Baseline Cost</label>
-                                <div className="flex items-center gap-1">
-                                  <span className="text-xs text-muted">$</span>
-                                  <input
-                                    type="number"
-                                    value={ssBaseline / 1e12}
-                                    onChange={(e) => setSsBaseline((parseFloat(e.target.value) || 1.3) * 1e12)}
-                                    step="0.1"
-                                    className="w-16 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
-                                  />
-                                  <span className="text-xs text-muted">T</span>
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    ) : (
-                      <p className="text-sm text-muted italic">Enable to configure retirement program parameters</p>
-                    )}
-                  </div>
                 </div>
 
                 {/* MIDDLE: UBI Program Cost Display */}
@@ -987,58 +816,6 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                             {(hhWithDeps * 100).toFixed(1)}%
                           </p>
                         </div>
-
-                        {/* Retirement Program Cards (Conditional) */}
-                        {retirementEnabled && (
-                          <>
-                            {/* Card 5: Individual Benefit (Illustrative) */}
-                            <div className="bg-dark-slate rounded-lg p-5 border-l-4 border-cyan-500 glow-border-slate">
-                              <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-2">Individual Benefit</p>
-                              <p className="text-2xl font-bold text-cyan-400">
-                                ${((Math.min(avgFinal3yrSalary, pensionableSalaryCap) * replacementRate / 100) / 1000).toFixed(1)}k/yr
-                              </p>
-                              <p className="text-xs text-dimmed mt-2">(Illustrative)</p>
-                            </div>
-
-                            {/* Card 6: National Retirement Cost */}
-                            <div className="bg-dark-slate rounded-lg p-5 border-l-4 border-sky-500 glow-border-slate space-y-3">
-                              <p className="text-xs font-semibold text-muted uppercase tracking-wide">National Retirement Cost</p>
-                              <div>
-                                <p className="text-xs text-dimmed mb-1">Annual</p>
-                                <p className="text-2xl font-bold text-sky-400">
-                                  ${(result.obligations.retirementProgramCost ? result.obligations.retirementProgramCost / 1e12 : 0).toFixed(2)}T
-                                </p>
-                              </div>
-                              <div className="border-t border-border-slate pt-3">
-                                <p className="text-xs text-dimmed mb-1">{payoutDurationYears}-Year Obligation</p>
-                                <p className="text-lg font-bold text-sky-300">
-                                  ${(result.obligations.retirement25yrTotal ? result.obligations.retirement25yrTotal / 1e12 : 0).toFixed(1)}T
-                                </p>
-                              </div>
-                              <div className="border-t border-border-slate pt-3">
-                                <p className="text-xs text-dimmed mb-1">% of Total Obligations</p>
-                                <p className="text-lg font-bold text-sky-300">
-                                  {result.obligations.totalObligations > 0 ? ((result.obligations.retirementProgramCost || 0) / result.obligations.totalObligations * 100).toFixed(1) : '0'}%
-                                </p>
-                              </div>
-                            </div>
-
-                            {/* Card 7: Net Impact vs SS (Only for replace_ss mode) */}
-                            {retirementMode === 'replace_ss' && (
-                              <div className={`bg-dark-slate rounded-lg p-5 border-l-4 glow-border-slate ${
-                                (result.obligations.netChangeVsSS ?? 0) >= 0 ? 'border-red-500' : 'border-green-500'
-                              }`}>
-                                <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-2">Net Impact vs SS</p>
-                                <p className={`text-2xl font-bold ${(result.obligations.netChangeVsSS ?? 0) >= 0 ? 'text-red-400' : 'text-green-400'}`}>
-                                  {(result.obligations.netChangeVsSS ?? 0) >= 0 ? '+' : ''} ${((Math.abs(result.obligations.netChangeVsSS ?? 0)) / 1e12).toFixed(2)}T
-                                </p>
-                                <p className="text-xs text-dimmed mt-2">
-                                  {(result.obligations.netChangeVsSS ?? 0) >= 0 ? 'More expensive' : 'Saves cost'} vs baseline SS
-                                </p>
-                              </div>
-                            )}
-                          </>
-                        )}
                       </>
                     );
                   })()}
@@ -1046,7 +823,256 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
               </div>
             )}
 
-            {/* Step 3: Work Incentives Screen */}
+            {/* Step 3: National Social Programs Screen */}
+            {activeScreen === 'programs' && (
+              <div className="grid grid-cols-6 gap-6">
+                {/* LEFT COLUMN — Program Inputs */}
+                <div className="col-span-3 space-y-4">
+
+                  {/* === RETIREMENT PROGRAM CARD === */}
+                  <div className="bg-dark-slate rounded-lg p-5 glow-border-slate">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-base font-semibold text-bright">Retirement Program</h3>
+                      <button
+                        onClick={() => setRetirementEnabled(!retirementEnabled)}
+                        className={`px-3 py-1 rounded text-xs font-medium border-none bg-transparent ${retirementEnabled ? 'text-green-400' : 'text-muted'}`}
+                      >
+                        {retirementEnabled ? '● Enabled' : '○ Disabled'}
+                      </button>
+                    </div>
+
+                    {retirementEnabled ? (
+                      <div className="space-y-3">
+                        {/* Mode */}
+                        <div className="flex items-center justify-between">
+                          <label className="text-sm text-dimmed">Mode</label>
+                          <select
+                            value={retirementMode}
+                            onChange={(e) => setRetirementMode(e.target.value as 'replace_ss' | 'supplement' | 'baseline_only')}
+                            className="w-48 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright bg-transparent border-none"
+                          >
+                            <option value="replace_ss">Replace Social Security</option>
+                            <option value="supplement">Supplement SS</option>
+                            <option value="baseline_only">Baseline-Only (Reference)</option>
+                          </select>
+                        </div>
+
+                        {/* Eligibility Age */}
+                        <div className="flex items-center justify-between">
+                          <label className="text-sm text-dimmed">Eligibility Age</label>
+                          <div className="flex items-center gap-1">
+                            <input
+                              type="number"
+                              value={retirementEligibilityAge}
+                              onChange={(e) => setRetirementEligibilityAge(Math.max(55, parseInt(e.target.value) || 67))}
+                              className="w-20 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                            />
+                            <span className="text-xs text-muted">yrs</span>
+                          </div>
+                        </div>
+
+                        {/* Replacement Rate */}
+                        <div className="flex items-center justify-between">
+                          <label className="text-sm text-dimmed">Replacement Rate</label>
+                          <div className="flex items-center gap-1">
+                            <input
+                              type="number"
+                              value={replacementRate}
+                              onChange={(e) => setReplacementRate(Math.max(0, Math.min(100, parseInt(e.target.value) || 80)))}
+                              className="w-20 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                            />
+                            <span className="text-xs text-muted">%</span>
+                          </div>
+                        </div>
+
+                        {/* Benefit Adjustment Factor */}
+                        <div className="flex items-center justify-between">
+                          <label className="text-sm text-dimmed">Benefit Adjustment Factor</label>
+                          <div className="flex items-center gap-1">
+                            <input
+                              type="number"
+                              value={benefitAdjustmentFactor}
+                              onChange={(e) => setBenefitAdjustmentFactor(Math.max(0, Math.min(100, parseInt(e.target.value) || 70)))}
+                              className="w-20 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                            />
+                            <span className="text-xs text-muted">%</span>
+                          </div>
+                        </div>
+
+                        {/* Pensionable Salary Cap */}
+                        <div className="flex items-center justify-between">
+                          <label className="text-sm text-dimmed">Salary Cap</label>
+                          <div className="flex items-center gap-1">
+                            <span className="text-xs text-muted">$</span>
+                            <input
+                              type="number"
+                              value={pensionableSalaryCap / 1000}
+                              onChange={(e) => setPensionableSalaryCap(Math.max(0, parseInt(e.target.value) || 250) * 1000)}
+                              className="w-20 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                            />
+                            <span className="text-xs text-muted">k</span>
+                          </div>
+                        </div>
+
+                        {/* Payout Duration */}
+                        <div className="flex items-center justify-between">
+                          <label className="text-sm text-dimmed">Payout Duration</label>
+                          <div className="flex items-center gap-1">
+                            <input
+                              type="number"
+                              value={payoutDurationYears}
+                              onChange={(e) => setPayoutDurationYears(Math.max(1, parseInt(e.target.value) || 25))}
+                              className="w-16 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                            />
+                            <span className="text-xs text-muted">yrs</span>
+                          </div>
+                        </div>
+
+                        {/* Salary Basis */}
+                        <div className="flex items-center justify-between">
+                          <label className="text-sm text-dimmed">Salary Basis</label>
+                          <select
+                            value={salaryBasis}
+                            onChange={(e) => setSalaryBasis(e.target.value as 'final_3yr' | 'final_5yr' | 'career_avg')}
+                            className="w-48 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright bg-transparent border-none"
+                          >
+                            <option value="final_3yr">Final 3-Year Avg</option>
+                            <option value="final_5yr">Final 5-Year Avg</option>
+                            <option value="career_avg">Career Average</option>
+                          </select>
+                        </div>
+
+                        {/* Baseline Assumptions collapsible */}
+                        <div className="mt-3 pt-3 border-t border-border-slate">
+                          <button
+                            onClick={() => setShowRetirementAdminBaseline(!showRetirementAdminBaseline)}
+                            className="text-xs text-dimmed bg-transparent border-none cursor-pointer hover:text-muted"
+                          >
+                            {showRetirementAdminBaseline ? '▼' : '▶'} Baseline Assumptions
+                          </button>
+                          {showRetirementAdminBaseline && (
+                            <div className="space-y-2 mt-2">
+                              <div className="flex items-center justify-between">
+                                <label className="text-xs text-dimmed">Retirees</label>
+                                <div className="flex items-center gap-1">
+                                  <input
+                                    type="number"
+                                    value={retireesCount / 1e6}
+                                    onChange={(e) => setRetireesCount(Math.max(0, parseFloat(e.target.value) || 54) * 1e6)}
+                                    className="w-20 px-2 py-1 bg-darker-slate border border-border-slate rounded text-xs text-bright text-right"
+                                  />
+                                  <span className="text-xs text-muted">M</span>
+                                </div>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <label className="text-xs text-dimmed">Avg Final Salary</label>
+                                <div className="flex items-center gap-1">
+                                  <span className="text-xs text-muted">$</span>
+                                  <input
+                                    type="number"
+                                    value={avgFinal3yrSalary / 1000}
+                                    onChange={(e) => setAvgFinal3yrSalary(Math.max(0, parseInt(e.target.value) || 75) * 1000)}
+                                    className="w-20 px-2 py-1 bg-darker-slate border border-border-slate rounded text-xs text-bright text-right"
+                                  />
+                                  <span className="text-xs text-muted">k</span>
+                                </div>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <label className="text-xs text-dimmed">SS Baseline</label>
+                                <div className="flex items-center gap-1">
+                                  <span className="text-xs text-muted">$</span>
+                                  <input
+                                    type="number"
+                                    value={ssBaseline / 1e12}
+                                    onChange={(e) => setSsBaseline(Math.max(0, parseFloat(e.target.value) || 1.3) * 1e12)}
+                                    step="0.1"
+                                    className="w-16 px-2 py-1 bg-darker-slate border border-border-slate rounded text-xs text-bright text-right"
+                                  />
+                                  <span className="text-xs text-muted">T</span>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-xs italic text-muted">
+                        Enable the Retirement Program to configure parameters and see projected costs.
+                      </p>
+                    )}
+                  </div>
+
+                  {/* === HEALTHCARE PLACEHOLDER === */}
+                  <div className="bg-dark-slate rounded-lg p-5 glow-border-slate opacity-60">
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="text-base font-semibold text-muted">Healthcare Program</h3>
+                      <span className="px-2 py-0.5 rounded text-xs bg-darker-slate text-dimmed border border-border-slate">Coming Soon</span>
+                    </div>
+                    <p className="text-xs text-dimmed italic">
+                      Phase 2 — Model public healthcare cost as % of GDP or per-capita baseline. Will include Medicare/Medicaid baseline comparisons.
+                    </p>
+                  </div>
+
+                </div>{/* end left column */}
+
+                {/* RIGHT COLUMN — Program Outputs */}
+                <div className="col-span-3 space-y-4">
+
+                  {retirementEnabled ? (
+                    <>
+                      {/* Individual Benefit */}
+                      <div className="bg-dark-slate rounded-lg p-4 glow-border-slate">
+                        <p className="text-xs text-dimmed uppercase tracking-wider mb-1">Individual Benefit (Illustrative)</p>
+                        <p className="text-2xl font-bold text-sky-400">
+                          ${((Math.min(avgFinal3yrSalary, pensionableSalaryCap) * replacementRate / 100 * benefitAdjustmentFactor / 100) / 1000).toFixed(1)}k<span className="text-sm font-normal text-muted">/yr</span>
+                        </p>
+                        <p className="text-xs text-dimmed mt-1">
+                          With UBI: ${(((Math.min(avgFinal3yrSalary, pensionableSalaryCap) * replacementRate / 100 * benefitAdjustmentFactor / 100) + config.ubiAnnualPerAdult) / 1000).toFixed(1)}k/yr
+                        </p>
+                      </div>
+
+                      {/* National Cost */}
+                      <div className="bg-dark-slate rounded-lg p-4 glow-border-slate">
+                        <p className="text-xs text-dimmed uppercase tracking-wider mb-1">National Retirement Cost</p>
+                        <p className="text-2xl font-bold text-sky-400">
+                          ${((result.obligations.retirementProgramCost ?? 0) / 1e12).toFixed(2)}T<span className="text-sm font-normal text-muted">/yr</span>
+                        </p>
+                        <p className="text-xs text-dimmed mt-1">
+                          {payoutDurationYears}-yr obligation: ${((result.obligations.retirement25yrTotal ?? 0) / 1e12).toFixed(1)}T
+                        </p>
+                        <p className="text-xs text-dimmed">
+                          {(((result.obligations.retirementProgramCost ?? 0) / result.obligations.totalObligations) * 100).toFixed(1)}% of total obligations
+                        </p>
+                      </div>
+
+                      {/* Net Impact vs SS — only for replace_ss and supplement modes */}
+                      {(retirementMode === 'replace_ss' || retirementMode === 'supplement') && result.obligations.netChangeVsSS !== null && (
+                        <div className="bg-dark-slate rounded-lg p-4 glow-border-slate">
+                          <p className="text-xs text-dimmed uppercase tracking-wider mb-1">Net Impact vs SS Baseline</p>
+                          <p className={`text-2xl font-bold ${(result.obligations.netChangeVsSS ?? 0) >= 0 ? 'text-red-400' : 'text-green-400'}`}>
+                            {(result.obligations.netChangeVsSS ?? 0) >= 0 ? '+' : ''}${(((result.obligations.netChangeVsSS ?? 0)) / 1e12).toFixed(2)}T<span className="text-sm font-normal text-muted">/yr</span>
+                          </p>
+                          <p className="text-xs text-dimmed mt-1">
+                            SS Baseline: ${(ssBaseline / 1e12).toFixed(2)}T/yr
+                          </p>
+                          <p className="text-xs text-dimmed">
+                            {(result.obligations.netChangeVsSS ?? 0) >= 0 ? 'Additional cost above current SS' : 'Cost reduction vs current SS'}
+                          </p>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div className="bg-dark-slate rounded-lg p-6 glow-border-slate text-center">
+                      <p className="text-muted text-sm italic">Enable the Retirement Program to see cost projections and SS comparisons.</p>
+                    </div>
+                  )}
+
+                </div>{/* end right column */}
+
+              </div>
+            )}
+
+            {/* Step 4: Work Incentives Screen */}
             {activeScreen === 'incentives' && (
               <div className="space-y-6">
                 <ProductivityBar personas={result.citizenModel.personaOutcomes} />
@@ -1054,7 +1080,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
               </div>
             )}
 
-            {/* Results Screen */}
+            {/* Step 5: Results Screen */}
             {activeScreen === 'results' && (
               <div className="space-y-6">
                 <FiscalSustainabilityIndicator result={result} />
@@ -1062,14 +1088,14 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
               </div>
             )}
 
-            {/* Charts Screen */}
+            {/* Step 6: Charts Screen */}
             {activeScreen === 'charts' && (
               <div>
                 <Charts result={result} config={config} />
               </div>
             )}
 
-            {/* Step 6: Stability & Risk Screen */}
+            {/* Step 7: Stability & Risk Screen */}
             {activeScreen === 'alerts' && (
               <div className="max-w-2xl mx-auto space-y-6">
                 <div>
@@ -1080,7 +1106,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
               </div>
             )}
 
-            {/* Step 7: Submit Model Screen */}
+            {/* Step 8: Submit Model Screen */}
             {activeScreen === 'submit' && (
               <div className="max-w-2xl mx-auto space-y-6">
                 <div className="bg-dark-slate rounded-lg p-6 border border-border-slate">
@@ -1196,12 +1222,11 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
           {/* Footer Navigation - Enhanced */}
           <div className="px-5 py-5 border-t border-border-slate bg-bg-dark-slate flex justify-between items-center gap-4" style={{ background: '#1E293B' }}>
             {(() => {
-              const screensArray: Array<typeof activeScreen> = ['engine', 'households', 'incentives', 'results', 'charts', 'alerts', 'submit'];
-              const current = screensArray.indexOf(activeScreen);
+              const current = screens.indexOf(activeScreen);
               return current > 0 ? (
                 <button
                   onClick={() => {
-                    if (current > 0) setActiveScreen(screensArray[current - 1]);
+                    if (current > 0) setActiveScreen(screens[current - 1]);
                   }}
                   className="px-5 py-3 rounded transition"
                   style={{
@@ -1220,8 +1245,8 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
             })()}
             <div className="flex flex-col items-center gap-2">
               <div className="flex gap-2 items-center">
-                {['engine', 'households', 'incentives', 'results', 'charts', 'alerts', 'submit'].map((screen, idx) => {
-                  const isActive = activeScreen === screen || ['engine', 'households', 'incentives', 'results', 'charts', 'alerts', 'submit'].indexOf(activeScreen) > idx;
+                {screens.map((screen, idx) => {
+                  const isActive = activeScreen === screen || screens.indexOf(activeScreen) > idx;
                   return (
                     <span
                       key={screen}
@@ -1234,15 +1259,14 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                 })}
               </div>
               <span className="text-sm text-white font-bold">
-                Step {['engine', 'households', 'incentives', 'results', 'charts', 'alerts', 'submit'].indexOf(activeScreen) + 1} of 7 — {stepLabels[activeScreen]}
+                Step {screens.indexOf(activeScreen) + 1} of {screens.length} — {stepLabels[activeScreen]}
               </span>
             </div>
             {activeScreen !== 'submit' && (
               <button
                 onClick={() => {
-                  const screens = ['engine', 'households', 'incentives', 'results', 'charts', 'alerts', 'submit'] as const;
-                  const current = screens.indexOf(activeScreen as any);
-                  if (current < screens.length - 1) setActiveScreen(screens[current + 1] as typeof activeScreen);
+                  const current = screens.indexOf(activeScreen);
+                  if (current < screens.length - 1) setActiveScreen(screens[current + 1]);
                 }}
                 className="px-5 py-3 rounded transition"
                 style={{
