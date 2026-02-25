@@ -210,8 +210,9 @@ export function runSimulation(config: PolicyConfig): SimulationResult {
   const ssBaseline           = config.ssBaseline ?? 1.3e12;
   const retirementMode       = config.retirementMode ?? 'replace_ss';
 
+  const benefitAdjustmentFactor = config.benefitAdjustmentFactor ?? 0.70;
   const avgPensionableSalary  = Math.min(avgFinal3yrSalary, pensionableSalaryCap);
-  const avgAnnualBenefit      = avgPensionableSalary * replacementRate;
+  const avgAnnualBenefit      = avgPensionableSalary * replacementRate * benefitAdjustmentFactor;
   const annualRetirementCost  = retirementEnabled ? retireesCount * avgAnnualBenefit : 0;
   const retirement25yrTotal   = annualRetirementCost * payoutDurationYears;
   const netChangeVsSS         = retirementEnabled && retirementMode === 'replace_ss'

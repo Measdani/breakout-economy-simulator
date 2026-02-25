@@ -74,6 +74,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   const [retirementMode, setRetirementMode] = useState<'replace_ss' | 'layer_on_ss'>('replace_ss');
   const [retirementEligibilityAge, setRetirementEligibilityAge] = useState(67);
   const [replacementRate, setReplacementRate] = useState(80);        // displayed as %
+  const [benefitAdjustmentFactor, setBenefitAdjustmentFactor] = useState(70);  // displayed as %
   const [pensionableSalaryCap, setPensionableSalaryCap] = useState(250000);
   const [payoutDurationYears, setPayoutDurationYears] = useState(25);
   const [salaryBasis, setSalaryBasis] = useState<'final_3yr' | 'final_5yr' | 'career_avg'>('final_3yr');
@@ -134,6 +135,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     retirementMode,
     retirementEligibilityAge,
     replacementRate: replacementRate / 100,  // % → decimal for engine
+    benefitAdjustmentFactor: benefitAdjustmentFactor / 100,  // % → decimal for engine
     pensionableSalaryCap,
     payoutDurationYears,
     salaryBasis,
@@ -218,6 +220,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     setRetirementMode('replace_ss');
     setRetirementEligibilityAge(67);
     setReplacementRate(80);
+    setBenefitAdjustmentFactor(70);
     setPensionableSalaryCap(250000);
     setPayoutDurationYears(25);
     setSalaryBasis('final_3yr');
@@ -749,6 +752,20 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                               type="number"
                               value={replacementRate}
                               onChange={(e) => setReplacementRate(Math.max(0, Math.min(100, parseInt(e.target.value) || 80)))}
+                              className="w-20 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                            />
+                            <span className="text-xs text-muted">%</span>
+                          </div>
+                        </div>
+
+                        {/* Benefit Adjustment Factor */}
+                        <div className="flex items-center justify-between">
+                          <label className="text-sm text-dimmed">Benefit Adjustment Factor</label>
+                          <div className="flex items-center gap-1">
+                            <input
+                              type="number"
+                              value={benefitAdjustmentFactor}
+                              onChange={(e) => setBenefitAdjustmentFactor(Math.max(0, Math.min(100, parseInt(e.target.value) || 70)))}
                               className="w-20 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
                             />
                             <span className="text-xs text-muted">%</span>

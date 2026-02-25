@@ -41,6 +41,7 @@ export interface PolicyConfig {
   retirementMode?: 'replace_ss' | 'layer_on_ss';
   retirementEligibilityAge?: number;
   replacementRate?: number;           // decimal: 0.80 = 80%
+  benefitAdjustmentFactor?: number;   // decimal: 0.70 = accounts for mixed demographics
   pensionableSalaryCap?: number;      // default 250_000
   payoutDurationYears?: number;       // default 25
   salaryBasis?: 'final_3yr' | 'final_5yr' | 'career_avg';

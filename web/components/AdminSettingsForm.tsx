@@ -33,6 +33,7 @@ export default function AdminSettingsForm({ currentConfig, history }: Props) {
   const [retireesCount, setRetireesCount] = useState(currentConfig.retireesCount ?? 60000000)
   const [avgFinal3yrSalary, setAvgFinal3yrSalary] = useState(currentConfig.avgFinal3yrSalary ?? 60000)
   const [ssBaseline, setSsBaseline] = useState(currentConfig.ssBaseline ?? 1.4e12)
+  const [benefitAdjustmentFactor, setBenefitAdjustmentFactor] = useState((currentConfig.benefitAdjustmentFactor ?? 0.70) * 100)
 
   // Preview state
   const [showPreview, setShowPreview] = useState(false)
@@ -54,6 +55,7 @@ export default function AdminSettingsForm({ currentConfig, history }: Props) {
     retireesCount,
     avgFinal3yrSalary,
     ssBaseline,
+    benefitAdjustmentFactor: benefitAdjustmentFactor / 100,
   }
 
   const previewResult: SimulationResult | null = useMemo(() => {
@@ -444,6 +446,32 @@ export default function AdminSettingsForm({ currentConfig, history }: Props) {
                   }}
                 />
                 <span style={{ color: '#94a3b8', fontSize: '0.875rem', minWidth: '60px' }}>${(ssBaseline / 1e12).toFixed(2)}T</span>
+              </div>
+            </div>
+
+            {/* Benefit Adjustment Factor */}
+            <div>
+              <label style={{ display: 'block', fontSize: '0.875rem', color: '#e0e7ff', marginBottom: '0.5rem', fontWeight: '600' }}>Benefit Adjustment Factor</label>
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                <input
+                  type="number"
+                  value={benefitAdjustmentFactor}
+                  onChange={(e) => setBenefitAdjustmentFactor(Math.max(0, Math.min(100, Number(e.target.value))))}
+                  step="1"
+                  min="0"
+                  max="100"
+                  style={{
+                    flex: 1,
+                    padding: '0.5rem',
+                    backgroundColor: '#1e293b',
+                    border: '1px solid rgba(59, 130, 246, 0.3)',
+                    borderRadius: '0.25rem',
+                    color: '#e0e7ff',
+                    fontSize: '0.875rem',
+                    boxSizing: 'border-box',
+                  }}
+                />
+                <span style={{ color: '#94a3b8', fontSize: '0.875rem', minWidth: '60px' }}>{benefitAdjustmentFactor.toFixed(0)}%</span>
               </div>
             </div>
           </div>
