@@ -826,12 +826,12 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
 
             {/* Step 3: National Social Programs Screen */}
             {activeScreen === 'programs' && (
-              <div className="grid grid-cols-6 gap-6">
+              <div className="grid grid-cols-6 gap-8">
                 {/* LEFT COLUMN — Program Inputs */}
-                <div className="col-span-3 space-y-4">
+                <div className="col-span-3 space-y-6">
 
                   {/* === RETIREMENT PROGRAM CARD === */}
-                  <div className="bg-dark-slate rounded-lg p-5 glow-border-blue">
+                  <div className="bg-dark-slate rounded-lg p-6 glow-border-blue">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-base font-semibold text-bright">{TERMINOLOGY.RETIREMENT_PROGRAM}</h3>
                       <button
@@ -843,7 +843,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                     </div>
 
                     {retirementEnabled ? (
-                      <div className="space-y-3">
+                      <div className="space-y-4">
                         {/* Mode */}
                         <div className="flex items-center justify-between">
                           <label className="text-sm text-dimmed">{TERMINOLOGY.RETIREMENT_MODE}</label>
@@ -1031,12 +1031,12 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                 </div>{/* end left column */}
 
                 {/* RIGHT COLUMN — Program Outputs */}
-                <div className="col-span-3 space-y-4">
+                <div className="col-span-3 space-y-6">
 
                   {retirementEnabled ? (
                     <>
                       {/* Individual Benefit */}
-                      <div className="bg-dark-slate rounded-lg p-4 glow-border-blue">
+                      <div className="bg-dark-slate rounded-lg p-6 glow-border-blue">
                         <p className="text-xs text-muted uppercase tracking-wider mb-1">{TERMINOLOGY.RETIREMENT_INDIVIDUAL_BENEFIT}</p>
                         <p className="text-2xl font-bold text-sky-400">
                           ${((Math.min(avgFinal3yrSalary, pensionableSalaryCap) * replacementRate / 100 * benefitAdjustmentFactor / 100) / 1000).toFixed(1)}k<span className="text-sm font-normal text-muted">/yr</span>
@@ -1047,7 +1047,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                       </div>
 
                       {/* National Cost */}
-                      <div className="bg-dark-slate rounded-lg p-4 glow-border-blue">
+                      <div className="bg-dark-slate rounded-lg p-6 glow-border-blue">
                         <p className="text-xs text-muted uppercase tracking-wider mb-1">{TERMINOLOGY.RETIREMENT_NATIONAL_COST}</p>
                         <p className="text-2xl font-bold text-sky-400">
                           ${((result.obligations.retirementProgramCost ?? 0) / 1e12).toFixed(2)}T<span className="text-sm font-normal text-muted">/yr</span>
@@ -1062,7 +1062,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
 
                       {/* Net Impact vs SS — only for replace_ss and supplement modes */}
                       {(retirementMode === 'replace_ss' || retirementMode === 'supplement') && result.obligations.netChangeVsSS !== null && (
-                        <div className="bg-dark-slate rounded-lg p-4 glow-border-blue">
+                        <div className="bg-dark-slate rounded-lg p-6 glow-border-blue">
                           <p className="text-xs text-muted uppercase tracking-wider mb-1">{TERMINOLOGY.RETIREMENT_NET_IMPACT_VS_SS}</p>
                           <p className={`text-2xl font-bold ${(result.obligations.netChangeVsSS ?? 0) >= 0 ? 'text-red-400' : 'text-green-400'}`}>
                             {(result.obligations.netChangeVsSS ?? 0) >= 0 ? '+' : ''}${(((result.obligations.netChangeVsSS ?? 0)) / 1e12).toFixed(2)}T<span className="text-sm font-normal text-muted">/yr</span>
@@ -1077,7 +1077,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                       )}
 
                       {/* Retirement Funding Ratio */}
-                      <div className="bg-dark-slate rounded-lg p-4 glow-border-blue">
+                      <div className="bg-dark-slate rounded-lg p-6 glow-border-blue">
                         <p className="text-xs text-muted uppercase tracking-wider mb-1">{TERMINOLOGY.RETIREMENT_FUNDING_RATIO}</p>
                         <p className={`text-2xl font-bold ${
                           result.revenue.totalRevenue > 0 && (result.obligations.retirementProgramCost ?? 0) / result.revenue.totalRevenue < 0.9 ? 'text-green-400' :
