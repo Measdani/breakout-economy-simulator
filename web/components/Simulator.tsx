@@ -1011,7 +1011,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         </div>
                       </div>
                     ) : (
-                      <p className="text-xs italic text-muted">
+                      <p className="text-xs italic text-bright">
                         Enable the Retirement Program to configure parameters and see projected costs.
                       </p>
                     )}
@@ -1020,10 +1020,10 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                   {/* === HEALTHCARE PLACEHOLDER === */}
                   <div className="bg-dark-slate rounded-lg p-5 glow-border-slate opacity-60">
                     <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-base font-semibold text-muted">{TERMINOLOGY.HEALTHCARE_PROGRAM}</h3>
-                      <span className="px-2 py-0.5 rounded text-xs bg-darker-slate text-dimmed border border-border-slate">{TERMINOLOGY.HEALTHCARE_COMING_SOON}</span>
+                      <h3 className="text-base font-semibold text-bright">{TERMINOLOGY.HEALTHCARE_PROGRAM}</h3>
+                      <span className="px-2 py-0.5 rounded text-xs bg-darker-slate text-muted border border-border-slate">{TERMINOLOGY.HEALTHCARE_COMING_SOON}</span>
                     </div>
-                    <p className="text-xs text-dimmed italic">
+                    <p className="text-xs text-muted italic">
                       {TERMINOLOGY.HEALTHCARE_DESCRIPTION}
                     </p>
                   </div>
@@ -1098,7 +1098,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                     </>
                   ) : (
                     <div className="bg-dark-slate rounded-lg p-6 glow-border-slate text-center">
-                      <p className="text-muted text-sm italic">Enable the Retirement Program to see cost projections and SS comparisons.</p>
+                      <p className="text-bright text-sm italic">Enable the Retirement Program to see cost projections and SS comparisons.</p>
                     </div>
                   )}
 
