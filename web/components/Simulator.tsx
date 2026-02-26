@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { runSimulation, calculateFrictionTaxSensitivity } from '../lib/engine';
 import { useAnimatedNumber, numberFormatters } from '../lib/hooks/useAnimatedNumber';
+import { TERMINOLOGY, getRetirementModeBadge } from '../lib/terminology';
 import type { PolicyConfig, SimulationResult } from '../lib/types';
 import PolicySliders from './PolicySliders';
 import ResultsDisplay from './ResultsDisplay';
@@ -832,12 +833,12 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                   {/* === RETIREMENT PROGRAM CARD === */}
                   <div className="bg-dark-slate rounded-lg p-5 glow-border-slate">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-base font-semibold text-bright">Retirement Program</h3>
+                      <h3 className="text-base font-semibold text-bright">{TERMINOLOGY.RETIREMENT_PROGRAM}</h3>
                       <button
                         onClick={() => setRetirementEnabled(!retirementEnabled)}
                         className={`px-3 py-1 rounded text-xs font-medium border-none bg-transparent ${retirementEnabled ? 'text-green-400' : 'text-muted'}`}
                       >
-                        {retirementEnabled ? '● Enabled' : '○ Disabled'}
+                        {retirementEnabled ? `● ${TERMINOLOGY.RETIREMENT_ENABLED}` : `○ ${TERMINOLOGY.RETIREMENT_DISABLED}`}
                       </button>
                     </div>
 
@@ -845,28 +846,26 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                       <div className="space-y-3">
                         {/* Mode */}
                         <div className="flex items-center justify-between">
-                          <label className="text-sm text-dimmed">Mode</label>
+                          <label className="text-sm text-dimmed">{TERMINOLOGY.RETIREMENT_MODE}</label>
                           <div className="flex items-center gap-2">
                             <select
                               value={retirementMode}
                               onChange={(e) => setRetirementMode(e.target.value as 'replace_ss' | 'supplement' | 'baseline_only')}
                               className="w-40 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright bg-transparent border-none"
                             >
-                              <option value="replace_ss">Replace Social Security</option>
-                              <option value="supplement">Supplement SS</option>
-                              <option value="baseline_only">Baseline-Only (Reference)</option>
+                              <option value="replace_ss">{TERMINOLOGY.RETIREMENT_MODE_REPLACE_SS}</option>
+                              <option value="supplement">{TERMINOLOGY.RETIREMENT_MODE_SUPPLEMENT}</option>
+                              <option value="baseline_only">{TERMINOLOGY.RETIREMENT_MODE_BASELINE}</option>
                             </select>
                             <span className="text-xs font-semibold whitespace-nowrap">
-                              {retirementMode === 'replace_ss' && '🟢 Replacing SS'}
-                              {retirementMode === 'supplement' && '🟡 Supplementing SS'}
-                              {retirementMode === 'baseline_only' && '⚪ Baseline Only'}
+                              {getRetirementModeBadge(retirementMode)}
                             </span>
                           </div>
                         </div>
 
                         {/* Eligibility Age */}
                         <div className="flex items-center justify-between">
-                          <label className="text-sm text-dimmed">Eligibility Age</label>
+                          <label className="text-sm text-dimmed">{TERMINOLOGY.RETIREMENT_ELIGIBILITY_AGE}</label>
                           <div className="flex items-center gap-1">
                             <input
                               type="number"
@@ -880,7 +879,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
 
                         {/* Replacement Rate */}
                         <div className="flex items-center justify-between">
-                          <label className="text-sm text-dimmed">Replacement Rate</label>
+                          <label className="text-sm text-dimmed">{TERMINOLOGY.RETIREMENT_REPLACEMENT_RATE}</label>
                           <div className="flex items-center gap-1">
                             <input
                               type="number"
@@ -896,9 +895,9 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         <div className="flex items-center justify-between">
                           <label
                             className="text-sm text-dimmed cursor-help flex items-center gap-1"
-                            title="Adjusts annual benefit to reflect average post-retirement lifespan and sustainability assumptions. Default 70% accounts for mixed demographic mortality rates."
+                            title={TERMINOLOGY.TOOLTIP_ACTUARIAL_ADJUSTMENT}
                           >
-                            Actuarial Fairness Adjustment
+                            {TERMINOLOGY.RETIREMENT_ACTUARIAL_ADJUSTMENT}
                             <span className="text-xs text-muted">(?)</span>
                           </label>
                           <div className="flex items-center gap-1">
@@ -914,7 +913,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
 
                         {/* Pensionable Salary Cap */}
                         <div className="flex items-center justify-between">
-                          <label className="text-sm text-dimmed">Salary Cap</label>
+                          <label className="text-sm text-dimmed">{TERMINOLOGY.RETIREMENT_SALARY_CAP}</label>
                           <div className="flex items-center gap-1">
                             <span className="text-xs text-muted">$</span>
                             <input
@@ -930,8 +929,8 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         {/* Payout Duration */}
                         <div className="flex items-center justify-between">
                           <div>
-                            <label className="text-sm text-dimmed block">Payout Duration</label>
-                            <p className="text-xs text-muted italic mt-0.5">Fixed Duration (Modeling Simplicity)</p>
+                            <label className="text-sm text-dimmed block">{TERMINOLOGY.RETIREMENT_PAYOUT_DURATION}</label>
+                            <p className="text-xs text-muted italic mt-0.5">{TERMINOLOGY.RETIREMENT_FIXED_DURATION_NOTE}</p>
                           </div>
                           <div className="flex items-center gap-1">
                             <input
@@ -946,7 +945,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
 
                         {/* Salary Basis */}
                         <div className="flex items-center justify-between">
-                          <label className="text-sm text-dimmed">Salary Basis</label>
+                          <label className="text-sm text-dimmed">{TERMINOLOGY.RETIREMENT_SALARY_BASIS}</label>
                           <select
                             value={salaryBasis}
                             onChange={(e) => setSalaryBasis(e.target.value as 'final_3yr' | 'final_5yr' | 'career_avg')}
@@ -964,12 +963,12 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                             onClick={() => setShowRetirementAdminBaseline(!showRetirementAdminBaseline)}
                             className="text-xs text-dimmed bg-transparent border-none cursor-pointer hover:text-muted"
                           >
-                            {showRetirementAdminBaseline ? '▼' : '▶'} Baseline Assumptions
+                            {showRetirementAdminBaseline ? '▼' : '▶'} {TERMINOLOGY.RETIREMENT_BASELINE_ASSUMPTIONS}
                           </button>
                           {showRetirementAdminBaseline && (
                             <div className="space-y-2 mt-2">
                               <div className="flex items-center justify-between">
-                                <label className="text-xs text-dimmed">Retirees</label>
+                                <label className="text-xs text-dimmed">{TERMINOLOGY.RETIREMENT_RETIREES}</label>
                                 <div className="flex items-center gap-1">
                                   <input
                                     type="number"
@@ -981,7 +980,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                                 </div>
                               </div>
                               <div className="flex items-center justify-between">
-                                <label className="text-xs text-dimmed">Avg Final Salary</label>
+                                <label className="text-xs text-dimmed">{TERMINOLOGY.RETIREMENT_AVG_SALARY}</label>
                                 <div className="flex items-center gap-1">
                                   <span className="text-xs text-muted">$</span>
                                   <input
@@ -994,7 +993,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                                 </div>
                               </div>
                               <div className="flex items-center justify-between">
-                                <label className="text-xs text-dimmed">SS Baseline</label>
+                                <label className="text-xs text-dimmed">{TERMINOLOGY.RETIREMENT_SS_BASELINE}</label>
                                 <div className="flex items-center gap-1">
                                   <span className="text-xs text-muted">$</span>
                                   <input
@@ -1021,11 +1020,11 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                   {/* === HEALTHCARE PLACEHOLDER === */}
                   <div className="bg-dark-slate rounded-lg p-5 glow-border-slate opacity-60">
                     <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-base font-semibold text-muted">Healthcare Program</h3>
-                      <span className="px-2 py-0.5 rounded text-xs bg-darker-slate text-dimmed border border-border-slate">Coming Soon</span>
+                      <h3 className="text-base font-semibold text-muted">{TERMINOLOGY.HEALTHCARE_PROGRAM}</h3>
+                      <span className="px-2 py-0.5 rounded text-xs bg-darker-slate text-dimmed border border-border-slate">{TERMINOLOGY.HEALTHCARE_COMING_SOON}</span>
                     </div>
                     <p className="text-xs text-dimmed italic">
-                      Phase 2 — Model public healthcare cost as % of GDP or per-capita baseline. Will include Medicare & Medicaid baseline replacement modeling.
+                      {TERMINOLOGY.HEALTHCARE_DESCRIPTION}
                     </p>
                   </div>
 
@@ -1038,18 +1037,18 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                     <>
                       {/* Individual Benefit */}
                       <div className="bg-dark-slate rounded-lg p-4 glow-border-slate">
-                        <p className="text-xs text-dimmed uppercase tracking-wider mb-1">Individual Benefit (Illustrative)</p>
+                        <p className="text-xs text-dimmed uppercase tracking-wider mb-1">{TERMINOLOGY.RETIREMENT_INDIVIDUAL_BENEFIT}</p>
                         <p className="text-2xl font-bold text-sky-400">
                           ${((Math.min(avgFinal3yrSalary, pensionableSalaryCap) * replacementRate / 100 * benefitAdjustmentFactor / 100) / 1000).toFixed(1)}k<span className="text-sm font-normal text-muted">/yr</span>
                         </p>
                         <p className="text-xs text-dimmed mt-1">
-                          With UBI: ${(((Math.min(avgFinal3yrSalary, pensionableSalaryCap) * replacementRate / 100 * benefitAdjustmentFactor / 100) + config.ubiAnnualPerAdult) / 1000).toFixed(1)}k/yr
+                          {TERMINOLOGY.BEL_WITH}: ${(((Math.min(avgFinal3yrSalary, pensionableSalaryCap) * replacementRate / 100 * benefitAdjustmentFactor / 100) + config.ubiAnnualPerAdult) / 1000).toFixed(1)}k/yr
                         </p>
                       </div>
 
                       {/* National Cost */}
                       <div className="bg-dark-slate rounded-lg p-4 glow-border-slate">
-                        <p className="text-xs text-dimmed uppercase tracking-wider mb-1">National Retirement Cost</p>
+                        <p className="text-xs text-dimmed uppercase tracking-wider mb-1">{TERMINOLOGY.RETIREMENT_NATIONAL_COST}</p>
                         <p className="text-2xl font-bold text-sky-400">
                           ${((result.obligations.retirementProgramCost ?? 0) / 1e12).toFixed(2)}T<span className="text-sm font-normal text-muted">/yr</span>
                         </p>
@@ -1064,12 +1063,12 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                       {/* Net Impact vs SS — only for replace_ss and supplement modes */}
                       {(retirementMode === 'replace_ss' || retirementMode === 'supplement') && result.obligations.netChangeVsSS !== null && (
                         <div className="bg-dark-slate rounded-lg p-4 glow-border-slate">
-                          <p className="text-xs text-dimmed uppercase tracking-wider mb-1">Net Impact vs SS Baseline</p>
+                          <p className="text-xs text-dimmed uppercase tracking-wider mb-1">{TERMINOLOGY.RETIREMENT_NET_IMPACT_VS_SS}</p>
                           <p className={`text-2xl font-bold ${(result.obligations.netChangeVsSS ?? 0) >= 0 ? 'text-red-400' : 'text-green-400'}`}>
                             {(result.obligations.netChangeVsSS ?? 0) >= 0 ? '+' : ''}${(((result.obligations.netChangeVsSS ?? 0)) / 1e12).toFixed(2)}T<span className="text-sm font-normal text-muted">/yr</span>
                           </p>
                           <p className="text-xs text-dimmed mt-1">
-                            SS Baseline: ${(ssBaseline / 1e12).toFixed(2)}T/yr
+                            {TERMINOLOGY.RETIREMENT_SS_BASELINE}: ${(ssBaseline / 1e12).toFixed(2)}T/yr
                           </p>
                           <p className="text-xs text-dimmed">
                             {(result.obligations.netChangeVsSS ?? 0) >= 0 ? 'Additional cost above current SS' : 'Cost reduction vs current SS'}
@@ -1079,7 +1078,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
 
                       {/* Retirement Funding Ratio */}
                       <div className="bg-dark-slate rounded-lg p-4 glow-border-slate">
-                        <p className="text-xs text-dimmed uppercase tracking-wider mb-1">📊 Retirement Funding Ratio</p>
+                        <p className="text-xs text-dimmed uppercase tracking-wider mb-1">{TERMINOLOGY.RETIREMENT_FUNDING_RATIO}</p>
                         <p className={`text-2xl font-bold ${
                           result.revenue.totalRevenue > 0 && (result.obligations.retirementProgramCost ?? 0) / result.revenue.totalRevenue < 0.9 ? 'text-green-400' :
                           result.revenue.totalRevenue > 0 && (result.obligations.retirementProgramCost ?? 0) / result.revenue.totalRevenue < 1.0 ? 'text-yellow-400' :
@@ -1088,12 +1087,12 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                           {result.revenue.totalRevenue > 0 ? ((result.obligations.retirementProgramCost ?? 0) / result.revenue.totalRevenue * 100).toFixed(0) : '0'}%
                         </p>
                         <p className="text-xs text-dimmed mt-1">
-                          {result.revenue.totalRevenue > 0 && (result.obligations.retirementProgramCost ?? 0) / result.revenue.totalRevenue < 0.9 ? '🟢 Sustainable' :
-                           result.revenue.totalRevenue > 0 && (result.obligations.retirementProgramCost ?? 0) / result.revenue.totalRevenue < 1.0 ? '🟡 Tight' :
-                           '🔴 Underfunded'}
+                          {result.revenue.totalRevenue > 0 && (result.obligations.retirementProgramCost ?? 0) / result.revenue.totalRevenue < 0.9 ? TERMINOLOGY.FUNDING_SUSTAINABLE :
+                           result.revenue.totalRevenue > 0 && (result.obligations.retirementProgramCost ?? 0) / result.revenue.totalRevenue < 1.0 ? TERMINOLOGY.FUNDING_TIGHT :
+                           TERMINOLOGY.FUNDING_UNDERFUNDED}
                         </p>
                         <p className="text-xs text-dimmed">
-                          Program as % of total model revenue
+                          {TERMINOLOGY.RETIREMENT_COST_OF_REVENUE}
                         </p>
                       </div>
                     </>

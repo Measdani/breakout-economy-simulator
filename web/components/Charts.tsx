@@ -18,6 +18,7 @@ import {
 } from 'recharts';
 import type { SimulationResult, PolicyConfig } from '@/lib/types';
 import { calculateSupplement } from '@/lib/engine';
+import { TERMINOLOGY } from '@/lib/terminology';
 
 interface ChartsProps {
   result: SimulationResult;
@@ -36,15 +37,15 @@ export default function Charts({ result, config }: ChartsProps) {
   // Revenue Chart Data
   const revenueData = [
     {
-      name: 'Token Tax',
+      name: TERMINOLOGY.REVENUE_TOKEN_TAX,
       value: result.revenue.tokenTaxRevenue / 1e9,
     },
     {
-      name: 'Income Tax',
+      name: TERMINOLOGY.REVENUE_INCOME_TAX,
       value: result.revenue.incomeTaxRevenue / 1e9,
     },
     {
-      name: 'Welfare Savings',
+      name: TERMINOLOGY.REVENUE_WELFARE_SAVINGS,
       value: result.revenue.welfareSavingsCredit / 1e9,
     },
   ];
@@ -52,22 +53,22 @@ export default function Charts({ result, config }: ChartsProps) {
   // Obligations Chart Data
   const obligationsData = [
     ...(result.obligations.adultUBICost ? [{
-      name: 'Adult UBI',
+      name: TERMINOLOGY.BEL_ADULT_COST,
       value: result.obligations.adultUBICost / 1e9,
     }] : [{
-      name: 'UBI Cost',
+      name: TERMINOLOGY.BEL_TOTAL_COST,
       value: result.obligations.ubiCost / 1e9,
     }]),
     ...(result.obligations.dependentUBICost && result.obligations.dependentUBICost > 0 ? [{
-      name: 'Dependent UBI',
+      name: TERMINOLOGY.BEL_DEPENDENT_COST,
       value: result.obligations.dependentUBICost / 1e9,
     }] : []),
     {
-      name: 'Govt Operations',
+      name: TERMINOLOGY.OBLIGATIONS_GOVT_OPERATIONS,
       value: result.obligations.govtOperatingRequirement / 1e9,
     },
     ...(result.obligations.retirementProgramCost && result.obligations.retirementProgramCost > 0 ? [{
-      name: 'Retirement Program',
+      name: TERMINOLOGY.RETIREMENT_PROGRAM,
       value: result.obligations.retirementProgramCost / 1e9,
     }] : []),
   ];
@@ -113,9 +114,9 @@ export default function Charts({ result, config }: ChartsProps) {
     if (props.active && props.payload && props.payload.length) {
       const data = props.payload[0];
       const colors: { [key: string]: string } = {
-        'Token Tax': '#60a5fa',
-        'Income Tax': '#4ade80',
-        'Welfare Savings': '#c084fc'
+        [TERMINOLOGY.REVENUE_TOKEN_TAX]: '#60a5fa',
+        [TERMINOLOGY.REVENUE_INCOME_TAX]: '#4ade80',
+        [TERMINOLOGY.REVENUE_WELFARE_SAVINGS]: '#c084fc'
       };
       return (
         <div style={{ background: '#1e293b', color: 'white', padding: '12px', borderRadius: '8px', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)', fontSize: '14px', border: '1px solid #334155' }}>
@@ -131,11 +132,11 @@ export default function Charts({ result, config }: ChartsProps) {
     if (props.active && props.payload && props.payload.length) {
       const data = props.payload[0];
       const colors: { [key: string]: string } = {
-        'UBI Cost': '#facc15',
-        'Adult UBI': '#facc15',
-        'Dependent UBI': '#d8b4fe',
-        'Govt Operations': '#f87171',
-        'Retirement Program': '#38bdf8'
+        [TERMINOLOGY.BEL_TOTAL_COST]: '#facc15',
+        [TERMINOLOGY.BEL_ADULT_COST]: '#facc15',
+        [TERMINOLOGY.BEL_DEPENDENT_COST]: '#d8b4fe',
+        [TERMINOLOGY.OBLIGATIONS_GOVT_OPERATIONS]: '#f87171',
+        [TERMINOLOGY.RETIREMENT_PROGRAM]: '#38bdf8'
       };
       return (
         <div style={{ background: '#1e293b', color: 'white', padding: '12px', borderRadius: '8px', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)', fontSize: '14px', border: '1px solid #334155' }}>
@@ -153,8 +154,8 @@ export default function Charts({ result, config }: ChartsProps) {
         <div style={{ background: '#1e293b', color: 'white', padding: '12px', borderRadius: '8px', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)', fontSize: '14px', border: '1px solid #334155' }}>
           <p style={{ fontWeight: 'bold', marginBottom: '8px' }}>${(props.label / 1000).toFixed(0)}k Income</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <p style={{ color: '#4ade80' }}>UBI: {formatCurrency(props.payload[0].value)}</p>
-            <p style={{ color: '#c084fc' }}>Supplement: {formatCurrency(props.payload[1].value)}</p>
+            <p style={{ color: '#4ade80' }}>{TERMINOLOGY.BEL_SHORT}: {formatCurrency(props.payload[0].value)}</p>
+            <p style={{ color: '#c084fc' }}>{TERMINOLOGY.SBI_SHORT}: {formatCurrency(props.payload[1].value)}</p>
           </div>
         </div>
       );
