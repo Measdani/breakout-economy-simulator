@@ -846,15 +846,22 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         {/* Mode */}
                         <div className="flex items-center justify-between">
                           <label className="text-sm text-dimmed">Mode</label>
-                          <select
-                            value={retirementMode}
-                            onChange={(e) => setRetirementMode(e.target.value as 'replace_ss' | 'supplement' | 'baseline_only')}
-                            className="w-48 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright bg-transparent border-none"
-                          >
-                            <option value="replace_ss">Replace Social Security</option>
-                            <option value="supplement">Supplement SS</option>
-                            <option value="baseline_only">Baseline-Only (Reference)</option>
-                          </select>
+                          <div className="flex items-center gap-2">
+                            <select
+                              value={retirementMode}
+                              onChange={(e) => setRetirementMode(e.target.value as 'replace_ss' | 'supplement' | 'baseline_only')}
+                              className="w-40 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright bg-transparent border-none"
+                            >
+                              <option value="replace_ss">Replace Social Security</option>
+                              <option value="supplement">Supplement SS</option>
+                              <option value="baseline_only">Baseline-Only (Reference)</option>
+                            </select>
+                            <span className="text-xs font-semibold whitespace-nowrap">
+                              {retirementMode === 'replace_ss' && '🟢 Replacing SS'}
+                              {retirementMode === 'supplement' && '🟡 Supplementing SS'}
+                              {retirementMode === 'baseline_only' && '⚪ Baseline Only'}
+                            </span>
+                          </div>
                         </div>
 
                         {/* Eligibility Age */}
@@ -885,9 +892,15 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                           </div>
                         </div>
 
-                        {/* Benefit Adjustment Factor */}
+                        {/* Actuarial Fairness Adjustment */}
                         <div className="flex items-center justify-between">
-                          <label className="text-sm text-dimmed">Benefit Adjustment Factor</label>
+                          <label
+                            className="text-sm text-dimmed cursor-help flex items-center gap-1"
+                            title="Adjusts annual benefit to reflect average post-retirement lifespan and sustainability assumptions. Default 70% accounts for mixed demographic mortality rates."
+                          >
+                            Actuarial Fairness Adjustment
+                            <span className="text-xs text-muted">(?)</span>
+                          </label>
                           <div className="flex items-center gap-1">
                             <input
                               type="number"
@@ -916,7 +929,10 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
 
                         {/* Payout Duration */}
                         <div className="flex items-center justify-between">
-                          <label className="text-sm text-dimmed">Payout Duration</label>
+                          <div>
+                            <label className="text-sm text-dimmed block">Payout Duration</label>
+                            <p className="text-xs text-muted italic mt-0.5">Fixed Duration (Modeling Simplicity)</p>
+                          </div>
                           <div className="flex items-center gap-1">
                             <input
                               type="number"
@@ -1009,7 +1025,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                       <span className="px-2 py-0.5 rounded text-xs bg-darker-slate text-dimmed border border-border-slate">Coming Soon</span>
                     </div>
                     <p className="text-xs text-dimmed italic">
-                      Phase 2 — Model public healthcare cost as % of GDP or per-capita baseline. Will include Medicare/Medicaid baseline comparisons.
+                      Phase 2 — Model public healthcare cost as % of GDP or per-capita baseline. Will include Medicare & Medicaid baseline replacement modeling.
                     </p>
                   </div>
 
@@ -1060,6 +1076,26 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                           </p>
                         </div>
                       )}
+
+                      {/* Retirement Funding Ratio */}
+                      <div className="bg-dark-slate rounded-lg p-4 glow-border-slate">
+                        <p className="text-xs text-dimmed uppercase tracking-wider mb-1">📊 Retirement Funding Ratio</p>
+                        <p className={`text-2xl font-bold ${
+                          result.revenue.totalRevenue > 0 && (result.obligations.retirementProgramCost ?? 0) / result.revenue.totalRevenue < 0.9 ? 'text-green-400' :
+                          result.revenue.totalRevenue > 0 && (result.obligations.retirementProgramCost ?? 0) / result.revenue.totalRevenue < 1.0 ? 'text-yellow-400' :
+                          'text-red-400'
+                        }`}>
+                          {result.revenue.totalRevenue > 0 ? ((result.obligations.retirementProgramCost ?? 0) / result.revenue.totalRevenue * 100).toFixed(0) : '0'}%
+                        </p>
+                        <p className="text-xs text-dimmed mt-1">
+                          {result.revenue.totalRevenue > 0 && (result.obligations.retirementProgramCost ?? 0) / result.revenue.totalRevenue < 0.9 ? '🟢 Sustainable' :
+                           result.revenue.totalRevenue > 0 && (result.obligations.retirementProgramCost ?? 0) / result.revenue.totalRevenue < 1.0 ? '🟡 Tight' :
+                           '🔴 Underfunded'}
+                        </p>
+                        <p className="text-xs text-dimmed">
+                          Program as % of total model revenue
+                        </p>
+                      </div>
                     </>
                   ) : (
                     <div className="bg-dark-slate rounded-lg p-6 glow-border-slate text-center">
