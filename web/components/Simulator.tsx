@@ -266,7 +266,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
         {/* Tablet Case/Bezel Frame */}
         <div className="bg-gradient-to-b from-slate-700 to-slate-800 rounded-3xl p-4 shadow-2xl" style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)' }}>
           {/* Tablet Container */}
-          <div className="bg-dark-slate rounded-2xl overflow-hidden shadow-lg flex flex-col h-screen glow-border-cyan" style={{ maxHeight: '700px' }}>
+          <div className="bg-dark-slate rounded-2xl overflow-hidden shadow-lg flex flex-col h-screen glow-border-blue" style={{ maxHeight: '700px' }}>
           {/* Header - Polished */}
           <div className="bg-darker-slate px-5 py-6 border-b border-border-slate">
             <div className="mb-5">
@@ -582,7 +582,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                 {/* LEFT: Household Inputs */}
                 <div className="col-span-2 overflow-y-auto pr-2 space-y-6">
                   {/* Dependent UBI Rates */}
-                  <div className="bg-dark-slate rounded-lg p-5 glow-border-cyan" style={{ transition: 'all 0.3s ease' }}>
+                  <div className="bg-dark-slate rounded-lg p-5 glow-border-blue" style={{ transition: 'all 0.3s ease' }}>
                     <p className="text-sm font-semibold text-muted uppercase tracking-wide mb-4">
                       💰 Tiered Dependent Support
                     </p>
@@ -627,7 +627,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                   </div>
 
                   {/* Household Distribution */}
-                  <div className="bg-dark-slate rounded-lg p-5 glow-border-cyan" style={{ transition: 'all 0.3s ease' }}>
+                  <div className="bg-dark-slate rounded-lg p-5 glow-border-blue" style={{ transition: 'all 0.3s ease' }}>
                     <p className="text-sm font-semibold text-muted uppercase tracking-wide mb-4">
                       📊 Household Distribution
                     </p>
@@ -787,7 +787,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                     return (
                       <>
                         {/* Card 1: Dependent UBI Cost */}
-                        <div className="bg-dark-slate rounded-lg p-5 border-l-4 border-emerald-500 glow-border-cyan">
+                        <div className="bg-dark-slate rounded-lg p-5 border-l-4 border-emerald-500 glow-border-blue">
                           <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-2">Dependent UBI Cost</p>
                           <p className="text-2xl font-bold text-emerald-400">
                             ${(dependentCost / 1e12).toFixed(2)}T
@@ -795,7 +795,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         </div>
 
                         {/* Card 2: % of UBI Budget */}
-                        <div className="bg-dark-slate rounded-lg p-5 border-l-4 border-blue-500 glow-border-cyan">
+                        <div className="bg-dark-slate rounded-lg p-5 border-l-4 border-blue-500 glow-border-blue">
                           <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-2">% of UBI Budget</p>
                           <p className="text-2xl font-bold text-blue-400">
                             {result.obligations.ubiCost > 0 ? ((dependentCost / result.obligations.ubiCost) * 100).toFixed(1) : '0'}%
@@ -803,7 +803,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         </div>
 
                         {/* Card 3: Total Dependents */}
-                        <div className="bg-dark-slate rounded-lg p-5 border-l-4 border-purple-500 glow-border-cyan">
+                        <div className="bg-dark-slate rounded-lg p-5 border-l-4 border-purple-500 glow-border-blue">
                           <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-2">Total Dependents</p>
                           <p className="text-2xl font-bold text-purple-400">
                             {(totalDependents / 1e6).toFixed(1)}M
@@ -811,7 +811,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         </div>
 
                         {/* Card 4: HH with Dependents */}
-                        <div className="bg-dark-slate rounded-lg p-5 border-l-4 border-orange-500 glow-border-cyan">
+                        <div className="bg-dark-slate rounded-lg p-5 border-l-4 border-orange-500 glow-border-blue">
                           <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-2">HH with Dependents</p>
                           <p className="text-2xl font-bold text-orange-400">
                             {(hhWithDeps * 100).toFixed(1)}%
@@ -831,7 +831,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                 <div className="col-span-3 space-y-4">
 
                   {/* === RETIREMENT PROGRAM CARD === */}
-                  <div className="bg-dark-slate rounded-lg p-5 glow-border-cyan">
+                  <div className="bg-dark-slate rounded-lg p-5 glow-border-blue">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-base font-semibold text-bright">{TERMINOLOGY.RETIREMENT_PROGRAM}</h3>
                       <button
@@ -1018,7 +1018,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                   </div>
 
                   {/* === HEALTHCARE PLACEHOLDER === */}
-                  <div className="bg-dark-slate rounded-lg p-5 glow-border-cyan opacity-60">
+                  <div className="bg-dark-slate rounded-lg p-5 glow-border-blue opacity-60">
                     <div className="flex items-center justify-between mb-2">
                       <h3 className="text-base font-semibold text-bright">{TERMINOLOGY.HEALTHCARE_PROGRAM}</h3>
                       <span className="px-2 py-0.5 rounded text-xs bg-darker-slate text-muted border border-border-slate">{TERMINOLOGY.HEALTHCARE_COMING_SOON}</span>
@@ -1036,7 +1036,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                   {retirementEnabled ? (
                     <>
                       {/* Individual Benefit */}
-                      <div className="bg-dark-slate rounded-lg p-4 glow-border-cyan">
+                      <div className="bg-dark-slate rounded-lg p-4 glow-border-blue">
                         <p className="text-xs text-muted uppercase tracking-wider mb-1">{TERMINOLOGY.RETIREMENT_INDIVIDUAL_BENEFIT}</p>
                         <p className="text-2xl font-bold text-sky-400">
                           ${((Math.min(avgFinal3yrSalary, pensionableSalaryCap) * replacementRate / 100 * benefitAdjustmentFactor / 100) / 1000).toFixed(1)}k<span className="text-sm font-normal text-muted">/yr</span>
@@ -1047,7 +1047,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                       </div>
 
                       {/* National Cost */}
-                      <div className="bg-dark-slate rounded-lg p-4 glow-border-cyan">
+                      <div className="bg-dark-slate rounded-lg p-4 glow-border-blue">
                         <p className="text-xs text-muted uppercase tracking-wider mb-1">{TERMINOLOGY.RETIREMENT_NATIONAL_COST}</p>
                         <p className="text-2xl font-bold text-sky-400">
                           ${((result.obligations.retirementProgramCost ?? 0) / 1e12).toFixed(2)}T<span className="text-sm font-normal text-muted">/yr</span>
@@ -1062,7 +1062,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
 
                       {/* Net Impact vs SS — only for replace_ss and supplement modes */}
                       {(retirementMode === 'replace_ss' || retirementMode === 'supplement') && result.obligations.netChangeVsSS !== null && (
-                        <div className="bg-dark-slate rounded-lg p-4 glow-border-cyan">
+                        <div className="bg-dark-slate rounded-lg p-4 glow-border-blue">
                           <p className="text-xs text-muted uppercase tracking-wider mb-1">{TERMINOLOGY.RETIREMENT_NET_IMPACT_VS_SS}</p>
                           <p className={`text-2xl font-bold ${(result.obligations.netChangeVsSS ?? 0) >= 0 ? 'text-red-400' : 'text-green-400'}`}>
                             {(result.obligations.netChangeVsSS ?? 0) >= 0 ? '+' : ''}${(((result.obligations.netChangeVsSS ?? 0)) / 1e12).toFixed(2)}T<span className="text-sm font-normal text-muted">/yr</span>
@@ -1077,7 +1077,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                       )}
 
                       {/* Retirement Funding Ratio */}
-                      <div className="bg-dark-slate rounded-lg p-4 glow-border-cyan">
+                      <div className="bg-dark-slate rounded-lg p-4 glow-border-blue">
                         <p className="text-xs text-muted uppercase tracking-wider mb-1">{TERMINOLOGY.RETIREMENT_FUNDING_RATIO}</p>
                         <p className={`text-2xl font-bold ${
                           result.revenue.totalRevenue > 0 && (result.obligations.retirementProgramCost ?? 0) / result.revenue.totalRevenue < 0.9 ? 'text-green-400' :
@@ -1097,7 +1097,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                       </div>
                     </>
                   ) : (
-                    <div className="bg-dark-slate rounded-lg p-6 glow-border-cyan text-center">
+                    <div className="bg-dark-slate rounded-lg p-6 glow-border-blue text-center">
                       <p className="text-bright text-sm italic">Enable the Retirement Program to see cost projections and SS comparisons.</p>
                     </div>
                   )}
