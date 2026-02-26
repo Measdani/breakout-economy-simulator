@@ -48,28 +48,28 @@ export default function ResultsDisplay({ result }: ResultsDisplayProps) {
       {/* Revenue Card */}
       <div className="bg-white rounded-lg shadow-lg p-6 glow-border-green">
         <h3 className="text-lg font-bold text-slate-900 mb-4">Revenue</h3>
-        <div className="space-y-3">
-          <div className="flex justify-between items-center pb-3 border-b">
-            <span className="text-slate-700">{TERMINOLOGY.REVENUE_TOKEN_TAX}</span>
-            <span className="font-semibold text-slate-900">
+        <div className="space-y-4">
+          <div className="flex justify-between items-center pb-4 border-b-2 border-slate-200">
+            <span className="text-slate-700 flex-1">{TERMINOLOGY.REVENUE_TOKEN_TAX}</span>
+            <span className="font-semibold text-slate-900 text-right">
               {formatCurrency(revenue.tokenTaxRevenue)}
             </span>
           </div>
-          <div className="flex justify-between items-center pb-3 border-b">
-            <span className="text-slate-700">{TERMINOLOGY.REVENUE_INCOME_TAX}</span>
-            <span className="font-semibold text-slate-900">
+          <div className="flex justify-between items-center pb-4 border-b-2 border-slate-200">
+            <span className="text-slate-700 flex-1">{TERMINOLOGY.REVENUE_INCOME_TAX}</span>
+            <span className="font-semibold text-slate-900 text-right">
               {formatCurrency(revenue.incomeTaxRevenue)}
             </span>
           </div>
-          <div className="flex justify-between items-center pb-3 border-b">
-            <span className="text-slate-700">{TERMINOLOGY.REVENUE_WELFARE_SAVINGS}</span>
-            <span className="font-semibold text-slate-900">
+          <div className="flex justify-between items-center pb-4 border-b-2 border-slate-200">
+            <span className="text-slate-700 flex-1">{TERMINOLOGY.REVENUE_WELFARE_SAVINGS}</span>
+            <span className="font-semibold text-slate-900 text-right">
               {formatCurrency(revenue.welfareSavingsCredit)}
             </span>
           </div>
           <div className="flex justify-between items-center pt-2">
-            <span className="font-bold text-slate-900">{TERMINOLOGY.REVENUE_TOTAL}</span>
-            <span className="text-xl font-bold text-blue-600">
+            <span className="font-bold text-slate-900 flex-1">{TERMINOLOGY.REVENUE_TOTAL}</span>
+            <span className="text-xl font-bold text-blue-600 text-right">
               {formatCurrency(revenue.totalRevenue)}
             </span>
           </div>
@@ -79,38 +79,38 @@ export default function ResultsDisplay({ result }: ResultsDisplayProps) {
       {/* Obligations Card */}
       <div className="bg-white rounded-lg shadow-lg p-6 glow-border-red">
         <h3 className="text-lg font-bold text-slate-900 mb-4">Obligations</h3>
-        <div className="space-y-3">
-          <div className="flex justify-between items-center pb-3 border-b">
-            <span className="text-slate-700">{TERMINOLOGY.BEL_TOTAL_COST}</span>
-            <span className="font-semibold text-slate-900">
+        <div className="space-y-4">
+          <div className="flex justify-between items-center pb-4 border-b-2 border-slate-200">
+            <span className="text-slate-700 flex-1">{TERMINOLOGY.BEL_TOTAL_COST}</span>
+            <span className="font-semibold text-slate-900 text-right">
               {formatCurrency(obligations.ubiCost)}
             </span>
           </div>
           {(obligations.adultUBICost !== undefined || obligations.dependentUBICost !== undefined) && (
             <>
               <div className="flex justify-between items-center pb-2 pl-4 text-sm bg-gray-50 py-2 rounded">
-                <span className="text-slate-600">└─ {TERMINOLOGY.BEL_ADULT_COST}</span>
-                <span className="font-semibold text-slate-700">
+                <span className="text-slate-600 flex-1">└─ {TERMINOLOGY.BEL_ADULT_COST}</span>
+                <span className="font-semibold text-slate-700 text-right">
                   {obligations.adultUBICost ? formatCurrency(obligations.adultUBICost) : '—'}
                 </span>
               </div>
-              <div className="flex justify-between items-center pb-3 border-b pl-4 text-sm bg-gray-50 py-2 rounded">
-                <span className="text-slate-600">└─ {TERMINOLOGY.BEL_DEPENDENT_COST}</span>
-                <span className="font-semibold text-slate-700">
+              <div className="flex justify-between items-center pb-4 border-b-2 border-slate-200 pl-4 text-sm bg-gray-50 py-2 rounded">
+                <span className="text-slate-600 flex-1">└─ {TERMINOLOGY.BEL_DEPENDENT_COST}</span>
+                <span className="font-semibold text-slate-700 text-right">
                   {obligations.dependentUBICost ? formatCurrency(obligations.dependentUBICost) : '$0'}
                 </span>
               </div>
             </>
           )}
-          <div className="flex justify-between items-center pb-3 border-b">
-            <span className="text-slate-700">{TERMINOLOGY.OBLIGATIONS_GOVT_OPERATIONS}</span>
-            <span className="font-semibold text-slate-900">
+          <div className="flex justify-between items-center pb-4 border-b-2 border-slate-200">
+            <span className="text-slate-700 flex-1">{TERMINOLOGY.OBLIGATIONS_GOVT_OPERATIONS}</span>
+            <span className="font-semibold text-slate-900 text-right">
               {formatCurrency(obligations.govtOperatingRequirement)}
             </span>
           </div>
           <div className="flex justify-between items-center pt-2">
-            <span className="font-bold text-slate-900">{TERMINOLOGY.OBLIGATIONS_TOTAL}</span>
-            <span className="text-xl font-bold text-red-600">
+            <span className="font-bold text-slate-900 flex-1">{TERMINOLOGY.OBLIGATIONS_TOTAL}</span>
+            <span className="text-xl font-bold text-red-600 text-right">
               {formatCurrency(obligations.totalObligations)}
             </span>
           </div>
