@@ -1041,7 +1041,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         <p className="text-2xl font-bold text-sky-400">
                           ${((Math.min(avgFinal3yrSalary, pensionableSalaryCap) * replacementRate / 100 * benefitAdjustmentFactor / 100) / 1000).toFixed(1)}k<span className="text-sm font-normal text-muted">/yr</span>
                         </p>
-                        <p className="text-xs text-muted mt-1">
+                        <p className="text-xs text-bright mt-1">
                           {TERMINOLOGY.BEL_WITH}: ${(((Math.min(avgFinal3yrSalary, pensionableSalaryCap) * replacementRate / 100 * benefitAdjustmentFactor / 100) + config.ubiAnnualPerAdult) / 1000).toFixed(1)}k/yr
                         </p>
                       </div>
@@ -1052,10 +1052,10 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         <p className="text-2xl font-bold text-sky-400">
                           ${((result.obligations.retirementProgramCost ?? 0) / 1e12).toFixed(2)}T<span className="text-sm font-normal text-muted">/yr</span>
                         </p>
-                        <p className="text-xs text-muted mt-1">
+                        <p className="text-xs text-bright mt-1">
                           {payoutDurationYears}-yr obligation: ${((result.obligations.retirement25yrTotal ?? 0) / 1e12).toFixed(1)}T
                         </p>
-                        <p className="text-xs text-muted">
+                        <p className="text-xs text-bright">
                           {(((result.obligations.retirementProgramCost ?? 0) / result.obligations.totalObligations) * 100).toFixed(1)}% of total obligations
                         </p>
                       </div>
@@ -1067,10 +1067,10 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                           <p className={`text-2xl font-bold ${(result.obligations.netChangeVsSS ?? 0) >= 0 ? 'text-red-400' : 'text-green-400'}`}>
                             {(result.obligations.netChangeVsSS ?? 0) >= 0 ? '+' : ''}${(((result.obligations.netChangeVsSS ?? 0)) / 1e12).toFixed(2)}T<span className="text-sm font-normal text-muted">/yr</span>
                           </p>
-                          <p className="text-xs text-muted mt-1">
+                          <p className="text-xs text-bright mt-1">
                             {TERMINOLOGY.RETIREMENT_SS_BASELINE}: ${(ssBaseline / 1e12).toFixed(2)}T/yr
                           </p>
-                          <p className="text-xs text-muted">
+                          <p className="text-xs text-bright">
                             {(result.obligations.netChangeVsSS ?? 0) >= 0 ? 'Additional cost above current SS' : 'Cost reduction vs current SS'}
                           </p>
                         </div>
@@ -1086,12 +1086,12 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         }`}>
                           {result.revenue.totalRevenue > 0 ? ((result.obligations.retirementProgramCost ?? 0) / result.revenue.totalRevenue * 100).toFixed(0) : '0'}%
                         </p>
-                        <p className="text-xs text-muted mt-1">
+                        <p className="text-xs text-bright mt-1">
                           {result.revenue.totalRevenue > 0 && (result.obligations.retirementProgramCost ?? 0) / result.revenue.totalRevenue < 0.9 ? TERMINOLOGY.FUNDING_SUSTAINABLE :
                            result.revenue.totalRevenue > 0 && (result.obligations.retirementProgramCost ?? 0) / result.revenue.totalRevenue < 1.0 ? TERMINOLOGY.FUNDING_TIGHT :
                            TERMINOLOGY.FUNDING_UNDERFUNDED}
                         </p>
-                        <p className="text-xs text-muted">
+                        <p className="text-xs text-bright">
                           {TERMINOLOGY.RETIREMENT_COST_OF_REVENUE}
                         </p>
                       </div>
