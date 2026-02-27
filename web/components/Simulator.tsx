@@ -20,6 +20,8 @@ import SubmitModal from './SubmitModal';
 import FeedbackModal from './FeedbackModal';
 import AssumptionsPanel from './AssumptionsPanel';
 import NavButtons from './NavButtons';
+import Tooltip from './Tooltip';
+import ProgramModuleTemplate from './ProgramModuleTemplate';
 
 const DEFAULT_CONFIG: PolicyConfig = {
   tokenTaxRate: 0.0035,
@@ -82,7 +84,6 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   const [retireesCount, setRetireesCount] = useState(54000000);
   const [avgFinal3yrSalary, setAvgFinal3yrSalary] = useState(75000);
   const [ssBaseline, setSsBaseline] = useState(1.3e12);
-  const [showRetirementAdminBaseline, setShowRetirementAdminBaseline] = useState(false);
   const [showTour, setShowTour] = useState(false);
   const [activeScreen, setActiveScreen] = useState<'engine' | 'households' | 'programs' | 'incentives' | 'results' | 'charts' | 'alerts' | 'submit'>('engine');
   const [currentConfig, setCurrentConfig] = useState<string>('Default');
@@ -157,6 +158,14 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     [baseTransactionVolume, frictionTaxRate, capitalFlightRate]
   );
 
+  const retirementAnnualCost = result.obligations.retirementProgramCost ?? 0;
+  const retirement25YearTotal = result.obligations.retirement25yrTotal ?? 0;
+  const retirementShareOfObligations = result.obligations.totalObligations > 0
+    ? (retirementAnnualCost / result.obligations.totalObligations) * 100
+    : 0;
+  const retirementNetChangeVsSS = result.obligations.netChangeVsSS ?? null;
+  const showRetirementBaselineComparison = retirementEnabled && (retirementMode === 'replace_ss' || retirementMode === 'supplement');
+
   // Animated number displays for hero panel
   const animatedBalance = useAnimatedNumber(
     result.balance.surplusDeficit,
@@ -229,7 +238,6 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     setRetireesCount(54000000);
     setAvgFinal3yrSalary(75000);
     setSsBaseline(1.3e12);
-    setShowRetirementAdminBaseline(false);
     setCurrentConfig('Default');
     setActiveScreen('engine');
   };
@@ -826,284 +834,241 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
 
             {/* Step 3: National Social Programs Screen */}
             {activeScreen === 'programs' && (
-              <div className="grid grid-cols-6 gap-8">
-                {/* LEFT COLUMN — Program Inputs */}
-                <div className="col-span-3 space-y-6">
+              <div className="space-y-6">
+                <ProgramModuleTemplate
+                  programName={TERMINOLOGY.RETIREMENT_PROGRAM}
+                  enabled={retirementEnabled}
+                  onToggleEnabled={() => setRetirementEnabled(!retirementEnabled)}
+                  enabledLabel={TERMINOLOGY.RETIREMENT_ENABLED}
+                  disabledLabel={TERMINOLOGY.RETIREMENT_DISABLED}
+                  modeControl={
+                    <select
+                      value={retirementMode}
+                      onChange={(e) => setRetirementMode(e.target.value as 'replace_ss' | 'supplement' | 'baseline_only')}
+                      className="w-44 px-3 py-1.5 bg-darker-slate border border-border-slate rounded text-xs text-bright"
+                    >
+                      <option value="replace_ss">{TERMINOLOGY.RETIREMENT_MODE_REPLACE_SS}</option>
+                      <option value="supplement">{TERMINOLOGY.RETIREMENT_MODE_SUPPLEMENT}</option>
+                      <option value="baseline_only">{TERMINOLOGY.RETIREMENT_MODE_BASELINE}</option>
+                    </select>
+                  }
+                  modeBadge={
+                    <span className="px-2 py-0.5 rounded text-xs font-semibold whitespace-nowrap bg-darker-slate border border-border-slate text-bright">
+                      {getRetirementModeBadge(retirementMode)}
+                    </span>
+                  }
+                  inputs={
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <label className="text-sm text-dimmed">{TERMINOLOGY.RETIREMENT_ELIGIBILITY_AGE}</label>
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="number"
+                            value={retirementEligibilityAge}
+                            onChange={(e) => setRetirementEligibilityAge(Math.max(55, parseInt(e.target.value) || 67))}
+                            className="w-20 px-2 py-1.5 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                          />
+                          <span className="text-xs text-muted">yrs</span>
+                        </div>
+                      </div>
 
-                  {/* === RETIREMENT PROGRAM CARD === */}
-                  <div className="bg-dark-slate rounded-lg p-6 glow-border-blue">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-base font-semibold text-bright">{TERMINOLOGY.RETIREMENT_PROGRAM}</h3>
-                      <button
-                        onClick={() => setRetirementEnabled(!retirementEnabled)}
-                        className={`px-3 py-1 rounded text-xs font-medium border-none bg-transparent ${retirementEnabled ? 'text-green-400' : 'text-muted'}`}
-                      >
-                        {retirementEnabled ? `● ${TERMINOLOGY.RETIREMENT_ENABLED}` : `○ ${TERMINOLOGY.RETIREMENT_DISABLED}`}
-                      </button>
+                      <div className="flex items-center justify-between">
+                        <label className="text-sm text-dimmed">{TERMINOLOGY.RETIREMENT_REPLACEMENT_RATE}</label>
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="number"
+                            value={replacementRate}
+                            onChange={(e) => setReplacementRate(Math.max(0, Math.min(100, parseInt(e.target.value) || 80)))}
+                            className="w-20 px-2 py-1.5 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                          />
+                          <span className="text-xs text-muted">%</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <label className="text-sm text-dimmed">{TERMINOLOGY.RETIREMENT_SALARY_CAP}</label>
+                        <div className="flex items-center gap-1">
+                          <span className="text-xs text-muted">$</span>
+                          <input
+                            type="number"
+                            value={pensionableSalaryCap / 1000}
+                            onChange={(e) => setPensionableSalaryCap(Math.max(0, parseInt(e.target.value) || 250) * 1000)}
+                            className="w-20 px-2 py-1.5 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                          />
+                          <span className="text-xs text-muted">k</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <label className="text-sm text-dimmed block">{TERMINOLOGY.RETIREMENT_PAYOUT_DURATION}</label>
+                          <p className="text-xs text-muted mt-0.5">{TERMINOLOGY.RETIREMENT_FIXED_DURATION_NOTE}</p>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="number"
+                            value={payoutDurationYears}
+                            onChange={(e) => setPayoutDurationYears(Math.max(1, parseInt(e.target.value) || 25))}
+                            className="w-16 px-2 py-1.5 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                          />
+                          <span className="text-xs text-muted">yrs</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1">
+                          <label className="text-sm text-dimmed">{TERMINOLOGY.RETIREMENT_ACTUARIAL_ADJUSTMENT}</label>
+                          <Tooltip text={TERMINOLOGY.TOOLTIP_ACTUARIAL_ADJUSTMENT}>
+                            <span className="text-xs text-muted underline decoration-dotted">info</span>
+                          </Tooltip>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="number"
+                            value={benefitAdjustmentFactor}
+                            onChange={(e) => setBenefitAdjustmentFactor(Math.max(0, Math.min(100, parseInt(e.target.value) || 70)))}
+                            className="w-20 px-2 py-1.5 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                          />
+                          <span className="text-xs text-muted">%</span>
+                        </div>
+                      </div>
                     </div>
-
-                    {retirementEnabled ? (
-                      <div className="space-y-4">
-                        {/* Mode */}
-                        <div className="flex items-center justify-between">
-                          <label className="text-sm text-dimmed">{TERMINOLOGY.RETIREMENT_MODE}</label>
-                          <div className="flex items-center gap-2">
-                            <select
-                              value={retirementMode}
-                              onChange={(e) => setRetirementMode(e.target.value as 'replace_ss' | 'supplement' | 'baseline_only')}
-                              className="w-40 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright bg-transparent border-none"
-                            >
-                              <option value="replace_ss">{TERMINOLOGY.RETIREMENT_MODE_REPLACE_SS}</option>
-                              <option value="supplement">{TERMINOLOGY.RETIREMENT_MODE_SUPPLEMENT}</option>
-                              <option value="baseline_only">{TERMINOLOGY.RETIREMENT_MODE_BASELINE}</option>
-                            </select>
-                            <span className="text-xs font-semibold whitespace-nowrap">
-                              {getRetirementModeBadge(retirementMode)}
-                            </span>
-                          </div>
+                  }
+                  outputs={
+                    <div className="space-y-3 text-sm">
+                      <div className="flex items-center justify-between">
+                        <span className="text-dimmed">{TERMINOLOGY.RETIREMENT_ANNUAL}</span>
+                        <span className="font-semibold text-sky-400">${(retirementAnnualCost / 1e12).toFixed(2)}T/yr</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-dimmed">25-Year Total</span>
+                        <span className="font-semibold text-sky-400">${(retirement25YearTotal / 1e12).toFixed(2)}T</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-dimmed">% Obligations</span>
+                        <span className="font-semibold text-bright">{retirementShareOfObligations.toFixed(1)}%</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-dimmed">{TERMINOLOGY.RETIREMENT_NET_IMPACT_VS_SS}</span>
+                        <span className={`font-semibold ${
+                          retirementEnabled && showRetirementBaselineComparison && retirementNetChangeVsSS !== null
+                            ? (retirementNetChangeVsSS >= 0 ? 'text-red-400' : 'text-green-400')
+                            : 'text-muted'
+                        }`}>
+                          {!retirementEnabled
+                            ? 'Program Disabled'
+                            : showRetirementBaselineComparison && retirementNetChangeVsSS !== null
+                            ? `${retirementNetChangeVsSS >= 0 ? '+' : ''}$${(retirementNetChangeVsSS / 1e12).toFixed(2)}T/yr`
+                            : 'Baseline-Only Mode'}
+                        </span>
+                      </div>
+                    </div>
+                  }
+                  baselineComparison={showRetirementBaselineComparison ? (
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <label className="text-sm text-dimmed">{TERMINOLOGY.RETIREMENT_SS_BASELINE}</label>
+                        <div className="flex items-center gap-1">
+                          <span className="text-xs text-muted">$</span>
+                          <input
+                            type="number"
+                            value={ssBaseline / 1e12}
+                            onChange={(e) => setSsBaseline(Math.max(0, parseFloat(e.target.value) || 1.3) * 1e12)}
+                            step="0.1"
+                            className="w-16 px-2 py-1 bg-darker-slate border border-border-slate rounded text-xs text-bright text-right"
+                          />
+                          <span className="text-xs text-muted">T</span>
                         </div>
+                      </div>
 
-                        {/* Eligibility Age */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div className="bg-dark-slate rounded border border-border-slate p-3">
+                          <p className="text-xs text-muted uppercase tracking-wide mb-1">{TERMINOLOGY.RETIREMENT_NATIONAL_COST}</p>
+                          <p className="text-sm font-semibold text-bright">${(retirementAnnualCost / 1e12).toFixed(2)}T/yr</p>
+                        </div>
+                        <div className="bg-dark-slate rounded border border-border-slate p-3">
+                          <p className="text-xs text-muted uppercase tracking-wide mb-1">{TERMINOLOGY.RETIREMENT_NET_IMPACT_VS_SS}</p>
+                          <p className={`text-sm font-semibold ${retirementNetChangeVsSS !== null && retirementNetChangeVsSS >= 0 ? 'text-red-400' : 'text-green-400'}`}>
+                            {retirementNetChangeVsSS !== null
+                              ? `${retirementNetChangeVsSS >= 0 ? '+' : ''}$${(retirementNetChangeVsSS / 1e12).toFixed(2)}T/yr`
+                              : 'n/a'}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <div className="flex items-center justify-between">
-                          <label className="text-sm text-dimmed">{TERMINOLOGY.RETIREMENT_ELIGIBILITY_AGE}</label>
+                          <label className="text-xs text-dimmed">{TERMINOLOGY.RETIREMENT_RETIREES}</label>
                           <div className="flex items-center gap-1">
                             <input
                               type="number"
-                              value={retirementEligibilityAge}
-                              onChange={(e) => setRetirementEligibilityAge(Math.max(55, parseInt(e.target.value) || 67))}
-                              className="w-20 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                              value={retireesCount / 1e6}
+                              onChange={(e) => setRetireesCount(Math.max(0, parseFloat(e.target.value) || 54) * 1e6)}
+                              className="w-16 px-2 py-1 bg-darker-slate border border-border-slate rounded text-xs text-bright text-right"
                             />
-                            <span className="text-xs text-muted">yrs</span>
+                            <span className="text-xs text-muted">M</span>
                           </div>
                         </div>
-
-                        {/* Replacement Rate */}
                         <div className="flex items-center justify-between">
-                          <label className="text-sm text-dimmed">{TERMINOLOGY.RETIREMENT_REPLACEMENT_RATE}</label>
-                          <div className="flex items-center gap-1">
-                            <input
-                              type="number"
-                              value={replacementRate}
-                              onChange={(e) => setReplacementRate(Math.max(0, Math.min(100, parseInt(e.target.value) || 80)))}
-                              className="w-20 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
-                            />
-                            <span className="text-xs text-muted">%</span>
-                          </div>
-                        </div>
-
-                        {/* Actuarial Fairness Adjustment */}
-                        <div className="flex items-center justify-between">
-                          <label
-                            className="text-sm text-dimmed cursor-help flex items-center gap-1"
-                            title={TERMINOLOGY.TOOLTIP_ACTUARIAL_ADJUSTMENT}
-                          >
-                            {TERMINOLOGY.RETIREMENT_ACTUARIAL_ADJUSTMENT}
-                            <span className="text-xs text-muted">(?)</span>
-                          </label>
-                          <div className="flex items-center gap-1">
-                            <input
-                              type="number"
-                              value={benefitAdjustmentFactor}
-                              onChange={(e) => setBenefitAdjustmentFactor(Math.max(0, Math.min(100, parseInt(e.target.value) || 70)))}
-                              className="w-20 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
-                            />
-                            <span className="text-xs text-muted">%</span>
-                          </div>
-                        </div>
-
-                        {/* Pensionable Salary Cap */}
-                        <div className="flex items-center justify-between">
-                          <label className="text-sm text-dimmed">{TERMINOLOGY.RETIREMENT_SALARY_CAP}</label>
+                          <label className="text-xs text-dimmed">{TERMINOLOGY.RETIREMENT_AVG_SALARY}</label>
                           <div className="flex items-center gap-1">
                             <span className="text-xs text-muted">$</span>
                             <input
                               type="number"
-                              value={pensionableSalaryCap / 1000}
-                              onChange={(e) => setPensionableSalaryCap(Math.max(0, parseInt(e.target.value) || 250) * 1000)}
-                              className="w-20 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
+                              value={avgFinal3yrSalary / 1000}
+                              onChange={(e) => setAvgFinal3yrSalary(Math.max(0, parseInt(e.target.value) || 75) * 1000)}
+                              className="w-16 px-2 py-1 bg-darker-slate border border-border-slate rounded text-xs text-bright text-right"
                             />
                             <span className="text-xs text-muted">k</span>
                           </div>
                         </div>
-
-                        {/* Payout Duration */}
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <label className="text-sm text-dimmed block">{TERMINOLOGY.RETIREMENT_PAYOUT_DURATION}</label>
-                            <p className="text-xs text-muted italic mt-0.5">{TERMINOLOGY.RETIREMENT_FIXED_DURATION_NOTE}</p>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <input
-                              type="number"
-                              value={payoutDurationYears}
-                              onChange={(e) => setPayoutDurationYears(Math.max(1, parseInt(e.target.value) || 25))}
-                              className="w-16 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
-                            />
-                            <span className="text-xs text-muted">yrs</span>
-                          </div>
-                        </div>
-
-                        {/* Salary Basis */}
-                        <div className="flex items-center justify-between">
-                          <label className="text-sm text-dimmed">{TERMINOLOGY.RETIREMENT_SALARY_BASIS}</label>
-                          <select
-                            value={salaryBasis}
-                            onChange={(e) => setSalaryBasis(e.target.value as 'final_3yr' | 'final_5yr' | 'career_avg')}
-                            className="w-48 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright bg-transparent border-none"
-                          >
-                            <option value="final_3yr">Final 3-Year Avg</option>
-                            <option value="final_5yr">Final 5-Year Avg</option>
-                            <option value="career_avg">Career Average</option>
-                          </select>
-                        </div>
-
-                        {/* Baseline Assumptions collapsible */}
-                        <div className="mt-3 pt-3 border-t border-border-slate">
-                          <button
-                            onClick={() => setShowRetirementAdminBaseline(!showRetirementAdminBaseline)}
-                            className="text-xs text-dimmed bg-transparent border-none cursor-pointer hover:text-muted"
-                          >
-                            {showRetirementAdminBaseline ? '▼' : '▶'} {TERMINOLOGY.RETIREMENT_BASELINE_ASSUMPTIONS}
-                          </button>
-                          {showRetirementAdminBaseline && (
-                            <div className="space-y-2 mt-2">
-                              <div className="flex items-center justify-between">
-                                <label className="text-xs text-dimmed">{TERMINOLOGY.RETIREMENT_RETIREES}</label>
-                                <div className="flex items-center gap-1">
-                                  <input
-                                    type="number"
-                                    value={retireesCount / 1e6}
-                                    onChange={(e) => setRetireesCount(Math.max(0, parseFloat(e.target.value) || 54) * 1e6)}
-                                    className="w-20 px-2 py-1 bg-darker-slate border border-border-slate rounded text-xs text-bright text-right"
-                                  />
-                                  <span className="text-xs text-muted">M</span>
-                                </div>
-                              </div>
-                              <div className="flex items-center justify-between">
-                                <label className="text-xs text-dimmed">{TERMINOLOGY.RETIREMENT_AVG_SALARY}</label>
-                                <div className="flex items-center gap-1">
-                                  <span className="text-xs text-muted">$</span>
-                                  <input
-                                    type="number"
-                                    value={avgFinal3yrSalary / 1000}
-                                    onChange={(e) => setAvgFinal3yrSalary(Math.max(0, parseInt(e.target.value) || 75) * 1000)}
-                                    className="w-20 px-2 py-1 bg-darker-slate border border-border-slate rounded text-xs text-bright text-right"
-                                  />
-                                  <span className="text-xs text-muted">k</span>
-                                </div>
-                              </div>
-                              <div className="flex items-center justify-between">
-                                <label className="text-xs text-dimmed">{TERMINOLOGY.RETIREMENT_SS_BASELINE}</label>
-                                <div className="flex items-center gap-1">
-                                  <span className="text-xs text-muted">$</span>
-                                  <input
-                                    type="number"
-                                    value={ssBaseline / 1e12}
-                                    onChange={(e) => setSsBaseline(Math.max(0, parseFloat(e.target.value) || 1.3) * 1e12)}
-                                    step="0.1"
-                                    className="w-16 px-2 py-1 bg-darker-slate border border-border-slate rounded text-xs text-bright text-right"
-                                  />
-                                  <span className="text-xs text-muted">T</span>
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                        </div>
                       </div>
-                    ) : (
-                      <p className="text-xs italic text-bright">
-                        Enable the Retirement Program to configure parameters and see projected costs.
-                      </p>
-                    )}
-                  </div>
-
-                  {/* === HEALTHCARE PLACEHOLDER === */}
-                  <div className="bg-dark-slate rounded-lg p-5 glow-border-blue opacity-60">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-base font-semibold text-bright">{TERMINOLOGY.HEALTHCARE_PROGRAM}</h3>
-                      <span className="px-2 py-0.5 rounded text-xs bg-darker-slate text-muted border border-border-slate">{TERMINOLOGY.HEALTHCARE_COMING_SOON}</span>
                     </div>
+                  ) : undefined}
+                  notes={
+                    <div className="space-y-1 text-xs text-dimmed leading-relaxed">
+                      <p>{TERMINOLOGY.RETIREMENT_FIXED_DURATION_NOTE}</p>
+                      <p>{TERMINOLOGY.TOOLTIP_ACTUARIAL_ADJUSTMENT}</p>
+                    </div>
+                  }
+                  disabledMessage={
+                    <p className="text-xs italic text-bright">
+                      Enable the Retirement Program to configure parameters and see projected costs.
+                    </p>
+                  }
+                />
+
+                <ProgramModuleTemplate
+                  programName={TERMINOLOGY.HEALTHCARE_PROGRAM}
+                  enabled={false}
+                  toggleDisabled
+                  modeControl={<span className="text-xs text-muted">Phase 2</span>}
+                  modeBadge={
+                    <span className="px-2 py-0.5 rounded text-xs bg-darker-slate text-muted border border-border-slate">
+                      {TERMINOLOGY.HEALTHCARE_COMING_SOON}
+                    </span>
+                  }
+                  inputs={
+                    <p className="text-sm text-dimmed leading-relaxed">
+                      Inputs will cover coverage mode, baseline replacement assumptions, and cost growth controls.
+                    </p>
+                  }
+                  outputs={
+                    <p className="text-sm text-dimmed leading-relaxed">
+                      Outputs will include annual cost, long-horizon totals, and impact against healthcare baseline spending.
+                    </p>
+                  }
+                  notes={
                     <p className="text-xs text-muted italic">
                       {TERMINOLOGY.HEALTHCARE_DESCRIPTION}
                     </p>
-                  </div>
-
-                </div>{/* end left column */}
-
-                {/* RIGHT COLUMN — Program Outputs */}
-                <div className="col-span-3 space-y-6">
-
-                  {retirementEnabled ? (
-                    <>
-                      {/* Individual Benefit */}
-                      <div className="bg-dark-slate rounded-lg p-6 glow-border-blue">
-                        <p className="text-xs text-muted uppercase tracking-wider mb-1">{TERMINOLOGY.RETIREMENT_INDIVIDUAL_BENEFIT}</p>
-                        <p className="text-2xl font-bold text-sky-400">
-                          ${((Math.min(avgFinal3yrSalary, pensionableSalaryCap) * replacementRate / 100 * benefitAdjustmentFactor / 100) / 1000).toFixed(1)}k<span className="text-sm font-normal text-muted">/yr</span>
-                        </p>
-                        <p className="text-xs text-bright mt-1">
-                          {TERMINOLOGY.BEL_WITH}: ${(((Math.min(avgFinal3yrSalary, pensionableSalaryCap) * replacementRate / 100 * benefitAdjustmentFactor / 100) + config.ubiAnnualPerAdult) / 1000).toFixed(1)}k/yr
-                        </p>
-                      </div>
-
-                      {/* National Cost */}
-                      <div className="bg-dark-slate rounded-lg p-6 glow-border-blue">
-                        <p className="text-xs text-muted uppercase tracking-wider mb-1">{TERMINOLOGY.RETIREMENT_NATIONAL_COST}</p>
-                        <p className="text-2xl font-bold text-sky-400">
-                          ${((result.obligations.retirementProgramCost ?? 0) / 1e12).toFixed(2)}T<span className="text-sm font-normal text-muted">/yr</span>
-                        </p>
-                        <p className="text-xs text-bright mt-1">
-                          {payoutDurationYears}-yr obligation: ${((result.obligations.retirement25yrTotal ?? 0) / 1e12).toFixed(1)}T
-                        </p>
-                        <p className="text-xs text-bright">
-                          {(((result.obligations.retirementProgramCost ?? 0) / result.obligations.totalObligations) * 100).toFixed(1)}% of total obligations
-                        </p>
-                      </div>
-
-                      {/* Net Impact vs SS — only for replace_ss and supplement modes */}
-                      {(retirementMode === 'replace_ss' || retirementMode === 'supplement') && result.obligations.netChangeVsSS !== null && (
-                        <div className="bg-dark-slate rounded-lg p-6 glow-border-blue">
-                          <p className="text-xs text-muted uppercase tracking-wider mb-1">{TERMINOLOGY.RETIREMENT_NET_IMPACT_VS_SS}</p>
-                          <p className={`text-2xl font-bold ${(result.obligations.netChangeVsSS ?? 0) >= 0 ? 'text-red-400' : 'text-green-400'}`}>
-                            {(result.obligations.netChangeVsSS ?? 0) >= 0 ? '+' : ''}${(((result.obligations.netChangeVsSS ?? 0)) / 1e12).toFixed(2)}T<span className="text-sm font-normal text-muted">/yr</span>
-                          </p>
-                          <p className="text-xs text-bright mt-1">
-                            {TERMINOLOGY.RETIREMENT_SS_BASELINE}: ${(ssBaseline / 1e12).toFixed(2)}T/yr
-                          </p>
-                          <p className="text-xs text-bright">
-                            {(result.obligations.netChangeVsSS ?? 0) >= 0 ? 'Additional cost above current SS' : 'Cost reduction vs current SS'}
-                          </p>
-                        </div>
-                      )}
-
-                      {/* Retirement Funding Ratio */}
-                      <div className="bg-dark-slate rounded-lg p-6 glow-border-blue">
-                        <p className="text-xs text-muted uppercase tracking-wider mb-1">{TERMINOLOGY.RETIREMENT_FUNDING_RATIO}</p>
-                        <p className={`text-2xl font-bold ${
-                          result.revenue.totalRevenue > 0 && (result.obligations.retirementProgramCost ?? 0) / result.revenue.totalRevenue < 0.9 ? 'text-green-400' :
-                          result.revenue.totalRevenue > 0 && (result.obligations.retirementProgramCost ?? 0) / result.revenue.totalRevenue < 1.0 ? 'text-yellow-400' :
-                          'text-red-400'
-                        }`}>
-                          {result.revenue.totalRevenue > 0 ? ((result.obligations.retirementProgramCost ?? 0) / result.revenue.totalRevenue * 100).toFixed(0) : '0'}%
-                        </p>
-                        <p className="text-xs text-bright mt-1">
-                          {result.revenue.totalRevenue > 0 && (result.obligations.retirementProgramCost ?? 0) / result.revenue.totalRevenue < 0.9 ? TERMINOLOGY.FUNDING_SUSTAINABLE :
-                           result.revenue.totalRevenue > 0 && (result.obligations.retirementProgramCost ?? 0) / result.revenue.totalRevenue < 1.0 ? TERMINOLOGY.FUNDING_TIGHT :
-                           TERMINOLOGY.FUNDING_UNDERFUNDED}
-                        </p>
-                        <p className="text-xs text-bright">
-                          {TERMINOLOGY.RETIREMENT_COST_OF_REVENUE}
-                        </p>
-                      </div>
-                    </>
-                  ) : (
-                    <div className="bg-dark-slate rounded-lg p-6 glow-border-blue text-center">
-                      <p className="text-bright text-sm italic">Enable the Retirement Program to see cost projections and SS comparisons.</p>
-                    </div>
-                  )}
-
-                </div>{/* end right column */}
-
+                  }
+                  disabledMessage={
+                    <p className="text-xs italic text-bright">
+                      Healthcare is plugged into the shared module framework and ready for model logic in the next phase.
+                    </p>
+                  }
+                />
               </div>
             )}
 
@@ -1399,3 +1364,5 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     </div>
   );
 }
+
+
