@@ -108,6 +108,22 @@ export default function ResultsDisplay({ result }: ResultsDisplayProps) {
               {formatCurrency(obligations.govtOperatingRequirement)}
             </span>
           </div>
+          {obligations.retirementProgramCost !== undefined && obligations.retirementProgramCost > 0 && (
+            <div className="flex justify-between items-center pb-4 border-b-2 border-slate-200">
+              <span className="text-slate-700 flex-1">{TERMINOLOGY.RETIREMENT_PROGRAM}</span>
+              <span className="font-semibold text-slate-900 text-right">
+                {formatCurrency(obligations.retirementProgramCost)}
+              </span>
+            </div>
+          )}
+          {obligations.healthcareProgramCost !== undefined && obligations.healthcareProgramCost > 0 && (
+            <div className="flex justify-between items-center pb-4 border-b-2 border-slate-200">
+              <span className="text-slate-700 flex-1">{TERMINOLOGY.HEALTHCARE_PROGRAM} (Federal)</span>
+              <span className="font-semibold text-slate-900 text-right">
+                {formatCurrency(obligations.healthcareProgramCost)}
+              </span>
+            </div>
+          )}
           <div className="flex justify-between items-center pt-2">
             <span className="font-bold text-slate-900 flex-1">{TERMINOLOGY.OBLIGATIONS_TOTAL}</span>
             <span className="text-xl font-bold text-red-600 text-right">

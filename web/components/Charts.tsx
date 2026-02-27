@@ -71,6 +71,10 @@ export default function Charts({ result, config }: ChartsProps) {
       name: TERMINOLOGY.RETIREMENT_PROGRAM,
       value: result.obligations.retirementProgramCost / 1e9,
     }] : []),
+    ...(result.obligations.healthcareProgramCost && result.obligations.healthcareProgramCost > 0 ? [{
+      name: `${TERMINOLOGY.HEALTHCARE_PROGRAM} (Federal)`,
+      value: result.obligations.healthcareProgramCost / 1e9,
+    }] : []),
   ];
 
   // Supplement Curve Data
@@ -108,7 +112,7 @@ export default function Charts({ result, config }: ChartsProps) {
   }
 
   const COLORS_REVENUE = ['#3b82f6', '#10b981', '#8b5cf6'];
-  const COLORS_OBLIGATIONS = ['#f59e0b', '#a78bfa', '#ef4444', '#38bdf8'];
+  const COLORS_OBLIGATIONS = ['#f59e0b', '#a78bfa', '#ef4444', '#38bdf8', '#22d3ee'];
 
   const revenueTooltip = (props: any) => {
     if (props.active && props.payload && props.payload.length) {
@@ -136,7 +140,8 @@ export default function Charts({ result, config }: ChartsProps) {
         [TERMINOLOGY.BEL_ADULT_COST]: '#facc15',
         [TERMINOLOGY.BEL_DEPENDENT_COST]: '#d8b4fe',
         [TERMINOLOGY.OBLIGATIONS_GOVT_OPERATIONS]: '#f87171',
-        [TERMINOLOGY.RETIREMENT_PROGRAM]: '#38bdf8'
+        [TERMINOLOGY.RETIREMENT_PROGRAM]: '#38bdf8',
+        [`${TERMINOLOGY.HEALTHCARE_PROGRAM} (Federal)`]: '#22d3ee'
       };
       return (
         <div style={{ background: '#1e293b', color: 'white', padding: '12px', borderRadius: '8px', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)', fontSize: '14px', border: '1px solid #334155' }}>

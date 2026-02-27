@@ -44,10 +44,32 @@ const DEFAULT_CONFIG: PolicyConfig = {
   transactionVolumeGrowthRate: 0.05,
   capitalFlightRate: 0,
   marketMakerExempt: false,
+  // Healthcare defaults
+  healthcareEnabled: true,
+  healthcareMode: 'baseline',
+  medicareAnnualSpend: 1.05e12,
+  medicaidAnnualSpend: 0.86e12,
+  federalHealthcareSpendTotal: 1.91e12,
+  aiDiagnosticsSavingsPct: 0,
+  adminAutomationSavingsPct: 0,
+  allPayerTransparencySavingsPct: 0,
 };
 
 interface SimulatorProps {
   initialConfig?: Partial<PolicyConfig>
+}
+
+function getHealthcareModeBadge(mode: 'baseline' | 'efficiency_reform' | 'structural_replacement'): string {
+  switch (mode) {
+    case 'baseline':
+      return 'Baseline Cost';
+    case 'efficiency_reform':
+      return 'Phase 1 Efficiency';
+    case 'structural_replacement':
+      return 'Locked';
+    default:
+      return '';
+  }
 }
 
 export default function Simulator({ initialConfig }: SimulatorProps = {}) {
@@ -84,6 +106,20 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   const [retireesCount, setRetireesCount] = useState(54000000);
   const [avgFinal3yrSalary, setAvgFinal3yrSalary] = useState(75000);
   const [ssBaseline, setSsBaseline] = useState(1.3e12);
+  // Healthcare Program state
+  const [healthcareEnabled, setHealthcareEnabled] = useState(mergedConfig.healthcareEnabled ?? true);
+  const [healthcareMode, setHealthcareMode] = useState<'baseline' | 'efficiency_reform' | 'structural_replacement'>(
+    mergedConfig.healthcareMode ?? 'baseline'
+  );
+  const [aiDiagnosticsSavingsPct, setAiDiagnosticsSavingsPct] = useState(mergedConfig.aiDiagnosticsSavingsPct ?? 0);
+  const [adminAutomationSavingsPct, setAdminAutomationSavingsPct] = useState(mergedConfig.adminAutomationSavingsPct ?? 0);
+  const [allPayerTransparencySavingsPct, setAllPayerTransparencySavingsPct] = useState(
+    mergedConfig.allPayerTransparencySavingsPct ?? 0
+  );
+  const medicareAnnualSpend = mergedConfig.medicareAnnualSpend ?? 1.05e12;
+  const medicaidAnnualSpend = mergedConfig.medicaidAnnualSpend ?? 0.86e12;
+  const federalHealthcareSpendTotal =
+    mergedConfig.federalHealthcareSpendTotal ?? (medicareAnnualSpend + medicaidAnnualSpend);
   const [showTour, setShowTour] = useState(false);
   const [activeScreen, setActiveScreen] = useState<'engine' | 'households' | 'programs' | 'incentives' | 'results' | 'charts' | 'alerts' | 'submit'>('engine');
   const [currentConfig, setCurrentConfig] = useState<string>('Default');
@@ -144,6 +180,14 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     retireesCount,
     avgFinal3yrSalary,
     ssBaseline,
+    healthcareEnabled,
+    healthcareMode,
+    medicareAnnualSpend,
+    medicaidAnnualSpend,
+    federalHealthcareSpendTotal,
+    aiDiagnosticsSavingsPct,
+    adminAutomationSavingsPct,
+    allPayerTransparencySavingsPct,
   };
 
   const result: SimulationResult = useMemo(() => runSimulation(config), [config]);
@@ -165,6 +209,12 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     : 0;
   const retirementNetChangeVsSS = result.obligations.netChangeVsSS ?? null;
   const showRetirementBaselineComparison = retirementEnabled && (retirementMode === 'replace_ss' || retirementMode === 'supplement');
+  const healthcareBaselineFederalCost = result.obligations.healthcareBaselineFederalCost ?? federalHealthcareSpendTotal;
+  const healthcareModeledFederalCost = result.obligations.healthcareProgramCost ?? 0;
+  const healthcareNetFederalSavings = result.obligations.healthcareNetFederalSavings ?? 0;
+  const healthcareObligationsImpact = result.obligations.totalObligations > 0
+    ? (healthcareNetFederalSavings / result.obligations.totalObligations) * 100
+    : 0;
 
   // Animated number displays for hero panel
   const animatedBalance = useAnimatedNumber(
@@ -238,6 +288,11 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     setRetireesCount(54000000);
     setAvgFinal3yrSalary(75000);
     setSsBaseline(1.3e12);
+    setHealthcareEnabled(DEFAULT_CONFIG.healthcareEnabled ?? true);
+    setHealthcareMode(DEFAULT_CONFIG.healthcareMode ?? 'baseline');
+    setAiDiagnosticsSavingsPct(DEFAULT_CONFIG.aiDiagnosticsSavingsPct ?? 0);
+    setAdminAutomationSavingsPct(DEFAULT_CONFIG.adminAutomationSavingsPct ?? 0);
+    setAllPayerTransparencySavingsPct(DEFAULT_CONFIG.allPayerTransparencySavingsPct ?? 0);
     setCurrentConfig('Default');
     setActiveScreen('engine');
   };
@@ -1040,32 +1095,133 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
 
                 <ProgramModuleTemplate
                   programName={TERMINOLOGY.HEALTHCARE_PROGRAM}
-                  enabled={false}
-                  toggleDisabled
-                  modeControl={<span className="text-xs text-muted">Phase 2</span>}
+                  enabled={healthcareEnabled}
+                  onToggleEnabled={() => setHealthcareEnabled(!healthcareEnabled)}
+                  enabledLabel="Enabled"
+                  disabledLabel="Disabled"
+                  modeControl={
+                    <select
+                      value={healthcareMode}
+                      onChange={(e) => setHealthcareMode(e.target.value as 'baseline' | 'efficiency_reform' | 'structural_replacement')}
+                      className="w-56 px-3 py-1.5 bg-darker-slate border border-border-slate rounded text-xs text-bright"
+                    >
+                      <option value="baseline">Baseline</option>
+                      <option value="efficiency_reform">Efficiency Reform (Phase 1)</option>
+                      <option value="structural_replacement" disabled>Structural Replacement (Locked)</option>
+                    </select>
+                  }
                   modeBadge={
-                    <span className="px-2 py-0.5 rounded text-xs bg-darker-slate text-muted border border-border-slate">
-                      {TERMINOLOGY.HEALTHCARE_COMING_SOON}
+                    <span className="px-2 py-0.5 rounded text-xs font-semibold whitespace-nowrap bg-darker-slate border border-border-slate text-bright">
+                      {getHealthcareModeBadge(healthcareMode)}
                     </span>
                   }
                   inputs={
-                    <p className="text-sm text-dimmed leading-relaxed">
-                      Inputs will cover coverage mode, baseline replacement assumptions, and cost growth controls.
-                    </p>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <label className="text-sm text-dimmed">AI Diagnostics Savings</label>
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="number"
+                            value={aiDiagnosticsSavingsPct}
+                            onChange={(e) => setAiDiagnosticsSavingsPct(Math.max(0, Math.min(100, parseFloat(e.target.value) || 0)))}
+                            disabled={healthcareMode !== 'efficiency_reform'}
+                            className={`w-20 px-2 py-1.5 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right ${
+                              healthcareMode !== 'efficiency_reform' ? 'opacity-60 cursor-not-allowed' : ''
+                            }`}
+                          />
+                          <span className="text-xs text-muted">%</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <label className="text-sm text-dimmed">Admin Automation Savings</label>
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="number"
+                            value={adminAutomationSavingsPct}
+                            onChange={(e) => setAdminAutomationSavingsPct(Math.max(0, Math.min(100, parseFloat(e.target.value) || 0)))}
+                            disabled={healthcareMode !== 'efficiency_reform'}
+                            className={`w-20 px-2 py-1.5 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right ${
+                              healthcareMode !== 'efficiency_reform' ? 'opacity-60 cursor-not-allowed' : ''
+                            }`}
+                          />
+                          <span className="text-xs text-muted">%</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <label className="text-sm text-dimmed">All-Payer Transparency Savings</label>
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="number"
+                            value={allPayerTransparencySavingsPct}
+                            onChange={(e) => setAllPayerTransparencySavingsPct(Math.max(0, Math.min(100, parseFloat(e.target.value) || 0)))}
+                            disabled={healthcareMode !== 'efficiency_reform'}
+                            className={`w-20 px-2 py-1.5 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right ${
+                              healthcareMode !== 'efficiency_reform' ? 'opacity-60 cursor-not-allowed' : ''
+                            }`}
+                          />
+                          <span className="text-xs text-muted">%</span>
+                        </div>
+                      </div>
+                      {healthcareMode !== 'efficiency_reform' && (
+                        <p className="text-xs text-muted italic">
+                          Savings levers activate only in Efficiency Reform (Phase 1) mode.
+                        </p>
+                      )}
+                    </div>
                   }
                   outputs={
-                    <p className="text-sm text-dimmed leading-relaxed">
-                      Outputs will include annual cost, long-horizon totals, and impact against healthcare baseline spending.
-                    </p>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex items-center justify-between">
+                        <span className="text-dimmed">Baseline Federal Cost</span>
+                        <span className="font-semibold text-orange-300">${(healthcareBaselineFederalCost / 1e12).toFixed(2)}T/yr</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-dimmed">Modeled Federal Cost</span>
+                        <span className="font-semibold text-sky-400">${(healthcareModeledFederalCost / 1e12).toFixed(2)}T/yr</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-dimmed">Net Federal Savings</span>
+                        <span className={`font-semibold ${healthcareNetFederalSavings > 0 ? 'text-green-400' : 'text-muted'}`}>
+                          {healthcareNetFederalSavings > 0
+                            ? `$${(healthcareNetFederalSavings / 1e9).toFixed(1)}B/yr`
+                            : '$0.0B/yr'}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-dimmed">% Obligations Impact</span>
+                        <span className="font-semibold text-bright">
+                          {healthcareNetFederalSavings > 0 ? `-${healthcareObligationsImpact.toFixed(1)}%` : '0.0%'}
+                        </span>
+                      </div>
+                    </div>
                   }
+                  baselineComparison={healthcareEnabled ? (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      <div className="bg-dark-slate rounded border border-border-slate p-3">
+                        <p className="text-xs text-muted uppercase tracking-wide mb-1">Medicare Baseline</p>
+                        <p className="text-sm font-semibold text-bright">${(medicareAnnualSpend / 1e12).toFixed(2)}T/yr</p>
+                      </div>
+                      <div className="bg-dark-slate rounded border border-border-slate p-3">
+                        <p className="text-xs text-muted uppercase tracking-wide mb-1">Medicaid Baseline</p>
+                        <p className="text-sm font-semibold text-bright">${(medicaidAnnualSpend / 1e12).toFixed(2)}T/yr</p>
+                      </div>
+                      <div className="bg-dark-slate rounded border border-border-slate p-3">
+                        <p className="text-xs text-muted uppercase tracking-wide mb-1">Federal Total Baseline</p>
+                        <p className="text-sm font-semibold text-orange-300">${(healthcareBaselineFederalCost / 1e12).toFixed(2)}T/yr</p>
+                      </div>
+                    </div>
+                  ) : undefined}
+                  baselineTitle="Federal Baseline Comparison"
+                  notesTitle="Model Notes"
                   notes={
-                    <p className="text-xs text-muted italic">
-                      {TERMINOLOGY.HEALTHCARE_DESCRIPTION}
-                    </p>
+                    <div className="space-y-1 text-xs text-dimmed leading-relaxed">
+                      <p>Phase 1 is federal-only and benchmarks Medicare + Medicaid baseline spending.</p>
+                      <p>Efficiency savings are combined multiplicatively for conservative modeling.</p>
+                    </div>
                   }
                   disabledMessage={
                     <p className="text-xs italic text-bright">
-                      Healthcare is plugged into the shared module framework and ready for model logic in the next phase.
+                      Enable the Healthcare Program to include federal healthcare obligations in fiscal results.
                     </p>
                   }
                 />

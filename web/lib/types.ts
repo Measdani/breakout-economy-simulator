@@ -48,6 +48,9 @@ export interface PolicyConfig {
   retireesCount?: number;             // default 54_000_000
   avgFinal3yrSalary?: number;         // default 75_000
   ssBaseline?: number;                // default 1.3e12
+  // Healthcare Program
+  healthcareEnabled?: boolean;
+  healthcareMode?: 'baseline' | 'efficiency_reform' | 'structural_replacement';
   // Healthcare Baselines (admin storage; model logic pending)
   medicareAnnualSpend?: number;             // federal baseline
   medicaidAnnualSpend?: number;             // federal baseline
@@ -78,6 +81,9 @@ export interface Obligations {
   retirementAnnualBenefit?: number;
   retirement25yrTotal?: number;
   netChangeVsSS?: number | null;
+  healthcareProgramCost?: number;
+  healthcareBaselineFederalCost?: number;
+  healthcareNetFederalSavings?: number;
 }
 
 export interface Balance {

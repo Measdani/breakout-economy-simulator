@@ -125,6 +125,8 @@ export default function SubmitModal({ config, result, isOpen, onClose, configNam
                 <span style={{ color: '#e2e8f0', textAlign: 'right' }}>${((result.obligations.ubiCost || 0) / 1e12).toFixed(2)}T</span>
                 <span style={{ color: '#94a3b8' }}>Retirement Annual</span>
                 <span style={{ color: '#e2e8f0', textAlign: 'right' }}>${((result.obligations.retirementProgramCost ?? 0) / 1e12).toFixed(2)}T</span>
+                <span style={{ color: '#94a3b8' }}>Healthcare Federal</span>
+                <span style={{ color: '#e2e8f0', textAlign: 'right' }}>${((result.obligations.healthcareProgramCost ?? 0) / 1e12).toFixed(2)}T</span>
                 <span style={{ color: '#94a3b8' }}>Surplus/Deficit</span>
                 <span style={{ color: result.balance.isSolvent ? '#4ade80' : '#f87171', textAlign: 'right', fontWeight: 600 }}>
                   {result.balance.isSolvent ? '+' : ''}${(result.balance.surplusDeficit / 1e9).toFixed(1)}B

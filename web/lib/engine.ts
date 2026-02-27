@@ -219,7 +219,32 @@ export function runSimulation(config: PolicyConfig): SimulationResult {
     ? annualRetirementCost - ssBaseline
     : null;
 
-  const totalObligations = ubiCost + govtOperatingRequirement + annualRetirementCost;
+  // Healthcare Program (Phase 1, federal-only)
+  const healthcareEnabled = config.healthcareEnabled ?? true;
+  const healthcareMode = config.healthcareMode ?? 'baseline';
+  const medicareAnnualSpend = config.medicareAnnualSpend ?? 1.05e12;
+  const medicaidAnnualSpend = config.medicaidAnnualSpend ?? 0.86e12;
+  const baselineFederalHealthcareCost =
+    config.federalHealthcareSpendTotal ?? (medicareAnnualSpend + medicaidAnnualSpend);
+  const aiDiagnosticsSavingsRate = Math.max(0, Math.min(1, (config.aiDiagnosticsSavingsPct ?? 0) / 100));
+  const adminAutomationSavingsRate = Math.max(0, Math.min(1, (config.adminAutomationSavingsPct ?? 0) / 100));
+  const allPayerTransparencySavingsRate = Math.max(0, Math.min(1, (config.allPayerTransparencySavingsPct ?? 0) / 100));
+  const healthcareSavingsRate =
+    healthcareEnabled && healthcareMode === 'efficiency_reform'
+      ? 1 -
+        (1 - aiDiagnosticsSavingsRate) *
+          (1 - adminAutomationSavingsRate) *
+          (1 - allPayerTransparencySavingsRate)
+      : 0;
+  const modeledFederalHealthcareCost = healthcareEnabled
+    ? baselineFederalHealthcareCost * (1 - healthcareSavingsRate)
+    : 0;
+  const healthcareNetFederalSavings = healthcareEnabled
+    ? baselineFederalHealthcareCost - modeledFederalHealthcareCost
+    : 0;
+
+  const totalObligations =
+    ubiCost + govtOperatingRequirement + annualRetirementCost + modeledFederalHealthcareCost;
 
   const surplusDeficit = totalRevenue - totalObligations;
   const isSolvent = surplusDeficit >= 0;
@@ -248,6 +273,12 @@ export function runSimulation(config: PolicyConfig): SimulationResult {
     );
   }
 
+  if (healthcareEnabled && healthcareMode === 'structural_replacement') {
+    warnings.push(
+      'Healthcare structural replacement mode is locked in Phase 1. Baseline federal cost is used for modeling.'
+    );
+  }
+
   return {
     revenue: {
       tokenTaxRevenue,
@@ -266,6 +297,9 @@ export function runSimulation(config: PolicyConfig): SimulationResult {
       retirementAnnualBenefit: avgAnnualBenefit,
       retirement25yrTotal,
       netChangeVsSS,
+      healthcareProgramCost: modeledFederalHealthcareCost,
+      healthcareBaselineFederalCost: baselineFederalHealthcareCost,
+      healthcareNetFederalSavings,
     },
     balance: {
       surplusDeficit,

@@ -34,7 +34,7 @@ export default function AdminSettingsForm({ currentConfig, history }: Props) {
   const [avgFinal3yrSalary, setAvgFinal3yrSalary] = useState(currentConfig.avgFinal3yrSalary ?? 60000)
   const [ssBaseline, setSsBaseline] = useState(currentConfig.ssBaseline ?? 1.4e12)
   const [benefitAdjustmentFactor, setBenefitAdjustmentFactor] = useState((currentConfig.benefitAdjustmentFactor ?? 0.70) * 100)
-  // Healthcare baselines (stored only for now; not used in model logic yet)
+  // Healthcare baselines and Phase 1 efficiency levers
   const [medicareAnnualSpend, setMedicareAnnualSpend] = useState(currentConfig.medicareAnnualSpend ?? 1.05e12)
   const [medicaidAnnualSpend, setMedicaidAnnualSpend] = useState(currentConfig.medicaidAnnualSpend ?? 0.86e12)
   const [nationalHealthcareSpendTotal, setNationalHealthcareSpendTotal] = useState(currentConfig.nationalHealthcareSpendTotal ?? 4.90e12)

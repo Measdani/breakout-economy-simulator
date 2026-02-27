@@ -70,6 +70,12 @@ export function exportConfigAsCSV(
   rows.push(`  Dependent UBI Cost ($),${result.obligations.dependentUBICost?.toLocaleString() || 'N/A'}`);
   rows.push(`  Total UBI Cost ($),${result.obligations.ubiCost.toLocaleString()}`);
   rows.push(`  Government Operations ($),${result.obligations.govtOperatingRequirement.toLocaleString()}`);
+  if (result.obligations.retirementProgramCost && result.obligations.retirementProgramCost > 0) {
+    rows.push(`  Retirement Program ($),${result.obligations.retirementProgramCost.toLocaleString()}`);
+  }
+  if (result.obligations.healthcareProgramCost && result.obligations.healthcareProgramCost > 0) {
+    rows.push(`  Healthcare Program - Federal ($),${result.obligations.healthcareProgramCost.toLocaleString()}`);
+  }
   rows.push(`  Total Obligations ($),${result.obligations.totalObligations.toLocaleString()}`);
   rows.push('');
 
