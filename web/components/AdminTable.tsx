@@ -63,10 +63,22 @@ export default function AdminTable({ submissions }: Props) {
           className="flex-1 px-4 py-2 bg-darker-navy border border-border-slate rounded text-bright focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <button
+          type="button"
           onClick={exportCSV}
-          className="px-6 py-2 bg-slate-900 text-slate-100 border border-slate-600 rounded hover:bg-slate-800 font-semibold transition whitespace-nowrap shadow-sm"
+          className="px-6 py-2 rounded font-semibold whitespace-nowrap transition"
+          style={{
+            backgroundColor: '#0f172a',
+            color: '#f8fafc',
+            border: '1px solid #475569',
+            boxShadow: '0 1px 2px rgba(0,0,0,0.35)',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 'auto',
+            minWidth: '160px',
+          }}
         >
-          📥 Export CSV ({filtered.length})
+          Export CSV ({filtered.length})
         </button>
       </div>
 
@@ -121,3 +133,4 @@ export default function AdminTable({ submissions }: Props) {
     </div>
   )
 }
+
