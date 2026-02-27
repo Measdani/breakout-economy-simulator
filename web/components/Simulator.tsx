@@ -208,13 +208,45 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     ? (retirementAnnualCost / result.obligations.totalObligations) * 100
     : 0;
   const retirementNetChangeVsSS = result.obligations.netChangeVsSS ?? null;
-  const showRetirementBaselineComparison = retirementEnabled && (retirementMode === 'replace_ss' || retirementMode === 'supplement');
+  const showRetirementBaselineComparison = retirementMode === 'replace_ss' || retirementMode === 'supplement';
   const healthcareBaselineFederalCost = result.obligations.healthcareBaselineFederalCost ?? federalHealthcareSpendTotal;
   const healthcareModeledFederalCost = result.obligations.healthcareProgramCost ?? 0;
   const healthcareNetFederalSavings = result.obligations.healthcareNetFederalSavings ?? 0;
   const healthcareObligationsImpact = result.obligations.totalObligations > 0
     ? (healthcareNetFederalSavings / result.obligations.totalObligations) * 100
     : 0;
+  const totalRevenueAnnual = result.revenue.totalRevenue;
+  const belAnnualCost = result.obligations.ubiCost;
+  const remainingFiscalSpaceAfterBEL = result.obligations.remainingFiscalSpaceAfterBEL
+    ?? (totalRevenueAnnual - belAnnualCost);
+  const fiscalSpaceAfterPrograms = result.obligations.fiscalSpaceAfterPrograms
+    ?? (remainingFiscalSpaceAfterBEL - retirementAnnualCost - healthcareModeledFederalCost);
+  const belShareOfRevenue = result.obligations.belShareOfRevenue
+    ?? (totalRevenueAnnual > 0 ? (belAnnualCost / totalRevenueAnnual) * 100 : 0);
+  const retirementShareOfRevenue = result.obligations.retirementShareOfRevenue
+    ?? (totalRevenueAnnual > 0 ? (retirementAnnualCost / totalRevenueAnnual) * 100 : 0);
+  const healthcareShareOfRevenue = result.obligations.healthcareShareOfRevenue
+    ?? (totalRevenueAnnual > 0 ? (healthcareModeledFederalCost / totalRevenueAnnual) * 100 : 0);
+  const retirementAllocatedRevenue = result.obligations.retirementAllocatedRevenue
+    ?? (retirementAnnualCost > 0
+      ? Math.max(0, Math.min(Math.max(remainingFiscalSpaceAfterBEL, 0), retirementAnnualCost))
+      : 0);
+  const remainingAfterRetirement = remainingFiscalSpaceAfterBEL - retirementAnnualCost;
+  const healthcareAllocatedRevenue = healthcareModeledFederalCost > 0
+    ? Math.max(0, Math.min(Math.max(remainingAfterRetirement, 0), healthcareModeledFederalCost))
+    : 0;
+  const retirementFundingRatio = result.obligations.retirementFundingRatio
+    ?? (retirementAnnualCost > 0 ? retirementAllocatedRevenue / retirementAnnualCost : null);
+  const retirementFundingStatus = retirementFundingRatio === null
+    ? null
+    : retirementFundingRatio > 1
+      ? { label: 'Fully funded', color: 'text-green-400', dot: 'bg-green-500' }
+      : retirementFundingRatio >= 0.8
+        ? { label: 'Stress zone', color: 'text-yellow-300', dot: 'bg-yellow-400' }
+        : { label: 'Unsustainable', color: 'text-red-400', dot: 'bg-red-500' };
+  const retirementDeficitContribution = Math.max(0, retirementAnnualCost - retirementAllocatedRevenue);
+  const healthcareDeficitContribution = Math.max(0, healthcareModeledFederalCost - healthcareAllocatedRevenue);
+  const programsIncreaseDeficit = fiscalSpaceAfterPrograms < 0;
 
   // Animated number displays for hero panel
   const animatedBalance = useAnimatedNumber(
@@ -890,6 +922,51 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
             {/* Step 3: National Social Programs Screen */}
             {activeScreen === 'programs' && (
               <div className="space-y-6">
+                <div className="bg-dark-slate rounded-lg p-6 border border-border-slate glow-border-blue">
+                  <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-4">Program Funding Allocation</p>
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
+                    <div className="bg-darker-slate rounded border border-border-slate p-3">
+                      <p className="text-xs text-muted mb-1">Total Revenue</p>
+                      <p className="text-sm font-semibold text-emerald-400">${(totalRevenueAnnual / 1e12).toFixed(2)}T</p>
+                    </div>
+                    <div className="bg-darker-slate rounded border border-border-slate p-3">
+                      <p className="text-xs text-muted mb-1">BEL Cost</p>
+                      <p className="text-sm font-semibold text-sky-300">${(belAnnualCost / 1e12).toFixed(2)}T</p>
+                    </div>
+                    <div className="bg-darker-slate rounded border border-border-slate p-3">
+                      <p className="text-xs text-muted mb-1">Remaining Fiscal Space</p>
+                      <p className={`text-sm font-semibold ${remainingFiscalSpaceAfterBEL >= 0 ? 'text-green-300' : 'text-red-300'}`}>
+                        ${Math.abs(remainingFiscalSpaceAfterBEL / 1e12).toFixed(2)}T {remainingFiscalSpaceAfterBEL >= 0 ? '' : '(deficit)'}
+                      </p>
+                    </div>
+                    <div className="bg-darker-slate rounded border border-border-slate p-3">
+                      <p className="text-xs text-muted mb-1">Post-Program Balance</p>
+                      <p className={`text-sm font-semibold ${fiscalSpaceAfterPrograms >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                        {fiscalSpaceAfterPrograms >= 0 ? '+' : '-'}${Math.abs(fiscalSpaceAfterPrograms / 1e12).toFixed(2)}T
+                      </p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div className="bg-darker-slate rounded border border-border-slate p-3">
+                      <p className="text-xs text-muted mb-1">BEL Share of Revenue</p>
+                      <p className="text-sm font-semibold text-bright">{belShareOfRevenue.toFixed(1)}%</p>
+                    </div>
+                    <div className="bg-darker-slate rounded border border-border-slate p-3">
+                      <p className="text-xs text-muted mb-1">Retirement Share of Revenue</p>
+                      <p className="text-sm font-semibold text-bright">{retirementShareOfRevenue.toFixed(1)}%</p>
+                    </div>
+                    <div className="bg-darker-slate rounded border border-border-slate p-3">
+                      <p className="text-xs text-muted mb-1">Healthcare Share of Revenue</p>
+                      <p className="text-sm font-semibold text-bright">{healthcareShareOfRevenue.toFixed(1)}%</p>
+                    </div>
+                  </div>
+                  <p className="text-xs text-dimmed mt-4">
+                    Crowd-out check: {programsIncreaseDeficit
+                      ? `Retirement + Healthcare exceed remaining fiscal space and increase deficit by $${Math.abs(fiscalSpaceAfterPrograms / 1e9).toFixed(1)}B.`
+                      : 'Retirement + Healthcare fit within remaining fiscal space after BEL.'}
+                  </p>
+                </div>
+
                 <ProgramModuleTemplate
                   programName={TERMINOLOGY.RETIREMENT_PROGRAM}
                   enabled={retirementEnabled}
@@ -1004,6 +1081,10 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         <span className="font-semibold text-bright">{retirementShareOfObligations.toFixed(1)}%</span>
                       </div>
                       <div className="flex items-center justify-between">
+                        <span className="text-dimmed">% Revenue</span>
+                        <span className="font-semibold text-bright">{retirementShareOfRevenue.toFixed(1)}%</span>
+                      </div>
+                      <div className="flex items-center justify-between">
                         <span className="text-dimmed">{TERMINOLOGY.RETIREMENT_NET_IMPACT_VS_SS}</span>
                         <span className={`font-semibold ${
                           retirementEnabled && showRetirementBaselineComparison && retirementNetChangeVsSS !== null
@@ -1017,9 +1098,48 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                             : 'Baseline-Only Mode'}
                         </span>
                       </div>
+
+                      <div className="pt-3 border-t border-border-slate space-y-2">
+                        <p className="text-xs font-semibold text-muted uppercase tracking-wide">Retirement Funding Ratio</p>
+                        {retirementFundingRatio === null ? (
+                          <p className="text-xs text-muted">No retirement cost active.</p>
+                        ) : (
+                          <>
+                            <div className="flex items-center justify-between">
+                              <span className="text-dimmed">Allocated Revenue</span>
+                              <span className="font-semibold text-bright">${(retirementAllocatedRevenue / 1e12).toFixed(2)}T</span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-dimmed">Retirement Cost</span>
+                              <span className="font-semibold text-bright">${(retirementAnnualCost / 1e12).toFixed(2)}T</span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-dimmed">Funding Ratio</span>
+                              <span className={`font-semibold ${retirementFundingStatus ? retirementFundingStatus.color : 'text-muted'}`}>
+                                {(retirementFundingRatio * 100).toFixed(1)}%
+                              </span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-dimmed">Status</span>
+                              <span className={`inline-flex items-center gap-2 font-semibold ${retirementFundingStatus ? retirementFundingStatus.color : 'text-muted'}`}>
+                                <span className={`w-2 h-2 rounded-full ${retirementFundingStatus ? retirementFundingStatus.dot : 'bg-slate-400'}`} />
+                                {retirementFundingStatus?.label ?? 'n/a'}
+                              </span>
+                            </div>
+                            <p className="text-xs text-dimmed">
+                              Thresholds: {`>100% Fully funded | 80-100% Stress zone | <80% Unsustainable`}
+                            </p>
+                            {retirementDeficitContribution > 0 && (
+                              <p className="text-xs text-red-300">
+                                Retirement increases deficit pressure by ${ (retirementDeficitContribution / 1e9).toFixed(1)}B after BEL allocation.
+                              </p>
+                            )}
+                          </>
+                        )}
+                      </div>
                     </div>
                   }
-                  baselineComparison={showRetirementBaselineComparison ? (
+                  baselineComparison={(
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
                         <label className="text-sm text-dimmed">{TERMINOLOGY.RETIREMENT_SS_BASELINE}</label>
@@ -1043,10 +1163,18 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         </div>
                         <div className="bg-dark-slate rounded border border-border-slate p-3">
                           <p className="text-xs text-muted uppercase tracking-wide mb-1">{TERMINOLOGY.RETIREMENT_NET_IMPACT_VS_SS}</p>
-                          <p className={`text-sm font-semibold ${retirementNetChangeVsSS !== null && retirementNetChangeVsSS >= 0 ? 'text-red-400' : 'text-green-400'}`}>
+                          <p className={`text-sm font-semibold ${
+                            retirementNetChangeVsSS === null
+                              ? 'text-muted'
+                              : retirementNetChangeVsSS >= 0
+                                ? 'text-red-400'
+                                : 'text-green-400'
+                          }`}>
                             {retirementNetChangeVsSS !== null
                               ? `${retirementNetChangeVsSS >= 0 ? '+' : ''}$${(retirementNetChangeVsSS / 1e12).toFixed(2)}T/yr`
-                              : 'n/a'}
+                              : retirementMode === 'baseline_only'
+                                ? 'Baseline-Only Mode'
+                                : 'Program Disabled'}
                           </p>
                         </div>
                       </div>
@@ -1079,7 +1207,8 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         </div>
                       </div>
                     </div>
-                  ) : undefined}
+                  )}
+                  baselineTitle="Current Baseline Comparison"
                   notes={
                     <div className="space-y-1 text-xs text-dimmed leading-relaxed">
                       <p>{TERMINOLOGY.RETIREMENT_FIXED_DURATION_NOTE}</p>
@@ -1188,14 +1317,23 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         </span>
                       </div>
                       <div className="flex items-center justify-between">
+                        <span className="text-dimmed">% Revenue</span>
+                        <span className="font-semibold text-bright">{healthcareShareOfRevenue.toFixed(1)}%</span>
+                      </div>
+                      <div className="flex items-center justify-between">
                         <span className="text-dimmed">% Obligations Impact</span>
                         <span className="font-semibold text-bright">
                           {healthcareNetFederalSavings > 0 ? `-${healthcareObligationsImpact.toFixed(1)}%` : '0.0%'}
                         </span>
                       </div>
+                      {healthcareDeficitContribution > 0 && (
+                        <p className="text-xs text-red-300">
+                          Healthcare increases deficit pressure by ${ (healthcareDeficitContribution / 1e9).toFixed(1)}B after BEL/Retirement allocation.
+                        </p>
+                      )}
                     </div>
                   }
-                  baselineComparison={healthcareEnabled ? (
+                  baselineComparison={(
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                       <div className="bg-dark-slate rounded border border-border-slate p-3">
                         <p className="text-xs text-muted uppercase tracking-wide mb-1">Medicare Baseline</p>
@@ -1210,8 +1348,8 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         <p className="text-sm font-semibold text-orange-300">${(healthcareBaselineFederalCost / 1e12).toFixed(2)}T/yr</p>
                       </div>
                     </div>
-                  ) : undefined}
-                  baselineTitle="Federal Baseline Comparison"
+                  )}
+                  baselineTitle="Current Medicare + Medicaid Baseline"
                   notesTitle="Model Notes"
                   notes={
                     <div className="space-y-1 text-xs text-dimmed leading-relaxed">

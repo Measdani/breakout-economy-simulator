@@ -77,6 +77,13 @@ export interface Obligations {
   dependentUBICost?: number;
   govtOperatingRequirement: number;
   totalObligations: number;
+  remainingFiscalSpaceAfterBEL?: number;
+  fiscalSpaceAfterPrograms?: number;
+  belShareOfRevenue?: number;
+  retirementShareOfRevenue?: number;
+  healthcareShareOfRevenue?: number;
+  retirementAllocatedRevenue?: number;
+  retirementFundingRatio?: number | null;
   retirementProgramCost?: number;
   retirementAnnualBenefit?: number;
   retirement25yrTotal?: number;

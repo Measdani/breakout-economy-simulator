@@ -243,6 +243,20 @@ export function runSimulation(config: PolicyConfig): SimulationResult {
     ? baselineFederalHealthcareCost - modeledFederalHealthcareCost
     : 0;
 
+  // Program funding allocation logic (formalized for Step 3)
+  const remainingFiscalSpaceAfterBEL = totalRevenue - ubiCost;
+  const fiscalSpaceAfterPrograms =
+    remainingFiscalSpaceAfterBEL - annualRetirementCost - modeledFederalHealthcareCost;
+  const retirementAllocatedRevenue = annualRetirementCost > 0
+    ? Math.max(0, Math.min(Math.max(remainingFiscalSpaceAfterBEL, 0), annualRetirementCost))
+    : 0;
+  const retirementFundingRatio = annualRetirementCost > 0
+    ? retirementAllocatedRevenue / annualRetirementCost
+    : null;
+  const belShareOfRevenue = totalRevenue > 0 ? (ubiCost / totalRevenue) * 100 : 0;
+  const retirementShareOfRevenue = totalRevenue > 0 ? (annualRetirementCost / totalRevenue) * 100 : 0;
+  const healthcareShareOfRevenue = totalRevenue > 0 ? (modeledFederalHealthcareCost / totalRevenue) * 100 : 0;
+
   const totalObligations =
     ubiCost + govtOperatingRequirement + annualRetirementCost + modeledFederalHealthcareCost;
 
@@ -279,6 +293,12 @@ export function runSimulation(config: PolicyConfig): SimulationResult {
     );
   }
 
+  if (fiscalSpaceAfterPrograms < 0) {
+    warnings.push(
+      `Retirement + healthcare exceed remaining fiscal space after BEL by $${Math.abs(fiscalSpaceAfterPrograms).toLocaleString()}.`
+    );
+  }
+
   return {
     revenue: {
       tokenTaxRevenue,
@@ -293,6 +313,13 @@ export function runSimulation(config: PolicyConfig): SimulationResult {
       dependentUBICost: dependentCost,
       govtOperatingRequirement,
       totalObligations,
+      remainingFiscalSpaceAfterBEL,
+      fiscalSpaceAfterPrograms,
+      belShareOfRevenue,
+      retirementShareOfRevenue,
+      healthcareShareOfRevenue,
+      retirementAllocatedRevenue,
+      retirementFundingRatio,
       retirementProgramCost: annualRetirementCost,
       retirementAnnualBenefit: avgAnnualBenefit,
       retirement25yrTotal,

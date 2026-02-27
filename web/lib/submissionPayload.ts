@@ -80,6 +80,13 @@ export interface SubmissionPayload {
     healthcare_annual_cost: number
     healthcare_baseline_federal_cost: number
     healthcare_net_federal_savings: number
+    remaining_fiscal_space_after_bel: number
+    fiscal_space_after_programs: number
+    retirement_allocated_revenue: number
+    retirement_funding_ratio: number | null
+    bel_share_of_revenue: number
+    retirement_share_of_revenue: number
+    healthcare_share_of_revenue: number
     pct_bel_of_obligations: number
     pct_retirement_of_obligations: number
     pct_healthcare_of_obligations: number
@@ -132,6 +139,22 @@ export function buildSubmissionPayload({
   const healthcareAnnualCost = result.obligations.healthcareProgramCost ?? 0
   const healthcareBaselineCost = result.obligations.healthcareBaselineFederalCost ?? 0
   const healthcareNetFederalSavings = result.obligations.healthcareNetFederalSavings ?? 0
+  const remainingFiscalSpaceAfterBEL = result.obligations.remainingFiscalSpaceAfterBEL
+    ?? (result.revenue.totalRevenue - belTotalCost)
+  const fiscalSpaceAfterPrograms = result.obligations.fiscalSpaceAfterPrograms
+    ?? (remainingFiscalSpaceAfterBEL - retirementAnnualCost - healthcareAnnualCost)
+  const retirementAllocatedRevenue = result.obligations.retirementAllocatedRevenue
+    ?? (retirementAnnualCost > 0
+      ? Math.max(0, Math.min(Math.max(remainingFiscalSpaceAfterBEL, 0), retirementAnnualCost))
+      : 0)
+  const retirementFundingRatio = result.obligations.retirementFundingRatio
+    ?? (retirementAnnualCost > 0 ? retirementAllocatedRevenue / retirementAnnualCost : null)
+  const belShareOfRevenue = result.obligations.belShareOfRevenue
+    ?? (result.revenue.totalRevenue > 0 ? (belTotalCost / result.revenue.totalRevenue) * 100 : 0)
+  const retirementShareOfRevenue = result.obligations.retirementShareOfRevenue
+    ?? (result.revenue.totalRevenue > 0 ? (retirementAnnualCost / result.revenue.totalRevenue) * 100 : 0)
+  const healthcareShareOfRevenue = result.obligations.healthcareShareOfRevenue
+    ?? (result.revenue.totalRevenue > 0 ? (healthcareAnnualCost / result.revenue.totalRevenue) * 100 : 0)
   const baselineMedicare = config.medicareAnnualSpend ?? 0
   const baselineMedicaid = config.medicaidAnnualSpend ?? 0
   const baselineFederalHealthcareTotal = config.federalHealthcareSpendTotal ?? (baselineMedicare + baselineMedicaid)
@@ -218,6 +241,13 @@ export function buildSubmissionPayload({
       healthcare_annual_cost: healthcareAnnualCost,
       healthcare_baseline_federal_cost: healthcareBaselineCost,
       healthcare_net_federal_savings: healthcareNetFederalSavings,
+      remaining_fiscal_space_after_bel: remainingFiscalSpaceAfterBEL,
+      fiscal_space_after_programs: fiscalSpaceAfterPrograms,
+      retirement_allocated_revenue: retirementAllocatedRevenue,
+      retirement_funding_ratio: retirementFundingRatio,
+      bel_share_of_revenue: belShareOfRevenue,
+      retirement_share_of_revenue: retirementShareOfRevenue,
+      healthcare_share_of_revenue: healthcareShareOfRevenue,
       pct_bel_of_obligations: totalObligations > 0 ? (belTotalCost / totalObligations) * 100 : 0,
       pct_retirement_of_obligations: totalObligations > 0 ? (retirementAnnualCost / totalObligations) * 100 : 0,
       pct_healthcare_of_obligations: totalObligations > 0 ? (healthcareAnnualCost / totalObligations) * 100 : 0,

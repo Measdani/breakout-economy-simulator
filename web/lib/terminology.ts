@@ -91,7 +91,7 @@ export const TERMINOLOGY = {
   FUNDING_UNDERFUNDED: '🔴 Underfunded',
 
   // === Tooltips ===
-  TOOLTIP_ACTUARIAL_ADJUSTMENT: 'Adjusts annual benefit to reflect average post-retirement lifespan and sustainability assumptions. Default 70% accounts for mixed demographic mortality rates.',
+  TOOLTIP_ACTUARIAL_ADJUSTMENT: 'Adjusts annual benefit to reflect longevity assumptions relative to fixed 25-year payout.',
 };
 
 /**
