@@ -70,6 +70,7 @@ export interface SubmissionPayload {
     }
   }
   computed_outputs: {
+    allocation_priority_rule: 'bel_first'
     total_revenue: number
     total_obligations: number
     surplus_deficit: number
@@ -231,6 +232,7 @@ export function buildSubmissionPayload({
       },
     },
     computed_outputs: {
+      allocation_priority_rule: 'bel_first',
       total_revenue: result.revenue.totalRevenue,
       total_obligations: totalObligations,
       surplus_deficit: result.balance.surplusDeficit,

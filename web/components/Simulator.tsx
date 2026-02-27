@@ -240,9 +240,9 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   const retirementFundingStatus = retirementFundingRatio === null
     ? null
     : retirementFundingRatio > 1
-      ? { label: 'Fully funded', color: 'text-green-400', dot: 'bg-green-500' }
-      : retirementFundingRatio >= 0.8
-        ? { label: 'Stress zone', color: 'text-yellow-300', dot: 'bg-yellow-400' }
+      ? { label: 'Sustainable', color: 'text-green-400', dot: 'bg-green-500' }
+      : retirementFundingRatio >= 0.9
+        ? { label: 'Tight', color: 'text-yellow-300', dot: 'bg-yellow-400' }
         : { label: 'Unsustainable', color: 'text-red-400', dot: 'bg-red-500' };
   const retirementDeficitContribution = Math.max(0, retirementAnnualCost - retirementAllocatedRevenue);
   const healthcareDeficitContribution = Math.max(0, healthcareModeledFederalCost - healthcareAllocatedRevenue);
@@ -924,6 +924,9 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
               <div className="space-y-6">
                 <div className="bg-dark-slate rounded-lg p-6 border border-border-slate glow-border-blue">
                   <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-4">Program Funding Allocation</p>
+                  <p className="text-xs text-dimmed mb-4">
+                    BEL-first allocation rule: BEL is funded first, then retirement and healthcare draw from remaining fiscal space.
+                  </p>
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
                     <div className="bg-darker-slate rounded border border-border-slate p-3">
                       <p className="text-xs text-muted mb-1">Total Revenue</p>
@@ -1099,44 +1102,46 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         </span>
                       </div>
 
-                      <div className="pt-3 border-t border-border-slate space-y-2">
-                        <p className="text-xs font-semibold text-muted uppercase tracking-wide">Retirement Funding Ratio</p>
-                        {retirementFundingRatio === null ? (
-                          <p className="text-xs text-muted">No retirement cost active.</p>
-                        ) : (
-                          <>
-                            <div className="flex items-center justify-between">
-                              <span className="text-dimmed">Allocated Revenue</span>
-                              <span className="font-semibold text-bright">${(retirementAllocatedRevenue / 1e12).toFixed(2)}T</span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-dimmed">Retirement Cost</span>
-                              <span className="font-semibold text-bright">${(retirementAnnualCost / 1e12).toFixed(2)}T</span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-dimmed">Funding Ratio</span>
-                              <span className={`font-semibold ${retirementFundingStatus ? retirementFundingStatus.color : 'text-muted'}`}>
-                                {(retirementFundingRatio * 100).toFixed(1)}%
-                              </span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-dimmed">Status</span>
-                              <span className={`inline-flex items-center gap-2 font-semibold ${retirementFundingStatus ? retirementFundingStatus.color : 'text-muted'}`}>
-                                <span className={`w-2 h-2 rounded-full ${retirementFundingStatus ? retirementFundingStatus.dot : 'bg-slate-400'}`} />
-                                {retirementFundingStatus?.label ?? 'n/a'}
-                              </span>
-                            </div>
-                            <p className="text-xs text-dimmed">
-                              Thresholds: {`>100% Fully funded | 80-100% Stress zone | <80% Unsustainable`}
-                            </p>
-                            {retirementDeficitContribution > 0 && (
-                              <p className="text-xs text-red-300">
-                                Retirement increases deficit pressure by ${ (retirementDeficitContribution / 1e9).toFixed(1)}B after BEL allocation.
+                      {retirementEnabled && (
+                        <div className="pt-3 border-t border-border-slate space-y-2">
+                          <p className="text-xs font-semibold text-muted uppercase tracking-wide">Retirement Funding Ratio</p>
+                          {retirementFundingRatio === null ? (
+                            <p className="text-xs text-muted">n/a</p>
+                          ) : (
+                            <>
+                              <div className="flex items-center justify-between">
+                                <span className="text-dimmed">Allocated Revenue</span>
+                                <span className="font-semibold text-bright">${(retirementAllocatedRevenue / 1e12).toFixed(2)}T</span>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-dimmed">Retirement Cost</span>
+                                <span className="font-semibold text-bright">${(retirementAnnualCost / 1e12).toFixed(2)}T</span>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-dimmed">Funding Ratio</span>
+                                <span className={`font-semibold ${retirementFundingStatus ? retirementFundingStatus.color : 'text-muted'}`}>
+                                  {(retirementFundingRatio * 100).toFixed(1)}%
+                                </span>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-dimmed">Status</span>
+                                <span className={`inline-flex items-center gap-2 font-semibold ${retirementFundingStatus ? retirementFundingStatus.color : 'text-muted'}`}>
+                                  <span className={`w-2 h-2 rounded-full ${retirementFundingStatus ? retirementFundingStatus.dot : 'bg-slate-400'}`} />
+                                  {retirementFundingStatus?.label ?? 'n/a'}
+                                </span>
+                              </div>
+                              <p className="text-xs text-dimmed">
+                                Thresholds: {`>100% Sustainable | 90-100% Tight | <90% Unsustainable`}
                               </p>
-                            )}
-                          </>
-                        )}
-                      </div>
+                              {retirementDeficitContribution > 0 && (
+                                <p className="text-xs text-red-300">
+                                  Retirement increases deficit pressure by ${ (retirementDeficitContribution / 1e9).toFixed(1)}B after BEL allocation.
+                                </p>
+                              )}
+                            </>
+                          )}
+                        </div>
+                      )}
                     </div>
                   }
                   baselineComparison={(
@@ -1213,6 +1218,10 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                     <div className="space-y-1 text-xs text-dimmed leading-relaxed">
                       <p>{TERMINOLOGY.RETIREMENT_FIXED_DURATION_NOTE}</p>
                       <p>{TERMINOLOGY.TOOLTIP_ACTUARIAL_ADJUSTMENT}</p>
+                      <p>Replacement mechanics (current model scope):</p>
+                      <p>- Payroll tax and trust-fund flows are not separately modeled yet.</p>
+                      <p>- Existing retirees are represented via the retirees baseline input.</p>
+                      <p>- Generational firewall cutoff age is not modeled yet.</p>
                     </div>
                   }
                   disabledMessage={
