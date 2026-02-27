@@ -64,7 +64,7 @@ export default function AdminTable({ submissions }: Props) {
         />
         <button
           onClick={exportCSV}
-          className="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-500 font-semibold transition whitespace-nowrap"
+          className="px-6 py-2 bg-slate-900 text-slate-100 border border-slate-600 rounded hover:bg-slate-800 font-semibold transition whitespace-nowrap shadow-sm"
         >
           📥 Export CSV ({filtered.length})
         </button>
