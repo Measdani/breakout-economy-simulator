@@ -34,6 +34,16 @@ export default function AdminSettingsForm({ currentConfig, history }: Props) {
   const [avgFinal3yrSalary, setAvgFinal3yrSalary] = useState(currentConfig.avgFinal3yrSalary ?? 60000)
   const [ssBaseline, setSsBaseline] = useState(currentConfig.ssBaseline ?? 1.4e12)
   const [benefitAdjustmentFactor, setBenefitAdjustmentFactor] = useState((currentConfig.benefitAdjustmentFactor ?? 0.70) * 100)
+  // Healthcare baselines (stored only for now; not used in model logic yet)
+  const [medicareAnnualSpend, setMedicareAnnualSpend] = useState(currentConfig.medicareAnnualSpend ?? 1.05e12)
+  const [medicaidAnnualSpend, setMedicaidAnnualSpend] = useState(currentConfig.medicaidAnnualSpend ?? 0.86e12)
+  const [nationalHealthcareSpendTotal, setNationalHealthcareSpendTotal] = useState(currentConfig.nationalHealthcareSpendTotal ?? 4.90e12)
+  const [healthcareEmployerSharePct, setHealthcareEmployerSharePct] = useState(currentConfig.healthcareEmployerSharePct ?? 30)
+  const [healthcareHouseholdSharePct, setHealthcareHouseholdSharePct] = useState(currentConfig.healthcareHouseholdSharePct ?? 28)
+  const [aiDiagnosticsSavingsPct, setAiDiagnosticsSavingsPct] = useState(currentConfig.aiDiagnosticsSavingsPct ?? 0)
+  const [adminAutomationSavingsPct, setAdminAutomationSavingsPct] = useState(currentConfig.adminAutomationSavingsPct ?? 0)
+  const [allPayerTransparencySavingsPct, setAllPayerTransparencySavingsPct] = useState(currentConfig.allPayerTransparencySavingsPct ?? 0)
+  const federalHealthcareSpendTotal = medicareAnnualSpend + medicaidAnnualSpend
 
   // Preview state
   const [showPreview, setShowPreview] = useState(false)
@@ -56,6 +66,15 @@ export default function AdminSettingsForm({ currentConfig, history }: Props) {
     avgFinal3yrSalary,
     ssBaseline,
     benefitAdjustmentFactor: benefitAdjustmentFactor / 100,
+    medicareAnnualSpend,
+    medicaidAnnualSpend,
+    federalHealthcareSpendTotal,
+    nationalHealthcareSpendTotal,
+    healthcareEmployerSharePct,
+    healthcareHouseholdSharePct,
+    aiDiagnosticsSavingsPct,
+    adminAutomationSavingsPct,
+    allPayerTransparencySavingsPct,
   }
 
   const previewResult: SimulationResult | null = useMemo(() => {
@@ -472,6 +491,240 @@ export default function AdminSettingsForm({ currentConfig, history }: Props) {
                   }}
                 />
                 <span style={{ color: '#94a3b8', fontSize: '0.875rem', minWidth: '60px' }}>{benefitAdjustmentFactor.toFixed(0)}%</span>
+              </div>
+            </div>
+
+            {/* Healthcare Baselines Section Header */}
+            <div style={{ gridColumn: '1 / -1', marginTop: '0.25rem', paddingTop: '1rem', borderTop: '1px solid rgba(59, 130, 246, 0.25)' }}>
+              <h3 style={{ color: '#00d9ff', fontSize: '1rem', fontWeight: '600', marginBottom: '0.25rem' }}>Healthcare Baselines</h3>
+              <p style={{ color: '#94a3b8', fontSize: '0.75rem' }}>Baselines are stored for future healthcare module modeling.</p>
+            </div>
+
+            {/* Medicare Annual Spend */}
+            <div>
+              <label style={{ display: 'block', fontSize: '0.875rem', color: '#e0e7ff', marginBottom: '0.5rem', fontWeight: '600' }}>Medicare Annual Spend (Federal)</label>
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                <input
+                  type="number"
+                  value={medicareAnnualSpend}
+                  onChange={(e) => setMedicareAnnualSpend(Math.max(0, Number(e.target.value)))}
+                  step="10000000000"
+                  min="0"
+                  style={{
+                    flex: 1,
+                    padding: '0.5rem',
+                    backgroundColor: '#1e293b',
+                    border: '1px solid rgba(59, 130, 246, 0.3)',
+                    borderRadius: '0.25rem',
+                    color: '#e0e7ff',
+                    fontSize: '0.875rem',
+                    boxSizing: 'border-box',
+                  }}
+                />
+                <span style={{ color: '#94a3b8', fontSize: '0.875rem', minWidth: '60px' }}>${(medicareAnnualSpend / 1e12).toFixed(2)}T</span>
+              </div>
+            </div>
+
+            {/* Medicaid Annual Spend */}
+            <div>
+              <label style={{ display: 'block', fontSize: '0.875rem', color: '#e0e7ff', marginBottom: '0.5rem', fontWeight: '600' }}>Medicaid Annual Spend (Federal)</label>
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                <input
+                  type="number"
+                  value={medicaidAnnualSpend}
+                  onChange={(e) => setMedicaidAnnualSpend(Math.max(0, Number(e.target.value)))}
+                  step="10000000000"
+                  min="0"
+                  style={{
+                    flex: 1,
+                    padding: '0.5rem',
+                    backgroundColor: '#1e293b',
+                    border: '1px solid rgba(59, 130, 246, 0.3)',
+                    borderRadius: '0.25rem',
+                    color: '#e0e7ff',
+                    fontSize: '0.875rem',
+                    boxSizing: 'border-box',
+                  }}
+                />
+                <span style={{ color: '#94a3b8', fontSize: '0.875rem', minWidth: '60px' }}>${(medicaidAnnualSpend / 1e12).toFixed(2)}T</span>
+              </div>
+            </div>
+
+            {/* Total Federal Healthcare Spend (Computed) */}
+            <div>
+              <label style={{ display: 'block', fontSize: '0.875rem', color: '#e0e7ff', marginBottom: '0.5rem', fontWeight: '600' }}>Total Federal Healthcare Spend (Computed)</label>
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                <input
+                  type="number"
+                  value={federalHealthcareSpendTotal}
+                  readOnly
+                  style={{
+                    flex: 1,
+                    padding: '0.5rem',
+                    backgroundColor: '#0f172a',
+                    border: '1px solid rgba(59, 130, 246, 0.2)',
+                    borderRadius: '0.25rem',
+                    color: '#cbd5e1',
+                    fontSize: '0.875rem',
+                    boxSizing: 'border-box',
+                  }}
+                />
+                <span style={{ color: '#94a3b8', fontSize: '0.875rem', minWidth: '60px' }}>${(federalHealthcareSpendTotal / 1e12).toFixed(2)}T</span>
+              </div>
+            </div>
+
+            {/* National Healthcare Spend */}
+            <div>
+              <label style={{ display: 'block', fontSize: '0.875rem', color: '#e0e7ff', marginBottom: '0.5rem', fontWeight: '600' }}>Total National Healthcare Spend (Optional)</label>
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                <input
+                  type="number"
+                  value={nationalHealthcareSpendTotal}
+                  onChange={(e) => setNationalHealthcareSpendTotal(Math.max(0, Number(e.target.value)))}
+                  step="10000000000"
+                  min="0"
+                  style={{
+                    flex: 1,
+                    padding: '0.5rem',
+                    backgroundColor: '#1e293b',
+                    border: '1px solid rgba(59, 130, 246, 0.3)',
+                    borderRadius: '0.25rem',
+                    color: '#e0e7ff',
+                    fontSize: '0.875rem',
+                    boxSizing: 'border-box',
+                  }}
+                />
+                <span style={{ color: '#94a3b8', fontSize: '0.875rem', minWidth: '60px' }}>${(nationalHealthcareSpendTotal / 1e12).toFixed(2)}T</span>
+              </div>
+            </div>
+
+            {/* Employer Share */}
+            <div>
+              <label style={{ display: 'block', fontSize: '0.875rem', color: '#e0e7ff', marginBottom: '0.5rem', fontWeight: '600' }}>Employer Share</label>
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                <input
+                  type="number"
+                  value={healthcareEmployerSharePct}
+                  onChange={(e) => setHealthcareEmployerSharePct(Math.max(0, Math.min(100, Number(e.target.value))))}
+                  step="0.5"
+                  min="0"
+                  max="100"
+                  style={{
+                    flex: 1,
+                    padding: '0.5rem',
+                    backgroundColor: '#1e293b',
+                    border: '1px solid rgba(59, 130, 246, 0.3)',
+                    borderRadius: '0.25rem',
+                    color: '#e0e7ff',
+                    fontSize: '0.875rem',
+                    boxSizing: 'border-box',
+                  }}
+                />
+                <span style={{ color: '#94a3b8', fontSize: '0.875rem', minWidth: '60px' }}>{healthcareEmployerSharePct.toFixed(1)}%</span>
+              </div>
+            </div>
+
+            {/* Household Share */}
+            <div>
+              <label style={{ display: 'block', fontSize: '0.875rem', color: '#e0e7ff', marginBottom: '0.5rem', fontWeight: '600' }}>Household Share</label>
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                <input
+                  type="number"
+                  value={healthcareHouseholdSharePct}
+                  onChange={(e) => setHealthcareHouseholdSharePct(Math.max(0, Math.min(100, Number(e.target.value))))}
+                  step="0.5"
+                  min="0"
+                  max="100"
+                  style={{
+                    flex: 1,
+                    padding: '0.5rem',
+                    backgroundColor: '#1e293b',
+                    border: '1px solid rgba(59, 130, 246, 0.3)',
+                    borderRadius: '0.25rem',
+                    color: '#e0e7ff',
+                    fontSize: '0.875rem',
+                    boxSizing: 'border-box',
+                  }}
+                />
+                <span style={{ color: '#94a3b8', fontSize: '0.875rem', minWidth: '60px' }}>{healthcareHouseholdSharePct.toFixed(1)}%</span>
+              </div>
+            </div>
+
+            {/* AI Diagnostics Savings */}
+            <div>
+              <label style={{ display: 'block', fontSize: '0.875rem', color: '#e0e7ff', marginBottom: '0.5rem', fontWeight: '600' }}>AI Diagnostics Savings</label>
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                <input
+                  type="number"
+                  value={aiDiagnosticsSavingsPct}
+                  onChange={(e) => setAiDiagnosticsSavingsPct(Math.max(0, Math.min(100, Number(e.target.value))))}
+                  step="0.1"
+                  min="0"
+                  max="100"
+                  style={{
+                    flex: 1,
+                    padding: '0.5rem',
+                    backgroundColor: '#1e293b',
+                    border: '1px solid rgba(59, 130, 246, 0.3)',
+                    borderRadius: '0.25rem',
+                    color: '#e0e7ff',
+                    fontSize: '0.875rem',
+                    boxSizing: 'border-box',
+                  }}
+                />
+                <span style={{ color: '#94a3b8', fontSize: '0.875rem', minWidth: '60px' }}>{aiDiagnosticsSavingsPct.toFixed(1)}%</span>
+              </div>
+            </div>
+
+            {/* Admin Automation Savings */}
+            <div>
+              <label style={{ display: 'block', fontSize: '0.875rem', color: '#e0e7ff', marginBottom: '0.5rem', fontWeight: '600' }}>Admin Automation Savings</label>
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                <input
+                  type="number"
+                  value={adminAutomationSavingsPct}
+                  onChange={(e) => setAdminAutomationSavingsPct(Math.max(0, Math.min(100, Number(e.target.value))))}
+                  step="0.1"
+                  min="0"
+                  max="100"
+                  style={{
+                    flex: 1,
+                    padding: '0.5rem',
+                    backgroundColor: '#1e293b',
+                    border: '1px solid rgba(59, 130, 246, 0.3)',
+                    borderRadius: '0.25rem',
+                    color: '#e0e7ff',
+                    fontSize: '0.875rem',
+                    boxSizing: 'border-box',
+                  }}
+                />
+                <span style={{ color: '#94a3b8', fontSize: '0.875rem', minWidth: '60px' }}>{adminAutomationSavingsPct.toFixed(1)}%</span>
+              </div>
+            </div>
+
+            {/* All-Payer Transparency Savings */}
+            <div>
+              <label style={{ display: 'block', fontSize: '0.875rem', color: '#e0e7ff', marginBottom: '0.5rem', fontWeight: '600' }}>All-Payer Transparency Savings</label>
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                <input
+                  type="number"
+                  value={allPayerTransparencySavingsPct}
+                  onChange={(e) => setAllPayerTransparencySavingsPct(Math.max(0, Math.min(100, Number(e.target.value))))}
+                  step="0.1"
+                  min="0"
+                  max="100"
+                  style={{
+                    flex: 1,
+                    padding: '0.5rem',
+                    backgroundColor: '#1e293b',
+                    border: '1px solid rgba(59, 130, 246, 0.3)',
+                    borderRadius: '0.25rem',
+                    color: '#e0e7ff',
+                    fontSize: '0.875rem',
+                    boxSizing: 'border-box',
+                  }}
+                />
+                <span style={{ color: '#94a3b8', fontSize: '0.875rem', minWidth: '60px' }}>{allPayerTransparencySavingsPct.toFixed(1)}%</span>
               </div>
             </div>
           </div>

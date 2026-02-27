@@ -32,6 +32,15 @@ export async function getActiveConfig(): Promise<PolicyConfig> {
       supplementApexIncome: 24000,
       supplementApexBonus: 6000,
       personaWeights: [0.25, 0.25, 0.25, 0.25],
+      medicareAnnualSpend: 1.05e12,
+      medicaidAnnualSpend: 0.86e12,
+      federalHealthcareSpendTotal: 1.91e12,
+      nationalHealthcareSpendTotal: 4.90e12,
+      healthcareEmployerSharePct: 30,
+      healthcareHouseholdSharePct: 28,
+      aiDiagnosticsSavingsPct: 0,
+      adminAutomationSavingsPct: 0,
+      allPayerTransparencySavingsPct: 0,
     }
   }
 
