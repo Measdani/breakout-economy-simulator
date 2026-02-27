@@ -14,6 +14,11 @@ export interface SubmissionPayload {
     model_version: string
     terminology_version: string
     advanced_mode_enabled: boolean
+    modelVersion: string
+    terminologyVersion: string
+    revenueArchitectureMode: 'hybrid' | 'friction_dominant' | 'friction_only'
+    retirementMode: 'replace_ss' | 'supplement' | 'baseline_only'
+    healthcareMode: 'baseline' | 'efficiency_reform' | 'structural_replacement'
   }
   scenario_inputs: {
     revenue: {
@@ -72,10 +77,15 @@ export interface SubmissionPayload {
     bel_total_cost: number
     retirement_annual_cost: number
     retirement_25yr_total: number
+    healthcare_annual_cost: number
+    healthcare_baseline_federal_cost: number
+    healthcare_net_federal_savings: number
     pct_bel_of_obligations: number
     pct_retirement_of_obligations: number
+    pct_healthcare_of_obligations: number
     percent_bel_of_obligations: number
     percent_retirement_of_obligations: number
+    percent_healthcare_of_obligations: number
   }
   user_feedback: {
     user_feedback_text: string | null
@@ -119,11 +129,17 @@ export function buildSubmissionPayload({
   const belTotalCost = result.obligations.ubiCost || 0
   const retirementAnnualCost = result.obligations.retirementProgramCost ?? 0
   const retirement25yrTotal = result.obligations.retirement25yrTotal ?? 0
+  const healthcareAnnualCost = result.obligations.healthcareProgramCost ?? 0
+  const healthcareBaselineCost = result.obligations.healthcareBaselineFederalCost ?? 0
+  const healthcareNetFederalSavings = result.obligations.healthcareNetFederalSavings ?? 0
   const baselineMedicare = config.medicareAnnualSpend ?? 0
   const baselineMedicaid = config.medicaidAnnualSpend ?? 0
   const baselineFederalHealthcareTotal = config.federalHealthcareSpendTotal ?? (baselineMedicare + baselineMedicaid)
+  const revenueArchitectureMode = config.revenueArchitectureMode ?? 'hybrid'
+  const retirementMode = config.retirementMode ?? 'replace_ss'
+  const healthcareMode = config.healthcareMode ?? 'baseline'
   const advancedModeEnabled = metadataOverrides?.advancedModeEnabled ?? (
-    (config.revenueArchitectureMode ?? 'hybrid') !== 'hybrid' ||
+    revenueArchitectureMode !== 'hybrid' ||
     (config.incomeTaxMultiplier ?? 1) !== 1 ||
     (config.marketMakerExempt ?? false)
   )
@@ -135,10 +151,15 @@ export function buildSubmissionPayload({
       model_version: 'NAERM v1.1',
       terminology_version: 'bel-sbi-v1',
       advanced_mode_enabled: advancedModeEnabled,
+      modelVersion: 'NAERM v1.1',
+      terminologyVersion: 'bel-sbi-v1',
+      revenueArchitectureMode,
+      retirementMode,
+      healthcareMode,
     },
     scenario_inputs: {
       revenue: {
-        revenue_mode: config.revenueArchitectureMode ?? 'hybrid',
+        revenue_mode: revenueArchitectureMode,
         friction_tax_rate: config.frictionTaxRate ?? 0.0035,
         income_tax_multiplier: config.incomeTaxMultiplier ?? 1,
         token_tax_rate: config.tokenTaxRate,
@@ -163,7 +184,7 @@ export function buildSubmissionPayload({
       },
       retirement: {
         retirement_enabled: config.retirementEnabled ?? false,
-        retirement_mode: config.retirementMode ?? 'replace_ss',
+        retirement_mode: retirementMode,
         retirement_age: config.retirementEligibilityAge ?? 67,
         // Store these as percentages to match what users selected in UI.
         replacement_rate: (config.replacementRate ?? 0.8) * 100,
@@ -194,10 +215,15 @@ export function buildSubmissionPayload({
       bel_total_cost: belTotalCost,
       retirement_annual_cost: retirementAnnualCost,
       retirement_25yr_total: retirement25yrTotal,
+      healthcare_annual_cost: healthcareAnnualCost,
+      healthcare_baseline_federal_cost: healthcareBaselineCost,
+      healthcare_net_federal_savings: healthcareNetFederalSavings,
       pct_bel_of_obligations: totalObligations > 0 ? (belTotalCost / totalObligations) * 100 : 0,
       pct_retirement_of_obligations: totalObligations > 0 ? (retirementAnnualCost / totalObligations) * 100 : 0,
+      pct_healthcare_of_obligations: totalObligations > 0 ? (healthcareAnnualCost / totalObligations) * 100 : 0,
       percent_bel_of_obligations: totalObligations > 0 ? (belTotalCost / totalObligations) * 100 : 0,
       percent_retirement_of_obligations: totalObligations > 0 ? (retirementAnnualCost / totalObligations) * 100 : 0,
+      percent_healthcare_of_obligations: totalObligations > 0 ? (healthcareAnnualCost / totalObligations) * 100 : 0,
     },
     user_feedback: {
       user_feedback_text: userFeedbackText,
