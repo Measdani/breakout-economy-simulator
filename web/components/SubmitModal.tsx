@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import type { PolicyConfig, SimulationResult } from '@/lib/types'
 import { submitSimulation } from '@/app/actions/submissions'
+import { buildSubmissionPayload, type SubmissionDemographics } from '@/lib/submissionPayload'
 
 interface Props {
   config: PolicyConfig
@@ -10,11 +11,13 @@ interface Props {
   isOpen: boolean
   onClose: () => void
   configName?: string
+  demographics?: SubmissionDemographics
 }
 
-export default function SubmitModal({ config, result, isOpen, onClose, configName }: Props) {
+export default function SubmitModal({ config, result, isOpen, onClose, configName, demographics }: Props) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [userFeedbackText, setUserFeedbackText] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -27,13 +30,29 @@ export default function SubmitModal({ config, result, isOpen, onClose, configNam
     setError(null)
 
     try {
-      await submitSimulation(config, result, name || undefined, email || undefined, configName)
+      const payload = buildSubmissionPayload({
+        config,
+        result,
+        userFeedbackText: userFeedbackText || null,
+        demographics: demographics ?? null,
+      })
+
+      await submitSimulation(
+        config,
+        result,
+        payload,
+        name || undefined,
+        email || undefined,
+        configName
+      )
+
       setSuccess(true)
       setTimeout(() => {
         onClose()
         setSuccess(false)
         setName('')
         setEmail('')
+        setUserFeedbackText('')
       }, 2000)
     } catch (err) {
       setError('Failed to submit. Please try again.')
@@ -45,13 +64,13 @@ export default function SubmitModal({ config, result, isOpen, onClose, configNam
 
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, minHeight: '100vh' }}>
-      <div style={{ width: '280px', padding: '0.75rem', backgroundColor: '#1a2332', border: '1.5px solid rgba(0, 217, 255, 0.6)', borderRadius: '0.5rem', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.6)' }}>
-        <h2 style={{ fontSize: '0.875rem', fontWeight: 'bold', color: '#00ff00', marginBottom: '0.25rem', textAlign: 'center' }}>✓ DEPLOYED - Submit Model</h2>
+      <div style={{ width: '340px', padding: '0.75rem', backgroundColor: '#1a2332', border: '1.5px solid rgba(0, 217, 255, 0.6)', borderRadius: '0.5rem', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.6)' }}>
+        <h2 style={{ fontSize: '0.875rem', fontWeight: 'bold', color: '#00ff00', marginBottom: '0.25rem', textAlign: 'center' }}>Submit Model</h2>
         <p style={{ color: '#94a3b8', fontSize: '0.65rem', marginBottom: '0.75rem', textAlign: 'center' }}>Share your policy configuration with the community</p>
 
         {success ? (
           <div style={{ textAlign: 'center', paddingTop: '0.5rem', paddingBottom: '0.5rem' }}>
-            <div style={{ fontSize: '2rem', marginBottom: '0.25rem' }}>✓</div>
+            <div style={{ fontSize: '2rem', marginBottom: '0.25rem' }}>OK</div>
             <p style={{ color: '#4ade80', fontSize: '0.75rem' }}>Submitted successfully!</p>
           </div>
         ) : (
@@ -84,7 +103,33 @@ export default function SubmitModal({ config, result, isOpen, onClose, configNam
               >
                 {result.balance.isSolvent ? '+' : ''}${(result.balance.surplusDeficit / 1e9).toFixed(1)}B
               </p>
-              <p style={{ fontSize: '0.6rem', color: '#94a3b8', lineHeight: '1.2' }}>Your model's outcome</p>
+              <p style={{ fontSize: '0.6rem', color: '#94a3b8', lineHeight: '1.2' }}>Your model outcome</p>
+            </div>
+
+            <div
+              style={{
+                marginBottom: '0.75rem',
+                borderRadius: '0.375rem',
+                padding: '0.5rem',
+                border: '1px solid rgba(0, 217, 255, 0.2)',
+                background: 'rgba(15, 23, 42, 0.65)',
+              }}
+            >
+              <p style={{ fontSize: '0.65rem', color: '#cbd5e1', marginBottom: '0.4rem', fontWeight: 600 }}>Submission Preview</p>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', rowGap: '0.25rem', columnGap: '0.5rem', fontSize: '0.62rem' }}>
+                <span style={{ color: '#94a3b8' }}>Revenue Mode</span>
+                <span style={{ color: '#e2e8f0', textAlign: 'right' }}>{config.revenueArchitectureMode ?? 'hybrid'}</span>
+                <span style={{ color: '#94a3b8' }}>Friction Tax Rate</span>
+                <span style={{ color: '#e2e8f0', textAlign: 'right' }}>{((config.frictionTaxRate ?? 0.0035) * 100).toFixed(3)}%</span>
+                <span style={{ color: '#94a3b8' }}>BEL Total Cost</span>
+                <span style={{ color: '#e2e8f0', textAlign: 'right' }}>${((result.obligations.ubiCost || 0) / 1e12).toFixed(2)}T</span>
+                <span style={{ color: '#94a3b8' }}>Retirement Annual</span>
+                <span style={{ color: '#e2e8f0', textAlign: 'right' }}>${((result.obligations.retirementProgramCost ?? 0) / 1e12).toFixed(2)}T</span>
+                <span style={{ color: '#94a3b8' }}>Surplus/Deficit</span>
+                <span style={{ color: result.balance.isSolvent ? '#4ade80' : '#f87171', textAlign: 'right', fontWeight: 600 }}>
+                  {result.balance.isSolvent ? '+' : ''}${(result.balance.surplusDeficit / 1e9).toFixed(1)}B
+                </span>
+              </div>
             </div>
 
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -105,14 +150,6 @@ export default function SubmitModal({ config, result, isOpen, onClose, configNam
                     fontSize: '0.75rem',
                     boxShadow: '0 2px 4px rgba(0, 217, 255, 0.05)',
                     boxSizing: 'border-box'
-                  }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(0, 217, 255, 0.6)'
-                    e.currentTarget.style.boxShadow = '0 0 8px rgba(0, 217, 255, 0.2)'
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(0, 217, 255, 0.3)'
-                    e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 217, 255, 0.05)'
                   }}
                   maxLength={50}
                 />
@@ -136,15 +173,34 @@ export default function SubmitModal({ config, result, isOpen, onClose, configNam
                     boxShadow: '0 2px 4px rgba(0, 217, 255, 0.05)',
                     boxSizing: 'border-box'
                   }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(0, 217, 255, 0.6)'
-                    e.currentTarget.style.boxShadow = '0 0 8px rgba(0, 217, 255, 0.2)'
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(0, 217, 255, 0.3)'
-                    e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 217, 255, 0.05)'
-                  }}
                 />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '0.6rem', color: '#94a3b8', marginBottom: '0.25rem', fontWeight: 600, letterSpacing: '0.05em' }}>Feedback (optional)</label>
+                <textarea
+                  value={userFeedbackText}
+                  onChange={(e) => setUserFeedbackText(e.target.value)}
+                  placeholder="What informed your policy choices?"
+                  style={{
+                    width: '100%',
+                    minHeight: '62px',
+                    padding: '0.375rem 0.5rem',
+                    backgroundColor: '#0f1419',
+                    border: '1px solid rgba(0, 217, 255, 0.3)',
+                    borderRadius: '0.25rem',
+                    color: '#e0e7ff',
+                    fontSize: '0.7rem',
+                    boxShadow: '0 2px 4px rgba(0, 217, 255, 0.05)',
+                    boxSizing: 'border-box',
+                    resize: 'vertical',
+                    fontFamily: 'inherit',
+                  }}
+                  maxLength={500}
+                />
+                <p style={{ fontSize: '0.58rem', color: '#64748b', marginTop: '0.2rem', textAlign: 'right' }}>
+                  {userFeedbackText.length}/500
+                </p>
               </div>
 
               {error && <div style={{ color: '#ef4444', fontSize: '0.65rem', marginTop: '0.25rem' }}>{error}</div>}
@@ -165,16 +221,6 @@ export default function SubmitModal({ config, result, isOpen, onClose, configNam
                     cursor: 'pointer',
                     transition: 'all 0.2s'
                   }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#3a5268'
-                    e.currentTarget.style.borderColor = 'rgba(0, 217, 255, 0.7)'
-                    e.currentTarget.style.boxShadow = '0 0 8px rgba(0, 217, 255, 0.3)'
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#2a3f52'
-                    e.currentTarget.style.borderColor = 'rgba(0, 217, 255, 0.4)'
-                    e.currentTarget.style.boxShadow = 'none'
-                  }}
                   disabled={isSubmitting}
                 >
                   Cancel
@@ -193,16 +239,6 @@ export default function SubmitModal({ config, result, isOpen, onClose, configNam
                     cursor: 'pointer',
                     transition: 'all 0.2s',
                     boxShadow: '0 4px 12px rgba(37, 99, 235, 0.25)'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'linear-gradient(to right, #1d4ed8, #2563eb, #16a34a)'
-                    e.currentTarget.style.boxShadow = '0 8px 16px rgba(37, 99, 235, 0.4)'
-                    e.currentTarget.style.transform = 'scale(1.02)'
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = 'linear-gradient(to right, #2563eb, #3b82f6, #22c55e)'
-                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.25)'
-                    e.currentTarget.style.transform = 'scale(1)'
                   }}
                   disabled={isSubmitting}
                 >

@@ -1,4 +1,5 @@
 import type { PolicyConfig, SimulationResult } from '../types'
+import type { SubmissionPayload } from '../submissionPayload'
 
 export interface SubmissionRow {
   id: string
@@ -13,6 +14,8 @@ export interface SubmissionRow {
   breakout_point: number
   is_solvent: boolean
   config_name: string | null
+  user_feedback_text?: string | null
+  submission_payload_json?: SubmissionPayload | null
 }
 
 export interface FeedbackRow {

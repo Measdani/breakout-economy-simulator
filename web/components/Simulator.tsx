@@ -1343,6 +1343,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
         isOpen={showSubmitModal}
         onClose={() => setShowSubmitModal(false)}
         configName={currentConfig}
+        demographics={demographics}
       />
 
       {/* Feedback Modal */}

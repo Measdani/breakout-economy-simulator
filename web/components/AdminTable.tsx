@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Papa from 'papaparse'
 import type { SubmissionRow } from '@/lib/supabase/types'
+import { buildSubmissionPayload, flattenSubmissionPayload } from '@/lib/submissionPayload'
 
 interface Props {
   submissions: SubmissionRow[]
@@ -19,18 +20,25 @@ export default function AdminTable({ submissions }: Props) {
 
   const exportCSV = () => {
     const csv = Papa.unparse(
-      filtered.map((sub) => ({
-        id: sub.id,
-        created_at: sub.created_at,
-        name: sub.name || 'Anonymous',
-        email: sub.email || '',
-        surplus_deficit: sub.surplus_deficit,
-        surplus_deficit_billions: (sub.surplus_deficit / 1e9).toFixed(2),
-        ubi_annual: sub.ubi_annual,
-        token_tax_rate: (sub.token_tax_rate * 100).toFixed(3),
-        breakout_point: sub.breakout_point,
-        is_solvent: sub.is_solvent ? 'Yes' : 'No'
-      }))
+      filtered.map((sub) => {
+        const payload = sub.submission_payload_json ?? buildSubmissionPayload({
+          config: sub.config,
+          result: sub.result,
+          userFeedbackText: sub.user_feedback_text ?? null,
+          metadataOverrides: {
+            submissionId: sub.id,
+            timestamp: sub.created_at,
+          },
+        })
+
+        return {
+          id: sub.id,
+          created_at: sub.created_at,
+          name: sub.name || 'Anonymous',
+          email: sub.email || '',
+          ...flattenSubmissionPayload(payload),
+        }
+      })
     )
 
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
