@@ -65,20 +65,29 @@ export default function AdminTable({ submissions }: Props) {
         <button
           type="button"
           onClick={exportCSV}
-          className="px-6 py-2 rounded font-semibold whitespace-nowrap transition"
+          className="rounded font-semibold whitespace-nowrap transition"
           style={{
-            backgroundColor: '#0f172a',
+            background: 'linear-gradient(180deg, #1e293b 0%, #0f172a 100%)',
             color: '#f8fafc',
-            border: '1px solid #475569',
-            boxShadow: '0 1px 2px rgba(0,0,0,0.35)',
+            border: '1px solid #334155',
+            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), 0 2px 6px rgba(0,0,0,0.35)',
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
+            gap: '8px',
             width: 'auto',
-            minWidth: '160px',
+            minWidth: '176px',
+            padding: '10px 14px',
+            cursor: 'pointer',
+            lineHeight: 1,
           }}
+          onMouseEnter={(e) => { e.currentTarget.style.filter = 'brightness(1.08)' }}
+          onMouseLeave={(e) => { e.currentTarget.style.filter = 'none' }}
         >
-          Export CSV ({filtered.length})
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3v11m0 0l4-4m-4 4l-4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" stroke="#e2e8f0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          <span>Export CSV ({filtered.length})</span>
         </button>
       </div>
 
