@@ -65,7 +65,25 @@ export default function AdminTable({ submissions }: Props) {
         <button
           type="button"
           onClick={exportCSV}
-          className="inline-flex min-w-[190px] items-center justify-center gap-2 whitespace-nowrap rounded-md border border-cyan-300/60 bg-gradient-to-r from-cyan-500 via-sky-500 to-blue-600 px-4 py-2.5 font-semibold text-slate-50 shadow-[0_8px_22px_rgba(14,165,233,0.45)] transition hover:-translate-y-0.5 hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-cyan-300 focus:ring-offset-2 focus:ring-offset-slate-900"
+          className="inline-flex items-center justify-center gap-2 rounded font-semibold whitespace-nowrap transition"
+          style={{
+            background: 'linear-gradient(135deg, #06b6d4 0%, #0ea5e9 45%, #2563eb 100%)',
+            color: '#f8fafc',
+            border: '1px solid #22d3ee',
+            boxShadow: '0 8px 20px rgba(14, 165, 233, 0.45), inset 0 1px 0 rgba(255,255,255,0.22)',
+            minWidth: '190px',
+            padding: '10px 14px',
+            lineHeight: 1,
+            cursor: 'pointer',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.filter = 'brightness(1.08)'
+            e.currentTarget.style.transform = 'translateY(-1px)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.filter = 'none'
+            e.currentTarget.style.transform = 'none'
+          }}
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M12 3v11m0 0l4-4m-4 4l-4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
