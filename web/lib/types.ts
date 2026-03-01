@@ -1,5 +1,5 @@
 /**
- * NAERM (National AI Economy Resiliency Model) - Type Definitions
+ * NAIERM (National AI Economy Resiliency Model) - Type Definitions
  * Mirrored from ../src/types.ts for web client use
  */
 
@@ -126,3 +126,4 @@ export const PERSONAS = [
   { label: 'Manager', earnedIncome: 100000 },
   { label: 'Executive', earnedIncome: 200000 },
 ];
+

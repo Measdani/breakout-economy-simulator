@@ -11,7 +11,7 @@ export function exportConfigAsCSV(
   const rows: string[] = [];
 
   // Header
-  rows.push(`NAERM (National AI Economy Resiliency Model) - Configuration Export`);
+  rows.push(`NAIERM (National AI Economy Resiliency Model) - Configuration Export`);
   rows.push(`Exported: ${timestamp}`);
   rows.push(`Configuration: ${configName}`);
   rows.push('');
@@ -111,3 +111,4 @@ export function exportConfigAsCSV(
   link.click();
   document.body.removeChild(link);
 }
+

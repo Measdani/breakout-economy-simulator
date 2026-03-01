@@ -366,7 +366,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
           <div className="bg-darker-slate px-5 py-6 border-b border-border-slate">
             <div className="mb-5">
               <h1 className="text-xl font-bold text-bright">The National AI Economy Resiliency Model</h1>
-              <p className="text-xs text-muted mt-0.5">NAERM v1.1</p>
+              <p className="text-xs text-muted mt-0.5">NAIERM v2.1</p>
             </div>
 
             <div className="border-t border-border-slate pt-5">
@@ -1668,5 +1668,3 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     </div>
   );
 }
-
-

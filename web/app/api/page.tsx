@@ -5,7 +5,7 @@ export default function APIDocumentation() {
         {/* Header */}
         <div style={{ marginBottom: '3rem' }}>
           <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>
-            NAERM API (National AI Economy Resiliency Model)
+            NAIERM API (National AI Economy Resiliency Model)
           </h1>
           <p style={{ fontSize: '1.125rem', color: '#94a3b8' }}>
             REST API for programmatic policy simulation and economic resilience analysis
@@ -222,3 +222,4 @@ export default function APIDocumentation() {
     </div>
   )
 }
+

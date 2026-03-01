@@ -1,6 +1,6 @@
 'use client';
 
-// Version marker: v1.1 - Household & viewMode removed - Build 2026-02-23
+// Version marker: v2.1 - Household & viewMode removed - Build 2026-02-23
 import { useState } from 'react';
 import Tooltip from './Tooltip';
 
@@ -510,3 +510,4 @@ export default function PolicySliders({
     </div>
   );
 }
+

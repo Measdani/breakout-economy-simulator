@@ -1,5 +1,5 @@
 /**
- * NAERM (National AI Economy Resiliency Model) - Math Engine (Browser Version)
+ * NAIERM (National AI Economy Resiliency Model) - Math Engine (Browser Version)
  * Mirrored from ../src/engine.ts for client-side use
  */
 
@@ -341,3 +341,4 @@ export function runSimulation(config: PolicyConfig): SimulationResult {
     },
   };
 }
+

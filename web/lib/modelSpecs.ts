@@ -1,5 +1,5 @@
 /**
- * NAERM Model Specifications - Friction Tax Engine (v1.0)
+ * NAIERM Model Specifications - Friction Tax Engine (v2.1)
  *
  * This file documents all input ranges, defaults, formulas, and outputs
  * for the Friction Tax Engine component of the simulator.
