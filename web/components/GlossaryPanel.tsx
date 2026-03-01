@@ -9,7 +9,7 @@ const GLOSSARY_ITEMS = [
   {
     term: 'Token Tax',
     definition: 'A tax on financial flow (all electronic financial transactions and digital transfers), not labor or wages.',
-    example: '0.35% × $1 quadrillion annual flow = $3.5 trillion/year revenue.',
+    example: '0.35 mils / 1,000 tokens total compute × $1 quadrillion annual flow = $3.5 trillion/year revenue.',
   },
   {
     term: 'Welfare Trap',

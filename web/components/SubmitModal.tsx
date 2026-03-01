@@ -24,6 +24,9 @@ export default function SubmitModal({ config, result, isOpen, onClose, configNam
 
   if (!isOpen) return null
 
+  const formatTokenMilsPerThousand = (rate: number) =>
+    `${(rate * 100).toFixed(2)} mils / 1,000 tokens total compute`
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
@@ -119,8 +122,8 @@ export default function SubmitModal({ config, result, isOpen, onClose, configNam
               <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', rowGap: '0.25rem', columnGap: '0.5rem', fontSize: '0.62rem' }}>
                 <span style={{ color: '#94a3b8' }}>Revenue Mode</span>
                 <span style={{ color: '#e2e8f0', textAlign: 'right' }}>{config.revenueArchitectureMode ?? 'hybrid'}</span>
-                <span style={{ color: '#94a3b8' }}>Friction Tax Rate</span>
-                <span style={{ color: '#e2e8f0', textAlign: 'right' }}>{((config.frictionTaxRate ?? 0.0035) * 100).toFixed(3)}%</span>
+                <span style={{ color: '#94a3b8' }}>Token Tax Rate</span>
+                <span style={{ color: '#e2e8f0', textAlign: 'right' }}>{formatTokenMilsPerThousand(config.tokenTaxRate)}</span>
                 <span style={{ color: '#94a3b8' }}>BEL Total Cost</span>
                 <span style={{ color: '#e2e8f0', textAlign: 'right' }}>${((result.obligations.ubiCost || 0) / 1e12).toFixed(2)}T</span>
                 <span style={{ color: '#94a3b8' }}>Retirement Annual</span>

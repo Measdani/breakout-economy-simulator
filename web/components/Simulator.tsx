@@ -85,8 +85,10 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   const [pctHouseholds1Dep, setPctHouseholds1Dep] = useState(mergedConfig.pctHouseholds1Dep ?? 0.25);
   const [pctHouseholds2Dep, setPctHouseholds2Dep] = useState(mergedConfig.pctHouseholds2Dep ?? 0.15);
   const [pctHouseholds3Dep, setPctHouseholds3Dep] = useState(mergedConfig.pctHouseholds3Dep ?? 0.10);
-  // Friction Tax state
-  const [frictionTaxRate, setFrictionTaxRate] = useState(mergedConfig.frictionTaxRate ?? 0.0035);
+  // Token-tax (transaction layer) state
+  const [frictionTaxRate, setFrictionTaxRate] = useState(
+    mergedConfig.frictionTaxRate ?? mergedConfig.tokenTaxRate ?? 0.0035
+  );
   const [baseTransactionVolume, setBaseTransactionVolume] = useState(mergedConfig.baseTransactionVolume ?? 1e15);
   const [transactionVolumeGrowthRate, setTransactionVolumeGrowthRate] = useState(mergedConfig.transactionVolumeGrowthRate ?? 0.05);
   const [capitalFlightRate, setCapitalFlightRate] = useState(mergedConfig.capitalFlightRate ?? 0);
@@ -151,6 +153,14 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     setToastVisible(true);
     setTimeout(() => setToastVisible(false), 3000);
   };
+
+  const handleTokenTaxRateChange = (value: number) => {
+    setTokenTaxRate(value);
+    setFrictionTaxRate(value);
+  };
+
+  const formatTokenMilsPerThousand = (rate: number) =>
+    `${(rate * 100).toFixed(2)} mils / 1,000 tokens total compute`;
 
   const config: PolicyConfig = {
     ...DEFAULT_CONFIG,
@@ -276,7 +286,8 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   );
 
   const handlePresetSelect = (presetConfig: Partial<PolicyConfig>) => {
-    if (presetConfig.tokenTaxRate) setTokenTaxRate(presetConfig.tokenTaxRate);
+    if (presetConfig.tokenTaxRate !== undefined) handleTokenTaxRateChange(presetConfig.tokenTaxRate);
+    if (presetConfig.frictionTaxRate !== undefined) handleTokenTaxRateChange(presetConfig.frictionTaxRate);
     if (presetConfig.ubiAnnualPerAdult) setUbiAnnualPerAdult(presetConfig.ubiAnnualPerAdult);
     if (presetConfig.breakoutPoint) setBreakoutPoint(presetConfig.breakoutPoint);
   };
@@ -294,7 +305,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   };
 
   const handleReset = () => {
-    setTokenTaxRate(DEFAULT_CONFIG.tokenTaxRate);
+    handleTokenTaxRateChange(DEFAULT_CONFIG.tokenTaxRate);
     setUbiAnnualPerAdult(DEFAULT_CONFIG.ubiAnnualPerAdult);
     setBreakoutPoint(DEFAULT_CONFIG.breakoutPoint);
     setUbiDependent1(6000);
@@ -303,7 +314,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     setPctHouseholds1Dep(0.25);
     setPctHouseholds2Dep(0.15);
     setPctHouseholds3Dep(0.10);
-    setFrictionTaxRate(DEFAULT_CONFIG.frictionTaxRate ?? 0.0035);
+    setFrictionTaxRate(DEFAULT_CONFIG.frictionTaxRate ?? DEFAULT_CONFIG.tokenTaxRate ?? 0.0035);
     setBaseTransactionVolume(DEFAULT_CONFIG.baseTransactionVolume ?? 1e15);
     setTransactionVolumeGrowthRate(DEFAULT_CONFIG.transactionVolumeGrowthRate ?? 0.05);
     setCapitalFlightRate(DEFAULT_CONFIG.capitalFlightRate ?? 0);
@@ -393,13 +404,13 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                 <div className="col-span-3 overflow-y-auto pr-2">
                   <PolicySliders
                     tokenTaxRate={tokenTaxRate}
-                    onTokenTaxRateChange={setTokenTaxRate}
+                    onTokenTaxRateChange={handleTokenTaxRateChange}
                     ubiAnnualPerAdult={ubiAnnualPerAdult}
                     onUbiChange={setUbiAnnualPerAdult}
                     breakoutPoint={breakoutPoint}
                     onBreakoutPointChange={setBreakoutPoint}
                     frictionTaxRate={frictionTaxRate}
-                    onFrictionTaxRateChange={setFrictionTaxRate}
+                    onFrictionTaxRateChange={handleTokenTaxRateChange}
                     transactionVolumeGrowthRate={transactionVolumeGrowthRate}
                     onTransactionVolumeGrowthRateChange={setTransactionVolumeGrowthRate}
                     capitalFlightRate={capitalFlightRate}
@@ -468,7 +479,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         <p className="text-sm text-muted uppercase tracking-wide mb-4">💰 Revenue Sources</p>
                         <div className="space-y-3">
                           <div className="flex justify-between">
-                            <span className="text-sm text-muted">Electronic Transaction Tax</span>
+                            <span className="text-sm text-muted">Token Tax (Total Compute)</span>
                             <span className="font-semibold text-blue-400">
                               ${((result.revenue.frictionTaxRevenue ?? 0) / 1e12).toFixed(2)}T
                             </span>
@@ -531,19 +542,19 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         </div>
                       </div>
 
-                      {/* Friction Tax Sensitivity Analysis */}
+                      {/* Token Tax Sensitivity Analysis */}
                       <div className="border-t border-border-slate pt-6">
                         <p className="text-sm text-muted uppercase tracking-wide mb-3">📊 Rate Sensitivity</p>
                         <p className="text-xs text-dimmed mb-3">(Static volume assumption)</p>
                         <div className="space-y-2 text-xs">
                           <div className="flex justify-between">
-                            <span className="text-muted">+0.10% rate</span>
+                            <span className="text-muted">+0.10 mils rate</span>
                             <span className="text-green-400">
                               +${(frictionTaxSensitivityUp.deltaRevenue / 1e9).toFixed(1)}B ({frictionTaxSensitivityUp.deltaPercent.toFixed(1)}%)
                             </span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-muted">-0.10% rate</span>
+                            <span className="text-muted">-0.10 mils rate</span>
                             <span className="text-red-400">
                               -${(Math.abs(frictionTaxSensitivityDown.deltaRevenue) / 1e9).toFixed(1)}B ({frictionTaxSensitivityDown.deltaPercent.toFixed(1)}%)
                             </span>
@@ -556,7 +567,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         <p className="text-sm text-muted uppercase tracking-wide mb-3">📈 Revenue Composition</p>
                         <div className="space-y-2 text-xs">
                           <div className="flex justify-between">
-                            <span className="text-muted">Friction Tax Share</span>
+                            <span className="text-muted">Token Tax Share</span>
                             <span className="font-semibold text-blue-400">
                               {((((result.revenue.frictionTaxRevenue ?? 0) / result.revenue.totalRevenue) * 100) || 0).toFixed(1)}%
                             </span>
@@ -608,7 +619,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                               <span className="text-dimmed">Sensitivity Analysis:</span>
                               <span className="text-bright font-semibold">Static Volume</span>
                             </div>
-                            <p className="text-dimmed text-xs mt-1">±0.1% rate changes assume constant transaction volume</p>
+                            <p className="text-dimmed text-xs mt-1">±0.10 mils rate changes assume constant transaction volume</p>
                           </div>
                         )}
                       </div>
@@ -628,8 +639,8 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                             {revenueArchitectureMode === 'hybrid'
                               ? 'Hybrid'
                               : revenueArchitectureMode === 'friction_dominant'
-                              ? 'Friction-Dominant'
-                              : 'Friction-Only'}
+                              ? 'Token-Dominant'
+                              : 'Token-Only'}
                           </span>
                         </div>
                         <div className="flex justify-between">
@@ -642,10 +653,10 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                           <span className="text-dimmed">Primary Funding Source:</span>
                           <span className="text-blue-400 font-semibold">
                             {revenueArchitectureMode === 'friction_only'
-                              ? 'Friction Tax'
+                              ? 'Token Tax'
                               : revenueArchitectureMode === 'friction_dominant'
-                              ? 'Friction Tax (dominant)'
-                              : 'Hybrid (Friction + Income)'}
+                              ? 'Token Tax (dominant)'
+                              : 'Hybrid (Token + Income)'}
                           </span>
                         </div>
                         <div className="pt-2 border-t border-border-slate">
@@ -1417,7 +1428,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span className="text-dimmed">Token Tax Rate</span>
-                      <span className="text-bright font-semibold">{(tokenTaxRate * 100).toFixed(2)}%</span>
+                      <span className="text-bright font-semibold">{formatTokenMilsPerThousand(tokenTaxRate)}</span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-dimmed">Adult UBI</span>

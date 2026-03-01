@@ -114,7 +114,7 @@ export default function AssumptionsPanel({ config, onClose }: AssumptionsPanelPr
             <div className="space-y-4 ml-4">
               <AssumptionRow
                 label="Token Tax Rate (Variable)"
-                value={`${(config.tokenTaxRate * 100).toFixed(3)}%`}
+                value={`${(config.tokenTaxRate * 100).toFixed(2)} mils / 1,000 tokens total compute`}
                 description="Proportional tax on digital capital transactions (e.g., crypto, digital payments, platform fees). Scales revenue linearly with rate."
               />
               <AssumptionRow

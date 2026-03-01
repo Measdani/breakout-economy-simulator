@@ -51,6 +51,10 @@ export default function PolicySliders({
     return `${(value * 100).toFixed(2)}%`;
   };
 
+  const formatTokenMilsPerThousand = (value: number) => {
+    return `${(value * 100).toFixed(2)} mils / 1,000 tokens total compute`;
+  };
+
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -204,14 +208,14 @@ export default function PolicySliders({
 
   return (
     <div className="space-y-6">
-      {/* Section A: Friction Tax Engine */}
+      {/* Section A: Token Tax Engine */}
       <div>
-        <p className="text-xs font-bold text-muted uppercase tracking-widest mb-3">SECTION A: Friction Tax Engine</p>
+        <p className="text-xs font-bold text-muted uppercase tracking-widest mb-3">SECTION A: Token Tax Engine</p>
         <div className="space-y-6">
-          {/* Friction Tax Rate */}
+          {/* Token Tax Rate */}
           <SliderSection
-            title="Friction Tax Rate"
-            subtitle="Electronic Transaction Tax"
+            title="Token Tax Rate"
+            subtitle="Per 1,000 Tokens Total Compute"
             icon="💳"
             color="blue"
             value={frictionTaxRate}
@@ -219,12 +223,12 @@ export default function PolicySliders({
             min={0.001}
             max={0.01}
             step={0.0005}
-            minLabel="0.1%"
-            maxLabel="1.0%"
-            formattedValue={formatPercent(frictionTaxRate)}
+            minLabel="0.10 mils"
+            maxLabel="1.00 mils"
+            formattedValue={formatTokenMilsPerThousand(frictionTaxRate)}
             position={frictionTaxPosition}
             context={getFrictionTaxContext()}
-            tooltipText="Tax applied to annual electronic transaction volume, adjusted for capital flight."
+            tooltipText="Token tax applied to annual electronic transaction volume, adjusted for capital flight."
           />
 
           {/* Transaction Volume Growth Rate */}
@@ -262,7 +266,7 @@ export default function PolicySliders({
             formattedValue={`${(capitalFlightRate * 100).toFixed(2)}%`}
             position={capitalFlightPosition}
             context={getCapitalFlightContext()}
-            tooltipText="% of transaction volume expected to migrate offshore in response to friction tax rate increase."
+            tooltipText="% of transaction volume expected to migrate offshore in response to token tax rate increase."
           />
         </div>
       </div>
@@ -282,9 +286,9 @@ export default function PolicySliders({
         min={0.001}
         max={0.01}
         step={0.0005}
-        minLabel="0.1%"
-        maxLabel="1.0%"
-        formattedValue={formatPercent(tokenTaxRate)}
+        minLabel="0.10 mils"
+        maxLabel="1.00 mils"
+        formattedValue={formatTokenMilsPerThousand(tokenTaxRate)}
         position={tokenTaxPosition}
         context={getTokenTaxContext()}
         tooltipText="Shifts part of the tax base from labor to digital capital activity."
@@ -370,9 +374,9 @@ export default function PolicySliders({
             {/* Radio Group — Funding Structure */}
             <div className="space-y-3 mb-5">
               {[
-                { value: 'hybrid' as const, label: 'Hybrid (Friction + Income Tax)', sub: 'Most realistic today' },
-                { value: 'friction_dominant' as const, label: 'Friction-Dominant (Reduced Income Tax)', sub: 'Transition scenario' },
-                { value: 'friction_only' as const, label: 'Friction-Only (Income Tax Eliminated)', sub: 'Full replacement model — high structural shift' },
+                { value: 'hybrid' as const, label: 'Hybrid (Token + Income Tax)', sub: 'Most realistic today' },
+                { value: 'friction_dominant' as const, label: 'Token-Dominant (Reduced Income Tax)', sub: 'Transition scenario' },
+                { value: 'friction_only' as const, label: 'Token-Only (Income Tax Eliminated)', sub: 'Full replacement model — high structural shift' },
               ].map((option) => (
                 <label
                   key={option.value}
@@ -510,4 +514,3 @@ export default function PolicySliders({
     </div>
   );
 }
-

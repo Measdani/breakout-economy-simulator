@@ -5,7 +5,7 @@ Interactive web interface for the Policy Flight Simulator - Educational UBI + To
 ## Features
 
 ✅ **Real-time Policy Sliders**
-- Token Tax Rate (0.1% - 1.0%)
+- Token Tax Rate (0.10 - 1.00 mils per 1,000 tokens total compute)
 - Annual UBI per Adult ($0 - $20,000)
 - Supplement Breakout Point ($30,000 - $100,000)
 
@@ -93,7 +93,7 @@ Default policy settings in `components/Simulator.tsx`:
 
 ```typescript
 {
-  tokenTaxRate: 0.0035,           // 0.35%
+  tokenTaxRate: 0.0035,           // 0.35 mils / 1,000 tokens total compute
   ubiAnnualPerAdult: 12000,       // $12k
   breakoutPoint: 60000,           // $60k
   adultPopulation: 265000000,     // 265M

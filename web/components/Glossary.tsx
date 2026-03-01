@@ -13,7 +13,7 @@ const GLOSSARY_ITEMS = [
     term: 'Token Tax',
     definition:
       'A tax on financial flow (all electronic financial transactions and digital transfers), not labor or wages. The tax base is the total annual volume of electronic payments in the economy.',
-    example: '0.35% × $1 quadrillion annual flow = $3.5 trillion/year revenue. Labor income below breakout point is not taxed.',
+    example: '0.35 mils / 1,000 tokens total compute × $1 quadrillion annual flow = $3.5 trillion/year revenue. Labor income below breakout point is not taxed.',
   },
   {
     term: 'Welfare Trap',

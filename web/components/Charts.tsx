@@ -30,7 +30,7 @@ export default function Charts({ result }: ChartsProps) {
   ].filter((item) => item.value > 0);
 
   const revenueData = [
-    { name: 'Friction Revenue', value: (result.revenue.frictionTaxRevenue ?? 0) / 1e9 },
+    { name: 'Token Tax Revenue', value: (result.revenue.frictionTaxRevenue ?? 0) / 1e9 },
     { name: 'Income Revenue', value: (result.revenue.incomeTaxRevenue ?? 0) / 1e9 },
   ].filter((item) => item.value > 0);
 
@@ -72,12 +72,12 @@ export default function Charts({ result }: ChartsProps) {
 
         <div className="bg-white rounded-lg shadow-lg p-6 glow-border-green">
           <h3 className="text-lg font-bold text-slate-900 mb-4">
-            Revenue Breakdown (Friction vs Income)
+            Revenue Breakdown (Token Tax vs Income)
           </h3>
           <ResponsiveContainer width="100%" height={320}>
             <PieChart>
               <Pie
-                data={revenueData.length > 0 ? revenueData : [{ name: 'Friction Revenue', value: 0 }]}
+                data={revenueData.length > 0 ? revenueData : [{ name: 'Token Tax Revenue', value: 0 }]}
                 cx="50%"
                 cy="50%"
                 outerRadius={110}
@@ -85,7 +85,7 @@ export default function Charts({ result }: ChartsProps) {
                 labelLine={false}
                 label={({ name, value }) => `${name}: ${formatBillions(value)}`}
               >
-                {(revenueData.length > 0 ? revenueData : [{ name: 'Friction Revenue', value: 0 }]).map((_, index) => (
+                {(revenueData.length > 0 ? revenueData : [{ name: 'Token Tax Revenue', value: 0 }]).map((_, index) => (
                   <Cell key={`revenue-cell-${index}`} fill={revenueColors[index % revenueColors.length]} />
                 ))}
               </Pie>

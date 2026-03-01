@@ -1,8 +1,8 @@
 /**
- * NAIERM Model Specifications - Friction Tax Engine (v2.1)
+ * NAIERM Model Specifications - Token Tax Engine (v2.1)
  *
  * This file documents all input ranges, defaults, formulas, and outputs
- * for the Friction Tax Engine component of the simulator.
+ * for the Token Tax Engine component of the simulator.
  *
  * Last Updated: 2026-02-24
  * Author: Claude Code
@@ -14,11 +14,11 @@ export const FrictionTaxEngineSpecs = {
   // ============================================================================
 
   frictionTaxRate: {
-    label: 'Friction Tax Rate',
+    label: 'Token Tax Rate',
     description: 'Tax applied to annual electronic transaction volume',
     inputFormat: 'decimal (0.001 = 0.1%)',
     uiFormat: 'percentage',
-    default: 0.0035, // 0.35%
+    default: 0.0035, // 0.35 mils / 1,000 tokens total compute
     min: 0.001, // 0.1%
     max: 0.01, // 1.0%
     step: 0.0005, // 0.05% increments
@@ -95,9 +95,9 @@ export const FrictionTaxEngineSpecs = {
     },
 
     annualFrictionTaxRevenue: {
-      name: 'Annual Friction Tax Revenue',
+      name: 'Annual Token Tax Revenue',
       formula: 'Adjusted Volume × Tax Rate',
-      example: '$1Q × 0.35% = $3.5T',
+      example: '$1Q × 0.35 mils / 1,000 tokens total compute = $3.5T',
       purpose: 'Primary revenue source in Year 0',
     },
 
@@ -109,7 +109,7 @@ export const FrictionTaxEngineSpecs = {
     },
 
     projectedFrictionTaxRevenue10Yr: {
-      name: '10-Year Friction Tax Revenue (Cumulative)',
+      name: '10-Year Token Tax Revenue (Cumulative)',
       formula: 'Sum from Year 0 to 9: [AdjustedVolume_Y × (1 + GrowthRate)^Y × TaxRate]',
       example: '$39.5T (cumulative over 10 years)',
       purpose: 'Long-term revenue projection for fiscal sustainability',
@@ -124,14 +124,14 @@ export const FrictionTaxEngineSpecs = {
 
     frictionTaxShareOfModelRevenue: {
       name: '% of Total Model Revenue',
-      formula: 'Friction Tax Revenue / Total Model Revenue',
+      formula: 'Token Tax Revenue / Total Model Revenue',
       example: '$3.5T / $10T = 35.0%',
       purpose: 'Show composition of total system revenue (recommended default)',
     },
 
     frictionTaxShareOfFederalBaseline: {
       label: '% of Current Federal Revenue (Optional)',
-      formula: 'Friction Tax Revenue / Federal Revenue Baseline',
+      formula: 'Token Tax Revenue / Federal Revenue Baseline',
       example: '$3.5T / $4.1T (2024 US federal revenue) = 85.4%',
       purpose: 'Optional metric for investor/policymaker comparison (admin toggle)',
       adminOnly: true,
@@ -144,7 +144,7 @@ export const FrictionTaxEngineSpecs = {
 
   outputs: {
     annualFrictionTaxRevenue: {
-      label: 'Annual Friction Tax Revenue',
+      label: 'Annual Token Tax Revenue',
       format: 'currency ($X.XT)',
       calculation: 'From formulas.annualFrictionTaxRevenue',
       displayLocation: 'Revenue Breakdown (right panel)',
@@ -180,7 +180,7 @@ export const FrictionTaxEngineSpecs = {
       label: 'Sensitivity: +0.10% Rate',
       format: 'delta revenue ($X.XT) + % change (X.X%)',
       calculation: 'calculateFrictionTaxSensitivity(volume, rate, capital_flight, +0.001)',
-      displayLocation: 'Friction Tax Sensitivity (right panel)',
+      displayLocation: 'Token Tax Sensitivity (right panel)',
       color: 'text-green-400',
     },
 
@@ -188,7 +188,7 @@ export const FrictionTaxEngineSpecs = {
       label: 'Sensitivity: -0.10% Rate',
       format: 'delta revenue ($X.XT) + % change (X.X%)',
       calculation: 'calculateFrictionTaxSensitivity(volume, rate, capital_flight, -0.001)',
-      displayLocation: 'Friction Tax Sensitivity (right panel)',
+      displayLocation: 'Token Tax Sensitivity (right panel)',
       color: 'text-red-400',
     },
   },
@@ -243,7 +243,7 @@ export const FrictionTaxEngineSpecs = {
     },
     lowRevenueWarning: {
       condition: 'annualFrictionTaxRevenue < 2e12',
-      message: 'Friction tax revenue is below $2T—verify policy feasibility.',
+      message: 'Token tax revenue is below $2T—verify policy feasibility.',
     },
     volatilityWarning: {
       condition: 'growthRate > 0.10 && capitalFlightRate > 0.02',
@@ -293,7 +293,7 @@ export const FrictionTaxEngineSpecs = {
       version: '1.0',
       date: '2026-02-24',
       author: 'Claude Code',
-      changes: 'Initial Friction Tax Engine specification; implements formulas, ranges, validation, and sensitivity.',
+      changes: 'Initial Token Tax Engine specification; implements formulas, ranges, validation, and sensitivity.',
     },
   ],
 };

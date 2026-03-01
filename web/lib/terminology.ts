@@ -1,7 +1,7 @@
 /**
  * NAIERM Terminology & Labels
  * Single source of truth for all user-facing language
- * Maintains institutional-grade terminology: BEL, SBI, Electronic Transaction Friction Tax, etc.
+ * Maintains institutional-grade terminology: BEL, SBI, Electronic Transaction Token Tax, etc.
  */
 
 export const TERMINOLOGY = {
@@ -10,8 +10,8 @@ export const TERMINOLOGY = {
   MODEL_FULL_NAME: 'National AI Economic Resilience Model',
 
   // === Revenue Architecture ===
-  REVENUE_FRICTION_TAX: 'Electronic Transaction Friction Tax',
-  REVENUE_FRICTION_RATE: 'Friction Tax Rate',
+  REVENUE_FRICTION_TAX: 'Electronic Transaction Token Tax',
+  REVENUE_FRICTION_RATE: 'Token Tax Rate',
   REVENUE_BASE: 'National Digital Settlement Base',
   REVENUE_TOKEN_TAX: 'Token Tax',
   REVENUE_INCOME_TAX: 'Income Tax',
