@@ -1,272 +1,141 @@
-import Link from 'next/link'
 import PublicSiteShell from '@/components/site/PublicSiteShell'
 
 export default function Home() {
   return (
-    <PublicSiteShell>
-      <div className="homepage">
-        <section className="hero">
-          <div className="relative overflow-hidden rounded-2xl border border-border-slate min-h-[430px] glow-border-blue">
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0f172af2] via-[#13243de6] to-[#0c1528f2]" />
-            <div
-              className="absolute inset-0 opacity-18"
-              style={{
-                backgroundImage:
-                  'repeating-linear-gradient(to right, rgba(148,163,184,0.2) 0, rgba(148,163,184,0.2) 1px, transparent 1px, transparent 28px), repeating-linear-gradient(to bottom, rgba(148,163,184,0.12) 0, rgba(148,163,184,0.12) 1px, transparent 1px, transparent 28px)',
-              }}
-            />
-            <svg className="absolute inset-0 w-full h-full opacity-30" viewBox="0 0 1200 500" preserveAspectRatio="none" aria-hidden="true">
-              <polyline points="40,330 180,295 320,310 460,260 620,270 770,215 940,230 1160,160" fill="none" stroke="#7dd3fc" strokeWidth="2" />
-              <line x1="120" y1="110" x2="280" y2="190" stroke="#93c5fd" strokeWidth="1.2" />
-              <line x1="280" y1="190" x2="510" y2="150" stroke="#93c5fd" strokeWidth="1.2" />
-              <line x1="510" y1="150" x2="710" y2="235" stroke="#93c5fd" strokeWidth="1.2" />
-              <line x1="710" y1="235" x2="980" y2="170" stroke="#93c5fd" strokeWidth="1.2" />
-              <circle cx="120" cy="110" r="4" fill="#bfdbfe" />
-              <circle cx="280" cy="190" r="4" fill="#bfdbfe" />
-              <circle cx="510" cy="150" r="4" fill="#bfdbfe" />
-              <circle cx="710" cy="235" r="4" fill="#bfdbfe" />
-              <circle cx="980" cy="170" r="4" fill="#bfdbfe" />
-            </svg>
+    <PublicSiteShell contentClassName="max-w-[1120px] mx-auto px-3 md:px-6 py-8 md:py-10">
+      <div className="rounded-2xl overflow-hidden border border-border-slate bg-gradient-to-b from-[#06132a] via-[#08162f] to-[#071127] shadow-[0_24px_48px_rgba(3,8,20,0.55)]">
+        <section className="px-7 py-12 md:px-10 md:py-14">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            <div>
+              <p className="text-[13px] uppercase tracking-[0.18em] text-blue-100/80 mb-4">Model Architecture Overview</p>
+              <h1 className="text-4xl md:text-5xl leading-tight font-semibold text-white mb-8">
+                Revenue to Obligations Sequencing Framework
+              </h1>
 
-            <div className="relative px-7 py-8 md:px-10 md:py-10 lg:px-12 lg:py-12 max-w-4xl">
-              <p className="text-xs uppercase tracking-widest text-blue-100 mb-3">National AI Economy Resiliency Model</p>
-            <h1 className="text-3xl md:text-5xl font-bold leading-tight text-bright mb-4">
-              Policy-Grade Modeling for AI-Era Fiscal Resilience
-            </h1>
-            <p className="body-copy max-w-3xl">
-              A transparent federal simulation engine for revenue architecture, national obligations, and long-term household stability.
-            </p>
-            <p className="body-copy max-w-3xl mt-3">
-              Designed to evaluate federal revenue architecture, national obligations, and macro-to-household stability under explicit fiscal assumptions.
-            </p>
-            <p className="text-sm text-blue-100/85 mt-3 mb-7">
-              Transparent assumptions &bull; Structured scenario modeling &bull; Exportable fiscal datasets &bull; No PII stored
-            </p>
-
-              <div className="flex flex-wrap items-center gap-3">
-                <Link
-                  href="/model"
-                  className="px-5 py-2.5 rounded border border-emerald-400 bg-emerald-900/30 text-emerald-200 text-sm font-semibold hover:bg-emerald-900/45 transition"
-                >
-                  Launch Simulator
-                </Link>
-                <Link
-                  href="/methodology"
-                  className="px-5 py-2.5 rounded border border-blue-300 text-blue-100 text-sm font-semibold hover:bg-blue-900/30 transition"
-                >
-                  Read Methodology
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="section">
-          <div className="rounded-2xl border border-border-slate bg-dark-slate px-7 py-8 md:px-10 md:py-10 shadow-[0_12px_36px_rgba(8,14,28,0.35)]">
-            <p className="text-xs uppercase tracking-widest text-blue-200 mb-2">Model Architecture Overview</p>
-            <h2 className="text-bright max-w-3xl">Revenue to Obligations Sequencing Framework</h2>
-            <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr_auto_1fr] gap-4 items-center mt-7">
-              <div className="rounded-xl border border-blue-300/30 bg-[#13263f] p-5">
-                <p className="text-xs uppercase tracking-widest text-blue-200 mb-2">Stage 1</p>
-                <p className="text-bright font-semibold mb-2">Revenue Generation</p>
-                <p className="body-copy">Friction tax and supplemental income tax generate total fiscal inflow.</p>
-              </div>
-              <div className="hidden md:flex items-center justify-center text-blue-200 text-xl" aria-hidden="true">{'->'}</div>
-              <div className="rounded-xl border border-violet-300/30 bg-[#1f1f42] p-5">
-                <p className="text-xs uppercase tracking-widest text-violet-200 mb-2">Stage 2</p>
-                <p className="text-bright font-semibold mb-2">Allocation Order</p>
-                <p className="body-copy">Basic Economic Liquidity (BEL) is funded first. Remaining fiscal space allocated to national programs.</p>
-              </div>
-              <div className="hidden md:flex items-center justify-center text-blue-200 text-xl" aria-hidden="true">{'->'}</div>
-              <div className="rounded-xl border border-emerald-300/30 bg-[#162d30] p-5">
-                <p className="text-xs uppercase tracking-widest text-emerald-200 mb-2">Stage 3</p>
-                <p className="text-bright font-semibold mb-2">Obligations and Balance</p>
-                <p className="body-copy">Retirement and healthcare obligations funded from remaining space. Final fiscal balance calculated.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="section">
-          <div className="bg-dark-slate rounded-2xl border border-border-slate px-7 py-8 md:px-10 md:py-10 shadow-[0_12px_36px_rgba(8,14,28,0.35)]">
-            <p className="text-xs uppercase tracking-widest text-blue-200 mb-2">How NAIERM Works</p>
-            <h2 className="text-bright max-w-3xl">
-              NAIERM models how federal revenue architecture, income floor policy (BEL), retirement systems, and healthcare obligations interact within a unified fiscal framework.
-            </h2>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-7 items-center mt-7">
-              <div className="space-y-4">
-                <p className="body-copy">
-                  Users configure revenue architecture and program parameters, then observe allocation order, fiscal balance, and sustainability indicators in real time.
-                </p>
-                <p className="body-copy">
-                  The interface is designed for transparent scenario testing, with output structure aligned for comparative review and export.
-                </p>
-              </div>
-              <div className="bg-darker-navy rounded-lg border border-border-slate p-4">
-                <div className="h-52 rounded border border-border-slate bg-dark-slate relative overflow-hidden">
-                  <div className="absolute inset-0 opacity-35 bg-gradient-to-r from-blue-900/45 to-emerald-900/30" />
-                  <div className="absolute left-4 right-4 top-5 h-2 bg-border-slate rounded" />
-                  <div className="absolute left-4 top-12 w-[62%] h-2 bg-sky-300/80 rounded" />
-                  <div className="absolute left-4 top-18 w-[45%] h-2 bg-violet-300/75 rounded" />
-                  <div className="absolute left-4 top-24 w-[74%] h-2 bg-orange-300/75 rounded" />
-                  <div className="absolute right-4 top-12 w-28 h-28 rounded border border-border-slate bg-darker-navy/90 p-2">
-                    <div className="h-2 w-full bg-emerald-400/75 rounded mb-2" />
-                    <div className="h-2 w-3/4 bg-sky-300/75 rounded mb-2" />
-                    <div className="h-2 w-1/2 bg-violet-300/75 rounded" />
-                  </div>
-                  <svg className="absolute inset-0 w-full h-full opacity-45" viewBox="0 0 400 180" preserveAspectRatio="none" aria-hidden="true">
-                    <polyline points="20,145 95,118 160,126 235,88 315,96 380,60" fill="none" stroke="#93c5fd" strokeWidth="2" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="section">
-          <div className="space-y-7">
-            <div className="space-y-2">
-              <p className="text-xs uppercase tracking-widest text-blue-200">Core Engines</p>
-              <h2 className="text-bright">Integrated Policy Modules</h2>
-            </div>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <article className="module-card bg-dark-slate rounded-2xl border border-border-slate p-6 shadow-[0_10px_28px_rgba(10,18,34,0.36)] relative overflow-hidden">
-                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-400/60 to-cyan-300/70" />
-                <div className="absolute -top-12 -right-10 w-36 h-36 rounded-full bg-blue-900/25 blur-2xl" />
-                <div className="relative">
-                  <div className="module-visual rounded-xl border border-blue-300/25 bg-gradient-to-br from-[#102743] to-[#111d32] relative overflow-hidden mb-5">
-                    <div className="absolute inset-0 opacity-25 bg-[radial-gradient(circle_at_70%_25%,rgba(125,211,252,0.35),transparent_45%)]" />
-                    <div className="absolute left-4 right-4 top-5 h-1.5 rounded bg-slate-700/75" />
-                    <div className="absolute left-4 top-10 w-[64%] h-2 rounded bg-cyan-300/75" />
-                    <div className="absolute left-4 top-16 w-[52%] h-2 rounded bg-sky-200/70" />
-                    <div className="absolute left-4 top-[86px] w-[75%] h-2 rounded bg-blue-200/65" />
-                    <div className="absolute right-4 top-10 w-24 h-24 rounded-lg border border-blue-200/30 bg-slate-900/65 p-2">
-                      <div className="h-2 w-full rounded bg-cyan-300/80 mb-2" />
-                      <div className="h-2 w-3/4 rounded bg-sky-200/75 mb-2" />
-                      <div className="h-2 w-1/2 rounded bg-blue-200/70" />
-                    </div>
-                    <svg className="absolute inset-0 w-full h-full opacity-45 module-line" viewBox="0 0 400 180" preserveAspectRatio="none" aria-hidden="true">
-                      <polyline points="18,145 94,118 164,125 236,92 316,98 382,64" fill="none" stroke="#7dd3fc" strokeWidth="2" />
-                    </svg>
-                  </div>
-                  <p className="text-xs uppercase tracking-widest text-blue-200 mb-1">Module 1</p>
-                  <h3 className="text-lg font-semibold text-bright mb-2">Revenue &amp; Funding Engine</h3>
-                  <p className="body-copy mb-5">
-                    Models federal revenue architecture and stress-tests financing under BEL-first allocation rules.
+              <div className="space-y-8">
+                <div>
+                  <h2 className="text-4xl md:text-5xl font-semibold text-white leading-tight mb-3">Stage 1 - Revenue Generation</h2>
+                  <p className="text-xl text-blue-100/80 leading-relaxed">
+                    Friction tax and supplemental income tax generate total fiscal inflow.
                   </p>
-                  <ul className="space-y-2 text-sm text-blue-100/85 mb-5">
-                    <li>Friction Tax (primary engine)</li>
-                    <li>Income Tax (supplemental)</li>
-                    <li>Allocation sequencing</li>
-                  </ul>
-                  <Link href="/model" className="inline-flex items-center gap-2 rounded-md border border-blue-300/40 bg-blue-900/20 px-3.5 py-2 text-xs font-semibold text-blue-100 transition hover:bg-blue-900/35 hover:border-blue-200/60">
-                    Explore Revenue Engine
-                    <span aria-hidden="true">{'->'}</span>
-                  </Link>
                 </div>
-              </article>
 
-              <article className="module-card bg-dark-slate rounded-2xl border border-border-slate p-6 shadow-[0_10px_28px_rgba(10,18,34,0.36)] relative overflow-hidden">
-                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-violet-400/60 to-indigo-300/70" />
-                <div className="absolute -top-12 -right-10 w-36 h-36 rounded-full bg-violet-900/25 blur-2xl" />
-                <div className="relative">
-                  <div className="module-visual rounded-xl border border-violet-300/25 bg-gradient-to-br from-[#24163f] to-[#171e36] relative overflow-hidden mb-5">
-                    <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_70%_25%,rgba(196,181,253,0.38),transparent_45%)]" />
-                    <div className="absolute left-4 top-6 w-9 h-9 rounded-full bg-violet-200/20 border border-violet-200/35" />
-                    <div className="absolute left-16 top-6 w-9 h-9 rounded-full bg-violet-200/20 border border-violet-200/35" />
-                    <div className="absolute left-10 top-14 w-16 h-1 rounded bg-violet-200/45" />
-                    <div className="absolute left-4 right-4 bottom-9 h-8 rounded border border-violet-200/25 bg-slate-900/65" />
-                    <div className="absolute left-7 right-7 bottom-12 h-2 rounded bg-violet-300/70" />
-                    <div className="absolute left-7 bottom-[54px] w-[58%] h-2 rounded bg-indigo-300/65" />
-                    <svg className="absolute inset-0 w-full h-full opacity-50 module-line" viewBox="0 0 400 180" preserveAspectRatio="none" aria-hidden="true">
-                      <polyline points="20,135 90,125 155,95 220,84 285,76 380,52" fill="none" stroke="#c4b5fd" strokeWidth="2" />
-                    </svg>
-                  </div>
-                  <p className="text-xs uppercase tracking-widest text-violet-200 mb-1">Module 2</p>
-                  <h3 className="text-lg font-semibold text-bright mb-2">Demographics &amp; Income Floor</h3>
-                  <p className="body-copy mb-5">
-                    Simulates household distribution, incentive taper dynamics, and income floor configuration.
+                <div>
+                  <h2 className="text-4xl md:text-5xl font-semibold text-white leading-tight mb-3">Stage 2 - Allocation Order</h2>
+                  <p className="text-xl text-blue-100/80 leading-relaxed">
+                    Basic Economic Liquidity (BEL) is funded first. Remaining fiscal space allocated to national programs.
                   </p>
-                  <ul className="space-y-2 text-sm text-blue-100/85 mb-5">
-                    <li>BEL allocation</li>
-                    <li>SBI (Systemic Bonus Incentive) taper structure</li>
-                    <li>Household distribution modeling</li>
-                  </ul>
-                  <Link href="/model" className="inline-flex items-center gap-2 rounded-md border border-violet-300/40 bg-violet-900/20 px-3.5 py-2 text-xs font-semibold text-blue-100 transition hover:bg-violet-900/35 hover:border-violet-200/60">
-                    Explore Demographics
-                    <span aria-hidden="true">{'->'}</span>
-                  </Link>
                 </div>
-              </article>
 
-              <article className="module-card bg-dark-slate rounded-2xl border border-border-slate p-6 shadow-[0_10px_28px_rgba(10,18,34,0.36)] relative overflow-hidden">
-                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-orange-300/70 to-amber-200/70" />
-                <div className="absolute -top-12 -right-10 w-36 h-36 rounded-full bg-orange-900/25 blur-2xl" />
-                <div className="relative">
-                  <div className="module-visual rounded-xl border border-orange-300/25 bg-gradient-to-br from-[#35220f] to-[#20222f] relative overflow-hidden mb-5">
-                    <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_72%_22%,rgba(253,186,116,0.38),transparent_45%)]" />
-                    <div className="absolute left-4 right-4 top-7 h-8 rounded border border-orange-100/20 bg-slate-900/65" />
-                    <div className="absolute left-7 top-9 w-[62%] h-2 rounded bg-amber-200/80" />
-                    <div className="absolute left-7 top-[54px] w-[48%] h-2 rounded bg-orange-300/75" />
-                    <div className="absolute left-4 right-4 top-[94px] h-8 rounded border border-orange-100/20 bg-slate-900/65" />
-                    <div className="absolute left-7 top-[102px] w-[70%] h-2 rounded bg-orange-200/75" />
-                    <div className="absolute left-7 top-[116px] w-[38%] h-2 rounded bg-amber-100/65" />
-                    <svg className="absolute inset-0 w-full h-full opacity-45 module-line" viewBox="0 0 400 180" preserveAspectRatio="none" aria-hidden="true">
-                      <polyline points="18,148 90,126 156,133 230,104 300,114 382,86" fill="none" stroke="#fdba74" strokeWidth="2" />
-                    </svg>
-                  </div>
-                  <p className="text-xs uppercase tracking-widest text-orange-200 mb-1">Module 3</p>
-                  <h3 className="text-lg font-semibold text-bright mb-2">National Social Programs</h3>
-                  <p className="body-copy mb-5">
-                    Evaluates retirement and healthcare obligations with sustainability and funding indicators.
+                <div>
+                  <h2 className="text-4xl md:text-5xl font-semibold text-white leading-tight mb-3">Stage 3 - Obligations and Balance</h2>
+                  <p className="text-xl text-blue-100/80 leading-relaxed">
+                    Retirement and healthcare obligations funded from remaining space. Final fiscal balance calculated.
                   </p>
-                  <ul className="space-y-2 text-sm text-blue-100/85 mb-5">
-                    <li>Retirement transition modeling</li>
-                    <li>Healthcare baselines (Medicare/Medicaid)</li>
-                    <li>Funding ratios and sustainability stress tests</li>
-                  </ul>
-                  <Link href="/methodology" className="inline-flex items-center gap-2 rounded-md border border-orange-300/40 bg-orange-900/20 px-3.5 py-2 text-xs font-semibold text-blue-100 transition hover:bg-orange-900/35 hover:border-orange-200/60">
-                    Explore Social Programs
-                    <span aria-hidden="true">{'->'}</span>
-                  </Link>
                 </div>
-              </article>
+              </div>
+            </div>
+
+            <div className="relative min-h-[460px] rounded-xl border border-blue-200/10 bg-gradient-to-br from-[#0b2547]/55 to-[#08172e]/75 overflow-hidden">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_28%,rgba(56,189,248,0.35),transparent_45%)]" />
+              <div className="absolute inset-x-8 bottom-8 h-1 bg-cyan-300/70 shadow-[0_0_20px_rgba(56,189,248,0.5)]" />
+              <div className="absolute inset-x-10 bottom-10 h-[2px] bg-cyan-200/45" />
+              <div className="absolute left-10 right-10 bottom-16 h-36">
+                <div className="absolute bottom-0 left-0 w-6 h-16 bg-cyan-200/35" />
+                <div className="absolute bottom-0 left-8 w-6 h-20 bg-cyan-200/35" />
+                <div className="absolute bottom-0 left-16 w-8 h-28 bg-cyan-200/40" />
+                <div className="absolute bottom-0 left-28 w-9 h-[9.5rem] bg-cyan-200/45" />
+                <div className="absolute bottom-0 left-[10.5rem] w-10 h-[11.5rem] bg-cyan-100/50" />
+                <div className="absolute bottom-0 left-[14.5rem] w-9 h-[14rem] bg-cyan-100/55" />
+                <div className="absolute bottom-0 left-[18.5rem] w-11 h-[16.5rem] bg-cyan-100/60" />
+                <div className="absolute bottom-0 left-[22.5rem] w-11 h-[18.5rem] bg-cyan-50/65" />
+              </div>
+              <svg className="absolute inset-0 w-full h-full opacity-80" viewBox="0 0 420 280" preserveAspectRatio="none" aria-hidden="true">
+                <polyline points="36,220 98,208 150,185 206,162 264,138 322,111 382,82" fill="none" stroke="#67e8f9" strokeWidth="2.5" />
+                <circle cx="98" cy="208" r="4" fill="#a5f3fc" />
+                <circle cx="150" cy="185" r="4" fill="#a5f3fc" />
+                <circle cx="206" cy="162" r="4" fill="#a5f3fc" />
+                <circle cx="264" cy="138" r="4" fill="#a5f3fc" />
+                <circle cx="322" cy="111" r="4" fill="#a5f3fc" />
+              </svg>
             </div>
           </div>
         </section>
 
-        <section className="section">
-          <div className="rounded-2xl border border-border-slate bg-[#152338] px-7 py-8 md:px-10 md:py-10 shadow-[0_14px_40px_rgba(7,13,24,0.45)]">
-            <p className="text-xs uppercase tracking-widest text-blue-200 mb-2">Credibility</p>
-            <h2 className="text-bright">Transparent by Design</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
-              <p className="body-copy">Open methodology</p>
-              <p className="body-copy">Explicit assumptions</p>
-              <p className="body-copy">Exportable structured data</p>
-              <p className="body-copy">No PII stored</p>
-              <p className="body-copy sm:col-span-2">Deterministic model logic (no hidden weighting)</p>
-            </div>
-          </div>
-        </section>
+        <div className="h-px bg-blue-200/20" />
 
-        <section className="section">
-          <div className="relative overflow-hidden bg-[#122136] rounded-2xl px-7 py-10 md:px-10 md:py-12 shadow-[0_20px_52px_rgba(6,11,20,0.52)]">
-            <div
-              className="absolute inset-0 bg-cover bg-center opacity-[0.16]"
-              style={{
-                backgroundImage: "url('/hero-family-scene.svg')",
-                filter: 'blur(0.8px)',
-              }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0f172adf] via-[#122238cc] to-[#0f172adf]" />
-            <div className="relative max-w-4xl">
-              <p className="text-xs uppercase tracking-widest text-blue-200 mb-2">Designed for Household Stability</p>
-              <h2 className="text-bright">Modeling Fiscal Systems That Support Household Stability</h2>
-              <p className="body-copy">
-                NAIERM connects macro-fiscal policy decisions to household-level stability outcomes. Income floors, retirement sustainability,
-                healthcare obligations, and capital formation are modeled as an integrated fiscal system - not as isolated policy silos.
+        <section className="px-7 py-12 md:px-10 md:py-14">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+            <div>
+              <p className="text-[13px] uppercase tracking-[0.18em] text-blue-100/80 mb-4">How NAIERM Works</p>
+              <h2 className="text-4xl md:text-5xl font-semibold leading-tight text-white mb-6">
+                NAIERM models how federal revenue architecture, income floor policy (BEL), retirement systems and healthcare obligations interact within a unified fiscal framework.
+              </h2>
+              <p className="text-xl text-blue-100/80 leading-relaxed mb-4">
+                Users configure revenue architecture and program parameters, then observe allocation order, fiscal balance, and sustainability indicators in real time.
+              </p>
+              <p className="text-xl text-blue-100/80 leading-relaxed">
+                The interface is designed for transparent scenario testing, with output structured aligned for comparative review and export.
               </p>
             </div>
+
+            <div className="relative min-h-[420px] rounded-xl border border-blue-200/10 bg-gradient-to-br from-[#0c2442]/60 to-[#09172a]/80 overflow-hidden">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(34,211,238,0.3),transparent_42%)]" />
+              <div className="absolute left-12 bottom-14 w-44 h-[7.5rem] rounded border border-cyan-200/35 bg-cyan-100/10" />
+              <div className="absolute left-[5.5rem] bottom-[4.5rem] w-52 h-40 rounded border border-cyan-200/40 bg-cyan-100/12" />
+              <div className="absolute left-[9.5rem] bottom-[5.5rem] w-56 h-52 rounded border border-cyan-200/45 bg-cyan-100/16" />
+              <div className="absolute left-[11rem] bottom-28 w-[7.5rem] h-[5.5rem] rounded border border-cyan-50/50 bg-cyan-100/20 flex items-center justify-center">
+                <div className="w-16 h-10 border border-cyan-100/60 rounded-sm" />
+              </div>
+              <div className="absolute inset-x-10 bottom-9 h-[2px] bg-cyan-200/60 shadow-[0_0_12px_rgba(34,211,238,0.45)]" />
+            </div>
+          </div>
+        </section>
+
+        <div className="h-px bg-blue-200/20" />
+
+        <section className="px-7 py-12 md:px-10 md:py-14">
+          <p className="text-[13px] uppercase tracking-[0.18em] text-blue-100/80 mb-3">Core Engines</p>
+          <h2 className="text-4xl md:text-5xl font-semibold leading-tight text-white mb-8">
+            Integrated Policy Modules
+          </h2>
+
+          <div className="space-y-6">
+            <article className="rounded-xl border border-blue-300/20 bg-[#0b1b35]/70 p-5 md:p-6">
+              <div className="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-6 items-center">
+                <div className="h-36 rounded-lg border border-cyan-200/30 bg-gradient-to-r from-[#0d2548] to-[#132f55] relative overflow-hidden">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(103,232,249,0.3),transparent_45%)]" />
+                  <div className="absolute left-4 bottom-4 right-4 h-[2px] bg-cyan-200/55" />
+                  <div className="absolute left-7 bottom-8 w-8 h-10 bg-cyan-100/35" />
+                  <div className="absolute left-[4.5rem] bottom-8 w-10 h-14 bg-cyan-100/40" />
+                  <div className="absolute left-[7.75rem] bottom-8 w-8 h-12 bg-cyan-100/35" />
+                </div>
+                <div>
+                  <h3 className="text-3xl md:text-4xl font-semibold text-cyan-200 mb-2">Revenue &amp; Funding Engine</h3>
+                  <p className="text-xl text-blue-100/80 leading-relaxed">
+                    Friction tax and supplemental income tax generate total fiscal inflow.
+                  </p>
+                </div>
+              </div>
+            </article>
+
+            <article className="rounded-xl border border-blue-300/20 bg-[#0b1b35]/70 p-5 md:p-6">
+              <div className="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-6 items-center">
+                <div className="h-36 rounded-lg border border-violet-200/30 bg-gradient-to-r from-[#281e4c] to-[#1c2f57] relative overflow-hidden">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_34%_45%,rgba(196,181,253,0.35),transparent_45%)]" />
+                  <div className="absolute left-4 bottom-4 right-4 h-[2px] bg-violet-200/55" />
+                  <div className="absolute left-8 bottom-10 w-8 h-8 rounded-full border border-violet-100/50" />
+                  <div className="absolute left-20 bottom-10 w-8 h-8 rounded-full border border-violet-100/50" />
+                  <div className="absolute left-12 bottom-[4.5rem] w-16 h-2 bg-violet-100/45 rounded" />
+                </div>
+                <div>
+                  <h3 className="text-3xl md:text-4xl font-semibold text-violet-200 mb-2">Demographics &amp; Income Floor</h3>
+                  <p className="text-xl text-blue-100/80 leading-relaxed">
+                    Basic Economic Liquidity (BEL) is funded first. Remaining fiscal space allocated to national programs.
+                  </p>
+                </div>
+              </div>
+            </article>
           </div>
         </section>
       </div>
