@@ -703,6 +703,8 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                             type="number"
                             value={ubiDependent1}
                             onChange={(e) => setUbiDependent1(Math.max(0, parseInt(e.target.value) || 0))}
+                            min={0}
+                            step={100}
                             className="w-24 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
                           />
                         </div>
@@ -715,6 +717,8 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                             type="number"
                             value={ubiDependent2}
                             onChange={(e) => setUbiDependent2(Math.max(0, parseInt(e.target.value) || 0))}
+                            min={0}
+                            step={100}
                             className="w-24 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
                           />
                         </div>
@@ -727,6 +731,8 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                             type="number"
                             value={ubiDependent3}
                             onChange={(e) => setUbiDependent3(Math.max(0, parseInt(e.target.value) || 0))}
+                            min={0}
+                            step={100}
                             className="w-24 px-3 py-2 bg-darker-slate border border-border-slate rounded text-sm text-bright text-right"
                           />
                         </div>
