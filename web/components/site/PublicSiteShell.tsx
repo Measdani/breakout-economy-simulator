@@ -65,6 +65,7 @@ export default function PublicSiteShell({
 
           <div className="mt-10 text-xs text-muted">
             <p>NAIERM Web v0.3 | Last updated March 2, 2026</p>
+            <p className="mt-2">Model assumptions versioned and archived. See changelog for revisions.</p>
           </div>
         </div>
       </footer>

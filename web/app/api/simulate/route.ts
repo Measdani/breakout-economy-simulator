@@ -149,28 +149,28 @@ export async function GET() {
             type: 'number',
             range: '0 - 20000',
             default: 12000,
-            description: 'Annual Universal Basic Income per adult in USD',
+            description: 'Annual Basic Economic Liquidity (BEL) amount per adult in USD',
           },
           breakoutPoint: {
             type: 'number',
             range: '30000 - 100000',
             default: 60000,
-            description: 'Income threshold where UBI supplement phases out in USD',
+            description: 'Income threshold where SBI (Systemic Bonus Incentive) phases out in USD',
           },
           ubiDependent1: {
             type: 'number',
             default: 6000,
-            description: 'Annual UBI for first dependent child in USD',
+            description: 'Annual BEL dependent tier 1 amount in USD',
           },
           ubiDependent2: {
             type: 'number',
             default: 4000,
-            description: 'Annual UBI for second dependent child in USD',
+            description: 'Annual BEL dependent tier 2 amount in USD',
           },
           ubiDependent3: {
             type: 'number',
             default: 2000,
-            description: 'Annual UBI for third+ dependent children in USD',
+            description: 'Annual BEL dependent tier 3 amount in USD',
           },
         },
       },
@@ -209,7 +209,7 @@ export async function GET() {
           request: 'POST /api/simulate\n{}',
         },
         {
-          description: 'Simulate higher UBI',
+          description: 'Simulate higher BEL',
           request: 'POST /api/simulate\n{\n  "ubiAnnualPerAdult": 15000\n}',
         },
         {

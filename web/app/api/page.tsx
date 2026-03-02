@@ -59,15 +59,15 @@ export default function APIDocumentation() {
             <p style={{ color: '#94a3b8', fontWeight: 'bold', marginBottom: '0.5rem' }}>Parameters:</p>
             <ul style={{ listStyle: 'none', marginBottom: '1rem', paddingLeft: '1rem', color: '#cbd5e1' }}>
               <li>• <code>tokenTaxRate</code> (0.001 - 0.01): Digital capital transaction tax</li>
-              <li>• <code>ubiAnnualPerAdult</code> (0 - 20000): Annual UBI in USD</li>
+              <li>• <code>ubiAnnualPerAdult</code> (0 - 20000): Annual BEL amount in USD</li>
               <li>• <code>breakoutPoint</code> (30000 - 100000): Phase-out threshold in USD</li>
-              <li>• <code>ubiDependent1/2/3</code>: Dependent UBI amounts (optional)</li>
+              <li>• <code>ubiDependent1/2/3</code>: Dependent BEL tier amounts (optional)</li>
             </ul>
 
             <p style={{ color: '#94a3b8', fontWeight: 'bold', marginBottom: '0.5rem' }}>Returns:</p>
             <ul style={{ listStyle: 'none', paddingLeft: '1rem', color: '#cbd5e1' }}>
               <li>• <code>revenue</code>: Token tax, income tax, welfare savings, total</li>
-              <li>• <code>obligations</code>: UBI cost, govt operations, total</li>
+              <li>• <code>obligations</code>: BEL cost, govt operations, total</li>
               <li>• <code>balance</code>: Surplus/deficit and solvency status</li>
               <li>• <code>citizenModel</code>: Persona outcomes and work incentives</li>
             </ul>
@@ -222,4 +222,5 @@ export default function APIDocumentation() {
     </div>
   )
 }
+
 

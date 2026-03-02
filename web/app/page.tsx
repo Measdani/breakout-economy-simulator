@@ -30,15 +30,18 @@ export default function Home() {
 
             <div className="relative px-7 py-8 md:px-10 md:py-10 lg:px-12 lg:py-12 max-w-4xl">
               <p className="text-xs uppercase tracking-widest text-blue-100 mb-3">National AI Economy Resiliency Model</p>
-              <h1 className="text-3xl md:text-5xl font-bold leading-tight text-bright mb-4">
-                Policy-Grade Modeling for AI-Era Fiscal Resilience
-              </h1>
-              <p className="body-copy max-w-3xl">
-                A transparent federal simulation engine for revenue architecture, national obligations, and long-term household stability.
-              </p>
-              <p className="text-sm text-blue-100/85 mt-3 mb-7">
-                Transparent assumptions | Scenario modeling | Exportable datasets
-              </p>
+            <h1 className="text-3xl md:text-5xl font-bold leading-tight text-bright mb-4">
+              Policy-Grade Modeling for AI-Era Fiscal Resilience
+            </h1>
+            <p className="body-copy max-w-3xl">
+              A transparent federal simulation engine for revenue architecture, national obligations, and long-term household stability.
+            </p>
+            <p className="body-copy max-w-3xl mt-3">
+              Built to evaluate revenue architecture, national obligations, and macro-to-household stability under explicit fiscal assumptions.
+            </p>
+            <p className="text-sm text-blue-100/85 mt-3 mb-7">
+              Transparent assumptions &bull; Structured scenario modeling &bull; Exportable fiscal datasets &bull; No PII stored
+            </p>
 
               <div className="flex flex-wrap items-center gap-3">
                 <Link
@@ -59,10 +62,36 @@ export default function Home() {
         </section>
 
         <section className="section">
+          <div className="rounded-2xl border border-border-slate bg-dark-slate px-7 py-8 md:px-10 md:py-10 shadow-[0_12px_36px_rgba(8,14,28,0.35)]">
+            <p className="text-xs uppercase tracking-widest text-blue-200 mb-2">Model Architecture Overview</p>
+            <h2 className="text-bright max-w-3xl">Revenue to Obligations Sequencing Framework</h2>
+            <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr_auto_1fr] gap-4 items-center mt-7">
+              <div className="rounded-xl border border-blue-300/30 bg-[#13263f] p-5">
+                <p className="text-xs uppercase tracking-widest text-blue-200 mb-2">Stage 1</p>
+                <p className="text-bright font-semibold mb-2">Revenue Generated</p>
+                <p className="body-copy">Friction tax and supplemental income tax produce total fiscal inflow.</p>
+              </div>
+              <div className="hidden md:flex items-center justify-center text-blue-200 text-xl" aria-hidden="true">{'->'}</div>
+              <div className="rounded-xl border border-violet-300/30 bg-[#1f1f42] p-5">
+                <p className="text-xs uppercase tracking-widest text-violet-200 mb-2">Stage 2</p>
+                <p className="text-bright font-semibold mb-2">Allocation Order</p>
+                <p className="body-copy">BEL is funded first, then remaining fiscal space is allocated to programs.</p>
+              </div>
+              <div className="hidden md:flex items-center justify-center text-blue-200 text-xl" aria-hidden="true">{'->'}</div>
+              <div className="rounded-xl border border-emerald-300/30 bg-[#162d30] p-5">
+                <p className="text-xs uppercase tracking-widest text-emerald-200 mb-2">Stage 3</p>
+                <p className="text-bright font-semibold mb-2">Obligations and Balance</p>
+                <p className="body-copy">Retirement and healthcare are funded from remaining space, then final balance is calculated.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="section">
           <div className="bg-dark-slate rounded-2xl border border-border-slate px-7 py-8 md:px-10 md:py-10 shadow-[0_12px_36px_rgba(8,14,28,0.35)]">
-            <p className="text-xs uppercase tracking-widest text-blue-200 mb-2">How AIERM Works</p>
+            <p className="text-xs uppercase tracking-widest text-blue-200 mb-2">How NAIERM Works</p>
             <h2 className="text-bright max-w-3xl">
-              AIERM models how revenue architecture and social obligations interact under explicit policy assumptions.
+              NAIERM models how federal revenue architecture, income floor policy (BEL), retirement systems, and healthcare obligations interact within a unified fiscal framework.
             </h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-7 items-center mt-7">
               <div className="space-y-4">
@@ -120,10 +149,16 @@ export default function Home() {
                       <polyline points="18,145 94,118 164,125 236,92 316,98 382,64" fill="none" stroke="#7dd3fc" strokeWidth="2" />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-semibold text-bright mb-2">Revenue and Funding Engine</h3>
+                  <p className="text-xs uppercase tracking-widest text-blue-200 mb-1">Module 1</p>
+                  <h3 className="text-lg font-semibold text-bright mb-2">Revenue &amp; Funding Engine</h3>
                   <p className="body-copy mb-5">
                     Models federal revenue architecture and stress-tests financing under BEL-first allocation rules.
                   </p>
+                  <ul className="space-y-2 text-sm text-blue-100/85 mb-5">
+                    <li>Friction Tax (primary engine)</li>
+                    <li>Income Tax (supplemental)</li>
+                    <li>Allocation sequencing</li>
+                  </ul>
                   <Link href="/model" className="inline-flex items-center gap-2 rounded-md border border-blue-300/40 bg-blue-900/20 px-3.5 py-2 text-xs font-semibold text-blue-100 transition hover:bg-blue-900/35 hover:border-blue-200/60">
                     Explore Revenue Engine
                     <span aria-hidden="true">{'->'}</span>
@@ -147,10 +182,16 @@ export default function Home() {
                       <polyline points="20,135 90,125 155,95 220,84 285,76 380,52" fill="none" stroke="#c4b5fd" strokeWidth="2" />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-semibold text-bright mb-2">Demographics and BEL/SBI</h3>
+                  <p className="text-xs uppercase tracking-widest text-violet-200 mb-1">Module 2</p>
+                  <h3 className="text-lg font-semibold text-bright mb-2">Demographics &amp; Income Floor</h3>
                   <p className="body-copy mb-5">
                     Simulates household distribution, incentive taper dynamics, and income floor configuration.
                   </p>
+                  <ul className="space-y-2 text-sm text-blue-100/85 mb-5">
+                    <li>BEL allocation</li>
+                    <li>SBI (Systemic Bonus Incentive) taper structure</li>
+                    <li>Household distribution modeling</li>
+                  </ul>
                   <Link href="/model" className="inline-flex items-center gap-2 rounded-md border border-violet-300/40 bg-violet-900/20 px-3.5 py-2 text-xs font-semibold text-blue-100 transition hover:bg-violet-900/35 hover:border-violet-200/60">
                     Explore Demographics
                     <span aria-hidden="true">{'->'}</span>
@@ -174,10 +215,16 @@ export default function Home() {
                       <polyline points="18,148 90,126 156,133 230,104 300,114 382,86" fill="none" stroke="#fdba74" strokeWidth="2" />
                     </svg>
                   </div>
+                  <p className="text-xs uppercase tracking-widest text-orange-200 mb-1">Module 3</p>
                   <h3 className="text-lg font-semibold text-bright mb-2">National Social Programs</h3>
                   <p className="body-copy mb-5">
                     Evaluates retirement and healthcare obligations with sustainability and funding indicators.
                   </p>
+                  <ul className="space-y-2 text-sm text-blue-100/85 mb-5">
+                    <li>Retirement transition modeling</li>
+                    <li>Healthcare baselines (Medicare/Medicaid)</li>
+                    <li>Funding ratios and sustainability stress tests</li>
+                  </ul>
                   <Link href="/methodology" className="inline-flex items-center gap-2 rounded-md border border-orange-300/40 bg-orange-900/20 px-3.5 py-2 text-xs font-semibold text-blue-100 transition hover:bg-orange-900/35 hover:border-orange-200/60">
                     Explore Social Programs
                     <span aria-hidden="true">{'->'}</span>
@@ -215,7 +262,7 @@ export default function Home() {
               <p className="text-xs uppercase tracking-widest text-blue-200 mb-2">Designed for Household Stability</p>
               <h2 className="text-bright">Modeling Fiscal Systems That Support Household Stability</h2>
               <p className="body-copy">
-                AIERM connects macro-fiscal policy decisions to household-level stability outcomes. Income floors, retirement sustainability,
+                NAIERM connects macro-fiscal policy decisions to household-level stability outcomes. Income floors, retirement sustainability,
                 healthcare obligations, and capital formation are modeled together, not in isolation.
               </p>
             </div>

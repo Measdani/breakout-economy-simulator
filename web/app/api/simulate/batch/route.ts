@@ -171,14 +171,14 @@ export async function GET() {
         example: {
           scenarios: [
             {
-              name: 'Conservative UBI',
+              name: 'Conservative BEL',
               config: {
                 ubiAnnualPerAdult: 10000,
                 tokenTaxRate: 0.003,
               },
             },
             {
-              name: 'Generous UBI',
+              name: 'Generous BEL',
               config: {
                 ubiAnnualPerAdult: 15000,
                 tokenTaxRate: 0.005,
