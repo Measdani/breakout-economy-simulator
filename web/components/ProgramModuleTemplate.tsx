@@ -104,7 +104,7 @@ export default function ProgramModuleTemplate({
             <button
               type="button"
               onClick={() => setIsBaselineOpen(!isBaselineOpen)}
-              className="w-full flex items-center justify-between text-left mb-2"
+              className="w-full flex items-center justify-between text-left mb-2 bg-transparent border-0 p-0 appearance-none focus:outline-none"
             >
               <p className="text-xs font-semibold text-muted uppercase tracking-wide">{baselineTitle}</p>
               <span className="text-xs text-dimmed">{isBaselineOpen ? 'Hide' : 'Show'}</span>
@@ -122,7 +122,7 @@ export default function ProgramModuleTemplate({
             <button
               type="button"
               onClick={() => setIsNotesOpen(!isNotesOpen)}
-              className="w-full flex items-center justify-between text-left mb-2"
+              className="w-full flex items-center justify-between text-left mb-2 bg-transparent border-0 p-0 appearance-none focus:outline-none"
             >
               <p className="text-xs font-semibold text-muted uppercase tracking-wide">{notesTitle}</p>
               <span className="text-xs text-dimmed">{isNotesOpen ? 'Hide' : 'Show'}</span>
