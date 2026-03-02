@@ -22,12 +22,12 @@ export default function PublicTopNav() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border-slate bg-darker-navy/95 backdrop-blur">
-      <div className="max-w-[1160px] mx-auto px-5 md:px-8 py-3 flex flex-wrap items-center gap-4 justify-between">
+      <div className="max-w-[1120px] mx-auto px-5 md:px-8 py-3 flex flex-wrap items-center gap-4 justify-between">
         <Link href="/" className="text-sm font-semibold tracking-wide text-bright">
           NAIERM
         </Link>
 
-        <nav className="flex items-center gap-2 overflow-x-auto whitespace-nowrap">
+        <nav className="flex items-center gap-3 overflow-x-auto whitespace-nowrap">
           {navItems.map((item) => (
             <Link
               key={item.href}

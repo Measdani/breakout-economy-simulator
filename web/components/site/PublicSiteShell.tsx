@@ -9,7 +9,7 @@ interface PublicSiteShellProps {
 
 export default function PublicSiteShell({
   children,
-  contentClassName = 'max-w-[1160px] mx-auto px-5 md:px-8 pt-12 md:pt-14 pb-24',
+  contentClassName = 'max-w-[1120px] mx-auto px-5 md:px-8 pt-12 md:pt-14 pb-24',
 }: PublicSiteShellProps) {
   return (
     <div className="min-h-screen text-bright">
@@ -18,7 +18,7 @@ export default function PublicSiteShell({
       <main className={contentClassName}>{children}</main>
 
       <footer className="bg-[#0a1220] shadow-[0_-18px_42px_rgba(5,10,18,0.55)]">
-        <div className="max-w-[1160px] mx-auto px-5 md:px-8 py-14">
+        <div className="max-w-[1120px] mx-auto px-5 md:px-8 py-14">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
             <div>
               <p className="text-xs uppercase tracking-widest text-muted mb-3">Model</p>
@@ -63,14 +63,8 @@ export default function PublicSiteShell({
             </div>
           </div>
 
-          <div className="mt-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs text-muted">
+          <div className="mt-10 text-xs text-muted">
             <p>NAIERM Web v0.3 | Last updated March 2, 2026</p>
-            <p>
-              Internal access:{' '}
-              <Link href="/admin" className="hover:text-bright transition">
-                /admin
-              </Link>
-            </p>
           </div>
         </div>
       </footer>
