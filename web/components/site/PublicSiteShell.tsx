@@ -9,7 +9,7 @@ interface PublicSiteShellProps {
 
 export default function PublicSiteShell({
   children,
-  contentClassName = 'max-w-6xl mx-auto px-4 py-10',
+  contentClassName = 'max-w-[1160px] mx-auto px-5 md:px-8 pt-12 md:pt-14 pb-24',
 }: PublicSiteShellProps) {
   return (
     <div className="min-h-screen text-bright">
@@ -17,15 +17,14 @@ export default function PublicSiteShell({
 
       <main className={contentClassName}>{children}</main>
 
-      <footer className="border-t border-border-slate bg-darker-navy">
-        <div className="max-w-6xl mx-auto px-4 py-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-7 text-sm">
+      <footer className="bg-[#0a1220] shadow-[0_-18px_42px_rgba(5,10,18,0.55)]">
+        <div className="max-w-[1160px] mx-auto px-5 md:px-8 py-14">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
             <div>
               <p className="text-xs uppercase tracking-widest text-muted mb-3">Model</p>
               <div className="space-y-2 text-dimmed">
                 <Link href="/model" className="block hover:text-bright transition">Launch Simulator</Link>
                 <Link href="/glossary" className="block hover:text-bright transition">Glossary</Link>
-                <Link href="/admin/login" className="block hover:text-bright transition">Admin Login</Link>
               </div>
             </div>
 
@@ -41,7 +40,7 @@ export default function PublicSiteShell({
             <div>
               <p className="text-xs uppercase tracking-widest text-muted mb-3">Research</p>
               <div className="space-y-2 text-dimmed">
-                <Link href="/research" className="block hover:text-bright transition">Dataset and Ethics</Link>
+                <Link href="/research" className="block hover:text-bright transition">Dataset &amp; Ethics</Link>
                 <Link href="/research#submission-use" className="block hover:text-bright transition">Submission Use</Link>
                 <a
                   href="https://github.com/Measdani/breakout-economy-simulator/commits/main"
@@ -64,9 +63,14 @@ export default function PublicSiteShell({
             </div>
           </div>
 
-          <div className="mt-8 pt-4 border-t border-border-slate/80 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs text-muted">
-            <p>NAIERM Web v0.3</p>
-            <p>Last updated March 2, 2026</p>
+          <div className="mt-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs text-muted">
+            <p>NAIERM Web v0.3 | Last updated March 2, 2026</p>
+            <p>
+              Internal access:{' '}
+              <Link href="/admin" className="hover:text-bright transition">
+                /admin
+              </Link>
+            </p>
           </div>
         </div>
       </footer>

@@ -17,6 +17,7 @@ body {
     Cantarell, 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.62;
   background: radial-gradient(ellipse 900px 500px at center, rgba(255,255,255,0.25) 0%, #2A4A7F 40%, #1E3A5F 70%, #0F172A 100%);
   min-height: 100vh;
 }

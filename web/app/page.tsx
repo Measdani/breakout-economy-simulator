@@ -4,7 +4,7 @@ import PublicSiteShell from '@/components/site/PublicSiteShell'
 export default function Home() {
   return (
     <PublicSiteShell>
-      <div className="space-y-20 py-8">
+      <div className="space-y-20 py-8 md:py-10">
         <section className="relative overflow-hidden rounded-xl border border-border-slate min-h-[430px] glow-border-blue">
           <div className="absolute inset-0 bg-gradient-to-r from-[#0f172af2] via-[#13243de6] to-[#0c1528f2]" />
           <div
@@ -32,7 +32,7 @@ export default function Home() {
             <h1 className="text-3xl md:text-5xl font-bold leading-tight text-bright mb-4">
               Policy-Grade Modeling for AI-Era Fiscal Resilience
             </h1>
-            <p className="text-base md:text-xl text-blue-100/95 max-w-3xl mb-3">
+            <p className="text-base md:text-xl text-blue-100/95 max-w-3xl mb-3 leading-8">
               A transparent federal simulation engine for revenue architecture, national obligations, and long-term household stability.
             </p>
             <p className="text-sm text-blue-100/85 mb-7">
@@ -56,12 +56,12 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="bg-dark-slate rounded-xl border border-border-slate p-6 md:p-8">
+        <section className="bg-dark-slate rounded-xl border border-border-slate p-6 md:p-8 shadow-[0_12px_36px_rgba(8,14,28,0.35)]">
           <p className="text-xs uppercase tracking-widest text-blue-200 mb-2">How AIERM Works</p>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-7 items-center">
-            <div className="space-y-4 text-base text-dimmed leading-relaxed">
+            <div className="space-y-4 text-base text-dimmed leading-7">
               <p>
-                NAIERM models how revenue, income floors, retirement systems, and healthcare obligations interact under explicit policy assumptions.
+                AIERM models how revenue, income floors, retirement systems, and healthcare obligations interact under explicit policy assumptions.
               </p>
               <p>
                 Users configure revenue architecture and program parameters, then observe allocation order, fiscal balance, and sustainability indicators in real time.
@@ -87,51 +87,84 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <article className="bg-dark-slate rounded-xl border border-border-slate p-6 shadow-[0_10px_24px_rgba(15,23,42,0.28)] relative overflow-hidden">
-            <div className="absolute -top-10 -right-8 w-28 h-28 rounded-full bg-blue-900/25 blur-2xl" />
-            <div className="relative">
-              <div className="w-9 h-9 rounded bg-blue-900/35 border border-blue-400/40 flex items-center justify-center text-blue-200 mb-3">R</div>
-              <h2 className="text-lg font-semibold text-bright mb-2">Revenue & Funding Engine</h2>
-              <p className="text-sm text-dimmed mb-5">
-                Models federal revenue architecture and stress-test financing under BEL-first allocation rules.
-              </p>
-              <Link href="/model" className="text-sm text-blue-200 hover:text-bright transition">
-                Explore Revenue Engine {'->'}
-              </Link>
-            </div>
-          </article>
+        <section className="space-y-6">
+          <div className="space-y-2">
+            <p className="text-xs uppercase tracking-widest text-blue-200">Core Engines</p>
+            <h2 className="text-2xl md:text-3xl font-semibold text-bright">Integrated Policy Modules</h2>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <article className="group bg-dark-slate rounded-2xl border border-border-slate p-6 shadow-[0_10px_28px_rgba(10,18,34,0.36)] relative overflow-hidden transition duration-200 hover:-translate-y-1 hover:shadow-[0_18px_42px_rgba(14,30,56,0.45)]">
+              <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-400/60 to-cyan-300/70" />
+              <div className="absolute -top-12 -right-10 w-36 h-36 rounded-full bg-blue-900/25 blur-2xl" />
+              <div className="relative">
+                <div className="w-10 h-10 rounded-lg border border-blue-300/40 bg-blue-900/30 flex items-center justify-center mb-4">
+                  <svg className="w-5 h-5 text-blue-200" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M4 16h4v4H4v-4Zm6-6h4v10h-4V10Zm6-6h4v16h-4V4Z" stroke="currentColor" strokeWidth="1.5" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-bright mb-2">Revenue and Funding Engine</h3>
+                <p className="text-sm text-dimmed leading-6 mb-5">
+                  Models federal revenue architecture and stress-tests financing under BEL-first allocation rules.
+                </p>
+                <Link
+                  href="/model"
+                  className="inline-flex items-center gap-2 rounded-md border border-blue-300/40 bg-blue-900/20 px-3 py-1.5 text-xs font-semibold text-blue-100 transition hover:bg-blue-900/35 hover:border-blue-200/60"
+                >
+                  Explore Revenue Engine
+                  <span aria-hidden="true">{'->'}</span>
+                </Link>
+              </div>
+            </article>
 
-          <article className="bg-dark-slate rounded-xl border border-border-slate p-6 shadow-[0_10px_24px_rgba(15,23,42,0.28)] relative overflow-hidden">
-            <div className="absolute -top-10 -right-8 w-28 h-28 rounded-full bg-violet-900/25 blur-2xl" />
-            <div className="relative">
-              <div className="w-9 h-9 rounded bg-violet-900/35 border border-violet-400/40 flex items-center justify-center text-violet-200 mb-3">D</div>
-              <h2 className="text-lg font-semibold text-bright mb-2">Demographics & BEL/SBI</h2>
-              <p className="text-sm text-dimmed mb-5">
-                Simulates household distribution, incentive taper dynamics, and income floor configuration.
-              </p>
-              <Link href="/model" className="text-sm text-blue-200 hover:text-bright transition">
-                Explore Demographics {'->'}
-              </Link>
-            </div>
-          </article>
+            <article className="group bg-dark-slate rounded-2xl border border-border-slate p-6 shadow-[0_10px_28px_rgba(10,18,34,0.36)] relative overflow-hidden transition duration-200 hover:-translate-y-1 hover:shadow-[0_18px_42px_rgba(14,30,56,0.45)]">
+              <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-violet-400/60 to-indigo-300/70" />
+              <div className="absolute -top-12 -right-10 w-36 h-36 rounded-full bg-violet-900/25 blur-2xl" />
+              <div className="relative">
+                <div className="w-10 h-10 rounded-lg border border-violet-300/40 bg-violet-900/30 flex items-center justify-center mb-4">
+                  <svg className="w-5 h-5 text-violet-200" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M4 18c4-7 12-7 16 0M7 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm-5 3v7" stroke="currentColor" strokeWidth="1.5" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-bright mb-2">Demographics and BEL/SBI</h3>
+                <p className="text-sm text-dimmed leading-6 mb-5">
+                  Simulates household distribution, incentive taper dynamics, and income floor configuration.
+                </p>
+                <Link
+                  href="/model"
+                  className="inline-flex items-center gap-2 rounded-md border border-violet-300/40 bg-violet-900/20 px-3 py-1.5 text-xs font-semibold text-blue-100 transition hover:bg-violet-900/35 hover:border-violet-200/60"
+                >
+                  Explore Demographics
+                  <span aria-hidden="true">{'->'}</span>
+                </Link>
+              </div>
+            </article>
 
-          <article className="bg-dark-slate rounded-xl border border-border-slate p-6 shadow-[0_10px_24px_rgba(15,23,42,0.28)] relative overflow-hidden">
-            <div className="absolute -top-10 -right-8 w-28 h-28 rounded-full bg-orange-900/25 blur-2xl" />
-            <div className="relative">
-              <div className="w-9 h-9 rounded bg-orange-900/35 border border-orange-400/40 flex items-center justify-center text-orange-200 mb-3">S</div>
-              <h2 className="text-lg font-semibold text-bright mb-2">National Social Programs</h2>
-              <p className="text-sm text-dimmed mb-5">
-                Evaluates retirement and healthcare obligations with sustainability and funding indicators.
-              </p>
-              <Link href="/methodology" className="text-sm text-blue-200 hover:text-bright transition">
-                Explore Social Programs {'->'}
-              </Link>
-            </div>
-          </article>
+            <article className="group bg-dark-slate rounded-2xl border border-border-slate p-6 shadow-[0_10px_28px_rgba(10,18,34,0.36)] relative overflow-hidden transition duration-200 hover:-translate-y-1 hover:shadow-[0_18px_42px_rgba(14,30,56,0.45)]">
+              <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-orange-300/70 to-amber-200/70" />
+              <div className="absolute -top-12 -right-10 w-36 h-36 rounded-full bg-orange-900/25 blur-2xl" />
+              <div className="relative">
+                <div className="w-10 h-10 rounded-lg border border-orange-300/40 bg-orange-900/30 flex items-center justify-center mb-4">
+                  <svg className="w-5 h-5 text-orange-200" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M5 5h14v5H5V5Zm0 9h6v5H5v-5Zm8 0h6v5h-6v-5Z" stroke="currentColor" strokeWidth="1.5" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-bright mb-2">National Social Programs</h3>
+                <p className="text-sm text-dimmed leading-6 mb-5">
+                  Evaluates retirement and healthcare obligations with sustainability and funding indicators.
+                </p>
+                <Link
+                  href="/methodology"
+                  className="inline-flex items-center gap-2 rounded-md border border-orange-300/40 bg-orange-900/20 px-3 py-1.5 text-xs font-semibold text-blue-100 transition hover:bg-orange-900/35 hover:border-orange-200/60"
+                >
+                  Explore Social Programs
+                  <span aria-hidden="true">{'->'}</span>
+                </Link>
+              </div>
+            </article>
+          </div>
         </section>
 
-        <section className="relative overflow-hidden bg-dark-slate rounded-xl border border-border-slate p-6 md:p-8">
+        <section className="relative overflow-hidden bg-dark-slate rounded-2xl border border-border-slate p-8 md:p-10 shadow-[0_16px_44px_rgba(8,14,28,0.42)]">
           <div
             className="absolute inset-0 bg-cover bg-center opacity-[0.16]"
             style={{
@@ -140,17 +173,18 @@ export default function Home() {
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0f172adf] via-[#122238cc] to-[#0f172adf]" />
-          <div className="relative">
+          <div className="relative max-w-4xl">
             <p className="text-xs uppercase tracking-widest text-blue-200 mb-2">Designed for Household Stability</p>
             <h2 className="text-2xl md:text-3xl font-semibold text-bright mb-4">
               Modeling Fiscal Systems That Support Household Stability
             </h2>
-            <p className="text-sm md:text-base text-blue-100/90 leading-relaxed max-w-4xl">
+            <p className="text-sm md:text-base text-blue-100/90 leading-7">
               AIERM connects macro-fiscal policy decisions to household-level stability outcomes. Income floors, retirement sustainability,
               healthcare obligations, and capital formation are modeled together, not in isolation.
             </p>
           </div>
         </section>
+
       </div>
     </PublicSiteShell>
   )

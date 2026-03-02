@@ -22,7 +22,7 @@ export default function PublicTopNav() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border-slate bg-darker-navy/95 backdrop-blur">
-      <div className="max-w-6xl mx-auto px-5 md:px-8 py-3 flex flex-wrap items-center gap-4 justify-between">
+      <div className="max-w-[1160px] mx-auto px-5 md:px-8 py-3 flex flex-wrap items-center gap-4 justify-between">
         <Link href="/" className="text-sm font-semibold tracking-wide text-bright">
           NAIERM
         </Link>
@@ -32,10 +32,10 @@ export default function PublicTopNav() {
             <Link
               key={item.href}
               href={item.href}
-              className={`px-3 py-1.5 rounded text-xs border transition ${
+              className={`px-3 py-1.5 rounded text-xs border transition duration-200 ${
                 isActive(item.href)
-                  ? 'bg-blue-900/35 border-blue-400 text-blue-200'
-                  : 'bg-transparent border-transparent text-dimmed hover:text-bright hover:border-border-slate hover:bg-dark-slate/40'
+                  ? 'bg-blue-900/35 border-blue-400 text-blue-200 shadow-[0_0_16px_rgba(59,130,246,0.2)]'
+                  : 'bg-transparent border-transparent text-dimmed hover:text-bright hover:border-border-slate hover:bg-dark-slate/40 hover:-translate-y-0.5'
               }`}
             >
               {item.label}
@@ -45,7 +45,7 @@ export default function PublicTopNav() {
 
         <Link
           href="/model"
-          className="px-3 py-1.5 text-xs font-semibold rounded border border-emerald-400 text-emerald-300 hover:bg-emerald-900/30 transition"
+          className="px-3.5 py-1.5 text-xs font-semibold rounded border border-emerald-400 text-emerald-300 bg-emerald-900/15 hover:bg-emerald-900/35 transition duration-200 hover:-translate-y-0.5"
         >
           Launch Simulator
         </Link>
@@ -53,4 +53,3 @@ export default function PublicTopNav() {
     </header>
   )
 }
-
