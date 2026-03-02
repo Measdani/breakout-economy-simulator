@@ -3,7 +3,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'The National AI Economy Resiliency Model (NAIERM)',
-  description: 'Interactive UBI + Token Tax policy explorer for AI-era economic resilience',
+  description: 'Policy-grade simulator for revenue architecture, BEL/SBI, and national social program resilience',
 };
 
 export default function RootLayout({
