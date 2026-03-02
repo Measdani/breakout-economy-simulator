@@ -51,6 +51,8 @@ export default function Simulator() {
     tokenTaxRate,
     ubiAnnualPerAdult,
     breakoutPoint,
+    // Keep tax-free threshold aligned with the breakout slider.
+    tier1Start: breakoutPoint,
   };
 
   const result: SimulationResult = useMemo(() => runSimulation(config), [config]);

@@ -53,10 +53,19 @@ export async function POST(request: NextRequest) {
       pctHouseholds3Dep: 0.10,
     }
 
+    // Keep tier1Start in sync with breakoutPoint unless explicitly provided.
+    const normalizedTier1Start =
+      typeof body.tier1Start === 'number'
+        ? body.tier1Start
+        : typeof body.breakoutPoint === 'number'
+          ? body.breakoutPoint
+          : DEFAULT_CONFIG.breakoutPoint
+
     // Merge provided config with defaults
     const config: PolicyConfig = {
       ...DEFAULT_CONFIG,
       ...body,
+      tier1Start: normalizedTier1Start,
     }
 
     // Validate critical parameters

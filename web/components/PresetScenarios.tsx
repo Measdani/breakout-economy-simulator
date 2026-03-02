@@ -101,6 +101,7 @@ export default function PresetScenarios({ onSelectPreset }: PresetScenariosProps
   const previewConfig: PolicyConfig = previewPreset ? {
     ...DEFAULT_CONFIG,
     ...previewPreset.config,
+    tier1Start: previewPreset.config.breakoutPoint ?? DEFAULT_CONFIG.breakoutPoint,
   } : DEFAULT_CONFIG;
   const previewResult: SimulationResult = useMemo(() => runSimulation(previewConfig), [previewConfig]);
 

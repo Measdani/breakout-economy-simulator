@@ -167,6 +167,8 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     tokenTaxRate,
     ubiAnnualPerAdult,
     breakoutPoint,
+    // Keep tax-free threshold aligned with the breakout slider.
+    tier1Start: breakoutPoint,
     ubiDependent1,
     ubiDependent2,
     ubiDependent3,

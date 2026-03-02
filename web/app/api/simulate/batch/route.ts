@@ -76,9 +76,17 @@ export async function POST(request: NextRequest) {
         throw new Error(`Scenario "${scenarioName}" has invalid config`)
       }
 
+      const normalizedTier1Start =
+        typeof scenario.config.tier1Start === 'number'
+          ? scenario.config.tier1Start
+          : typeof scenario.config.breakoutPoint === 'number'
+            ? scenario.config.breakoutPoint
+            : DEFAULT_CONFIG.breakoutPoint
+
       const config: PolicyConfig = {
         ...DEFAULT_CONFIG,
         ...scenario.config,
+        tier1Start: normalizedTier1Start,
       }
 
       // Validate critical parameters
