@@ -1,19 +1,11 @@
 import Link from 'next/link'
 import type { ReactNode } from 'react'
+import PublicTopNav from './PublicTopNav'
 
 interface PublicSiteShellProps {
   children: ReactNode
   contentClassName?: string
 }
-
-const navItems = [
-  { href: '/', label: 'Home' },
-  { href: '/model', label: 'Model' },
-  { href: '/methodology', label: 'Methodology' },
-  { href: '/research', label: 'Research' },
-  { href: '/about', label: 'About' },
-  { href: '/contact', label: 'Contact' },
-]
 
 export default function PublicSiteShell({
   children,
@@ -21,30 +13,7 @@ export default function PublicSiteShell({
 }: PublicSiteShellProps) {
   return (
     <div className="min-h-screen text-bright">
-      <header className="sticky top-0 z-40 border-b border-border-slate bg-darker-navy/95 backdrop-blur">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center gap-3 justify-between">
-          <Link href="/" className="text-sm font-semibold tracking-wide text-bright">
-            NAIERM
-          </Link>
-          <nav className="flex flex-wrap items-center gap-3">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-xs text-dimmed hover:text-bright transition"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-          <Link
-            href="/model"
-            className="px-3 py-1.5 text-xs font-semibold rounded border border-blue-400 text-blue-200 hover:bg-blue-900/40 transition"
-          >
-            Launch Simulator
-          </Link>
-        </div>
-      </header>
+      <PublicTopNav />
 
       <main className={contentClassName}>{children}</main>
 
@@ -69,4 +38,3 @@ export default function PublicSiteShell({
     </div>
   )
 }
-
