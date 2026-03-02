@@ -478,8 +478,14 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         <p className="text-sm text-muted uppercase tracking-wide mb-4">💰 Revenue Sources</p>
                         <div className="space-y-3">
                           <div className="flex justify-between">
-                            <span className="text-sm text-muted">Token Tax (Total Compute)</span>
+                            <span className="text-sm text-muted">Token Tax (Flow Base)</span>
                             <span className="font-semibold text-blue-400">
+                              ${((result.revenue.tokenTaxRevenue) / 1e12).toFixed(2)}T
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-sm text-muted">Token Tax (Total Compute)</span>
+                            <span className="font-semibold text-cyan-400">
                               ${((result.revenue.frictionTaxRevenue ?? 0) / 1e12).toFixed(2)}T
                             </span>
                           </div>
@@ -566,14 +572,14 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         <p className="text-sm text-muted uppercase tracking-wide mb-3">📈 Revenue Composition</p>
                         <div className="space-y-2 text-xs">
                           <div className="flex justify-between">
-                            <span className="text-muted">Token Tax Share</span>
+                            <span className="text-muted">Total Token Tax Share</span>
                             <span className="font-semibold text-blue-400">
-                              {((((result.revenue.frictionTaxRevenue ?? 0) / result.revenue.totalRevenue) * 100) || 0).toFixed(1)}%
+                              {(((((result.revenue.tokenTaxRevenue + (result.revenue.frictionTaxRevenue ?? 0)) / result.revenue.totalRevenue) * 100) || 0)).toFixed(1)}%
                             </span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-muted">of Model Revenue</span>
-                            <span className="text-xs text-dimmed">(primary metric)</span>
+                            <span className="text-xs text-dimmed">(flow + compute)</span>
                           </div>
                         </div>
                       </div>
@@ -605,7 +611,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                             </div>
                             <div className="flex justify-between">
                               <span className="text-dimmed">Base Transaction Volume:</span>
-                              <span className="text-bright font-semibold">$1.0 Quadrillion</span>
+                              <span className="text-bright font-semibold">1.0 Quadrillion tokens</span>
                             </div>
                             <p className="text-dimmed text-xs mt-1">Applied to electronic settlement layer</p>
 
@@ -743,19 +749,6 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                       📊 Household Distribution
                     </p>
                     <div className="space-y-3">
-                      {/* 0 Dependents - Auto Calculated */}
-                      <div className="bg-darker-navy rounded-lg p-3 border border-border-slate opacity-75">
-                        <div className="flex items-center justify-between">
-                          <label className="text-sm text-muted">0 Dependents</label>
-                          <div className="flex items-center gap-2">
-                            <span className="w-12 text-right font-semibold text-emerald-400 text-sm">
-                              {Math.round((1 - (pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep)) * 100)}%
-                            </span>
-                            <span className="text-dimmed text-xs">(Auto)</span>
-                          </div>
-                        </div>
-                      </div>
-
                       {/* User Input Fields */}
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
@@ -803,6 +796,13 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                             <span className="text-dimmed text-sm">%</span>
                           </div>
                         </div>
+                      </div>
+
+                      {/* Auto remainder helper */}
+                      <div className="flex justify-end">
+                        <p className="text-xs text-dimmed">
+                          Remaining: {Math.round((1 - (pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep)) * 100)}%
+                        </p>
                       </div>
 
                       {/* Validation Message */}
