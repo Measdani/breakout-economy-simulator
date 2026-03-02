@@ -21,6 +21,58 @@ export interface SubmissionPayload {
     healthcareMode: 'baseline' | 'efficiency_reform' | 'structural_replacement'
   }
   scenario_inputs: {
+    selected_policy_variables: {
+      token_tax_rate: number
+      flow_base_annual: number
+      ubi_annual_per_adult: number
+      adult_population: number
+      welfare_savings_credit: number
+      govt_operating_requirement: number
+      breakout_point: number
+      tier1_rate: number
+      tier1_start: number
+      tier2_rate: number
+      tier2_start: number
+      supplement_apex_income: number
+      supplement_apex_bonus: number
+      persona_weights: number[]
+      ubi_dependent_1: number
+      ubi_dependent_2: number
+      ubi_dependent_3: number
+      num_households: number
+      pct_households_1_dep: number
+      pct_households_2_dep: number
+      pct_households_3_dep: number
+      friction_tax_rate: number
+      base_transaction_volume: number
+      transaction_volume_growth_rate: number
+      capital_flight_rate: number
+      market_maker_exempt: boolean
+      revenue_architecture_mode: 'hybrid' | 'friction_dominant' | 'friction_only'
+      income_tax_multiplier: number
+      retirement_enabled: boolean
+      retirement_mode: 'replace_ss' | 'supplement' | 'baseline_only'
+      retirement_eligibility_age: number
+      replacement_rate_pct: number
+      benefit_adjustment_factor_pct: number
+      pensionable_salary_cap: number
+      payout_duration_years: number
+      salary_basis: 'final_3yr' | 'final_5yr' | 'career_avg'
+      retirees_count: number
+      avg_final_3yr_salary: number
+      ss_baseline: number
+      healthcare_enabled: boolean
+      healthcare_mode: 'baseline' | 'efficiency_reform' | 'structural_replacement'
+      medicare_annual_spend: number
+      medicaid_annual_spend: number
+      federal_healthcare_spend_total: number
+      national_healthcare_spend_total: number
+      healthcare_employer_share_pct: number
+      healthcare_household_share_pct: number
+      ai_diagnostics_savings_pct: number
+      admin_automation_savings_pct: number
+      all_payer_transparency_savings_pct: number
+    }
     revenue: {
       revenue_mode: 'hybrid' | 'friction_dominant' | 'friction_only'
       friction_tax_rate: number
@@ -159,13 +211,55 @@ export function buildSubmissionPayload({
   const baselineMedicare = config.medicareAnnualSpend ?? 0
   const baselineMedicaid = config.medicaidAnnualSpend ?? 0
   const baselineFederalHealthcareTotal = config.federalHealthcareSpendTotal ?? (baselineMedicare + baselineMedicaid)
+  const flowBaseAnnual = config.flowBaseAnnual
+  const ubiAnnualPerAdult = config.ubiAnnualPerAdult
+  const welfareSavingsCredit = config.welfareSavingsCredit
+  const govtOperatingRequirement = config.govtOperatingRequirement
+  const breakoutPoint = config.breakoutPoint
+  const tier1Rate = config.tier1Rate
+  const tier1Start = config.tier1Start
+  const tier2Rate = config.tier2Rate
+  const tier2Start = config.tier2Start
+  const supplementApexIncome = config.supplementApexIncome
+  const supplementApexBonus = config.supplementApexBonus
+  const personaWeights = config.personaWeights ?? [0.25, 0.25, 0.25, 0.25]
+  const ubiDependent1 = config.ubiDependent1 ?? 6000
+  const ubiDependent2 = config.ubiDependent2 ?? 4000
+  const ubiDependent3 = config.ubiDependent3 ?? 2000
+  const numHouseholds = config.numHouseholds ?? 130000000
+  const pctHouseholds1Dep = config.pctHouseholds1Dep ?? 0.25
+  const pctHouseholds2Dep = config.pctHouseholds2Dep ?? 0.15
+  const pctHouseholds3Dep = config.pctHouseholds3Dep ?? 0.10
+  const frictionTaxRate = config.frictionTaxRate ?? 0.0035
+  const baseTransactionVolume = config.baseTransactionVolume ?? 1e15
+  const transactionVolumeGrowthRate = config.transactionVolumeGrowthRate ?? 0.05
+  const capitalFlightRate = config.capitalFlightRate ?? 0
+  const marketMakerExempt = config.marketMakerExempt ?? false
   const revenueArchitectureMode = config.revenueArchitectureMode ?? 'hybrid'
   const retirementMode = config.retirementMode ?? 'replace_ss'
   const healthcareMode = config.healthcareMode ?? 'baseline'
+  const incomeTaxMultiplier = config.incomeTaxMultiplier ?? 1
+  const retirementEnabled = config.retirementEnabled ?? false
+  const retirementEligibilityAge = config.retirementEligibilityAge ?? 67
+  const replacementRatePct = (config.replacementRate ?? 0.8) * 100
+  const benefitAdjustmentFactorPct = (config.benefitAdjustmentFactor ?? 0.7) * 100
+  const pensionableSalaryCap = config.pensionableSalaryCap ?? 250000
+  const payoutDurationYears = config.payoutDurationYears ?? 25
+  const salaryBasis = config.salaryBasis ?? 'final_3yr'
+  const retireesCount = config.retireesCount ?? 54000000
+  const avgFinal3yrSalary = config.avgFinal3yrSalary ?? 75000
+  const ssBaseline = config.ssBaseline ?? 1.3e12
+  const healthcareEnabled = config.healthcareEnabled ?? true
+  const nationalHealthcareSpendTotal = config.nationalHealthcareSpendTotal ?? 0
+  const healthcareEmployerSharePct = config.healthcareEmployerSharePct ?? 0
+  const healthcareHouseholdSharePct = config.healthcareHouseholdSharePct ?? 0
+  const aiDiagnosticsSavingsPct = config.aiDiagnosticsSavingsPct ?? 0
+  const adminAutomationSavingsPct = config.adminAutomationSavingsPct ?? 0
+  const allPayerTransparencySavingsPct = config.allPayerTransparencySavingsPct ?? 0
   const advancedModeEnabled = metadataOverrides?.advancedModeEnabled ?? (
     revenueArchitectureMode !== 'hybrid' ||
-    (config.incomeTaxMultiplier ?? 1) !== 1 ||
-    (config.marketMakerExempt ?? false)
+    incomeTaxMultiplier !== 1 ||
+    marketMakerExempt
   )
 
   return {
@@ -182,53 +276,105 @@ export function buildSubmissionPayload({
       healthcareMode,
     },
     scenario_inputs: {
+      selected_policy_variables: {
+        token_tax_rate: config.tokenTaxRate,
+        flow_base_annual: flowBaseAnnual,
+        ubi_annual_per_adult: ubiAnnualPerAdult,
+        adult_population: config.adultPopulation,
+        welfare_savings_credit: welfareSavingsCredit,
+        govt_operating_requirement: govtOperatingRequirement,
+        breakout_point: breakoutPoint,
+        tier1_rate: tier1Rate,
+        tier1_start: tier1Start,
+        tier2_rate: tier2Rate,
+        tier2_start: tier2Start,
+        supplement_apex_income: supplementApexIncome,
+        supplement_apex_bonus: supplementApexBonus,
+        persona_weights: personaWeights,
+        ubi_dependent_1: ubiDependent1,
+        ubi_dependent_2: ubiDependent2,
+        ubi_dependent_3: ubiDependent3,
+        num_households: numHouseholds,
+        pct_households_1_dep: pctHouseholds1Dep,
+        pct_households_2_dep: pctHouseholds2Dep,
+        pct_households_3_dep: pctHouseholds3Dep,
+        friction_tax_rate: frictionTaxRate,
+        base_transaction_volume: baseTransactionVolume,
+        transaction_volume_growth_rate: transactionVolumeGrowthRate,
+        capital_flight_rate: capitalFlightRate,
+        market_maker_exempt: marketMakerExempt,
+        revenue_architecture_mode: revenueArchitectureMode,
+        income_tax_multiplier: incomeTaxMultiplier,
+        retirement_enabled: retirementEnabled,
+        retirement_mode: retirementMode,
+        retirement_eligibility_age: retirementEligibilityAge,
+        replacement_rate_pct: replacementRatePct,
+        benefit_adjustment_factor_pct: benefitAdjustmentFactorPct,
+        pensionable_salary_cap: pensionableSalaryCap,
+        payout_duration_years: payoutDurationYears,
+        salary_basis: salaryBasis,
+        retirees_count: retireesCount,
+        avg_final_3yr_salary: avgFinal3yrSalary,
+        ss_baseline: ssBaseline,
+        healthcare_enabled: healthcareEnabled,
+        healthcare_mode: healthcareMode,
+        medicare_annual_spend: baselineMedicare,
+        medicaid_annual_spend: baselineMedicaid,
+        federal_healthcare_spend_total: baselineFederalHealthcareTotal,
+        national_healthcare_spend_total: nationalHealthcareSpendTotal,
+        healthcare_employer_share_pct: healthcareEmployerSharePct,
+        healthcare_household_share_pct: healthcareHouseholdSharePct,
+        ai_diagnostics_savings_pct: aiDiagnosticsSavingsPct,
+        admin_automation_savings_pct: adminAutomationSavingsPct,
+        all_payer_transparency_savings_pct: allPayerTransparencySavingsPct,
+      },
       revenue: {
         revenue_mode: revenueArchitectureMode,
-        friction_tax_rate: config.frictionTaxRate ?? 0.0035,
-        income_tax_multiplier: config.incomeTaxMultiplier ?? 1,
+        friction_tax_rate: frictionTaxRate,
+        income_tax_multiplier: incomeTaxMultiplier,
         token_tax_rate: config.tokenTaxRate,
-        base_transaction_volume: config.baseTransactionVolume ?? 1e15,
-        transaction_volume_growth_rate: config.transactionVolumeGrowthRate ?? 0.05,
-        capital_flight_rate: config.capitalFlightRate ?? 0,
-        market_maker_exempt: config.marketMakerExempt ?? false,
+        base_transaction_volume: baseTransactionVolume,
+        transaction_volume_growth_rate: transactionVolumeGrowthRate,
+        capital_flight_rate: capitalFlightRate,
+        market_maker_exempt: marketMakerExempt,
       },
       demographics: {
         adult_population: config.adultPopulation,
-        num_households: config.numHouseholds ?? 130000000,
-        pct_households_1_dep: config.pctHouseholds1Dep ?? 0.25,
-        pct_households_2_dep: config.pctHouseholds2Dep ?? 0.15,
-        pct_households_3_dep: config.pctHouseholds3Dep ?? 0.10,
-        bel_dependent_tier_1: config.ubiDependent1 ?? 6000,
-        bel_dependent_tier_2: config.ubiDependent2 ?? 4000,
-        bel_dependent_tier_3: config.ubiDependent3 ?? 2000,
+        num_households: numHouseholds,
+        pct_households_1_dep: pctHouseholds1Dep,
+        pct_households_2_dep: pctHouseholds2Dep,
+        pct_households_3_dep: pctHouseholds3Dep,
+        bel_dependent_tier_1: ubiDependent1,
+        bel_dependent_tier_2: ubiDependent2,
+        bel_dependent_tier_3: ubiDependent3,
         user_age_range: demographics?.ageRange || null,
         user_income_level: demographics?.incomeLevel || null,
         user_region: demographics?.region || null,
         user_affiliation: demographics?.affiliation || null,
       },
       retirement: {
-        retirement_enabled: config.retirementEnabled ?? false,
+        retirement_enabled: retirementEnabled,
         retirement_mode: retirementMode,
-        retirement_age: config.retirementEligibilityAge ?? 67,
+        retirement_age: retirementEligibilityAge,
         // Store these as percentages to match what users selected in UI.
-        replacement_rate: (config.replacementRate ?? 0.8) * 100,
-        salary_cap: config.pensionableSalaryCap ?? 250000,
-        payout_years: config.payoutDurationYears ?? 25,
-        actuarial_adjustment: (config.benefitAdjustmentFactor ?? 0.7) * 100,
+        replacement_rate: replacementRatePct,
+        salary_cap: pensionableSalaryCap,
+        payout_years: payoutDurationYears,
+        actuarial_adjustment: benefitAdjustmentFactorPct,
       },
       baseline_assumptions: {
-        baseline_ss_cost: config.ssBaseline ?? 1.3e12,
-        baseline_retirees: config.retireesCount ?? 54000000,
-        baseline_avg_retiree_salary: config.avgFinal3yrSalary ?? 75000,
+        baseline_ss_cost: ssBaseline,
+        baseline_retirees: retireesCount,
+        baseline_avg_retiree_salary: avgFinal3yrSalary,
         baseline_medicare_annual_spend: baselineMedicare,
         baseline_medicaid_annual_spend: baselineMedicaid,
         baseline_federal_healthcare_spend_total: baselineFederalHealthcareTotal,
-        baseline_national_healthcare_spend_total: config.nationalHealthcareSpendTotal ?? 0,
-        baseline_healthcare_employer_share_pct: config.healthcareEmployerSharePct ?? 0,
-        baseline_healthcare_household_share_pct: config.healthcareHouseholdSharePct ?? 0,
-        baseline_ai_diagnostics_savings_pct: config.aiDiagnosticsSavingsPct ?? 0,
-        baseline_admin_automation_savings_pct: config.adminAutomationSavingsPct ?? 0,
-        baseline_all_payer_transparency_savings_pct: config.allPayerTransparencySavingsPct ?? 0,
+        baseline_national_healthcare_spend_total: nationalHealthcareSpendTotal,
+        baseline_healthcare_employer_share_pct: healthcareEmployerSharePct,
+        baseline_healthcare_household_share_pct: healthcareHouseholdSharePct,
+        baseline_ai_diagnostics_savings_pct: aiDiagnosticsSavingsPct,
+        baseline_admin_automation_savings_pct: adminAutomationSavingsPct,
+        baseline_all_payer_transparency_savings_pct: allPayerTransparencySavingsPct,
       },
     },
     computed_outputs: {

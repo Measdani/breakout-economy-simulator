@@ -18,18 +18,39 @@ export default function AdminTable({ submissions }: Props) {
       (sub.email?.toLowerCase().includes(search.toLowerCase()) || sub.email === null)
   )
 
+  const getSubmissionPayload = (sub: SubmissionRow) => {
+    const existing = sub.submission_payload_json as any
+    if (existing?.scenario_inputs?.selected_policy_variables) {
+      return existing
+    }
+
+    return buildSubmissionPayload({
+      config: sub.config,
+      result: sub.result,
+      userFeedbackText: sub.user_feedback_text ?? null,
+      metadataOverrides: {
+        submissionId: sub.id,
+        timestamp: sub.created_at,
+      },
+    })
+  }
+
+  const formatPayloadValue = (value: unknown): string => {
+    if (value === null || value === undefined) return '-'
+    if (Array.isArray(value)) return JSON.stringify(value)
+    if (typeof value === 'number') {
+      return Number.isFinite(value)
+        ? value.toLocaleString('en-US', { maximumFractionDigits: 6 })
+        : String(value)
+    }
+    if (typeof value === 'boolean') return value ? 'true' : 'false'
+    return String(value)
+  }
+
   const exportCSV = () => {
     const csv = Papa.unparse(
       filtered.map((sub) => {
-        const payload = sub.submission_payload_json ?? buildSubmissionPayload({
-          config: sub.config,
-          result: sub.result,
-          userFeedbackText: sub.user_feedback_text ?? null,
-          metadataOverrides: {
-            submissionId: sub.id,
-            timestamp: sub.created_at,
-          },
-        })
+        const payload = getSubmissionPayload(sub)
 
         return {
           id: sub.id,
@@ -103,39 +124,58 @@ export default function AdminTable({ submissions }: Props) {
               <th className="px-4 py-3 text-right font-semibold text-muted">UBI</th>
               <th className="px-4 py-3 text-right font-semibold text-muted">Tax Rate</th>
               <th className="px-4 py-3 text-right font-semibold text-muted">Solvent</th>
+              <th className="px-4 py-3 text-left font-semibold text-muted">Variables</th>
             </tr>
           </thead>
           <tbody>
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan={7} className="px-4 py-8 text-center text-muted">
+                <td colSpan={8} className="px-4 py-8 text-center text-muted">
                   No submissions found
                 </td>
               </tr>
             ) : (
-              filtered.map((sub) => (
-                <tr key={sub.id} className="border-t border-border-slate hover:bg-darker-navy transition">
-                  <td className="px-4 py-3 text-muted text-xs whitespace-nowrap">
-                    {new Date(sub.created_at).toLocaleString()}
-                  </td>
-                  <td className="px-4 py-3 text-bright">{sub.name || 'Anonymous'}</td>
-                  <td className="px-4 py-3 text-muted text-xs">{sub.email || '-'}</td>
-                  <td
-                    className={`px-4 py-3 text-right font-bold ${
-                      sub.is_solvent ? 'text-green-400' : 'text-red-400'
-                    }`}
-                  >
-                    {sub.is_solvent ? '+' : ''}${(sub.surplus_deficit / 1e9).toFixed(1)}B
-                  </td>
-                  <td className="px-4 py-3 text-right text-muted">${(sub.ubi_annual / 1000).toFixed(0)}K</td>
-                  <td className="px-4 py-3 text-right text-muted">
-                    {(sub.token_tax_rate * 100).toFixed(3)}%
-                  </td>
-                  <td className="px-4 py-3 text-right text-muted">
-                    {sub.is_solvent ? '✓' : '✗'}
-                  </td>
-                </tr>
-              ))
+              filtered.map((sub) => {
+                const payload = getSubmissionPayload(sub)
+                const variables = payload.scenario_inputs.selected_policy_variables
+
+                return (
+                  <tr key={sub.id} className="border-t border-border-slate hover:bg-darker-navy transition">
+                    <td className="px-4 py-3 text-muted text-xs whitespace-nowrap">
+                      {new Date(sub.created_at).toLocaleString()}
+                    </td>
+                    <td className="px-4 py-3 text-bright">{sub.name || 'Anonymous'}</td>
+                    <td className="px-4 py-3 text-muted text-xs">{sub.email || '-'}</td>
+                    <td
+                      className={`px-4 py-3 text-right font-bold ${
+                        sub.is_solvent ? 'text-green-400' : 'text-red-400'
+                      }`}
+                    >
+                      {sub.is_solvent ? '+' : ''}${(sub.surplus_deficit / 1e9).toFixed(1)}B
+                    </td>
+                    <td className="px-4 py-3 text-right text-muted">${(sub.ubi_annual / 1000).toFixed(0)}K</td>
+                    <td className="px-4 py-3 text-right text-muted">
+                      {(sub.token_tax_rate * 100).toFixed(3)}%
+                    </td>
+                    <td className="px-4 py-3 text-right text-muted">
+                      {sub.is_solvent ? 'Yes' : 'No'}
+                    </td>
+                    <td className="px-4 py-3 align-top">
+                      <details>
+                        <summary className="cursor-pointer text-xs text-blue-300">View</summary>
+                        <div className="mt-2 max-h-56 overflow-y-auto rounded border border-border-slate bg-darker-navy p-2 min-w-[340px]">
+                          {Object.entries(variables).map(([key, value]) => (
+                            <div key={key} className="flex justify-between gap-3 text-[11px] leading-5">
+                              <span className="text-dimmed">{key}</span>
+                              <span className="text-bright text-right break-all">{formatPayloadValue(value)}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </details>
+                    </td>
+                  </tr>
+                )
+              })
             )}
           </tbody>
         </table>
@@ -143,4 +183,3 @@ export default function AdminTable({ submissions }: Props) {
     </div>
   )
 }
-
