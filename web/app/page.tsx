@@ -16,22 +16,6 @@ const stageItems = [
   },
 ]
 
-function ArchitectureVisual() {
-  return (
-    <div className="relative min-h-[380px] overflow-hidden rounded-2xl border border-cyan-200/20 bg-[#041226]">
-      <Image
-        src="/home/firstbackground.png"
-        alt="Revenue growth city visual"
-        fill
-        priority
-        sizes="(max-width: 1024px) 100vw, 44vw"
-        className="object-cover object-center"
-      />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#03102a]/55 via-transparent to-[#020919]/20" />
-    </div>
-  )
-}
-
 export default function Home() {
   return (
     <PublicSiteShell contentClassName="mx-auto max-w-[1120px] px-3 py-8 md:px-6 md:py-10">
@@ -39,24 +23,32 @@ export default function Home() {
         <div className="pointer-events-none absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(125,211,252,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(125,211,252,0.08)_1px,transparent_1px)] [background-size:76px_76px]" />
 
         <section id="architecture" className="px-6 py-12 md:px-10 md:py-16">
-          <div className="grid items-start gap-8 lg:grid-cols-[1.04fr_1fr]">
-            <div>
-              <p className="mb-4 text-[13px] uppercase tracking-[0.18em] text-slate-300/90">Model Architecture Overview</p>
-              <h1 className="mb-8 text-[clamp(2.1rem,3.6vw,3.3rem)] font-semibold leading-[1.1] text-white">
+          <div className="relative min-h-[520px] overflow-hidden rounded-2xl border border-cyan-200/20 bg-[#041226]">
+            <Image
+              src="/home/firstbackground.png"
+              alt="Revenue growth city visual"
+              fill
+              priority
+              sizes="(max-width: 1200px) 100vw, 1120px"
+              className="object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#030f2a]/78 via-[#041633]/42 to-[#020919]/24" />
+
+            <div className="relative z-10 max-w-[620px] px-6 py-8 md:px-8 md:py-10 lg:px-10 lg:py-12">
+              <p className="mb-3 text-[11px] uppercase tracking-[0.16em] text-slate-300/90">Model Architecture Overview</p>
+              <h1 className="mb-7 text-[clamp(1.45rem,2.25vw,2.2rem)] font-semibold leading-[1.12] text-white">
                 Revenue to Obligations Sequencing Framework
               </h1>
 
-              <div className="space-y-7">
+              <div className="space-y-5">
                 {stageItems.map((item) => (
                   <div key={item.title}>
-                    <h2 className="mb-2 text-[clamp(1.65rem,2.65vw,2.2rem)] font-semibold leading-[1.15] text-white">{item.title}</h2>
-                    <p className="border-l border-cyan-100/20 pl-3 text-lg leading-relaxed text-slate-200/85">{item.body}</p>
+                    <h2 className="mb-1.5 text-[clamp(1.1rem,1.65vw,1.5rem)] font-semibold leading-[1.16] text-white">{item.title}</h2>
+                    <p className="border-l border-cyan-100/20 pl-3 text-[0.94rem] leading-relaxed text-slate-200/88">{item.body}</p>
                   </div>
                 ))}
               </div>
             </div>
-
-            <ArchitectureVisual />
           </div>
         </section>
 
