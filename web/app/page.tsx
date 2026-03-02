@@ -37,7 +37,7 @@ export default function Home() {
               A transparent federal simulation engine for revenue architecture, national obligations, and long-term household stability.
             </p>
             <p className="body-copy max-w-3xl mt-3">
-              Built to evaluate revenue architecture, national obligations, and macro-to-household stability under explicit fiscal assumptions.
+              Designed to evaluate federal revenue architecture, national obligations, and macro-to-household stability under explicit fiscal assumptions.
             </p>
             <p className="text-sm text-blue-100/85 mt-3 mb-7">
               Transparent assumptions &bull; Structured scenario modeling &bull; Exportable fiscal datasets &bull; No PII stored
@@ -68,20 +68,20 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr_auto_1fr] gap-4 items-center mt-7">
               <div className="rounded-xl border border-blue-300/30 bg-[#13263f] p-5">
                 <p className="text-xs uppercase tracking-widest text-blue-200 mb-2">Stage 1</p>
-                <p className="text-bright font-semibold mb-2">Revenue Generated</p>
-                <p className="body-copy">Friction tax and supplemental income tax produce total fiscal inflow.</p>
+                <p className="text-bright font-semibold mb-2">Revenue Generation</p>
+                <p className="body-copy">Friction tax and supplemental income tax generate total fiscal inflow.</p>
               </div>
               <div className="hidden md:flex items-center justify-center text-blue-200 text-xl" aria-hidden="true">{'->'}</div>
               <div className="rounded-xl border border-violet-300/30 bg-[#1f1f42] p-5">
                 <p className="text-xs uppercase tracking-widest text-violet-200 mb-2">Stage 2</p>
                 <p className="text-bright font-semibold mb-2">Allocation Order</p>
-                <p className="body-copy">BEL is funded first, then remaining fiscal space is allocated to programs.</p>
+                <p className="body-copy">Basic Economic Liquidity (BEL) is funded first. Remaining fiscal space allocated to national programs.</p>
               </div>
               <div className="hidden md:flex items-center justify-center text-blue-200 text-xl" aria-hidden="true">{'->'}</div>
               <div className="rounded-xl border border-emerald-300/30 bg-[#162d30] p-5">
                 <p className="text-xs uppercase tracking-widest text-emerald-200 mb-2">Stage 3</p>
                 <p className="text-bright font-semibold mb-2">Obligations and Balance</p>
-                <p className="body-copy">Retirement and healthcare are funded from remaining space, then final balance is calculated.</p>
+                <p className="body-copy">Retirement and healthcare obligations funded from remaining space. Final fiscal balance calculated.</p>
               </div>
             </div>
           </div>
@@ -244,6 +244,7 @@ export default function Home() {
               <p className="body-copy">Explicit assumptions</p>
               <p className="body-copy">Exportable structured data</p>
               <p className="body-copy">No PII stored</p>
+              <p className="body-copy sm:col-span-2">Deterministic model logic (no hidden weighting)</p>
             </div>
           </div>
         </section>
@@ -263,7 +264,7 @@ export default function Home() {
               <h2 className="text-bright">Modeling Fiscal Systems That Support Household Stability</h2>
               <p className="body-copy">
                 NAIERM connects macro-fiscal policy decisions to household-level stability outcomes. Income floors, retirement sustainability,
-                healthcare obligations, and capital formation are modeled together, not in isolation.
+                healthcare obligations, and capital formation are modeled as an integrated fiscal system - not as isolated policy silos.
               </p>
             </div>
           </div>
