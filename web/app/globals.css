@@ -22,6 +22,57 @@ body {
   min-height: 100vh;
 }
 
+.homepage .section {
+  padding: 96px 0;
+}
+
+.homepage .hero {
+  padding: 140px 0 120px 0;
+}
+
+.homepage .module-visual {
+  height: 220px;
+}
+
+.homepage .module-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.homepage .module-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.homepage .module-line {
+  animation: module-line-drift 14s ease-in-out infinite;
+}
+
+.homepage h2 {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
+.homepage .body-copy {
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.homepage h2 + .body-copy {
+  margin-top: 14px;
+}
+
+.footer {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.03),
+    rgba(0, 0, 0, 0.25)
+  );
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
 /* ═══ DARK DATA LAB THEME VARIABLES ═══ */
 :root {
   /* Core background colors */
@@ -103,6 +154,15 @@ body {
     box-shadow: 0 0 20px var(--glow-blue),
                 0 0 40px var(--glow-blue),
                 inset 0 0 20px rgba(59, 130, 246, 0.15);
+  }
+}
+
+@keyframes module-line-drift {
+  0%, 100% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
   }
 }
 

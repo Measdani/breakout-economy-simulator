@@ -17,8 +17,8 @@ export default function PublicSiteShell({
 
       <main className={contentClassName}>{children}</main>
 
-      <footer className="bg-[#0a1220] shadow-[0_-18px_42px_rgba(5,10,18,0.55)]">
-        <div className="max-w-[1120px] mx-auto px-5 md:px-8 py-14">
+      <footer className="footer bg-[#0a1220] shadow-[0_-18px_42px_rgba(5,10,18,0.55)]">
+        <div className="max-w-[1120px] mx-auto px-5 md:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
             <div>
               <p className="text-xs uppercase tracking-widest text-muted mb-3">Model</p>
