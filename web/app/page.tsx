@@ -55,28 +55,27 @@ export default function Home() {
         <div className="h-px bg-sky-200/15" />
 
         <section id="how-it-works" className="px-6 py-12 md:px-10 md:py-16">
-          <div className="grid items-start gap-8 lg:grid-cols-[1.04fr_1fr]">
-            <div>
-              <p className="mb-4 text-[13px] uppercase tracking-[0.18em] text-slate-300/90">How NAIERM Works</p>
-              <h2 className="mb-6 text-[clamp(2.1rem,4vw,3.45rem)] font-semibold leading-[1.14] text-white">
+          <div className="relative min-h-[460px] overflow-hidden rounded-2xl border border-cyan-200/20 bg-[#041226]">
+            <Image
+              src="/home/secondbackground.png"
+              alt="Institutional fiscal modeling visual"
+              fill
+              sizes="(max-width: 1200px) 100vw, 1120px"
+              className="object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#03102a]/80 via-[#041632]/50 to-[#020816]/26" />
+
+            <div className="relative z-10 max-w-[760px] px-6 py-8 md:px-8 md:py-10 lg:px-10 lg:py-12">
+              <p className="mb-3 text-[11px] uppercase tracking-[0.16em] text-slate-300/90">How NAIERM Works</p>
+              <h2 className="mb-5 text-[clamp(1.35rem,2.15vw,2.05rem)] font-semibold leading-[1.12] text-white">
                 NAIERM models how federal revenue architecture, income floor policy (BEL), retirement systems and healthcare obligations interact within a unified fiscal framework.
               </h2>
-              <p className="mb-4 text-lg leading-relaxed text-slate-200/85">
+              <p className="mb-3 text-[0.95rem] leading-relaxed text-slate-200/90">
                 Users configure revenue architecture and program parameters, then observe allocation order, fiscal balance, and sustainability indicators in real time.
               </p>
-              <p className="text-lg leading-relaxed text-slate-200/85">
+              <p className="text-[0.95rem] leading-relaxed text-slate-200/90">
                 The interface is designed for transparent scenario testing, with output structured for comparative review and export.
               </p>
-            </div>
-
-            <div className="relative min-h-[360px] rounded-2xl border border-cyan-200/20 bg-[radial-gradient(circle_at_70%_26%,rgba(34,211,238,0.28),transparent_46%),linear-gradient(155deg,#081f43_0%,#061734_58%,#040f29_100%)] overflow-hidden">
-              <div className="absolute inset-0 opacity-25 [background-image:linear-gradient(rgba(125,211,252,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(125,211,252,0.08)_1px,transparent_1px)] [background-size:58px_58px]" />
-              <div className="absolute left-6 right-6 bottom-8 h-[2px] bg-cyan-200/65 shadow-[0_0_14px_rgba(34,211,238,0.42)]" />
-              <div className="absolute left-10 bottom-14 h-36 w-44 rounded-md border border-cyan-200/35 bg-cyan-100/10" />
-              <div className="absolute left-[5.5rem] bottom-[4.5rem] h-44 w-52 rounded-md border border-cyan-200/35 bg-cyan-100/12" />
-              <div className="absolute left-[9.2rem] bottom-[5.4rem] h-52 w-60 rounded-md border border-cyan-200/40 bg-cyan-100/16" />
-              <div className="absolute right-8 top-12 h-16 w-28 rounded border border-cyan-200/35 bg-cyan-100/10" />
-              <div className="absolute right-14 top-36 h-14 w-24 rounded border border-cyan-200/35 bg-cyan-100/10" />
             </div>
           </div>
         </section>
