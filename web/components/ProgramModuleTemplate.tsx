@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import type { ReactNode } from 'react';
 
 interface ProgramModuleTemplateProps {
@@ -20,6 +21,10 @@ interface ProgramModuleTemplateProps {
   outputsTitle?: string;
   baselineTitle?: string;
   notesTitle?: string;
+  baselineCollapsible?: boolean;
+  notesCollapsible?: boolean;
+  baselineDefaultOpen?: boolean;
+  notesDefaultOpen?: boolean;
 }
 
 export default function ProgramModuleTemplate({
@@ -40,9 +45,15 @@ export default function ProgramModuleTemplate({
   outputsTitle = 'Outputs',
   baselineTitle = 'Baseline Comparison',
   notesTitle = 'Notes',
+  baselineCollapsible = true,
+  notesCollapsible = true,
+  baselineDefaultOpen = false,
+  notesDefaultOpen = false,
 }: ProgramModuleTemplateProps) {
   const isToggleDisabled = toggleDisabled || !onToggleEnabled;
   const contentDisabled = !enabled;
+  const [isBaselineOpen, setIsBaselineOpen] = useState(baselineDefaultOpen);
+  const [isNotesOpen, setIsNotesOpen] = useState(notesDefaultOpen);
 
   return (
     <div className="bg-dark-slate rounded-lg p-6 glow-border-blue space-y-4">
@@ -89,15 +100,37 @@ export default function ProgramModuleTemplate({
 
       {baselineComparison && (
         <div className={`bg-darker-slate rounded-lg border border-border-slate p-4 ${contentDisabled ? 'pointer-events-none opacity-70' : ''}`}>
-          <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-3">{baselineTitle}</p>
-          {baselineComparison}
+          {baselineCollapsible ? (
+            <button
+              type="button"
+              onClick={() => setIsBaselineOpen(!isBaselineOpen)}
+              className="w-full flex items-center justify-between text-left mb-2"
+            >
+              <p className="text-xs font-semibold text-muted uppercase tracking-wide">{baselineTitle}</p>
+              <span className="text-xs text-dimmed">{isBaselineOpen ? 'Hide' : 'Show'}</span>
+            </button>
+          ) : (
+            <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-3">{baselineTitle}</p>
+          )}
+          {(!baselineCollapsible || isBaselineOpen) && baselineComparison}
         </div>
       )}
 
       {notes && (
         <div className="bg-darker-navy rounded-lg border border-border-slate p-4">
-          <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-3">{notesTitle}</p>
-          {notes}
+          {notesCollapsible ? (
+            <button
+              type="button"
+              onClick={() => setIsNotesOpen(!isNotesOpen)}
+              className="w-full flex items-center justify-between text-left mb-2"
+            >
+              <p className="text-xs font-semibold text-muted uppercase tracking-wide">{notesTitle}</p>
+              <span className="text-xs text-dimmed">{isNotesOpen ? 'Hide' : 'Show'}</span>
+            </button>
+          ) : (
+            <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-3">{notesTitle}</p>
+          )}
+          {(!notesCollapsible || isNotesOpen) && notes}
         </div>
       )}
     </div>

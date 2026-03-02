@@ -257,6 +257,22 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   const retirementDeficitContribution = Math.max(0, retirementAnnualCost - retirementAllocatedRevenue);
   const healthcareDeficitContribution = Math.max(0, healthcareModeledFederalCost - healthcareAllocatedRevenue);
   const programsIncreaseDeficit = fiscalSpaceAfterPrograms < 0;
+  const postBelBalance = remainingFiscalSpaceAfterBEL;
+  const postRetirementBalance = remainingAfterRetirement;
+  const postHealthcareBalance = fiscalSpaceAfterPrograms;
+  const waterfallBelWidth = Math.max(0, Math.min(100, belShareOfRevenue));
+  const waterfallRetirementWidth = Math.max(
+    0,
+    Math.min(100 - waterfallBelWidth, retirementShareOfRevenue)
+  );
+  const waterfallHealthcareWidth = Math.max(
+    0,
+    Math.min(100 - waterfallBelWidth - waterfallRetirementWidth, healthcareShareOfRevenue)
+  );
+  const waterfallRemainingWidth = Math.max(
+    0,
+    100 - waterfallBelWidth - waterfallRetirementWidth - waterfallHealthcareWidth
+  );
 
   // Animated number displays for hero panel
   const animatedBalance = useAnimatedNumber(
@@ -937,56 +953,64 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
 
             {/* Step 3: National Social Programs Screen */}
             {activeScreen === 'programs' && (
-              <div className="space-y-6">
-                <div className="bg-dark-slate rounded-lg p-6 border border-border-slate glow-border-blue">
-                  <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-4">Program Funding Allocation</p>
-                  <p className="text-xs text-dimmed mb-4">
-                    BEL-first allocation rule: BEL is funded first, then retirement and healthcare draw from remaining fiscal space.
-                  </p>
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
-                    <div className="bg-darker-slate rounded border border-border-slate p-3">
-                      <p className="text-xs text-muted mb-1">Total Revenue</p>
-                      <p className="text-sm font-semibold text-emerald-400">${(totalRevenueAnnual / 1e12).toFixed(2)}T</p>
+              <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+                <div className="xl:col-span-9 space-y-6">
+                  <div className="bg-dark-slate rounded-lg p-6 border border-border-slate glow-border-blue">
+                    <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-4">BEL-First Funding Waterfall</p>
+                    <p className="text-xs text-dimmed mb-4">
+                      Revenue is allocated in sequence: BEL first, then Retirement, then Healthcare.
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
+                      <div className="bg-darker-slate rounded border border-emerald-800 p-3">
+                        <p className="text-xs text-muted mb-1">Start: Total Revenue</p>
+                        <p className="text-sm font-semibold text-emerald-400">${(totalRevenueAnnual / 1e12).toFixed(2)}T</p>
+                      </div>
+                      <div className="bg-darker-slate rounded border border-sky-900 p-3">
+                        <p className="text-xs text-muted mb-1">After BEL</p>
+                        <p className="text-xs text-sky-300 mb-1">-${(belAnnualCost / 1e12).toFixed(2)}T</p>
+                        <p className={`text-sm font-semibold ${postBelBalance >= 0 ? 'text-green-300' : 'text-red-300'}`}>
+                          {postBelBalance >= 0 ? '+' : '-'}${Math.abs(postBelBalance / 1e12).toFixed(2)}T
+                        </p>
+                      </div>
+                      <div className="bg-darker-slate rounded border border-violet-900 p-3">
+                        <p className="text-xs text-muted mb-1">After Retirement</p>
+                        <p className="text-xs text-violet-300 mb-1">-${(retirementAnnualCost / 1e12).toFixed(2)}T</p>
+                        <p className={`text-sm font-semibold ${postRetirementBalance >= 0 ? 'text-green-300' : 'text-red-300'}`}>
+                          {postRetirementBalance >= 0 ? '+' : '-'}${Math.abs(postRetirementBalance / 1e12).toFixed(2)}T
+                        </p>
+                      </div>
+                      <div className="bg-darker-slate rounded border border-orange-900 p-3">
+                        <p className="text-xs text-muted mb-1">After Healthcare</p>
+                        <p className="text-xs text-orange-300 mb-1">-${(healthcareModeledFederalCost / 1e12).toFixed(2)}T</p>
+                        <p className={`text-sm font-semibold ${postHealthcareBalance >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                          {postHealthcareBalance >= 0 ? '+' : '-'}${Math.abs(postHealthcareBalance / 1e12).toFixed(2)}T
+                        </p>
+                      </div>
                     </div>
-                    <div className="bg-darker-slate rounded border border-border-slate p-3">
-                      <p className="text-xs text-muted mb-1">BEL Cost</p>
-                      <p className="text-sm font-semibold text-sky-300">${(belAnnualCost / 1e12).toFixed(2)}T</p>
-                    </div>
-                    <div className="bg-darker-slate rounded border border-border-slate p-3">
-                      <p className="text-xs text-muted mb-1">Remaining Fiscal Space</p>
-                      <p className={`text-sm font-semibold ${remainingFiscalSpaceAfterBEL >= 0 ? 'text-green-300' : 'text-red-300'}`}>
-                        ${Math.abs(remainingFiscalSpaceAfterBEL / 1e12).toFixed(2)}T {remainingFiscalSpaceAfterBEL >= 0 ? '' : '(deficit)'}
-                      </p>
-                    </div>
-                    <div className="bg-darker-slate rounded border border-border-slate p-3">
-                      <p className="text-xs text-muted mb-1">Post-Program Balance</p>
-                      <p className={`text-sm font-semibold ${fiscalSpaceAfterPrograms >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                        {fiscalSpaceAfterPrograms >= 0 ? '+' : '-'}${Math.abs(fiscalSpaceAfterPrograms / 1e12).toFixed(2)}T
-                      </p>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <div className="bg-darker-slate rounded border border-border-slate p-3">
-                      <p className="text-xs text-muted mb-1">BEL Share of Revenue</p>
-                      <p className="text-sm font-semibold text-bright">{belShareOfRevenue.toFixed(1)}%</p>
-                    </div>
-                    <div className="bg-darker-slate rounded border border-border-slate p-3">
-                      <p className="text-xs text-muted mb-1">Retirement Share of Revenue</p>
-                      <p className="text-sm font-semibold text-bright">{retirementShareOfRevenue.toFixed(1)}%</p>
-                    </div>
-                    <div className="bg-darker-slate rounded border border-border-slate p-3">
-                      <p className="text-xs text-muted mb-1">Healthcare Share of Revenue</p>
-                      <p className="text-sm font-semibold text-bright">{healthcareShareOfRevenue.toFixed(1)}%</p>
-                    </div>
-                  </div>
-                  <p className="text-xs text-dimmed mt-4">
-                    Crowd-out check: {programsIncreaseDeficit
-                      ? `Retirement + Healthcare exceed remaining fiscal space and increase deficit by $${Math.abs(fiscalSpaceAfterPrograms / 1e9).toFixed(1)}B.`
-                      : 'Retirement + Healthcare fit within remaining fiscal space after BEL.'}
-                  </p>
-                </div>
 
-                <ProgramModuleTemplate
+                    <div className="mb-3">
+                      <div className="w-full h-3 rounded-full overflow-hidden bg-darker-navy border border-border-slate flex">
+                        <div className="bg-sky-500" style={{ width: `${waterfallBelWidth}%` }} />
+                        <div className="bg-violet-500" style={{ width: `${waterfallRetirementWidth}%` }} />
+                        <div className="bg-orange-500" style={{ width: `${waterfallHealthcareWidth}%` }} />
+                        <div className="bg-emerald-500" style={{ width: `${waterfallRemainingWidth}%` }} />
+                      </div>
+                      <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-[11px] text-dimmed">
+                        <span>BEL {belShareOfRevenue.toFixed(1)}%</span>
+                        <span>Retirement {retirementShareOfRevenue.toFixed(1)}%</span>
+                        <span>Healthcare {healthcareShareOfRevenue.toFixed(1)}%</span>
+                        <span>Remaining {Math.max(0, (100 - (belShareOfRevenue + retirementShareOfRevenue + healthcareShareOfRevenue))).toFixed(1)}%</span>
+                      </div>
+                    </div>
+
+                    <p className="text-xs text-dimmed">
+                      Crowd-out check: {programsIncreaseDeficit
+                        ? `Retirement + Healthcare exceed remaining fiscal space and increase deficit by $${Math.abs(fiscalSpaceAfterPrograms / 1e9).toFixed(1)}B.`
+                        : 'Retirement + Healthcare fit within remaining fiscal space after BEL.'}
+                    </p>
+                  </div>
+
+                  <ProgramModuleTemplate
                   programName={TERMINOLOGY.RETIREMENT_PROGRAM}
                   enabled={retirementEnabled}
                   onToggleEnabled={() => setRetirementEnabled(!retirementEnabled)}
@@ -1388,6 +1412,45 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                     </p>
                   }
                 />
+                </div>
+
+                <aside className="xl:col-span-3">
+                  <div className="xl:sticky xl:top-4 space-y-4">
+                    <div className="bg-dark-slate rounded-lg p-4 border border-border-slate glow-border-blue">
+                      <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-3">Impact Rail</p>
+                      <div className="space-y-3 text-sm">
+                        <div className="bg-darker-slate rounded border border-border-slate p-3">
+                          <p className="text-xs text-muted mb-1">Post-Program Balance</p>
+                          <p className={`font-semibold ${fiscalSpaceAfterPrograms >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                            {fiscalSpaceAfterPrograms >= 0 ? '+' : '-'}${Math.abs(fiscalSpaceAfterPrograms / 1e12).toFixed(2)}T
+                          </p>
+                        </div>
+                        <div className="bg-darker-slate rounded border border-border-slate p-3">
+                          <p className="text-xs text-muted mb-1">Retirement Funding Ratio</p>
+                          <p className={`font-semibold ${retirementFundingStatus ? retirementFundingStatus.color : 'text-muted'}`}>
+                            {retirementFundingRatio === null ? 'n/a' : `${(retirementFundingRatio * 100).toFixed(1)}%`}
+                          </p>
+                          <p className="text-xs text-dimmed mt-1">{retirementFundingStatus?.label ?? 'Program off'}</p>
+                        </div>
+                        <div className="bg-darker-slate rounded border border-border-slate p-3">
+                          <p className="text-xs text-muted mb-1">Healthcare Net Federal Savings</p>
+                          <p className={`font-semibold ${healthcareNetFederalSavings > 0 ? 'text-green-400' : 'text-muted'}`}>
+                            {healthcareNetFederalSavings > 0
+                              ? `$${(healthcareNetFederalSavings / 1e9).toFixed(1)}B/yr`
+                              : '$0.0B/yr'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-darker-navy rounded-lg p-4 border border-border-slate">
+                      <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-2">Allocation Rule</p>
+                      <p className="text-xs text-dimmed leading-relaxed">
+                        BEL is funded first. Retirement and healthcare are then funded from the remaining fiscal space.
+                      </p>
+                    </div>
+                  </div>
+                </aside>
               </div>
             )}
 
