@@ -35,7 +35,7 @@ export default function MethodologyPage() {
         </article>
       </section>
 
-      <section className="mt-6 bg-dark-slate rounded-lg border border-border-slate p-5">
+      <section id="assumptions" className="mt-6 bg-dark-slate rounded-lg border border-border-slate p-5">
         <h2 className="text-sm font-semibold text-bright mb-4">Core Assumptions</h2>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -59,7 +59,7 @@ export default function MethodologyPage() {
         </div>
       </section>
 
-      <section className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <section id="modules" className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
         <article className="bg-dark-slate rounded-lg border border-border-slate p-5">
           <h2 className="text-sm font-semibold text-bright mb-2">Program Modules</h2>
           <ul className="space-y-2 text-sm text-dimmed">
@@ -81,4 +81,3 @@ export default function MethodologyPage() {
     </PublicSiteShell>
   )
 }
-

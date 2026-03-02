@@ -12,7 +12,7 @@ export default function ResearchPage() {
       </section>
 
       <section id="data-policy" className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <article className="bg-dark-slate rounded-lg border border-border-slate p-5">
+        <article id="no-pii" className="bg-dark-slate rounded-lg border border-border-slate p-5">
           <h2 className="text-sm font-semibold text-bright mb-2">What We Store</h2>
           <ul className="space-y-2 text-sm text-dimmed">
             <li>Complete policy configuration inputs selected in the simulator.</li>
@@ -30,7 +30,7 @@ export default function ResearchPage() {
         </article>
       </section>
 
-      <section className="mt-6 bg-dark-slate rounded-lg border border-border-slate p-5">
+      <section id="submission-use" className="mt-6 bg-dark-slate rounded-lg border border-border-slate p-5">
         <h2 className="text-sm font-semibold text-bright mb-3">Use of Submissions</h2>
         <p className="text-sm text-dimmed leading-relaxed mb-3">
           Submitted scenarios are used to build a comparative policy research dataset, support aggregated analytics,
@@ -43,4 +43,3 @@ export default function ResearchPage() {
     </PublicSiteShell>
   )
 }
-
