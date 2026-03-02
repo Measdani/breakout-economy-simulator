@@ -11,8 +11,6 @@ import ResultsDisplay from './ResultsDisplay';
 import FiscalSustainabilityIndicator from './FiscalSustainabilityIndicator';
 import PersonaTable from './PersonaTable';
 import Charts from './Charts';
-import PersonaComparison from './PersonaComparison';
-import ProductivityBar from './ProductivityBar';
 import OnboardingTour from './OnboardingTour';
 import Warnings from './Warnings';
 import GlossaryPanel from './GlossaryPanel';
@@ -123,7 +121,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   const federalHealthcareSpendTotal =
     mergedConfig.federalHealthcareSpendTotal ?? (medicareAnnualSpend + medicaidAnnualSpend);
   const [showTour, setShowTour] = useState(false);
-  const [activeScreen, setActiveScreen] = useState<'engine' | 'households' | 'programs' | 'incentives' | 'results' | 'charts' | 'alerts' | 'submit'>('engine');
+  const [activeScreen, setActiveScreen] = useState<'engine' | 'households' | 'programs' | 'results' | 'charts' | 'alerts' | 'submit'>('engine');
   const [currentConfig, setCurrentConfig] = useState<string>('Default');
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
@@ -294,12 +292,11 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     if (presetConfig.breakoutPoint) setBreakoutPoint(presetConfig.breakoutPoint);
   };
 
-  const screens: Array<typeof activeScreen> = ['engine', 'households', 'programs', 'incentives', 'results', 'charts', 'alerts', 'submit'];
+  const screens: Array<typeof activeScreen> = ['engine', 'households', 'programs', 'results', 'charts', 'alerts', 'submit'];
   const stepLabels: Record<string, string> = {
     engine: 'Revenue & Funding Model',
     households: 'Demographics',
     programs: 'National Social Programs',
-    incentives: 'Labor Incentive Modeling',
     results: 'Budget Outcome Summary',
     charts: 'Fiscal Composition & Scenario Analysis',
     alerts: 'Stability & Risk',
@@ -1394,15 +1391,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
               </div>
             )}
 
-            {/* Step 4: Work Incentives Screen */}
-            {activeScreen === 'incentives' && (
-              <div className="space-y-6">
-                <ProductivityBar personas={result.citizenModel.personaOutcomes} />
-                <PersonaComparison personas={result.citizenModel.personaOutcomes} />
-              </div>
-            )}
-
-            {/* Step 5: Results Screen */}
+            {/* Step 4: Results Screen */}
             {activeScreen === 'results' && (
               <div className="space-y-6">
                 <FiscalSustainabilityIndicator result={result} />
@@ -1410,14 +1399,14 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
               </div>
             )}
 
-            {/* Step 6: Charts Screen */}
+            {/* Step 5: Charts Screen */}
             {activeScreen === 'charts' && (
               <div>
                 <Charts result={result} config={config} />
               </div>
             )}
 
-            {/* Step 7: Stability & Risk Screen */}
+            {/* Step 6: Stability & Risk Screen */}
             {activeScreen === 'alerts' && (
               <div className="max-w-2xl mx-auto space-y-6">
                 <div>
@@ -1428,7 +1417,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
               </div>
             )}
 
-            {/* Step 8: Submit Model Screen */}
+            {/* Step 7: Submit Model Screen */}
             {activeScreen === 'submit' && (
               <div className="max-w-2xl mx-auto space-y-6">
                 <div className="bg-dark-slate rounded-lg p-6 border border-border-slate">
