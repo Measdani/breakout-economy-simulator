@@ -6,7 +6,6 @@ import styles from './PublicTopNav.module.css'
 
 const navItems = [
   { href: '/', label: 'Home' },
-  { href: '/model', label: 'Model' },
   { href: '/methodology', label: 'Methodology' },
   { href: '/research', label: 'Research' },
   { href: '/about', label: 'About' },
