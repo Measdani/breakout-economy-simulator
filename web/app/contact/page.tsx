@@ -1,26 +1,41 @@
 import PublicSiteShell from '@/components/site/PublicSiteShell'
+import styles from './contact.module.css'
 
 export default function ContactPage() {
   return (
-    <PublicSiteShell>
-      <section className="bg-dark-slate rounded-xl border border-border-slate p-8">
-        <p className="text-xs uppercase tracking-widest text-blue-200 mb-2">Contact</p>
-        <h1 className="text-3xl font-bold text-bright mb-3">Inquiries and Partnerships</h1>
-        <p className="text-sm text-dimmed">
-          For policy collaborations, institutional demos, and research partnerships, reach out directly.
-        </p>
-      </section>
+    <PublicSiteShell contentClassName="px-0 py-0">
+      <main className={styles.page}>
+        <div className={styles.container}>
+          <header className={styles.header}>
+            <div className={styles.kicker}>Contact</div>
+            <h1 className={styles.title}>Inquiries and Partnerships</h1>
+            <p className={styles.subtitle}>
+              For policy collaboration, institutional demos, and research partnerships, contact the NAIERM team directly.
+            </p>
+          </header>
 
-      <section className="mt-6 bg-dark-slate rounded-lg border border-border-slate p-5">
-        <p className="text-sm text-dimmed mb-2">Primary contact</p>
-        <a
-          href="mailto:research@breakouteconomy.org"
-          className="text-blue-200 text-sm hover:text-bright transition"
-        >
-          research@breakouteconomy.org
-        </a>
-      </section>
+          <div className={styles.grid}>
+            <section className={styles.card}>
+              <h2 className={styles.h2}>Primary Contact</h2>
+              <p className={styles.p}>Research and institutional inquiries:</p>
+              <a href="mailto:research@breakouteconomy.org" className={styles.link}>
+                research@breakouteconomy.org
+              </a>
+            </section>
+
+            <section className={styles.card}>
+              <h2 className={styles.h2}>Best Use Cases</h2>
+              <ul className={styles.list}>
+                <li>Policy architecture and financing scenario reviews.</li>
+                <li>Institutional walkthroughs of model assumptions.</li>
+                <li>Partnership discussions for research and publication.</li>
+              </ul>
+            </section>
+          </div>
+
+          <div className={styles.footerSpacer} />
+        </div>
+      </main>
     </PublicSiteShell>
   )
 }
-
