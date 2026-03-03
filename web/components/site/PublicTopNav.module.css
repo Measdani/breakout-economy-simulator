@@ -7,15 +7,15 @@
 .inner {
   max-width: 1120px;
   margin: 0 auto;
-  padding: 32px 20px 30px;
+  padding: 22px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 26px;
+  gap: 22px;
 }
 
 .brand {
-  font-size: 34px;
+  font-size: 15px;
   letter-spacing: 0.08em;
   font-weight: 700;
   color: #001f4f;
@@ -32,7 +32,7 @@
 }
 
 .link {
-  font-size: 34px;
+  font-size: 16px;
   color: #526279;
   text-decoration: none;
   transition: color 0.2s ease;
@@ -54,11 +54,11 @@
   background: #27439b;
   color: #ffffff;
   text-decoration: none;
-  font-size: 40px;
+  font-size: 16px;
   font-weight: 700;
   line-height: 1;
-  border-radius: 14px;
-  padding: 24px 34px;
+  border-radius: 12px;
+  padding: 14px 26px;
   transition: background 0.2s ease;
 }
 
@@ -67,26 +67,11 @@
 }
 
 @media (max-width: 1300px) {
-  .brand {
-    font-size: 26px;
-  }
-
-  .link {
-    font-size: 30px;
-  }
-
-  .cta {
-    font-size: 30px;
-    padding: 18px 24px;
-  }
-}
-
-@media (max-width: 1000px) {
   .inner {
     flex-wrap: wrap;
     justify-content: center;
-    padding-top: 18px;
-    padding-bottom: 18px;
+    padding-top: 16px;
+    padding-bottom: 16px;
   }
 
   .links {
@@ -98,16 +83,16 @@
   }
 
   .brand {
-    font-size: 20px;
+    font-size: 15px;
   }
 
   .link {
-    font-size: 20px;
+    font-size: 15px;
   }
 
   .cta {
-    font-size: 18px;
-    padding: 12px 16px;
+    font-size: 15px;
+    padding: 11px 16px;
     border-radius: 10px;
   }
 }
