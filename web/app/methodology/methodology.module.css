@@ -1,0 +1,190 @@
+.page {
+  min-height: 100vh;
+  background: #f6f8fc;
+  color: #0f172a;
+}
+
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 48px 20px 0;
+}
+
+.header {
+  margin-bottom: 28px;
+}
+
+.kicker {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 10px;
+}
+
+.title {
+  font-size: 42px;
+  line-height: 1.1;
+  margin: 0 0 12px 0;
+  color: #0b1220;
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.badge {
+  background: #ffffff;
+  border: 1px solid #e6edf7;
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  color: #334155;
+}
+
+.metaNote {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+.card {
+  background: #0f1b33;
+  color: #e6edf7;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 18px 18px;
+  box-shadow: 0 12px 30px rgba(2, 6, 23, 0.12);
+}
+
+.h2 {
+  font-size: 18px;
+  margin: 0 0 10px 0;
+  color: #ffffff;
+}
+
+.p {
+  margin: 0;
+  color: rgba(230, 237, 247, 0.82);
+  line-height: 1.65;
+  font-size: 14px;
+}
+
+.tableWrap {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 18, 35, 0.6);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+}
+
+.table thead th {
+  text-align: left;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(230, 237, 247, 0.7);
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.table tbody td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgba(230, 237, 247, 0.86);
+  font-size: 14px;
+  line-height: 1.45;
+  vertical-align: top;
+}
+
+.tdStrong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.tdMono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  color: rgba(230, 237, 247, 0.9);
+}
+
+.list {
+  margin: 0;
+  padding-left: 18px;
+  color: rgba(230, 237, 247, 0.86);
+  line-height: 1.65;
+  font-size: 14px;
+}
+
+.listStrong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.roadmap {
+  display: grid;
+  gap: 10px;
+}
+
+.roadmapItem {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 18, 35, 0.55);
+}
+
+.phase {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  padding: 6px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  color: #0b1220;
+  background: #a8c7ff;
+  font-weight: 700;
+}
+
+.phaseText {
+  color: rgba(230, 237, 247, 0.86);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.footerSpacer {
+  height: 80px;
+}
+
+@media (max-width: 900px) {
+  .title {
+    font-size: 34px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full {
+    grid-column: auto;
+  }
+}
