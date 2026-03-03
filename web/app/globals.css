@@ -22,6 +22,16 @@ body {
   min-height: 100vh;
 }
 
+.appShell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.appMain {
+  flex: 1;
+}
+
 .footer {
   background: linear-gradient(
     180deg,
