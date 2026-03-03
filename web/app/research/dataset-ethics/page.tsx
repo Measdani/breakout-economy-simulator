@@ -15,7 +15,7 @@ export default function DatasetEthicsPage() {
             </p>
           </header>
 
-          <div className={styles.grid}>
+          <div id="data-policy" className={styles.grid}>
             <section className={styles.card}>
               <h2 className={styles.h2}>What We Store</h2>
               <ul className={styles.list}>
@@ -27,7 +27,7 @@ export default function DatasetEthicsPage() {
               </ul>
             </section>
 
-            <section className={styles.card}>
+            <section id="no-pii" className={styles.card}>
               <h2 className={styles.h2}>What We Do Not Require</h2>
               <ul className={styles.list}>
                 <li>No mandatory personally identifying information is required to submit scenarios.</li>
@@ -38,7 +38,7 @@ export default function DatasetEthicsPage() {
               </ul>
             </section>
 
-            <section className={`${styles.card} ${styles.full}`}>
+            <section id="submission-use" className={`${styles.card} ${styles.full}`}>
               <h2 className={styles.h2}>Use of Submissions</h2>
               <p className={styles.p}>
                 Submitted scenarios are used to build a comparative policy research dataset,
