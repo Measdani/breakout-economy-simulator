@@ -1,29 +1,15 @@
 'use client'
 
 import Link from 'next/link'
+import PublicTopNav from '@/components/site/PublicTopNav'
 import './home.css'
 
 export default function Home() {
   return (
     <>
+      <PublicTopNav />
+
       <main className="wrapper">
-        <header className="nav">
-          <div className="logo">NAIERM</div>
-
-          <nav className="navLinks">
-            <Link href="/">Home</Link>
-            <Link href="/model">Model</Link>
-            <Link href="/methodology">Methodology</Link>
-            <Link href="/research">Research</Link>
-            <Link href="/about">About</Link>
-            <Link href="/contact">Contact</Link>
-          </nav>
-
-          <Link href="/model" className="primaryButton">
-            Launch Simulator
-          </Link>
-        </header>
-
         <section className="hero">
           <div className="heroContent">
             <p className="eyebrow">National AI Economy Resiliency Model</p>
@@ -112,7 +98,7 @@ export default function Home() {
               National AI Economy Resiliency Model
             </p>
             <p className="footerVersion">
-              Web v0.3 · Model assumptions versioned and archived.
+              Web v0.3 &middot; Model assumptions versioned and archived.
             </p>
           </div>
 
