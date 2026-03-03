@@ -18,7 +18,7 @@ export default function Home() {
           <Link href="/contact">Contact</Link>
         </nav>
 
-        <Link href="/model" className="btnPrimary">
+        <Link href="/model" className="primaryButton">
           Launch Simulator
         </Link>
       </header>
@@ -35,9 +35,12 @@ export default function Home() {
           <p className="sub">
             A transparent simulation framework for revenue architecture, national obligations, and long-term household stability.
           </p>
+          <p className="authority">
+            Structured fiscal simulation · Explicit allocation logic · Versioned assumptions
+          </p>
 
           <div className="heroButtons">
-            <Link href="/model" className="btnPrimary">
+            <Link href="/model" className="primaryButton">
               Launch Simulator
             </Link>
             <Link href="/methodology" className="btnSecondary">
@@ -48,14 +51,16 @@ export default function Home() {
 
         <div className="heroDiagram">
           <div className="diagramBox">Revenue</div>
-          <div className="arrow">→</div>
+          <div className="arrow">-&gt;</div>
           <div className="diagramBox">BEL First</div>
-          <div className="arrow">→</div>
+          <div className="arrow">-&gt;</div>
           <div className="diagramBox">Programs</div>
-          <div className="arrow">→</div>
+          <div className="arrow">-&gt;</div>
           <div className="diagramBox">Solvency</div>
         </div>
       </section>
+
+      <div className="sectionDivider" />
 
       <section className="section">
         <h2>Integrated Policy Modules</h2>
@@ -83,6 +88,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <div className="sectionDivider" />
 
       <section className="cred">
         <h2>Transparent by Design</h2>
