@@ -42,14 +42,6 @@ export default function PublicSiteShell({
               <div className="space-y-2 text-dimmed">
                 <Link href="/research" className="block hover:text-bright transition">Dataset &amp; Ethics</Link>
                 <Link href="/research#submission-use" className="block hover:text-bright transition">Submission Use</Link>
-                <a
-                  href="https://github.com/Measdani/breakout-economy-simulator/commits/main"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="block hover:text-bright transition"
-                >
-                  Changelog
-                </a>
               </div>
             </div>
 
