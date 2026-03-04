@@ -119,9 +119,6 @@ export default function Home() {
             <div className="footerColumn">
               <h4>Research</h4>
               <Link href="/research">Dataset &amp; Ethics</Link>
-              <a href="https://github.com/Measdani/breakout-economy-simulator/commits/main" target="_blank" rel="noreferrer">
-                Changelog
-              </a>
             </div>
           </div>
         </div>
