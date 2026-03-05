@@ -465,63 +465,63 @@ export default async function LeaderboardPage() {
           }}
         >
           <article
+            className="transition-all duration-150 hover:-translate-y-0.5 hover:shadow-lg"
             style={{
               background: '#1E293B',
               border: '1px solid rgba(148,163,184,0.25)',
               borderRadius: '14px',
               padding: '1.1rem 1rem',
-              boxShadow: '0 8px 22px rgba(2,6,23,0.24)',
             }}
           >
             <p className="text-xs uppercase tracking-wide text-muted mb-2">
               Scenarios Tested
             </p>
-            <p className="text-3xl font-bold text-bright">
+            <p className="font-bold text-bright" style={{ fontSize: '28px', lineHeight: 1.15 }}>
               {totalCount.toLocaleString('en-US')}
             </p>
           </article>
 
           <article
+            className="transition-all duration-150 hover:-translate-y-0.5 hover:shadow-lg"
             style={{
               background: '#1E293B',
               border: '1px solid rgba(74,222,128,0.35)',
               borderRadius: '14px',
               padding: '1.1rem 1rem',
-              boxShadow: '0 8px 22px rgba(2,6,23,0.24)',
             }}
           >
             <p className="text-xs uppercase tracking-wide text-muted mb-2">
               Best Fiscal Balance
             </p>
-            <p className="text-3xl font-bold text-green-400">
+            <p className="font-bold text-green-400" style={{ fontSize: '28px', lineHeight: 1.15 }}>
               {bestFiscalScenario ? formatBillions(bestFiscalScenario.balance, true) : '$0.0B'}
             </p>
           </article>
 
           <article
+            className="transition-all duration-150 hover:-translate-y-0.5 hover:shadow-lg"
             style={{
               background: '#1E293B',
               border: '1px solid rgba(96,165,250,0.35)',
               borderRadius: '14px',
               padding: '1.1rem 1rem',
-              boxShadow: '0 8px 22px rgba(2,6,23,0.24)',
             }}
           >
             <p className="text-xs uppercase tracking-wide text-muted mb-2">
               Average Work Incentive
             </p>
-            <p className="text-3xl font-bold text-blue-400">
+            <p className="font-bold text-blue-400" style={{ fontSize: '28px', lineHeight: 1.15 }}>
               {formatPercent(avgWorkIncentive, 1)}
             </p>
           </article>
 
           <article
+            className="transition-all duration-150 hover:-translate-y-0.5 hover:shadow-lg"
             style={{
               background: '#1E293B',
               border: '1px solid rgba(56,189,248,0.35)',
               borderRadius: '14px',
               padding: '1.1rem 1rem',
-              boxShadow: '0 8px 22px rgba(2,6,23,0.24)',
             }}
           >
             <p className="text-xs uppercase tracking-wide text-muted mb-2">
@@ -530,7 +530,7 @@ export default async function LeaderboardPage() {
             <p className="text-base font-semibold text-bright">
               {mostEfficientRevenueScenario?.scenario || 'N/A'}
             </p>
-            <p className="text-sm text-dimmed mt-2">
+            <p className="text-sm mt-2" style={{ color: '#9fb3c8', fontSize: '13px' }}>
               {mostEfficientRevenueScenario
                 ? `${formatBillions(mostEfficientRevenueScenario.revenue)} revenue @ ${formatPercent(mostEfficientRevenueScenario.transactionTaxPct, 2)}`
                 : 'No submissions yet'}
@@ -538,12 +538,12 @@ export default async function LeaderboardPage() {
           </article>
 
           <article
+            className="transition-all duration-150 hover:-translate-y-0.5 hover:shadow-lg"
             style={{
               background: '#1E293B',
               border: '1px solid rgba(251,191,36,0.35)',
               borderRadius: '14px',
               padding: '1.1rem 1rem',
-              boxShadow: '0 8px 22px rgba(2,6,23,0.24)',
             }}
           >
             <p className="text-xs uppercase tracking-wide text-muted mb-2">
@@ -552,7 +552,7 @@ export default async function LeaderboardPage() {
             <p className="text-base font-semibold text-bright">
               {bestWorkIncentiveScenario?.scenario || 'N/A'}
             </p>
-            <p className="text-sm text-dimmed mt-2">
+            <p className="text-sm mt-2" style={{ color: '#9fb3c8', fontSize: '13px' }}>
               {bestWorkIncentiveScenario
                 ? formatPercent(bestWorkIncentiveScenario.workIncentive, 1)
                 : '0.0%'}
@@ -607,6 +607,9 @@ export default async function LeaderboardPage() {
               <h2 className="text-3xl font-semibold text-bright">
                 Leaderboard Results
               </h2>
+              <p className="text-sm mt-2" style={{ color: '#c7dcff' }}>
+                Top Performing Policy Configurations
+              </p>
               <p className="text-xs text-muted mt-1">
                 Tip: Add a custom scenario name when submitting to make your model easier to find.
               </p>
@@ -626,7 +629,17 @@ export default async function LeaderboardPage() {
                     <th className="px-4 py-3 text-left text-sm font-semibold text-muted" style={{ color: '#dbe7ff' }}>Scenario</th>
                     <th className="px-4 py-3 text-right text-sm font-semibold text-muted" style={{ color: '#dbe7ff' }}>Fiscal Balance</th>
                     <th className="px-4 py-3 text-right text-sm font-semibold text-muted" style={{ color: '#dbe7ff' }}>Revenue</th>
-                    <th className="px-4 py-3 text-right text-sm font-semibold text-muted" style={{ color: '#dbe7ff' }}>Work Incentive</th>
+                    <th className="px-4 py-3 text-right text-sm font-semibold text-muted" style={{ color: '#dbe7ff' }}>
+                      <span>Work Incentive</span>
+                      <span
+                        className="ml-1 inline-flex items-center justify-center rounded-full border border-blue-200/50 text-[10px] leading-none"
+                        style={{ width: '14px', height: '14px', color: '#dbe7ff' }}
+                        title="Measures how strongly the policy preserves incentives for employment and productivity."
+                        aria-label="Measures how strongly the policy preserves incentives for employment and productivity."
+                      >
+                        i
+                      </span>
+                    </th>
                     <th className="px-4 py-3 text-right text-sm font-semibold text-muted" style={{ color: '#dbe7ff' }}>Transaction Tax</th>
                     <th className="px-4 py-3 text-right text-sm font-semibold text-muted" style={{ color: '#dbe7ff' }}>Submitted</th>
                     <th className="px-4 py-3 text-left text-sm font-semibold text-muted" style={{ color: '#dbe7ff' }}>Details</th>
@@ -639,15 +652,16 @@ export default async function LeaderboardPage() {
                     return (
                       <tr
                         key={row.id}
-                        className={`border-t border-white/10 transition ${
-                          isTopRow ? 'bg-amber-400/10' : 'hover:bg-white/5'
+                        className={`border-t border-white/10 transition-colors duration-150 cursor-pointer ${
+                          isTopRow ? 'bg-amber-400/10 hover:bg-amber-400/15' : 'hover:bg-white/5'
                         }`}
                         style={{
-                          cursor: 'pointer',
                           ...(isTopRow
                             ? {
                                 boxShadow:
-                                  'inset 4px 0 0 rgba(251,191,36,0.95), inset 0 0 0 1px rgba(251,191,36,0.35), 0 0 20px rgba(251,191,36,0.1)',
+                                  'inset 4px 0 0 rgba(246,196,83,1), inset 0 0 0 1px rgba(251,191,36,0.35), 0 0 22px rgba(251,191,36,0.16)',
+                                background:
+                                  'linear-gradient(90deg, rgba(251,191,36,0.14) 0%, rgba(251,191,36,0.06) 34%, rgba(30,41,59,0.88) 100%)',
                               }
                             : {})
                         }}
@@ -657,7 +671,9 @@ export default async function LeaderboardPage() {
                         </td>
                         <td className="px-4 py-4">
                           <p className="text-sm font-semibold text-bright">{row.scenario}</p>
-                          <p className="text-xs text-dimmed mt-1">({row.secondaryLabel})</p>
+                          <p className="mt-1" style={{ color: '#9fb3c8', fontSize: '13px' }}>
+                            {row.secondaryLabel}
+                          </p>
                         </td>
                         <td className={`px-4 py-4 text-right font-semibold ${row.isSolvent ? 'text-green-400' : 'text-red-400'}`}>
                           {formatBillions(row.balance, true)}
@@ -722,38 +738,46 @@ export default async function LeaderboardPage() {
           </section>
         )}
 
-        <section className="bg-dark-slate rounded-2xl border border-white/12 px-6 py-9 md:px-8 text-center">
-          <h2 className="text-3xl font-semibold text-bright mb-4">
-            Test Your Own Policy Scenario
-          </h2>
-          <p className="text-base text-dimmed max-w-4xl mx-auto">
-            The NAIERM simulator allows anyone to explore how policy choices
-            affect national fiscal balance and work incentives.
-          </p>
-          <ul className="text-base text-dimmed list-disc list-inside mt-4 max-w-3xl mx-auto text-left space-y-1">
-            <li>Revenue structures</li>
-            <li>BEL economic liquidity levels</li>
-            <li>Program assumptions</li>
-          </ul>
-          <p className="text-base text-dimmed max-w-4xl mx-auto mt-4">
-            Then submit your results and see how your policy compares on the
-            leaderboard. Your model could become the next top scenario.
-          </p>
-          <div className="mt-7">
-            <Link
-              href="/model"
-              className="inline-flex items-center rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3 transition"
-              style={{
-                backgroundColor: '#2563eb',
-                color: '#ffffff',
-                border: '1px solid #1d4ed8',
-                textDecoration: 'none',
-              }}
-            >
-              Launch the Simulator
-            </Link>
-          </div>
-        </section>
+        <div
+          style={{
+            borderTop: '1px solid rgba(255,255,255,0.1)',
+            marginTop: '30px',
+            paddingTop: '30px',
+          }}
+        >
+          <section className="bg-dark-slate rounded-2xl border border-white/12 px-6 py-10 md:px-8 text-center">
+            <h2 className="text-3xl font-semibold text-bright mb-4">
+              Test Your Own Policy Scenario
+            </h2>
+            <p className="text-base text-dimmed max-w-4xl mx-auto">
+              The NAIERM simulator allows anyone to explore how policy choices
+              affect national fiscal balance and work incentives.
+            </p>
+            <ul className="text-base text-dimmed list-disc list-inside mt-4 max-w-3xl mx-auto text-left space-y-1">
+              <li>Revenue structures</li>
+              <li>BEL economic liquidity levels</li>
+              <li>Program assumptions</li>
+            </ul>
+            <p className="text-base text-dimmed max-w-4xl mx-auto mt-4">
+              Then submit your results and see how your policy compares on the
+              leaderboard. Your model could become the next top scenario.
+            </p>
+            <div className="mt-7">
+              <Link
+                href="/model"
+                className="inline-flex items-center rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3 transition"
+                style={{
+                  backgroundColor: '#2563eb',
+                  color: '#ffffff',
+                  border: '1px solid #1d4ed8',
+                  textDecoration: 'none',
+                }}
+              >
+                Launch the Simulator
+              </Link>
+            </div>
+          </section>
+        </div>
 
         <p className="text-xs text-muted text-center pt-1 pb-2 border-t border-white/10">
           All leaderboard scenarios are generated from simulator submissions and
