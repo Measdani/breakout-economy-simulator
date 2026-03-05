@@ -413,508 +413,629 @@ export default async function LeaderboardPage() {
 
   return (
     <PublicSiteShell contentClassName="max-w-none p-0">
-      <div className="lb-page">
-        <div className="lb-content w-full max-w-7xl mx-auto space-y-10">
-        <section className="lb-light-section lb-hero-section rounded-2xl border px-6 py-10 md:px-10 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-bright mb-5">
-            Policy Innovation Leaderboard
-          </h1>
-          <p className="text-lg text-dimmed max-w-4xl mx-auto">
-            Explore the most effective fiscal policy scenarios discovered using
-            the NAIERM economic simulation model.
-          </p>
-          <p className="text-base text-dimmed mt-4 max-w-4xl mx-auto">
-            Researchers, students, policymakers, and citizens can test their
-            own ideas and compare outcomes.
-          </p>
-          <p className="text-base text-bright mt-2">Your scenario could be next.</p>
+      <main className="lb-page">
+        <div className="lb-container">
+          <section className="lb-hero">
+            <div className="lb-kicker">Policy Innovation</div>
+            <h1 className="lb-title">Policy Innovation Leaderboard</h1>
+            <p className="lb-subtitle">
+              Explore the most effective fiscal policy scenarios discovered using the NAIERM
+              economic simulation model. Researchers, students, policymakers, and citizens can test
+              their own ideas and compare outcomes.
+            </p>
 
-          <div className="mt-7">
-            <Link
-              href="/model"
-              className="lb-btn inline-flex items-center rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3 transition"
-              style={{
-                backgroundColor: '#2563eb',
-                color: '#ffffff',
-                border: '1px solid #1d4ed8',
-                textDecoration: 'none',
-              }}
-            >
-              Launch Policy Simulator -&gt;
-            </Link>
-          </div>
-
-          <div className="mt-6 text-xs text-muted">
-            <span className="font-semibold">Total Scenarios Tested:</span>{' '}
-            {totalCount.toLocaleString('en-US')}
-            {'  '}|{'  '}
-            <span className="font-semibold">Best Fiscal Balance Discovered:</span>{' '}
-            {bestFiscalScenario ? formatBillions(bestFiscalScenario.balance, true) : '$0.0B'}
-            {'  '}|{'  '}
-            <span className="font-semibold">Average Work Incentive:</span>{' '}
-            {formatPercent(avgWorkIncentive, 1)}
-            {'  '}|{'  '}
-            <span className="font-semibold">Last Submission:</span>{' '}
-            {lastSubmission ? formatDate(lastSubmission.submittedAt) : 'N/A'}
-          </div>
-        </section>
-
-        <section
-          className="lb-stats-grid"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-            gap: '1rem',
-          }}
-        >
-          <article
-            className="transition-all duration-150 hover:-translate-y-0.5 hover:shadow-lg"
-            style={{
-              background: '#ffffff',
-              border: '1px solid #e6edf7',
-              borderRadius: '14px',
-              padding: '1.1rem 1rem',
-            }}
-          >
-            <p className="text-xs uppercase tracking-wide text-muted mb-2">
-              Scenarios Tested
-            </p>
-            <p className="font-bold text-bright" style={{ fontSize: '28px', lineHeight: 1.15 }}>
-              {totalCount.toLocaleString('en-US')}
-            </p>
-          </article>
-
-          <article
-            className="transition-all duration-150 hover:-translate-y-0.5 hover:shadow-lg"
-            style={{
-              background: '#ffffff',
-              border: '1px solid #d5f0df',
-              borderRadius: '14px',
-              padding: '1.1rem 1rem',
-            }}
-          >
-            <p className="text-xs uppercase tracking-wide text-muted mb-2">
-              Best Fiscal Balance
-            </p>
-            <p className="font-bold text-green-400" style={{ fontSize: '28px', lineHeight: 1.15 }}>
-              {bestFiscalScenario ? formatBillions(bestFiscalScenario.balance, true) : '$0.0B'}
-            </p>
-          </article>
-
-          <article
-            className="transition-all duration-150 hover:-translate-y-0.5 hover:shadow-lg"
-            style={{
-              background: '#ffffff',
-              border: '1px solid #dce9fd',
-              borderRadius: '14px',
-              padding: '1.1rem 1rem',
-            }}
-          >
-            <p className="text-xs uppercase tracking-wide text-muted mb-2">
-              Average Work Incentive
-            </p>
-            <p className="font-bold text-blue-400" style={{ fontSize: '28px', lineHeight: 1.15 }}>
-              {formatPercent(avgWorkIncentive, 1)}
-            </p>
-          </article>
-
-          <article
-            className="transition-all duration-150 hover:-translate-y-0.5 hover:shadow-lg"
-            style={{
-              background: '#ffffff',
-              border: '1px solid #d8eef5',
-              borderRadius: '14px',
-              padding: '1.1rem 1rem',
-            }}
-          >
-            <p className="text-xs uppercase tracking-wide text-muted mb-2">
-              Most Efficient Revenue Design
-            </p>
-            <p className="text-base font-semibold text-bright">
-              {mostEfficientRevenueScenario?.scenario || 'N/A'}
-            </p>
-            <p className="text-sm mt-2" style={{ color: '#9fb3c8', fontSize: '13px' }}>
-              {mostEfficientRevenueScenario
-                ? `${formatBillions(mostEfficientRevenueScenario.revenue)} revenue @ ${formatPercent(mostEfficientRevenueScenario.transactionTaxPct, 2)}`
-                : 'No submissions yet'}
-            </p>
-          </article>
-
-          <article
-            className="transition-all duration-150 hover:-translate-y-0.5 hover:shadow-lg"
-            style={{
-              background: '#ffffff',
-              border: '1px solid #f5e8b7',
-              borderRadius: '14px',
-              padding: '1.1rem 1rem',
-            }}
-          >
-            <p className="text-xs uppercase tracking-wide text-muted mb-2">
-              Best Work Incentive
-            </p>
-            <p className="text-base font-semibold text-bright">
-              {bestWorkIncentiveScenario?.scenario || 'N/A'}
-            </p>
-            <p className="text-sm mt-2" style={{ color: '#9fb3c8', fontSize: '13px' }}>
-              {bestWorkIncentiveScenario
-                ? formatPercent(bestWorkIncentiveScenario.workIncentive, 1)
-                : '0.0%'}
-            </p>
-          </article>
-        </section>
-
-        <section className="lb-light-section rounded-2xl border px-6 py-7 md:px-8">
-          <h2 className="text-3xl font-semibold text-bright mb-4">
-            How the Leaderboard Works
-          </h2>
-          <p className="text-base text-dimmed mb-4">
-            Each submission represents a complete policy configuration tested in
-            the simulator.
-          </p>
-          <ul className="text-base text-dimmed list-disc list-inside space-y-1 mb-4">
-            <li>Fiscal balance</li>
-            <li>Sustainable revenue generation</li>
-            <li>Work incentive preservation</li>
-            <li>Realistic transaction tax levels</li>
-          </ul>
-          <p className="text-base text-dimmed">
-            Top results highlight policy combinations that maintain government
-            solvency while supporting household economic stability.
-          </p>
-        </section>
-
-        {rankedScenarios.length === 0 ? (
-          <section className="lb-light-section rounded-2xl border p-10 text-center">
-            <p className="text-bright font-semibold mb-2">
-              No scenarios have been submitted yet.
-            </p>
-            <p className="text-sm text-dimmed mb-5">
-              Launch the model and submit the first policy scenario.
-            </p>
-            <Link
-              href="/model"
-              className="lb-btn inline-flex items-center rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3 transition"
-              style={{
-                backgroundColor: '#2563eb',
-                color: '#ffffff',
-                border: '1px solid #1d4ed8',
-                textDecoration: 'none',
-              }}
-            >
-              Launch Policy Simulator -&gt;
-            </Link>
-          </section>
-        ) : (
-          <section className="lb-table-shell bg-dark-slate rounded-2xl border border-white/12 overflow-hidden">
-            <div className="px-6 py-5 border-b border-white/10">
-              <h2 className="text-3xl font-semibold text-bright">
-                Leaderboard Results
-              </h2>
-              <p className="text-sm mt-2" style={{ color: '#c7dcff' }}>
-                Top Performing Policy Configurations
-              </p>
-              <p className="text-xs text-muted mt-1">
-                Tip: Add a custom scenario name when submitting to make your model easier to find.
-              </p>
-            </div>
-
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[1180px]">
-                <thead
-                  className="bg-darker-slate border-b border-white/10"
-                  style={{
-                    backgroundColor: '#22344b',
-                    borderBottom: '1px solid rgba(255,255,255,0.18)',
-                  }}
-                >
-                  <tr>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-muted" style={{ color: '#dbe7ff' }}>Rank</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-muted" style={{ color: '#dbe7ff' }}>Scenario</th>
-                    <th className="px-4 py-3 text-right text-sm font-semibold text-muted" style={{ color: '#dbe7ff' }}>Fiscal Balance</th>
-                    <th className="px-4 py-3 text-right text-sm font-semibold text-muted" style={{ color: '#dbe7ff' }}>Revenue</th>
-                    <th className="px-4 py-3 text-right text-sm font-semibold text-muted" style={{ color: '#dbe7ff' }}>
-                      <span>Work Incentive</span>
-                      <span
-                        className="ml-1 inline-flex items-center justify-center rounded-full border border-blue-200/50 text-[10px] leading-none"
-                        style={{ width: '14px', height: '14px', color: '#dbe7ff' }}
-                        title="Measures how strongly the policy preserves incentives for employment and productivity."
-                        aria-label="Measures how strongly the policy preserves incentives for employment and productivity."
-                      >
-                        i
-                      </span>
-                    </th>
-                    <th className="px-4 py-3 text-right text-sm font-semibold text-muted" style={{ color: '#dbe7ff' }}>Transaction Tax</th>
-                    <th className="px-4 py-3 text-right text-sm font-semibold text-muted" style={{ color: '#dbe7ff' }}>Submitted</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-muted" style={{ color: '#dbe7ff' }}>Details</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {rankedScenarios.map((row, idx) => {
-                    const isTopRow = idx === 0
-
-                    return (
-                      <tr
-                        key={row.id}
-                        className={`border-t border-white/10 transition-colors duration-150 cursor-pointer ${
-                          isTopRow ? 'bg-amber-400/10 hover:bg-amber-400/15' : 'hover:bg-white/5'
-                        }`}
-                        style={{
-                          ...(isTopRow
-                            ? {
-                                boxShadow:
-                                  'inset 4px 0 0 rgba(246,196,83,1), inset 0 0 0 1px rgba(246,196,83,0.25), 0 0 14px rgba(246,196,83,0.1)',
-                                background: 'rgba(246,196,83,0.05)',
-                              }
-                            : {})
-                        }}
-                      >
-                        <td className={`px-4 py-4 font-semibold ${isTopRow ? 'text-amber-300' : 'text-bright'}`}>
-                          {isTopRow ? `\u{1F3C6} #${row.rank} Top Scenario` : `#${row.rank}`}
-                        </td>
-                        <td className="px-4 py-4">
-                          <p className="text-sm font-semibold text-bright">{row.scenario}</p>
-                          <p className="mt-1" style={{ color: '#9fb3c8', fontSize: '13px' }}>
-                            {row.secondaryLabel}
-                          </p>
-                        </td>
-                        <td className={`px-4 py-4 text-right font-semibold ${row.isSolvent ? 'text-green-400' : 'text-red-400'}`}>
-                          {formatBillions(row.balance, true)}
-                        </td>
-                        <td className="px-4 py-4 text-right text-dimmed">
-                          {formatBillions(row.revenue)}
-                        </td>
-                        <td className="px-4 py-4 text-right text-dimmed">
-                          {formatPercent(row.workIncentive, 1)}
-                        </td>
-                        <td className="px-4 py-4 text-right text-dimmed">
-                          {formatPercent(row.transactionTaxPct, 2)}
-                        </td>
-                        <td className="px-4 py-4 text-right text-dimmed text-sm whitespace-nowrap">
-                          {formatDate(row.submittedAt)}
-                        </td>
-                        <td className="px-4 py-4 align-top">
-                          <details>
-                            <summary
-                              className="cursor-pointer rounded-md border border-blue-400/40 bg-blue-500/10 px-3 py-1.5 text-xs font-semibold text-blue-200 hover:bg-blue-500/20 transition list-none inline-block"
-                              style={{
-                                backgroundColor: 'rgba(37,99,235,0.18)',
-                                border: '1px solid rgba(96,165,250,0.48)',
-                                color: '#dbeafe',
-                                textDecoration: 'none',
-                              }}
-                            >
-                              View Policy
-                            </summary>
-                            <div className="mt-2 min-w-[260px] rounded-md border border-white/10 bg-darker-navy p-3 text-xs text-dimmed space-y-1 leading-5">
-                              <p>
-                                <span className="text-muted">BEL level:</span>{' '}
-                                {usdFormatter.format(row.policy.belLevel)} per adult/year
-                              </p>
-                              <p>
-                                <span className="text-muted">SBI configuration:</span>{' '}
-                                Breakout at {usdFormatter.format(row.policy.sbiBreakoutPoint)}
-                              </p>
-                              <p>
-                                <span className="text-muted">Healthcare assumption:</span>{' '}
-                                {row.policy.healthcareAssumption}
-                              </p>
-                              <p>
-                                <span className="text-muted">Retirement replacement:</span>{' '}
-                                {row.policy.retirementReplacement === null
-                                  ? 'Not specified'
-                                  : formatPercent(row.policy.retirementReplacement, 0)}
-                              </p>
-                              <p>
-                                <span className="text-muted">Revenue structure:</span>{' '}
-                                {row.policy.revenueStructure}
-                              </p>
-                            </div>
-                          </details>
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </section>
-        )}
-
-        <div
-          className="lb-cta-divider"
-          style={{
-            borderTop: '1px solid rgba(15,23,42,0.1)',
-            marginTop: '30px',
-            paddingTop: '30px',
-          }}
-        >
-          <section className="lb-light-section rounded-2xl border px-6 py-10 md:px-8 text-center">
-            <h2 className="text-3xl font-semibold text-bright mb-4">
-              Test Your Own Policy Scenario
-            </h2>
-            <p className="text-base text-dimmed max-w-4xl mx-auto">
-              The NAIERM simulator allows anyone to explore how policy choices
-              affect national fiscal balance and work incentives.
-            </p>
-            <ul className="text-base text-dimmed list-disc list-inside mt-4 max-w-3xl mx-auto text-left space-y-1">
-              <li>Revenue structures</li>
-              <li>BEL economic liquidity levels</li>
-              <li>Program assumptions</li>
-            </ul>
-            <p className="text-base text-dimmed max-w-4xl mx-auto mt-4">
-              Then submit your results and see how your policy compares on the
-              leaderboard. Your model could become the next top scenario.
-            </p>
-            <div className="mt-7">
-              <Link
-                href="/model"
-                className="lb-btn inline-flex items-center rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3 transition"
-                style={{
-                  backgroundColor: '#2563eb',
-                  color: '#ffffff',
-                  border: '1px solid #1d4ed8',
-                  textDecoration: 'none',
-                }}
-              >
-                Launch the Simulator
+            <div className="lb-hero-actions">
+              <Link href="/model" className="btn-primary">
+                Launch Policy Simulator -&gt;
+              </Link>
+              <Link href="/methodology" className="btn-ghost">
+                Read Methodology
               </Link>
             </div>
-          </section>
-        </div>
 
-        <p className="lb-transparency text-xs text-muted text-center pt-1 pb-2 border-t border-white/10">
-          All leaderboard scenarios are generated from simulator submissions and
-          exported directly from the model dataset. No personally identifying
-          information is collected.
-        </p>
+            <div className="lb-meta">
+              Total scenarios tested: <b>{totalCount.toLocaleString('en-US')}</b> | Best fiscal
+              balance: <b>{bestFiscalScenario ? formatBillions(bestFiscalScenario.balance, true) : '$0.0B'}</b> | Avg
+              work incentive: <b>{formatPercent(avgWorkIncentive, 1)}</b> | Last submission:{' '}
+              <b>{lastSubmission ? formatDate(lastSubmission.submittedAt) : 'N/A'}</b>
+            </div>
+
+            <div className="lb-stats">
+              <article className="stat">
+                <div className="stat-label">Scenarios Tested</div>
+                <div className="stat-value">{totalCount.toLocaleString('en-US')}</div>
+                <div className="stat-sub">From simulator submissions</div>
+              </article>
+
+              <article className="stat">
+                <div className="stat-label">Best Fiscal Balance</div>
+                <div className="stat-value stat-value-positive">
+                  {bestFiscalScenario ? formatBillions(bestFiscalScenario.balance, true) : '$0.0B'}
+                </div>
+                <div className="stat-sub">Top solvent configuration</div>
+              </article>
+
+              <article className="stat">
+                <div className="stat-label">Average Work Incentive</div>
+                <div className="stat-value stat-value-info">{formatPercent(avgWorkIncentive, 1)}</div>
+                <div className="stat-sub">Across all submissions</div>
+              </article>
+
+              <article className="stat">
+                <div className="stat-label">Most Efficient Revenue Design</div>
+                <div className="stat-name">{mostEfficientRevenueScenario?.scenario || 'N/A'}</div>
+                <div className="stat-sub">
+                  {mostEfficientRevenueScenario
+                    ? `${formatBillions(mostEfficientRevenueScenario.revenue)} revenue @ ${formatPercent(mostEfficientRevenueScenario.transactionTaxPct, 2)}`
+                    : 'No submissions yet'}
+                </div>
+              </article>
+
+              <article className="stat">
+                <div className="stat-label">Best Work Incentive</div>
+                <div className="stat-name">{bestWorkIncentiveScenario?.scenario || 'N/A'}</div>
+                <div className="stat-sub">
+                  {bestWorkIncentiveScenario
+                    ? formatPercent(bestWorkIncentiveScenario.workIncentive, 1)
+                    : '0.0%'}
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section className="lb-section">
+            <h2 className="lb-h2">How the Leaderboard Works</h2>
+            <p className="lb-p">
+              Each submission represents a complete policy configuration tested in the simulator.
+            </p>
+            <ul className="lb-list">
+              <li>Fiscal balance</li>
+              <li>Sustainable revenue generation</li>
+              <li>Work incentive preservation</li>
+              <li>Realistic transaction tax levels</li>
+            </ul>
+            <p className="lb-p">
+              Top results highlight policy combinations that maintain government solvency while
+              supporting household economic stability.
+            </p>
+          </section>
+
+          {rankedScenarios.length === 0 ? (
+            <section className="lb-section">
+              <h2 className="lb-h2">Leaderboard Results</h2>
+              <p className="lb-p">No scenarios have been submitted yet.</p>
+              <div className="lb-hero-actions">
+                <Link href="/model" className="btn-primary">
+                  Launch Policy Simulator -&gt;
+                </Link>
+              </div>
+            </section>
+          ) : (
+            <section className="table-card">
+              <div className="table-head">
+                <div className="table-head-row">
+                  <div>
+                    <b>Leaderboard Results</b>
+                    <br />
+                    <small>
+                      Tip: add a custom scenario name when submitting so you can find it later.
+                    </small>
+                  </div>
+                  <span className="pill">Top performing configurations</span>
+                </div>
+              </div>
+
+              <div className="table-wrap">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>Rank</th>
+                      <th>Scenario</th>
+                      <th>Fiscal Balance</th>
+                      <th>Revenue</th>
+                      <th>
+                        <span>Work Incentive</span>
+                        <span
+                          className="info-dot"
+                          title="Measures how strongly the policy preserves incentives for employment and productivity."
+                          aria-label="Measures how strongly the policy preserves incentives for employment and productivity."
+                        >
+                          i
+                        </span>
+                      </th>
+                      <th>Transaction Tax</th>
+                      <th>Submitted</th>
+                      <th>Details</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rankedScenarios.map((row, idx) => {
+                      const isTopRow = idx === 0
+                      return (
+                        <tr key={row.id} className={isTopRow ? 'top-scenario' : undefined}>
+                          <td>{isTopRow ? `\u{1F3C6} #${row.rank} Top Scenario` : `#${row.rank}`}</td>
+                          <td>
+                            <span className="scenario-name">{row.scenario}</span>
+                            <span className="scenario-sub">{row.secondaryLabel}</span>
+                          </td>
+                          <td className={row.isSolvent ? 'value-positive' : 'value-negative'}>
+                            {formatBillions(row.balance, true)}
+                          </td>
+                          <td>{formatBillions(row.revenue)}</td>
+                          <td>{formatPercent(row.workIncentive, 1)}</td>
+                          <td>{formatPercent(row.transactionTaxPct, 2)}</td>
+                          <td>{formatDate(row.submittedAt)}</td>
+                          <td>
+                            <details>
+                              <summary className="link-btn">View Policy</summary>
+                              <div className="policy-panel">
+                                <p>
+                                  <span>BEL level:</span>{' '}
+                                  {usdFormatter.format(row.policy.belLevel)} per adult/year
+                                </p>
+                                <p>
+                                  <span>SBI configuration:</span> Breakout at{' '}
+                                  {usdFormatter.format(row.policy.sbiBreakoutPoint)}
+                                </p>
+                                <p>
+                                  <span>Healthcare assumption:</span>{' '}
+                                  {row.policy.healthcareAssumption}
+                                </p>
+                                <p>
+                                  <span>Retirement replacement:</span>{' '}
+                                  {row.policy.retirementReplacement === null
+                                    ? 'Not specified'
+                                    : formatPercent(row.policy.retirementReplacement, 0)}
+                                </p>
+                                <p>
+                                  <span>Revenue structure:</span> {row.policy.revenueStructure}
+                                </p>
+                              </div>
+                            </details>
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          )}
+
+          <section className="lb-cta">
+            <div>
+              <h3>Test Your Own Policy Scenario</h3>
+              <p>
+                Try different revenue structures, BEL levels, and program assumptions, then submit
+                your result to compare outcomes on the leaderboard.
+              </p>
+            </div>
+            <Link href="/model" className="btn-primary">
+              Launch the Simulator
+            </Link>
+          </section>
+
+          <p className="lb-transparency">
+            All leaderboard scenarios are generated from simulator submissions and exported
+            directly from the model dataset. No personally identifying information is collected.
+          </p>
         </div>
-      </div>
+      </main>
 
       <style>{`
         .lb-page {
           background: #f6f8fc;
+          color: #0f172a;
           min-height: 100vh;
-          padding: 40px 16px;
+        }
+
+        .lb-container {
+          max-width: 1100px;
+          margin: 0 auto;
+          padding: 48px 20px 60px;
+        }
+
+        .lb-hero {
+          background: #ffffff;
+          border: 1px solid #e6edf7;
+          border-radius: 16px;
+          padding: 28px;
+          box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+        }
+
+        .lb-kicker {
+          font-size: 12px;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: #64748b;
+          margin-bottom: 8px;
+          font-weight: 600;
+        }
+
+        .lb-title {
+          font-size: 40px;
+          line-height: 1.1;
+          margin: 0 0 10px;
           color: #0f172a;
         }
 
-        .lb-content {
-          max-width: 1120px;
+        .lb-subtitle {
+          margin: 0 0 16px;
+          color: #475569;
+          max-width: 74ch;
+          line-height: 1.55;
         }
 
-        .lb-light-section {
-          background: #ffffff !important;
-          border-color: #e6edf7 !important;
+        .lb-hero-actions {
+          display: flex;
+          gap: 10px;
+          flex-wrap: wrap;
+          margin-top: 10px;
         }
 
-        .lb-light-section p,
-        .lb-light-section h1,
-        .lb-light-section h2,
-        .lb-light-section li,
-        .lb-light-section span,
-        .lb-light-section [class*='text'] {
-          color: #0f172a !important;
+        .btn-primary {
+          background: #1d4ed8;
+          color: white;
+          border: none;
+          border-radius: 10px;
+          padding: 10px 14px;
+          font-weight: 600;
+          cursor: pointer;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          transition: filter 0.15s ease;
         }
 
-        .lb-light-section .text-muted,
-        .lb-light-section .text-dimmed {
-          color: #56677f !important;
+        .btn-primary:hover {
+          filter: brightness(0.95);
         }
 
-        .lb-hero-section {
-          border-bottom: 1px solid #e6edf7 !important;
+        .btn-ghost {
+          background: #ffffff;
+          color: #1d4ed8;
+          border: 1px solid #cfe0ff;
+          border-radius: 10px;
+          padding: 10px 14px;
+          font-weight: 600;
+          cursor: pointer;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
         }
 
-        .lb-light-section a.lb-btn,
-        .lb-light-section a.lb-btn * {
-          color: #ffffff !important;
-          text-decoration: none !important;
+        .lb-meta {
+          margin-top: 14px;
+          padding-top: 14px;
+          border-top: 1px solid #eef2f7;
+          color: #64748b;
+          font-size: 13px;
         }
 
-        .lb-stats-grid {
-          grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        .lb-stats {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 12px;
+          margin-top: 16px;
         }
 
-        .lb-stats-grid p,
-        .lb-stats-grid span,
-        .lb-stats-grid [class*='text'] {
-          color: #0f172a !important;
-        }
-
-        .lb-stats-grid .text-muted,
-        .lb-stats-grid .text-dimmed {
-          color: #5c6d84 !important;
-        }
-
-        .lb-stats-grid .text-green-400 {
-          color: #0f9f53 !important;
-        }
-
-        .lb-stats-grid .text-blue-400 {
-          color: #1d4ed8 !important;
-        }
-
-        .lb-stats-grid article {
+        .stat {
+          background: #fff;
+          border: 1px solid #e6edf7;
+          border-radius: 14px;
+          padding: 14px 14px 12px;
+          min-height: 86px;
           transition: transform 0.15s ease, box-shadow 0.15s ease;
         }
 
-        .lb-stats-grid article:hover {
+        .stat:hover {
           transform: translateY(-2px);
-          box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
+          box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
         }
 
-        .lb-table-shell {
-          background: #0f1b33 !important;
-          color: #e6edf7 !important;
-          border-radius: 14px;
-          border-color: rgba(124, 148, 190, 0.25) !important;
+        .stat-label {
+          font-size: 12px;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: #64748b;
         }
 
-        .lb-table-shell .text-bright,
-        .lb-table-shell .text-dimmed,
-        .lb-table-shell .text-muted,
-        .lb-table-shell [class*='text'] {
-          color: #e6edf7 !important;
+        .stat-value {
+          font-size: 28px;
+          font-weight: 750;
+          margin-top: 6px;
+          line-height: 1.1;
+          color: #0f172a;
         }
 
-        .lb-table-shell .text-green-400 {
-          color: #7af2b5 !important;
+        .stat-name {
+          margin-top: 6px;
+          font-size: 22px;
+          line-height: 1.1;
+          font-weight: 700;
+          color: #0f172a;
         }
 
-        .lb-table-shell .text-red-400 {
-          color: #ff9b93 !important;
+        .stat-value-positive {
+          color: #16a34a;
         }
 
-        .lb-table-shell .text-muted {
-          color: #b9cae3 !important;
+        .stat-value-info {
+          color: #2563eb;
         }
 
-        .lb-table-shell .text-dimmed {
-          color: #d7e1f2 !important;
+        .stat-sub {
+          font-size: 12px;
+          color: #64748b;
+          margin-top: 6px;
+          line-height: 1.4;
+        }
+
+        .lb-section {
+          margin-top: 26px;
+          background: #fff;
+          border: 1px solid #e6edf7;
+          border-radius: 16px;
+          padding: 18px;
+        }
+
+        .lb-h2 {
+          font-size: 22px;
+          margin: 0 0 10px;
+          color: #0f172a;
+        }
+
+        .lb-p {
+          margin: 0 0 10px;
+          color: #475569;
+          line-height: 1.5;
+        }
+
+        .lb-list {
+          margin: 0;
+          padding-left: 18px;
+          color: #334155;
+          line-height: 1.5;
+        }
+
+        .table-card {
+          margin-top: 14px;
+          background: linear-gradient(180deg, #0b1630 0%, #0a1226 100%);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 16px;
+          overflow: hidden;
+        }
+
+        .table-head {
+          padding: 14px 16px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          color: #e6edf7;
+        }
+
+        .table-head-row {
+          display: flex;
+          justify-content: space-between;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+
+        .table-head small {
+          color: rgba(230, 237, 247, 0.75);
+        }
+
+        .table-wrap {
+          overflow: auto;
+        }
+
+        .table {
+          width: 100%;
+          border-collapse: collapse;
+          min-width: 980px;
+          color: #e6edf7;
+        }
+
+        .table th {
+          position: sticky;
+          top: 0;
+          background: rgba(10, 18, 38, 0.96);
+          text-align: left;
+          font-size: 12px;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          padding: 10px 12px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          color: rgba(230, 237, 247, 0.85);
+          white-space: nowrap;
+        }
+
+        .table td {
+          padding: 10px 12px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+          font-size: 14px;
+          vertical-align: top;
+        }
+
+        .table th:nth-child(3),
+        .table th:nth-child(4),
+        .table th:nth-child(5),
+        .table th:nth-child(6),
+        .table th:nth-child(7),
+        .table td:nth-child(3),
+        .table td:nth-child(4),
+        .table td:nth-child(5),
+        .table td:nth-child(6),
+        .table td:nth-child(7) {
+          text-align: right;
+        }
+
+        .table tr {
+          cursor: pointer;
+          transition: background-color 0.15s ease;
+        }
+
+        .table tr:hover td {
+          background: rgba(255, 255, 255, 0.03);
+        }
+
+        .top-scenario td {
+          background: rgba(246, 196, 83, 0.05);
+          box-shadow: inset 4px 0 0 #f6c453;
+        }
+
+        .top-scenario td:first-child {
+          color: #f6c453;
+          font-weight: 700;
+        }
+
+        .scenario-name {
+          display: block;
+          font-weight: 700;
+          color: #ffffff;
+        }
+
+        .scenario-sub {
+          display: block;
+          margin-top: 4px;
+          color: #9fb3c8;
+          font-size: 13px;
+        }
+
+        .value-positive {
+          color: #34d399;
+          font-weight: 700;
+        }
+
+        .value-negative {
+          color: #f87171;
+          font-weight: 700;
+        }
+
+        .info-dot {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 14px;
+          height: 14px;
+          border-radius: 50%;
+          border: 1px solid rgba(255, 255, 255, 0.38);
+          font-size: 10px;
+          margin-left: 5px;
+          opacity: 0.9;
+          line-height: 1;
+        }
+
+        .pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          border: 1px solid rgba(255, 255, 255, 0.14);
+          padding: 4px 10px;
+          border-radius: 999px;
+          font-size: 12px;
+          color: rgba(230, 237, 247, 0.9);
+        }
+
+        .link-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          color: #e6edf7;
+          background: rgba(255, 255, 255, 0.06);
+          border-radius: 10px;
+          padding: 7px 10px;
+          font-weight: 600;
+          cursor: pointer;
+          white-space: nowrap;
+          list-style: none;
+          transition: background-color 0.15s ease;
+        }
+
+        .link-btn::-webkit-details-marker {
+          display: none;
+        }
+
+        .link-btn:hover {
+          background: rgba(255, 255, 255, 0.1);
+        }
+
+        .policy-panel {
+          margin-top: 10px;
+          min-width: 250px;
+          background: rgba(6, 13, 28, 0.92);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          border-radius: 12px;
+          padding: 10px;
+          font-size: 12px;
+          color: #dce6f7;
+          line-height: 1.5;
+        }
+
+        .policy-panel p {
+          margin: 0 0 6px;
+        }
+
+        .policy-panel p:last-child {
+          margin-bottom: 0;
+        }
+
+        .policy-panel span {
+          color: #9fb3c8;
+        }
+
+        .lb-cta {
+          margin-top: 22px;
+          background: linear-gradient(180deg, #ffffff 0%, #f3f7ff 100%);
+          border: 1px solid #e6edf7;
+          border-radius: 16px;
+          padding: 22px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 14px;
+          flex-wrap: wrap;
+        }
+
+        .lb-cta h3 {
+          margin: 0;
+          font-size: 18px;
+          color: #0f172a;
+        }
+
+        .lb-cta p {
+          margin: 6px 0 0;
+          color: #475569;
+          max-width: 70ch;
+          line-height: 1.5;
         }
 
         .lb-transparency {
-          border-top-color: rgba(15, 23, 42, 0.1) !important;
-          color: #53657d !important;
+          margin-top: 16px;
+          color: #64748b;
+          text-align: center;
+          font-size: 12px;
+          line-height: 1.5;
         }
 
-        @media (max-width: 1024px) {
-          .lb-stats-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        @media (max-width: 960px) {
+          .lb-stats {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
           }
         }
 
-        @media (max-width: 700px) {
-          .lb-page {
-            padding: 24px 12px;
+        @media (max-width: 520px) {
+          .lb-container {
+            padding: 30px 14px 44px;
           }
 
-          .lb-content {
-            gap: 28px !important;
+          .lb-title {
+            font-size: 32px;
           }
 
-          .lb-stats-grid {
-            grid-template-columns: 1fr !important;
+          .lb-stats {
+            grid-template-columns: 1fr;
           }
         }
       `}</style>
