@@ -424,15 +424,6 @@ export default async function LeaderboardPage() {
               their own ideas and compare outcomes.
             </p>
 
-            <div className="lb-hero-actions">
-              <Link href="/model" className="btn-primary">
-                Launch Policy Simulator -&gt;
-              </Link>
-              <Link href="/methodology" className="btn-ghost">
-                Read Methodology
-              </Link>
-            </div>
-
             <div className="lb-meta">
               Total scenarios tested: <b>{totalCount.toLocaleString('en-US')}</b> | Best fiscal
               balance: <b>{bestFiscalScenario ? formatBillions(bestFiscalScenario.balance, true) : '$0.0B'}</b> | Avg
