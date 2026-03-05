@@ -790,7 +790,7 @@ export default async function LeaderboardPage() {
         </div>
       </div>
 
-      <style jsx global>{`
+      <style>{`
         .lb-page {
           background: #f6f8fc;
           min-height: 100vh;
