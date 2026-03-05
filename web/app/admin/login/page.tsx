@@ -63,7 +63,7 @@ export default function AdminLoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
               className="w-full px-3 py-2 bg-darker-navy border border-border-slate rounded text-bright text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              style={{ width: '100%', borderRadius: '10px' }}
+              style={{ width: '100%', borderRadius: '10px', textAlign: 'center' }}
               required
               disabled={isLoading}
             />
@@ -92,9 +92,14 @@ export default function AdminLoginPage() {
         </form>
 
         <div className="mt-4 pt-4 border-t border-border-slate text-center">
-          <Link href="/" className="text-blue-400 hover:text-blue-300 text-xs">
-            &larr; Back to Simulator
-          </Link>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '0.9rem' }}>
+            <Link href="/model" className="text-blue-400 hover:text-blue-300 text-xs">
+              &larr; Back to Simulator
+            </Link>
+            <Link href="/" className="text-blue-400 hover:text-blue-300 text-xs">
+              Home
+            </Link>
+          </div>
         </div>
       </div>
     </div>

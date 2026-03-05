@@ -333,7 +333,7 @@ function buildRankedScenarios(submissions: SubmissionRecord[]): RankedScenario[]
       submission.config_name.trim().length > 0 &&
       !isGenericScenarioName(submission.config_name)
         ? submission.config_name.trim()
-        : `${policy.revenueStructure} architecture`
+        : `${policy.revenueStructure} fiscal architecture`
 
     return {
       id: submission.id,
@@ -431,6 +431,12 @@ export default async function LeaderboardPage() {
             <Link
               href="/model"
               className="inline-flex items-center rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3 transition"
+              style={{
+                backgroundColor: '#2563eb',
+                color: '#ffffff',
+                border: '1px solid #1d4ed8',
+                textDecoration: 'none',
+              }}
             >
               Launch Policy Simulator -&gt;
             </Link>
@@ -440,13 +446,33 @@ export default async function LeaderboardPage() {
             <span className="font-semibold">Total Scenarios Tested:</span>{' '}
             {totalCount.toLocaleString('en-US')}
             {'  '}|{'  '}
+            <span className="font-semibold">Best Fiscal Balance Discovered:</span>{' '}
+            {bestFiscalScenario ? formatBillions(bestFiscalScenario.balance, true) : '$0.0B'}
+            {'  '}|{'  '}
+            <span className="font-semibold">Average Work Incentive:</span>{' '}
+            {formatPercent(avgWorkIncentive, 1)}
+            {'  '}|{'  '}
             <span className="font-semibold">Last Submission:</span>{' '}
             {lastSubmission ? formatDate(lastSubmission.submittedAt) : 'N/A'}
           </div>
         </section>
 
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <article className="bg-dark-slate rounded-xl border border-white/15 p-5">
+        <section
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
+            gap: '1rem',
+          }}
+        >
+          <article
+            style={{
+              background: '#1E293B',
+              border: '1px solid rgba(148,163,184,0.25)',
+              borderRadius: '14px',
+              padding: '1.1rem 1rem',
+              boxShadow: '0 8px 22px rgba(2,6,23,0.24)',
+            }}
+          >
             <p className="text-xs uppercase tracking-wide text-muted mb-2">
               Scenarios Tested
             </p>
@@ -455,7 +481,15 @@ export default async function LeaderboardPage() {
             </p>
           </article>
 
-          <article className="bg-dark-slate rounded-xl border border-emerald-300/35 p-5">
+          <article
+            style={{
+              background: '#1E293B',
+              border: '1px solid rgba(74,222,128,0.35)',
+              borderRadius: '14px',
+              padding: '1.1rem 1rem',
+              boxShadow: '0 8px 22px rgba(2,6,23,0.24)',
+            }}
+          >
             <p className="text-xs uppercase tracking-wide text-muted mb-2">
               Best Fiscal Balance
             </p>
@@ -464,7 +498,15 @@ export default async function LeaderboardPage() {
             </p>
           </article>
 
-          <article className="bg-dark-slate rounded-xl border border-blue-300/30 p-5">
+          <article
+            style={{
+              background: '#1E293B',
+              border: '1px solid rgba(96,165,250,0.35)',
+              borderRadius: '14px',
+              padding: '1.1rem 1rem',
+              boxShadow: '0 8px 22px rgba(2,6,23,0.24)',
+            }}
+          >
             <p className="text-xs uppercase tracking-wide text-muted mb-2">
               Average Work Incentive
             </p>
@@ -473,7 +515,15 @@ export default async function LeaderboardPage() {
             </p>
           </article>
 
-          <article className="bg-dark-slate rounded-xl border border-cyan-300/30 p-5 md:col-span-1 lg:col-span-1">
+          <article
+            style={{
+              background: '#1E293B',
+              border: '1px solid rgba(56,189,248,0.35)',
+              borderRadius: '14px',
+              padding: '1.1rem 1rem',
+              boxShadow: '0 8px 22px rgba(2,6,23,0.24)',
+            }}
+          >
             <p className="text-xs uppercase tracking-wide text-muted mb-2">
               Most Efficient Revenue Design
             </p>
@@ -487,7 +537,15 @@ export default async function LeaderboardPage() {
             </p>
           </article>
 
-          <article className="bg-dark-slate rounded-xl border border-amber-300/35 p-5 md:col-span-1 lg:col-span-1">
+          <article
+            style={{
+              background: '#1E293B',
+              border: '1px solid rgba(251,191,36,0.35)',
+              borderRadius: '14px',
+              padding: '1.1rem 1rem',
+              boxShadow: '0 8px 22px rgba(2,6,23,0.24)',
+            }}
+          >
             <p className="text-xs uppercase tracking-wide text-muted mb-2">
               Best Work Incentive
             </p>
@@ -533,6 +591,12 @@ export default async function LeaderboardPage() {
             <Link
               href="/model"
               className="inline-flex items-center rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3 transition"
+              style={{
+                backgroundColor: '#2563eb',
+                color: '#ffffff',
+                border: '1px solid #1d4ed8',
+                textDecoration: 'none',
+              }}
             >
               Launch Policy Simulator -&gt;
             </Link>
@@ -550,16 +614,22 @@ export default async function LeaderboardPage() {
 
             <div className="overflow-x-auto">
               <table className="w-full min-w-[1180px]">
-                <thead className="bg-darker-slate border-b border-white/10">
+                <thead
+                  className="bg-darker-slate border-b border-white/10"
+                  style={{
+                    backgroundColor: '#22344b',
+                    borderBottom: '1px solid rgba(255,255,255,0.18)',
+                  }}
+                >
                   <tr>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-muted">Rank</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-muted">Scenario</th>
-                    <th className="px-4 py-3 text-right text-sm font-semibold text-muted">Fiscal Balance</th>
-                    <th className="px-4 py-3 text-right text-sm font-semibold text-muted">Revenue</th>
-                    <th className="px-4 py-3 text-right text-sm font-semibold text-muted">Work Incentive</th>
-                    <th className="px-4 py-3 text-right text-sm font-semibold text-muted">Transaction Tax</th>
-                    <th className="px-4 py-3 text-right text-sm font-semibold text-muted">Submitted</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-muted">Details</th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-muted" style={{ color: '#dbe7ff' }}>Rank</th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-muted" style={{ color: '#dbe7ff' }}>Scenario</th>
+                    <th className="px-4 py-3 text-right text-sm font-semibold text-muted" style={{ color: '#dbe7ff' }}>Fiscal Balance</th>
+                    <th className="px-4 py-3 text-right text-sm font-semibold text-muted" style={{ color: '#dbe7ff' }}>Revenue</th>
+                    <th className="px-4 py-3 text-right text-sm font-semibold text-muted" style={{ color: '#dbe7ff' }}>Work Incentive</th>
+                    <th className="px-4 py-3 text-right text-sm font-semibold text-muted" style={{ color: '#dbe7ff' }}>Transaction Tax</th>
+                    <th className="px-4 py-3 text-right text-sm font-semibold text-muted" style={{ color: '#dbe7ff' }}>Submitted</th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-muted" style={{ color: '#dbe7ff' }}>Details</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -572,21 +642,22 @@ export default async function LeaderboardPage() {
                         className={`border-t border-white/10 transition ${
                           isTopRow ? 'bg-amber-400/10' : 'hover:bg-white/5'
                         }`}
-                        style={
-                          isTopRow
+                        style={{
+                          cursor: 'pointer',
+                          ...(isTopRow
                             ? {
                                 boxShadow:
                                   'inset 4px 0 0 rgba(251,191,36,0.95), inset 0 0 0 1px rgba(251,191,36,0.35), 0 0 20px rgba(251,191,36,0.1)',
                               }
-                            : undefined
-                        }
+                            : {})
+                        }}
                       >
                         <td className={`px-4 py-4 font-semibold ${isTopRow ? 'text-amber-300' : 'text-bright'}`}>
-                          {isTopRow ? `#${row.rank} Top Scenario` : `#${row.rank}`}
+                          {isTopRow ? `\u{1F3C6} #${row.rank} Top Scenario` : `#${row.rank}`}
                         </td>
                         <td className="px-4 py-4">
                           <p className="text-sm font-semibold text-bright">{row.scenario}</p>
-                          <p className="text-xs text-dimmed mt-1">{row.secondaryLabel}</p>
+                          <p className="text-xs text-dimmed mt-1">({row.secondaryLabel})</p>
                         </td>
                         <td className={`px-4 py-4 text-right font-semibold ${row.isSolvent ? 'text-green-400' : 'text-red-400'}`}>
                           {formatBillions(row.balance, true)}
@@ -605,7 +676,15 @@ export default async function LeaderboardPage() {
                         </td>
                         <td className="px-4 py-4 align-top">
                           <details>
-                            <summary className="cursor-pointer rounded-md border border-blue-400/40 bg-blue-500/10 px-3 py-1.5 text-xs font-semibold text-blue-200 hover:bg-blue-500/20 transition list-none inline-block">
+                            <summary
+                              className="cursor-pointer rounded-md border border-blue-400/40 bg-blue-500/10 px-3 py-1.5 text-xs font-semibold text-blue-200 hover:bg-blue-500/20 transition list-none inline-block"
+                              style={{
+                                backgroundColor: 'rgba(37,99,235,0.18)',
+                                border: '1px solid rgba(96,165,250,0.48)',
+                                color: '#dbeafe',
+                                textDecoration: 'none',
+                              }}
+                            >
                               View Policy
                             </summary>
                             <div className="mt-2 min-w-[260px] rounded-md border border-white/10 bg-darker-navy p-3 text-xs text-dimmed space-y-1 leading-5">
@@ -652,9 +731,9 @@ export default async function LeaderboardPage() {
             affect national fiscal balance and work incentives.
           </p>
           <ul className="text-base text-dimmed list-disc list-inside mt-4 max-w-3xl mx-auto text-left space-y-1">
-            <li>revenue structures</li>
+            <li>Revenue structures</li>
             <li>BEL economic liquidity levels</li>
-            <li>program assumptions</li>
+            <li>Program assumptions</li>
           </ul>
           <p className="text-base text-dimmed max-w-4xl mx-auto mt-4">
             Then submit your results and see how your policy compares on the
@@ -664,6 +743,12 @@ export default async function LeaderboardPage() {
             <Link
               href="/model"
               className="inline-flex items-center rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3 transition"
+              style={{
+                backgroundColor: '#2563eb',
+                color: '#ffffff',
+                border: '1px solid #1d4ed8',
+                textDecoration: 'none',
+              }}
             >
               Launch the Simulator
             </Link>
