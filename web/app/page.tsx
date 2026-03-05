@@ -33,6 +33,9 @@ export default function Home() {
               <Link href="/methodology" className="btnSecondary">
                 Read Methodology
               </Link>
+              <Link href="/admin" className="btnSecondary">
+                Admin
+              </Link>
             </div>
           </div>
 

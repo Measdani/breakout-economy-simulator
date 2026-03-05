@@ -111,6 +111,7 @@ body {
 
 .heroButtons {
   display: flex;
+  flex-wrap: wrap;
   gap: 14px;
   margin-top: 24px;
 }
