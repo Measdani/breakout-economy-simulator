@@ -31,10 +31,23 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-deep-navy flex items-center justify-center px-4 py-8">
+    <div
+      className="bg-deep-navy"
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '2rem 1rem'
+      }}
+    >
       <div
         className="bg-dark-slate rounded-lg p-6 border-2 border-blue-500/50"
-        style={{ width: 'min(92vw, 420px)' }}
+        style={{
+          width: '100%',
+          maxWidth: '360px',
+          margin: '0 auto'
+        }}
       >
         <div className="mb-5 text-center">
           <h1 className="text-2xl font-bold text-bright">Admin Login</h1>

@@ -17,7 +17,6 @@ import GlossaryPanel from './GlossaryPanel';
 import SubmitModal from './SubmitModal';
 import FeedbackModal from './FeedbackModal';
 import AssumptionsPanel from './AssumptionsPanel';
-import NavButtons from './NavButtons';
 import Tooltip from './Tooltip';
 import ProgramModuleTemplate from './ProgramModuleTemplate';
 
@@ -396,7 +395,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
             </div>
 
             <div className="border-t border-border-slate pt-5">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center">
                 <div className="flex flex-col gap-1">
                   <div className="flex items-center gap-2">
                     <div className={`w-2 h-2 rounded-full ${tokenTaxRate > ubiAnnualPerAdult / 1000000 ? 'bg-green-500' : 'bg-slate-600'}`}></div>
@@ -405,7 +404,6 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                   </div>
                   <p className="text-xs text-muted">Step {screens.indexOf(activeScreen) + 1} of {screens.length} — {stepLabels[activeScreen]}</p>
                 </div>
-                <NavButtons />
               </div>
             </div>
           </div>

@@ -8,6 +8,7 @@ const navItems = [
   { href: '/', label: 'Home' },
   { href: '/methodology', label: 'Methodology' },
   { href: '/research', label: 'Research' },
+  { href: '/leaderboard', label: 'Leaderboard' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
   { href: '/admin', label: 'Admin' },
