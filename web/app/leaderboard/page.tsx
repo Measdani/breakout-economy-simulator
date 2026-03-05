@@ -648,13 +648,15 @@ export default async function LeaderboardPage() {
           line-height: 1.1;
           margin: 0 0 10px;
           color: #0f172a;
+          text-align: center;
         }
 
         .lb-subtitle {
-          margin: 0 0 16px;
+          margin: 0 auto 16px;
           color: #475569;
           max-width: 74ch;
           line-height: 1.55;
+          text-align: center;
         }
 
         .lb-hero-actions {
