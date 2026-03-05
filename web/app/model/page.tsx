@@ -16,14 +16,15 @@ export default async function ModelPage() {
   return (
     <PublicSiteShell contentClassName="max-w-none px-4 py-6">
       <div className="max-w-6xl mx-auto mb-4 bg-dark-slate rounded-lg border border-border-slate p-4">
-        <p className="text-xs uppercase tracking-wide text-muted mb-1">Model Workspace</p>
-        <h1 className="text-xl font-semibold text-bright mb-1">NAIERM Simulator</h1>
-        <p className="text-sm text-dimmed">
-          Embedded policy modeling environment with Supabase-backed submissions and admin exports.
-        </p>
+        <div className="max-w-3xl mx-auto text-center">
+          <p className="text-xs uppercase tracking-wide text-muted mb-1">Model Workspace</p>
+          <h1 className="text-xl font-semibold text-bright mb-1">NAIERM Simulator</h1>
+          <p className="text-sm text-dimmed">
+            Embedded policy modeling environment with Supabase-backed submissions and admin exports.
+          </p>
+        </div>
       </div>
       <Simulator initialConfig={initialConfig} />
     </PublicSiteShell>
   )
 }
-
