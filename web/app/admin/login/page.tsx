@@ -32,7 +32,10 @@ export default function AdminLoginPage() {
 
   return (
     <div className="min-h-screen bg-deep-navy flex items-center justify-center px-4 py-8">
-      <div className="bg-dark-slate rounded-lg p-6 w-full max-w-sm border-2 border-blue-500/50">
+      <div
+        className="bg-dark-slate rounded-lg p-6 border-2 border-blue-500/50"
+        style={{ width: 'min(92vw, 420px)' }}
+      >
         <div className="mb-5 text-center">
           <h1 className="text-2xl font-bold text-bright">Admin Login</h1>
           <p className="text-muted text-xs mt-1">Enter password to continue</p>
@@ -46,6 +49,7 @@ export default function AdminLoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
               className="w-full px-3 py-2 bg-darker-navy border border-border-slate rounded text-bright text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              style={{ width: '100%' }}
               required
               disabled={isLoading}
             />
@@ -59,6 +63,7 @@ export default function AdminLoginPage() {
             type="submit"
             disabled={isLoading}
             className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 disabled:opacity-50 font-semibold text-sm transition"
+            style={{ width: '100%' }}
           >
             {isLoading ? 'Logging in...' : 'Login'}
           </button>
@@ -66,7 +71,7 @@ export default function AdminLoginPage() {
 
         <div className="mt-4 pt-4 border-t border-border-slate text-center">
           <Link href="/" className="text-blue-400 hover:text-blue-300 text-xs">
-            ← Back to Simulator
+            &larr; Back to Simulator
           </Link>
         </div>
       </div>

@@ -380,7 +380,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
         </div>
       )}
 
-      <div className="w-full h-screen flex items-center" style={{ maxWidth: '1000px' }}>
+      <div className="w-full h-screen flex items-center justify-center" style={{ maxWidth: '1000px' }}>
         {/* Onboarding Tour */}
         {showTour && <OnboardingTour onComplete={() => setShowTour(false)} />}
 
