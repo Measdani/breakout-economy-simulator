@@ -46,7 +46,8 @@ export default function AdminLoginPage() {
         style={{
           width: '100%',
           maxWidth: '360px',
-          margin: '0 auto'
+          margin: '0 auto',
+          borderRadius: '16px'
         }}
       >
         <div className="mb-5 text-center">
@@ -62,7 +63,7 @@ export default function AdminLoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
               className="w-full px-3 py-2 bg-darker-navy border border-border-slate rounded text-bright text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              style={{ width: '100%' }}
+              style={{ width: '100%', borderRadius: '10px' }}
               required
               disabled={isLoading}
             />
@@ -75,8 +76,16 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 disabled:opacity-50 font-semibold text-sm transition"
-            style={{ width: '100%' }}
+            className="w-full px-4 py-2 rounded font-semibold text-sm transition"
+            style={{
+              width: '100%',
+              backgroundColor: isLoading ? '#1e3a8a' : '#2563eb',
+              color: '#ffffff',
+              border: '1px solid #1d4ed8',
+              opacity: isLoading ? 0.65 : 1,
+              cursor: isLoading ? 'not-allowed' : 'pointer',
+              borderRadius: '10px'
+            }}
           >
             {isLoading ? 'Logging in...' : 'Login'}
           </button>
