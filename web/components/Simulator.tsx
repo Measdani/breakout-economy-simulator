@@ -391,17 +391,19 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
           <div className="bg-darker-slate px-5 py-6 border-b border-border-slate">
             <div className="mb-5">
               <h1 className="text-xl font-bold text-bright">The National AI Economy Resiliency Model</h1>
-              <p className="text-xs text-muted mt-0.5">NAIERM v2.1</p>
+              <div className="mt-1 flex items-center justify-between gap-3">
+                <p className="text-xs text-muted">NAIERM v2.1</p>
+                <div className="flex items-center gap-2">
+                  <div className={`w-2 h-2 rounded-full ${tokenTaxRate > ubiAnnualPerAdult / 1000000 ? 'bg-green-500' : 'bg-slate-600'}`}></div>
+                  <span className="text-xs text-muted">Configuration:</span>
+                  <span className="text-xs font-medium text-bright bg-darker-slate px-2.5 py-1 rounded-full border border-border-slate">{currentConfig}</span>
+                </div>
+              </div>
             </div>
 
             <div className="border-t border-border-slate pt-5">
               <div className="flex items-center">
                 <div className="flex flex-col gap-1">
-                  <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${tokenTaxRate > ubiAnnualPerAdult / 1000000 ? 'bg-green-500' : 'bg-slate-600'}`}></div>
-                    <span className="text-xs text-muted">Configuration:</span>
-                    <span className="text-xs font-medium text-bright bg-darker-slate px-2.5 py-1 rounded-full border border-border-slate">{currentConfig}</span>
-                  </div>
                   <p className="text-xs text-muted">Step {screens.indexOf(activeScreen) + 1} of {screens.length} — {stepLabels[activeScreen]}</p>
                 </div>
               </div>
