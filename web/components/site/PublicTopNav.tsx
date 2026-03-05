@@ -10,6 +10,7 @@ const navItems = [
   { href: '/research', label: 'Research' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
+  { href: '/admin', label: 'Admin' },
 ]
 
 export default function PublicTopNav() {
