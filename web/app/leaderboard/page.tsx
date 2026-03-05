@@ -419,17 +419,8 @@ export default async function LeaderboardPage() {
             <div className="lb-kicker">Policy Innovation</div>
             <h1 className="lb-title">Policy Innovation Leaderboard</h1>
             <p className="lb-subtitle">
-              Explore the most effective fiscal policy scenarios discovered using the NAIERM economic simulation model.
-              <br />
-              Researchers, students, policymakers, and citizens can test their own ideas and compare outcomes.
+              Explore the most effective fiscal policy scenarios discovered using the NAIERM economic simulation model. Researchers, students, policymakers, and citizens can test their own ideas and compare outcomes.
             </p>
-
-            <div className="lb-meta">
-              Total scenarios tested: <b>{totalCount.toLocaleString('en-US')}</b> | Best fiscal
-              balance: <b>{bestFiscalScenario ? formatBillions(bestFiscalScenario.balance, true) : '$0.0B'}</b> | Avg
-              work incentive: <b>{formatPercent(avgWorkIncentive, 1)}</b> | Last submission:{' '}
-              <b>{lastSubmission ? formatDate(lastSubmission.submittedAt) : 'N/A'}</b>
-            </div>
 
             <div className="lb-stats">
               <article className="stat">
@@ -654,7 +645,7 @@ export default async function LeaderboardPage() {
         .lb-subtitle {
           margin: 0 auto 16px;
           color: #475569;
-          max-width: 74ch;
+          max-width: 106ch;
           line-height: 1.55;
           text-align: center;
         }
@@ -697,14 +688,6 @@ export default async function LeaderboardPage() {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-        }
-
-        .lb-meta {
-          margin-top: 14px;
-          padding-top: 14px;
-          border-top: 1px solid #eef2f7;
-          color: #64748b;
-          font-size: 13px;
         }
 
         .lb-stats {
