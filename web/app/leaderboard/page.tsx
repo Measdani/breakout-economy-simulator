@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
+import PublicSiteShell from '@/components/site/PublicSiteShell'
 
 export const dynamic = 'force-dynamic'
 
@@ -411,9 +412,10 @@ export default async function LeaderboardPage() {
       : null
 
   return (
-    <div className="min-h-screen bg-deep-navy px-4 py-10">
-      <div className="w-full max-w-7xl mx-auto space-y-8">
-        <section className="bg-dark-slate rounded-2xl border border-white/15 px-6 py-10 md:px-10 text-center">
+    <PublicSiteShell contentClassName="max-w-none p-0">
+      <div className="lb-page">
+        <div className="lb-content w-full max-w-7xl mx-auto space-y-10">
+        <section className="lb-light-section lb-hero-section rounded-2xl border px-6 py-10 md:px-10 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-bright mb-5">
             Policy Innovation Leaderboard
           </h1>
@@ -430,7 +432,7 @@ export default async function LeaderboardPage() {
           <div className="mt-7">
             <Link
               href="/model"
-              className="inline-flex items-center rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3 transition"
+              className="lb-btn inline-flex items-center rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3 transition"
               style={{
                 backgroundColor: '#2563eb',
                 color: '#ffffff',
@@ -458,17 +460,18 @@ export default async function LeaderboardPage() {
         </section>
 
         <section
+          className="lb-stats-grid"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
+            gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
             gap: '1rem',
           }}
         >
           <article
             className="transition-all duration-150 hover:-translate-y-0.5 hover:shadow-lg"
             style={{
-              background: '#1E293B',
-              border: '1px solid rgba(148,163,184,0.25)',
+              background: '#ffffff',
+              border: '1px solid #e6edf7',
               borderRadius: '14px',
               padding: '1.1rem 1rem',
             }}
@@ -484,8 +487,8 @@ export default async function LeaderboardPage() {
           <article
             className="transition-all duration-150 hover:-translate-y-0.5 hover:shadow-lg"
             style={{
-              background: '#1E293B',
-              border: '1px solid rgba(74,222,128,0.35)',
+              background: '#ffffff',
+              border: '1px solid #d5f0df',
               borderRadius: '14px',
               padding: '1.1rem 1rem',
             }}
@@ -501,8 +504,8 @@ export default async function LeaderboardPage() {
           <article
             className="transition-all duration-150 hover:-translate-y-0.5 hover:shadow-lg"
             style={{
-              background: '#1E293B',
-              border: '1px solid rgba(96,165,250,0.35)',
+              background: '#ffffff',
+              border: '1px solid #dce9fd',
               borderRadius: '14px',
               padding: '1.1rem 1rem',
             }}
@@ -518,8 +521,8 @@ export default async function LeaderboardPage() {
           <article
             className="transition-all duration-150 hover:-translate-y-0.5 hover:shadow-lg"
             style={{
-              background: '#1E293B',
-              border: '1px solid rgba(56,189,248,0.35)',
+              background: '#ffffff',
+              border: '1px solid #d8eef5',
               borderRadius: '14px',
               padding: '1.1rem 1rem',
             }}
@@ -540,8 +543,8 @@ export default async function LeaderboardPage() {
           <article
             className="transition-all duration-150 hover:-translate-y-0.5 hover:shadow-lg"
             style={{
-              background: '#1E293B',
-              border: '1px solid rgba(251,191,36,0.35)',
+              background: '#ffffff',
+              border: '1px solid #f5e8b7',
               borderRadius: '14px',
               padding: '1.1rem 1rem',
             }}
@@ -560,7 +563,7 @@ export default async function LeaderboardPage() {
           </article>
         </section>
 
-        <section className="bg-dark-slate rounded-2xl border border-white/12 px-6 py-7 md:px-8">
+        <section className="lb-light-section rounded-2xl border px-6 py-7 md:px-8">
           <h2 className="text-3xl font-semibold text-bright mb-4">
             How the Leaderboard Works
           </h2>
@@ -581,7 +584,7 @@ export default async function LeaderboardPage() {
         </section>
 
         {rankedScenarios.length === 0 ? (
-          <section className="bg-dark-slate rounded-2xl border border-white/12 p-10 text-center">
+          <section className="lb-light-section rounded-2xl border p-10 text-center">
             <p className="text-bright font-semibold mb-2">
               No scenarios have been submitted yet.
             </p>
@@ -590,7 +593,7 @@ export default async function LeaderboardPage() {
             </p>
             <Link
               href="/model"
-              className="inline-flex items-center rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3 transition"
+              className="lb-btn inline-flex items-center rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3 transition"
               style={{
                 backgroundColor: '#2563eb',
                 color: '#ffffff',
@@ -602,7 +605,7 @@ export default async function LeaderboardPage() {
             </Link>
           </section>
         ) : (
-          <section className="bg-dark-slate rounded-2xl border border-white/12 overflow-hidden">
+          <section className="lb-table-shell bg-dark-slate rounded-2xl border border-white/12 overflow-hidden">
             <div className="px-6 py-5 border-b border-white/10">
               <h2 className="text-3xl font-semibold text-bright">
                 Leaderboard Results
@@ -659,9 +662,8 @@ export default async function LeaderboardPage() {
                           ...(isTopRow
                             ? {
                                 boxShadow:
-                                  'inset 4px 0 0 rgba(246,196,83,1), inset 0 0 0 1px rgba(251,191,36,0.35), 0 0 22px rgba(251,191,36,0.16)',
-                                background:
-                                  'linear-gradient(90deg, rgba(251,191,36,0.14) 0%, rgba(251,191,36,0.06) 34%, rgba(30,41,59,0.88) 100%)',
+                                  'inset 4px 0 0 rgba(246,196,83,1), inset 0 0 0 1px rgba(246,196,83,0.25), 0 0 14px rgba(246,196,83,0.1)',
+                                background: 'rgba(246,196,83,0.05)',
                               }
                             : {})
                         }}
@@ -739,13 +741,14 @@ export default async function LeaderboardPage() {
         )}
 
         <div
+          className="lb-cta-divider"
           style={{
-            borderTop: '1px solid rgba(255,255,255,0.1)',
+            borderTop: '1px solid rgba(15,23,42,0.1)',
             marginTop: '30px',
             paddingTop: '30px',
           }}
         >
-          <section className="bg-dark-slate rounded-2xl border border-white/12 px-6 py-10 md:px-8 text-center">
+          <section className="lb-light-section rounded-2xl border px-6 py-10 md:px-8 text-center">
             <h2 className="text-3xl font-semibold text-bright mb-4">
               Test Your Own Policy Scenario
             </h2>
@@ -765,7 +768,7 @@ export default async function LeaderboardPage() {
             <div className="mt-7">
               <Link
                 href="/model"
-                className="inline-flex items-center rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3 transition"
+                className="lb-btn inline-flex items-center rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3 transition"
                 style={{
                   backgroundColor: '#2563eb',
                   color: '#ffffff',
@@ -779,12 +782,142 @@ export default async function LeaderboardPage() {
           </section>
         </div>
 
-        <p className="text-xs text-muted text-center pt-1 pb-2 border-t border-white/10">
+        <p className="lb-transparency text-xs text-muted text-center pt-1 pb-2 border-t border-white/10">
           All leaderboard scenarios are generated from simulator submissions and
           exported directly from the model dataset. No personally identifying
           information is collected.
         </p>
+        </div>
       </div>
-    </div>
+
+      <style jsx global>{`
+        .lb-page {
+          background: #f6f8fc;
+          min-height: 100vh;
+          padding: 40px 16px;
+          color: #0f172a;
+        }
+
+        .lb-content {
+          max-width: 1120px;
+        }
+
+        .lb-light-section {
+          background: #ffffff !important;
+          border-color: #e6edf7 !important;
+        }
+
+        .lb-light-section p,
+        .lb-light-section h1,
+        .lb-light-section h2,
+        .lb-light-section li,
+        .lb-light-section span,
+        .lb-light-section [class*='text'] {
+          color: #0f172a !important;
+        }
+
+        .lb-light-section .text-muted,
+        .lb-light-section .text-dimmed {
+          color: #56677f !important;
+        }
+
+        .lb-hero-section {
+          border-bottom: 1px solid #e6edf7 !important;
+        }
+
+        .lb-light-section a.lb-btn,
+        .lb-light-section a.lb-btn * {
+          color: #ffffff !important;
+          text-decoration: none !important;
+        }
+
+        .lb-stats-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        }
+
+        .lb-stats-grid p,
+        .lb-stats-grid span,
+        .lb-stats-grid [class*='text'] {
+          color: #0f172a !important;
+        }
+
+        .lb-stats-grid .text-muted,
+        .lb-stats-grid .text-dimmed {
+          color: #5c6d84 !important;
+        }
+
+        .lb-stats-grid .text-green-400 {
+          color: #0f9f53 !important;
+        }
+
+        .lb-stats-grid .text-blue-400 {
+          color: #1d4ed8 !important;
+        }
+
+        .lb-stats-grid article {
+          transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .lb-stats-grid article:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
+        }
+
+        .lb-table-shell {
+          background: #0f1b33 !important;
+          color: #e6edf7 !important;
+          border-radius: 14px;
+          border-color: rgba(124, 148, 190, 0.25) !important;
+        }
+
+        .lb-table-shell .text-bright,
+        .lb-table-shell .text-dimmed,
+        .lb-table-shell .text-muted,
+        .lb-table-shell [class*='text'] {
+          color: #e6edf7 !important;
+        }
+
+        .lb-table-shell .text-green-400 {
+          color: #7af2b5 !important;
+        }
+
+        .lb-table-shell .text-red-400 {
+          color: #ff9b93 !important;
+        }
+
+        .lb-table-shell .text-muted {
+          color: #b9cae3 !important;
+        }
+
+        .lb-table-shell .text-dimmed {
+          color: #d7e1f2 !important;
+        }
+
+        .lb-transparency {
+          border-top-color: rgba(15, 23, 42, 0.1) !important;
+          color: #53657d !important;
+        }
+
+        @media (max-width: 1024px) {
+          .lb-stats-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          }
+        }
+
+        @media (max-width: 700px) {
+          .lb-page {
+            padding: 24px 12px;
+          }
+
+          .lb-content {
+            gap: 28px !important;
+          }
+
+          .lb-stats-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
+    </PublicSiteShell>
   )
 }
