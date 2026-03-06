@@ -496,7 +496,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                           boxShadow: '0 0 16px rgba(14, 165, 233, 0.35)',
                         }}
                       >
-                        Run Default Scenario (Year 5 Baseline)
+                        Load Research Baseline (Year-5 Scenario)
                       </button>
                       <p className="text-xs text-dimmed mt-2">
                         See <Link href="/methodology#objective" className="text-cyan-300 underline">Methodology</Link> for objective function and baseline assumptions.
