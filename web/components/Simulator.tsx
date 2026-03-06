@@ -52,6 +52,14 @@ const DEFAULT_CONFIG: PolicyConfig = {
   allPayerTransparencySavingsPct: 0,
 };
 
+const YEAR5_BASE_SCENARIO: Partial<PolicyConfig> = {
+  tokenTaxRate: 0.0066,
+  frictionTaxRate: 0.0066,
+  ubiAnnualPerAdult: 12000,
+  supplementApexBonus: 6000,
+  breakoutPoint: 60000,
+};
+
 interface SimulatorProps {
   initialConfig?: Partial<PolicyConfig>
 }
@@ -76,6 +84,9 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     mergedConfig.ubiAnnualPerAdult
   );
   const [breakoutPoint, setBreakoutPoint] = useState(mergedConfig.breakoutPoint);
+  const [sbiMaximum, setSbiMaximum] = useState(
+    mergedConfig.supplementApexBonus ?? DEFAULT_CONFIG.supplementApexBonus
+  );
   const [ubiDependent1, setUbiDependent1] = useState(mergedConfig.ubiDependent1 ?? 6000);
   const [ubiDependent2, setUbiDependent2] = useState(mergedConfig.ubiDependent2 ?? 4000);
   const [ubiDependent3, setUbiDependent3] = useState(mergedConfig.ubiDependent3 ?? 2000);
@@ -159,11 +170,15 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   const formatTokenMilsPerThousand = (rate: number) =>
     `${(rate * 100).toFixed(2)} mils / 1,000 tokens total compute`;
 
+  const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+  const formatTrillions = (value: number) => `$${(value / 1e12).toFixed(2)}T`;
+
   const config: PolicyConfig = {
     ...DEFAULT_CONFIG,
     tokenTaxRate,
     ubiAnnualPerAdult,
     breakoutPoint,
+    supplementApexBonus: sbiMaximum,
     // Keep tax-free threshold aligned with the breakout slider.
     tier1Start: breakoutPoint,
     ubiDependent1,
@@ -273,6 +288,49 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     100 - waterfallBelWidth - waterfallRetirementWidth - waterfallHealthcareWidth
   );
 
+  // Objective-function proxies (Phase 1): Y_t = min(Ycap, AD)
+  const personaWeights = config.personaWeights ?? [0.25, 0.25, 0.25, 0.25];
+  const weightedEarnedIncome = result.citizenModel.personaOutcomes.reduce(
+    (sum, persona, index) => sum + persona.earnedIncome * (personaWeights[index] ?? 0),
+    0
+  );
+  const weightedNetIncome = result.citizenModel.personaOutcomes.reduce(
+    (sum, persona, index) => sum + persona.netIncome * (personaWeights[index] ?? 0),
+    0
+  );
+  const humanProductiveCapacity = weightedEarnedIncome * config.adultPopulation;
+  const machineProductiveCapacity =
+    (baseTransactionVolume / 1e15) *
+    Math.pow(1 + transactionVolumeGrowthRate, 5) *
+    (1 - capitalFlightRate) *
+    19.6e12;
+  const productiveCapacity = humanProductiveCapacity + machineProductiveCapacity;
+  const aggregateDemand =
+    (weightedNetIncome * config.adultPopulation * 1.82) +
+    (config.govtOperatingRequirement * 1.2);
+  const realEconomicOutput = Math.min(productiveCapacity, aggregateDemand);
+  const debtRetirementRate = result.revenue.totalRevenue > 0 && result.balance.surplusDeficit > 0
+    ? (result.balance.surplusDeficit / result.revenue.totalRevenue) * 100
+    : 0;
+  const aiInvestmentIncentive = clamp(
+    100 - (frictionTaxRate * 9000) - (capitalFlightRate * 1200) + (transactionVolumeGrowthRate * 200) + (result.balance.isSolvent ? 6 : -8),
+    0,
+    100
+  );
+  const demandGapRatio = productiveCapacity > 0 ? ((aggregateDemand - productiveCapacity) / productiveCapacity) : 0;
+  const stabilityStatus = (() => {
+    if (aiInvestmentIncentive < 35 || capitalFlightRate >= 0.03) {
+      return { icon: '🔴', label: 'Investment Collapse', color: 'text-red-300', dot: 'bg-red-500' };
+    }
+    if (demandGapRatio < -0.05) {
+      return { icon: '🟡', label: 'Demand Shortfall', color: 'text-yellow-300', dot: 'bg-yellow-400' };
+    }
+    if (demandGapRatio > 0.05) {
+      return { icon: '🔵', label: 'Inflationary Risk', color: 'text-blue-300', dot: 'bg-blue-500' };
+    }
+    return { icon: '🟢', label: 'Balanced Economy', color: 'text-green-300', dot: 'bg-green-500' };
+  })();
+
   // Animated number displays for hero panel
   const animatedBalance = useAnimatedNumber(
     result.balance.surplusDeficit,
@@ -303,8 +361,9 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   const handlePresetSelect = (presetConfig: Partial<PolicyConfig>) => {
     if (presetConfig.tokenTaxRate !== undefined) handleTokenTaxRateChange(presetConfig.tokenTaxRate);
     if (presetConfig.frictionTaxRate !== undefined) handleTokenTaxRateChange(presetConfig.frictionTaxRate);
-    if (presetConfig.ubiAnnualPerAdult) setUbiAnnualPerAdult(presetConfig.ubiAnnualPerAdult);
-    if (presetConfig.breakoutPoint) setBreakoutPoint(presetConfig.breakoutPoint);
+    if (presetConfig.ubiAnnualPerAdult !== undefined) setUbiAnnualPerAdult(presetConfig.ubiAnnualPerAdult);
+    if (presetConfig.breakoutPoint !== undefined) setBreakoutPoint(presetConfig.breakoutPoint);
+    if (presetConfig.supplementApexBonus !== undefined) setSbiMaximum(presetConfig.supplementApexBonus);
   };
 
   const screens: Array<typeof activeScreen> = ['engine', 'households', 'programs', 'results', 'charts', 'alerts', 'submit'];
@@ -322,6 +381,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     handleTokenTaxRateChange(DEFAULT_CONFIG.tokenTaxRate);
     setUbiAnnualPerAdult(DEFAULT_CONFIG.ubiAnnualPerAdult);
     setBreakoutPoint(DEFAULT_CONFIG.breakoutPoint);
+    setSbiMaximum(DEFAULT_CONFIG.supplementApexBonus);
     setUbiDependent1(6000);
     setUbiDependent2(4000);
     setUbiDependent3(2000);
@@ -351,6 +411,11 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     setAdminAutomationSavingsPct(DEFAULT_CONFIG.adminAutomationSavingsPct ?? 0);
     setAllPayerTransparencySavingsPct(DEFAULT_CONFIG.allPayerTransparencySavingsPct ?? 0);
     setCurrentConfig('Default');
+    setActiveScreen('engine');
+  };
+
+  const runYear5BaseScenario = () => {
+    handlePresetSelectWithName('Year 5 Base Case', YEAR5_BASE_SCENARIO);
     setActiveScreen('engine');
   };
 
@@ -417,27 +482,63 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
               <div className="grid grid-cols-6 gap-6 h-full">
                 {/* LEFT: Configuration Sliders */}
                 <div className="col-span-3 overflow-y-auto pr-2">
-                  <PolicySliders
-                    tokenTaxRate={tokenTaxRate}
-                    onTokenTaxRateChange={handleTokenTaxRateChange}
-                    ubiAnnualPerAdult={ubiAnnualPerAdult}
-                    onUbiChange={setUbiAnnualPerAdult}
-                    breakoutPoint={breakoutPoint}
-                    onBreakoutPointChange={setBreakoutPoint}
-                    frictionTaxRate={frictionTaxRate}
-                    onFrictionTaxRateChange={handleTokenTaxRateChange}
-                    transactionVolumeGrowthRate={transactionVolumeGrowthRate}
-                    onTransactionVolumeGrowthRateChange={setTransactionVolumeGrowthRate}
-                    capitalFlightRate={capitalFlightRate}
-                    onCapitalFlightRateChange={setCapitalFlightRate}
-                    onReset={handleReset}
-                    showGlossary={showGlossary}
-                    onGlossaryToggle={setShowGlossary}
-                    revenueArchitectureMode={revenueArchitectureMode}
-                    onRevenueArchitectureModeChange={handleRevenueArchitectureModeChange}
-                    incomeTaxMultiplier={incomeTaxMultiplier}
-                    onIncomeTaxMultiplierChange={setIncomeTaxMultiplier}
-                  />
+                  <div className="space-y-6">
+                    <div className="bg-dark-slate rounded-lg p-5 border border-border-slate">
+                      <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-3">Model Objective</p>
+                      <p className="text-sm text-dimmed leading-relaxed mb-3">
+                        The simulator explores how policy parameters influence the balance between:
+                      </p>
+                      <ul className="text-sm text-dimmed space-y-1 mb-4">
+                        <li>- Productive capacity (AI + human output)</li>
+                        <li>- Aggregate demand (consumer liquidity)</li>
+                      </ul>
+                      <p className="text-sm text-dimmed">The model seeks to maximize:</p>
+                      <p className="text-lg font-semibold text-bright mt-1">Real Economic Output</p>
+                      <p className="text-base font-mono text-cyan-300 mt-2">Y_t = min(Ycap, AD)</p>
+                    </div>
+
+                    <div className="bg-darker-slate rounded-lg p-4 border border-border-slate">
+                      <button
+                        type="button"
+                        onClick={runYear5BaseScenario}
+                        className="w-full px-4 py-3 rounded font-semibold text-white transition"
+                        style={{
+                          background: 'linear-gradient(135deg, #0ea5e9, #0284c7)',
+                          boxShadow: '0 0 16px rgba(14, 165, 233, 0.35)',
+                        }}
+                      >
+                        Run Default Scenario
+                      </button>
+                      <p className="text-xs text-dimmed mt-2">
+                        Year 5 base case: Token Tax ~6.6% equivalent (set here as 0.66%), BEL $12,000, SBI max $6,000, Breakout $60,000.
+                      </p>
+                      <p className="text-xs text-cyan-300 mt-1">Projected output ~ $49.5T economy</p>
+                    </div>
+
+                    <PolicySliders
+                      tokenTaxRate={tokenTaxRate}
+                      onTokenTaxRateChange={handleTokenTaxRateChange}
+                      ubiAnnualPerAdult={ubiAnnualPerAdult}
+                      onUbiChange={setUbiAnnualPerAdult}
+                      breakoutPoint={breakoutPoint}
+                      onBreakoutPointChange={setBreakoutPoint}
+                      sbiMaximum={sbiMaximum}
+                      onSbiMaximumChange={setSbiMaximum}
+                      frictionTaxRate={frictionTaxRate}
+                      onFrictionTaxRateChange={handleTokenTaxRateChange}
+                      transactionVolumeGrowthRate={transactionVolumeGrowthRate}
+                      onTransactionVolumeGrowthRateChange={setTransactionVolumeGrowthRate}
+                      capitalFlightRate={capitalFlightRate}
+                      onCapitalFlightRateChange={setCapitalFlightRate}
+                      onReset={handleReset}
+                      showGlossary={showGlossary}
+                      onGlossaryToggle={setShowGlossary}
+                      revenueArchitectureMode={revenueArchitectureMode}
+                      onRevenueArchitectureModeChange={handleRevenueArchitectureModeChange}
+                      incomeTaxMultiplier={incomeTaxMultiplier}
+                      onIncomeTaxMultiplierChange={setIncomeTaxMultiplier}
+                    />
+                  </div>
                 </div>
 
                 {/* RIGHT: Fiscal Status Panel */}
@@ -487,6 +588,49 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                             <span>Structural transition scenario — significant institutional reform required.</span>
                           </p>
                         )}
+                      </div>
+
+                      <div className="border-t border-border-slate pt-6">
+                        <p className="text-sm text-muted uppercase tracking-wide mb-4">Model Outcomes</p>
+                        <div className="grid grid-cols-1 gap-3">
+                          <div className="bg-darker-navy rounded border border-border-slate p-3 flex items-center justify-between">
+                            <span className="text-sm text-dimmed">Real Economic Output</span>
+                            <span className="text-sm font-semibold text-emerald-300">{formatTrillions(realEconomicOutput)}</span>
+                          </div>
+                          <div className="bg-darker-navy rounded border border-border-slate p-3 flex items-center justify-between">
+                            <span className="text-sm text-dimmed">Aggregate Demand</span>
+                            <span className="text-sm font-semibold text-sky-300">{formatTrillions(aggregateDemand)}</span>
+                          </div>
+                          <div className="bg-darker-navy rounded border border-border-slate p-3 flex items-center justify-between">
+                            <span className="text-sm text-dimmed">Federal Revenue</span>
+                            <span className="text-sm font-semibold text-cyan-300">{formatTrillions(result.revenue.totalRevenue)}</span>
+                          </div>
+                          <div className="bg-darker-navy rounded border border-border-slate p-3 flex items-center justify-between">
+                            <span className="text-sm text-dimmed">Federal Outlays</span>
+                            <span className="text-sm font-semibold text-orange-300">{formatTrillions(result.obligations.totalObligations)}</span>
+                          </div>
+                          <div className="bg-darker-navy rounded border border-border-slate p-3 flex items-center justify-between">
+                            <span className="text-sm text-dimmed">Debt Retirement Rate</span>
+                            <span className="text-sm font-semibold text-purple-300">{debtRetirementRate.toFixed(1)}%</span>
+                          </div>
+                          <div className="bg-darker-navy rounded border border-border-slate p-3 flex items-center justify-between">
+                            <span className="text-sm text-dimmed">AI Investment Incentive</span>
+                            <span className="text-sm font-semibold text-yellow-200">{aiInvestmentIncentive.toFixed(1)} / 100</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="border-t border-border-slate pt-6">
+                        <p className="text-sm text-muted uppercase tracking-wide mb-3">System Stability</p>
+                        <div className="bg-darker-navy rounded border border-border-slate p-3 flex items-center justify-between">
+                          <span className="inline-flex items-center gap-2 text-sm text-dimmed">
+                            <span className={`w-2.5 h-2.5 rounded-full ${stabilityStatus.dot}`} />
+                            Health Check
+                          </span>
+                          <span className={`text-sm font-semibold ${stabilityStatus.color}`}>
+                            {stabilityStatus.icon} {stabilityStatus.label}
+                          </span>
+                        </div>
                       </div>
 
                       {/* Revenue Breakdown */}
@@ -1491,12 +1635,16 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                       <span className="text-bright font-semibold">{formatTokenMilsPerThousand(tokenTaxRate)}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-dimmed">Adult UBI</span>
+                      <span className="text-dimmed">BEL (Annual)</span>
                       <span className="text-bright font-semibold">${ubiAnnualPerAdult.toLocaleString()}/yr</span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-dimmed">Breakout Point</span>
                       <span className="text-bright font-semibold">${breakoutPoint.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-dimmed">SBI Maximum</span>
+                      <span className="text-bright font-semibold">${sbiMaximum.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-dimmed">Fiscal Status</span>
@@ -1520,7 +1668,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                 {/* Optional Demographics */}
                 <div className="bg-dark-slate rounded-lg p-5 border border-border-slate">
                   <p className="text-sm font-semibold text-muted uppercase tracking-wide mb-4">Optional: Demographic Context</p>
-                  <p className="text-xs text-dimmed mb-4">Help us understand policy preferences across different populations (completely optional).</p>
+                  <p className="text-xs text-dimmed mb-4">Optional demographic context helps researchers understand how policy preferences vary across populations. All responses are anonymized and aggregated.</p>
                   <div className="space-y-3">
                     <div>
                       <label className="text-xs text-dimmed mb-1 block">Age Range</label>
