@@ -20,7 +20,7 @@ export default async function ModelPage() {
           <p className="text-xs uppercase tracking-wide text-muted mb-1">Model Workspace</p>
           <h1 className="text-xl font-semibold text-bright mb-1">NAIERM Simulator</h1>
           <p className="text-sm text-dimmed">
-            Embedded policy modeling environment with Supabase-backed submissions and admin exports.
+            This simulator allows users to explore how policy parameters influence the balance between AI productivity, aggregate demand, and federal fiscal stability.
           </p>
         </div>
       </div>

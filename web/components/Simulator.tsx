@@ -483,20 +483,6 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                 {/* LEFT: Configuration Sliders */}
                 <div className="col-span-3 overflow-y-auto pr-2">
                   <div className="space-y-6">
-                    <div className="bg-dark-slate rounded-lg p-5 border border-border-slate">
-                      <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-3">Model Objective</p>
-                      <p className="text-sm text-dimmed leading-relaxed mb-3">
-                        The simulator explores how policy parameters influence the balance between:
-                      </p>
-                      <ul className="text-sm text-dimmed space-y-1 mb-4">
-                        <li>- Productive capacity (AI + human output)</li>
-                        <li>- Aggregate demand (consumer liquidity)</li>
-                      </ul>
-                      <p className="text-sm text-dimmed">The model seeks to maximize:</p>
-                      <p className="text-lg font-semibold text-bright mt-1">Real Economic Output</p>
-                      <p className="text-base font-mono text-cyan-300 mt-2">Y_t = min(Ycap, AD)</p>
-                    </div>
-
                     <div className="bg-darker-slate rounded-lg p-4 border border-border-slate">
                       <button
                         type="button"
@@ -507,12 +493,11 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                           boxShadow: '0 0 16px rgba(14, 165, 233, 0.35)',
                         }}
                       >
-                        Run Default Scenario
+                        Run Default Scenario (Year 5 Baseline)
                       </button>
                       <p className="text-xs text-dimmed mt-2">
-                        Year 5 base case: Token Tax ~6.6% equivalent (set here as 0.66%), BEL $12,000, SBI max $6,000, Breakout $60,000.
+                        See <Link href="/methodology#objective" className="text-cyan-300 underline">Methodology</Link> for objective function and baseline assumptions.
                       </p>
-                      <p className="text-xs text-cyan-300 mt-1">Projected output ~ $49.5T economy</p>
                     </div>
 
                     <PolicySliders
