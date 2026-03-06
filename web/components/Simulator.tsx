@@ -318,11 +318,14 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     100
   );
   const demandGapRatio = productiveCapacity > 0 ? ((aggregateDemand - productiveCapacity) / productiveCapacity) : 0;
+  const deficitRatio = result.revenue.totalRevenue > 0
+    ? Math.max(0, -result.balance.surplusDeficit) / result.revenue.totalRevenue
+    : 0;
   const stabilityStatus = (() => {
-    if (aiInvestmentIncentive < 35 || capitalFlightRate >= 0.03) {
+    if (deficitRatio >= 0.08 || aiInvestmentIncentive < 30 || capitalFlightRate >= 0.035) {
       return { icon: '🔴', label: 'Investment Collapse', color: 'text-red-300', dot: 'bg-red-500' };
     }
-    if (demandGapRatio < -0.05) {
+    if (!result.balance.isSolvent || demandGapRatio < -0.05) {
       return { icon: '🟡', label: 'Demand Shortfall', color: 'text-yellow-300', dot: 'bg-yellow-400' };
     }
     if (demandGapRatio > 0.05) {
