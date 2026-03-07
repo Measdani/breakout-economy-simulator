@@ -279,11 +279,6 @@ body {
   margin-bottom: 14px;
 }
 
-.headingIcon {
-  margin-right: 8px;
-  color: #1f3a8a;
-}
-
 .card p {
   color: var(--muted);
 }
@@ -291,27 +286,6 @@ body {
 .card ul {
   padding-left: 18px;
   margin: 10px 0 0;
-}
-
-.iconList {
-  list-style: none;
-  padding: 0;
-  margin: 10px 0 0;
-}
-
-.iconList li {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.listIcon {
-  width: 1.15em;
-  line-height: 1.2;
-  display: inline-flex;
-  justify-content: center;
-  color: #1f3a8a;
 }
 
 .architectureGrid {
@@ -415,11 +389,60 @@ body {
   font-weight: 600;
 }
 
-.simulationGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-  margin: 24px 0;
+.simulationSwitch {
+  margin: 22px 0 14px;
+  display: inline-flex;
+  gap: 10px;
+  padding: 6px;
+  border: 1px solid #d7e1ef;
+  border-radius: 10px;
+  background: #f8fbff;
+}
+
+.simTab {
+  border: 1px solid transparent;
+  background: transparent;
+  color: #315074;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.simTab:hover {
+  color: #1f3a8a;
+}
+
+.simTab.isActive {
+  background: #1f3a8a;
+  border-color: #1f3a8a;
+  color: #ffffff;
+}
+
+.simTab:focus-visible {
+  outline: 2px solid #1b4ed8;
+  outline-offset: 2px;
+}
+
+.simPanel {
+  margin: 0 0 10px;
+  max-width: 560px;
+}
+
+.simPanel h3 {
+  margin-bottom: 10px;
+}
+
+.simList {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.simList li {
+  margin-bottom: 8px;
 }
 
 .metricCallout {
@@ -703,8 +726,14 @@ body {
     grid-template-columns: 1fr;
   }
 
-  .simulationGrid {
-    grid-template-columns: 1fr;
+  .simulationSwitch {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .simPanel {
+    max-width: none;
   }
 
   .metricCallout {

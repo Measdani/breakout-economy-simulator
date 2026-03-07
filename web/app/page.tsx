@@ -28,8 +28,30 @@ const RESEARCH_PRINCIPLES = [
   },
 ] as const
 
+const SIMULATION_VIEWS = {
+  adjust: {
+    title: 'Participants can adjust',
+    items: [
+      'Token tax rate on AI compute',
+      'Baseline Economic Liquidity (BEL)',
+      'Workforce incentives',
+      'Tax thresholds and obligations',
+    ],
+  },
+  outcomes: {
+    title: 'Model outcomes include',
+    items: [
+      'Real economic output',
+      'Fiscal balance',
+      'Federal revenue',
+      'Debt retirement trajectory',
+    ],
+  },
+} as const
+
 export default function Home() {
   const [openPrinciple, setOpenPrinciple] = useState<number | null>(null)
+  const [simulationView, setSimulationView] = useState<'adjust' | 'outcomes'>('adjust')
 
   useEffect(() => {
     const titles = Array.from(document.querySelectorAll<HTMLElement>('.section h2'))
@@ -60,6 +82,8 @@ export default function Home() {
 
     return () => observer.disconnect()
   }, [])
+
+  const activeSimulationView = SIMULATION_VIEWS[simulationView]
 
   return (
     <>
@@ -114,16 +138,16 @@ export default function Home() {
             <strong>Artificial intelligence is changing how economic value is created.</strong>
           </p>
           <p>
-            <strong>Labor-based taxation has defined national revenue systems for more than a century.</strong> Tax structures have relied primarily on wages, payroll taxes, and income taxes.
+            For more than a century, national tax systems have relied primarily on <strong>taxing human labor</strong> through wages, payroll taxes, and income taxes.
           </p>
           <p>
-            <strong>AI can generate economic value without corresponding human employment.</strong> As cognitive automation expands, productivity can increase even when labor participation does not.
+            As AI systems increasingly perform <strong>cognitive work</strong>, economic value can grow even when human employment does not.
           </p>
           <p>
-            <strong>This creates a structural vulnerability for labor-tax-dependent governments.</strong> Revenue systems tied to employment face growing instability as the AI transition accelerates.
+            This creates a <strong>structural vulnerability for labor-based tax systems</strong>, where government revenue depends on wages.
           </p>
           <p>
-            <strong>The NAIERM framework explores how fiscal architecture can adapt.</strong> The objective is to preserve macroeconomic stability through the transition.
+            <strong>NAIERM explores how fiscal architecture can adapt to this transition</strong>, ensuring economic stability even as AI productivity accelerates.
           </p>
         </section>
 
@@ -168,25 +192,42 @@ export default function Home() {
           <p>
             The simulator allows users to explore how different policy configurations affect national economic outcomes.
           </p>
-          <div className="simulationGrid">
-            <div className="card">
-              <h3><span className="headingIcon" aria-hidden="true">&#9881;</span>Participants can adjust</h3>
-              <ul className="iconList">
-                <li><span className="listIcon" aria-hidden="true">&#9881;</span>Token tax rate on AI compute</li>
-                <li><span className="listIcon" aria-hidden="true">&#128176;</span>Baseline Economic Liquidity (BEL)</li>
-                <li><span className="listIcon" aria-hidden="true">&#128200;</span>Workforce incentives</li>
-                <li><span className="listIcon" aria-hidden="true">&#127963;</span>Tax thresholds and public obligations</li>
-              </ul>
-            </div>
-            <div className="card">
-              <h3><span className="headingIcon" aria-hidden="true">&#128202;</span>Model outcomes include</h3>
-              <ul className="iconList">
-                <li><span className="listIcon" aria-hidden="true">&#128202;</span>Real economic output</li>
-                <li><span className="listIcon" aria-hidden="true">&#128201;</span>Fiscal balance</li>
-                <li><span className="listIcon" aria-hidden="true">&#128181;</span>Federal revenue and obligations</li>
-                <li><span className="listIcon" aria-hidden="true">&#128201;</span>Debt retirement trajectory</li>
-              </ul>
-            </div>
+          <div className="simulationSwitch" role="tablist" aria-label="Simulation preview views">
+            <button
+              id="sim-tab-adjust"
+              type="button"
+              role="tab"
+              className={`simTab${simulationView === 'adjust' ? ' isActive' : ''}`}
+              aria-selected={simulationView === 'adjust'}
+              aria-controls="sim-panel-adjust"
+              onClick={() => setSimulationView('adjust')}
+            >
+              Adjust Policies
+            </button>
+            <button
+              id="sim-tab-outcomes"
+              type="button"
+              role="tab"
+              className={`simTab${simulationView === 'outcomes' ? ' isActive' : ''}`}
+              aria-selected={simulationView === 'outcomes'}
+              aria-controls="sim-panel-outcomes"
+              onClick={() => setSimulationView('outcomes')}
+            >
+              See Outcomes
+            </button>
+          </div>
+          <div
+            id={`sim-panel-${simulationView}`}
+            role="tabpanel"
+            aria-labelledby={`sim-tab-${simulationView}`}
+            className="card simPanel"
+          >
+            <h3>{activeSimulationView.title}</h3>
+            <ul className="simList">
+              {activeSimulationView.items.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
           </div>
           <p>
             Each configuration contributes to an anonymized research dataset used to explore policy tradeoffs.
