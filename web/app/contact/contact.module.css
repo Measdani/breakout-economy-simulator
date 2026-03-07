@@ -43,6 +43,10 @@
   gap: 18px;
 }
 
+.full {
+  grid-column: 1 / -1;
+}
+
 .card {
   background: #0f1b33;
   color: #e6edf7;
@@ -81,6 +85,14 @@
   color: rgba(230, 237, 247, 0.86);
   line-height: 1.65;
   font-size: 14px;
+}
+
+.credibilityNote {
+  margin: 16px 0 0;
+  max-width: 920px;
+  color: #475569;
+  font-size: 14px;
+  line-height: 1.65;
 }
 
 .footerSpacer {
