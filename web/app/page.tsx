@@ -36,9 +36,6 @@ export default function Home() {
               <Link href="/methodology" className="btnSecondary">
                 Read Methodology
               </Link>
-              <Link href="/admin" className="btnSecondary">
-                Admin
-              </Link>
             </div>
           </div>
 
@@ -103,27 +100,6 @@ export default function Home() {
               </p>
             </div>
           </div>
-        </section>
-
-        <div className="sectionDivider" />
-
-        <section className="section">
-          <h2>Model Objective</h2>
-          <p>
-            The NAIERM simulator explores how policy parameters influence the relationship between productive capacity and aggregate demand.
-          </p>
-          <p>
-            The model seeks to maximize real economic output while maintaining fiscal solvency.
-          </p>
-          <div className="objectiveBox">Y_t = min(Ycap, AD)</div>
-          <p>Where:</p>
-          <ul>
-            <li>Ycap = total productive capacity (AI + human output)</li>
-            <li>AD = aggregate demand</li>
-          </ul>
-          <p>
-            Economic stability requires demand to remain sufficient to absorb total production.
-          </p>
         </section>
 
         <div className="sectionDivider" />
@@ -249,21 +225,6 @@ export default function Home() {
           </p>
         </section>
 
-        <div className="sectionDivider" />
-
-        <section className="section whitePaperSection">
-          <h2>Research and White Paper</h2>
-          <p>Download the full research framework.</p>
-          <ul>
-            <li><Link href="/methodology#objective">NAIERM White Paper</Link></li>
-            <li><Link href="/methodology#assumptions">Model assumptions</Link></li>
-            <li><Link href="/methodology#objective">Quantitative framework</Link></li>
-            <li><Link href="/methodology#modules">Transition architecture</Link></li>
-          </ul>
-          <Link href="/research" className="btnSecondary">
-            Explore Research Dataset
-          </Link>
-        </section>
       </main>
 
       <footer className="footer">
