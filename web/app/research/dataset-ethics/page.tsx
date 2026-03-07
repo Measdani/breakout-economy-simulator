@@ -16,47 +16,75 @@ export default function DatasetEthicsPage() {
           </header>
 
           <div id="data-policy" className={styles.grid}>
-            <section className={styles.card}>
-              <h2 className={styles.h2}>What We Store</h2>
+            <section id="research-purpose" className={`${styles.card} ${styles.full}`}>
+              <h2 className={styles.h2}>Research Purpose</h2>
+              <p className={styles.p}>
+                The NAIERM simulator generates a structured dataset of policy architecture scenarios.
+                Each submitted configuration represents a modeled fiscal system under defined parameters.
+              </p>
+              <p className={styles.p}>The dataset allows researchers to analyze:</p>
               <ul className={styles.list}>
-                <li>Complete policy configuration inputs selected in the simulator.</li>
-                <li>
-                  Computed outputs (revenue, obligations, balance, module-level metrics).
-                </li>
-                <li>Optional qualitative feedback submitted with the policy scenario.</li>
+                <li>fiscal solvency across policy structures</li>
+                <li>liquidity distribution effects on demand</li>
+                <li>parameter sensitivity across economic scenarios</li>
+                <li>long-term stability thresholds in AI-driven economies</li>
               </ul>
-            </section>
-
-            <section id="no-pii" className={styles.card}>
-              <h2 className={styles.h2}>What We Do Not Require</h2>
-              <ul className={styles.list}>
-                <li>No mandatory personally identifying information is required to submit scenarios.</li>
-                <li>No hidden behavioral tracking for policy records.</li>
-                <li>
-                  No opaque aggregation: export schema reflects the submission payload directly.
-                </li>
-              </ul>
+              <p className={styles.p}>
+                The goal is to support transparent policy modeling and comparative research.
+              </p>
             </section>
 
             <section id="submission-use" className={`${styles.card} ${styles.full}`}>
               <h2 className={styles.h2}>Use of Submissions</h2>
               <p className={styles.p}>
-                Submitted scenarios are used to build a comparative policy research dataset,
-                support aggregated analytics, and publish transparent model behavior under
-                varied assumptions.
+                Submitted scenarios are aggregated into a comparative fiscal architecture dataset.
               </p>
               <p className={styles.p}>
-                Admin exports are available as CSV with flattened payload fields for independent
-                verification and auditing.
+                Researchers can use this dataset to evaluate how different policy configurations
+                influence:
               </p>
+              <ul className={styles.list}>
+                <li>national fiscal balance</li>
+                <li>real economic output</li>
+                <li>liquidity distribution across households</li>
+                <li>debt trajectory under varying assumptions</li>
+              </ul>
+              <p className={styles.p}>
+                Admin exports are available as structured CSV files for independent verification
+                and external analysis.
+              </p>
+            </section>
 
-              <div className={styles.callout}>
-                <div className={styles.calloutTitle}>Privacy posture</div>
-                <div className={styles.calloutBody}>
-                  The model is designed to be research-grade without collecting user identity.
-                  We prioritize transparency, minimal data collection, and exportable structure.
-                </div>
-              </div>
+            <section id="dataset-structure" className={`${styles.card} ${styles.full}`}>
+              <h2 className={styles.h2}>Dataset Structure</h2>
+              <p className={styles.p}>Each record in the research dataset contains:</p>
+              <ul className={styles.list}>
+                <li>policy parameter inputs selected in the simulator</li>
+                <li>derived economic outputs and fiscal metrics</li>
+                <li>module-level results across revenue, liquidity, and obligations</li>
+                <li>optional qualitative scenario feedback</li>
+              </ul>
+              <p className={styles.p}>
+                Exports preserve the exact structure of the model inputs and outputs to allow
+                reproducibility of policy scenarios.
+              </p>
+            </section>
+
+            <section id="no-pii" className={`${styles.card} ${styles.full}`}>
+              <h2 className={styles.h2}>Privacy Posture</h2>
+              <p className={styles.p}>
+                The model is designed to support research without collecting personal identity.
+              </p>
+              <p className={styles.p}>We prioritize:</p>
+              <ul className={styles.list}>
+                <li>minimal data collection</li>
+                <li>transparent modeling parameters</li>
+                <li>exportable research records</li>
+                <li>no behavioral tracking</li>
+              </ul>
+              <p className={styles.p}>
+                No personally identifiable information is collected or stored.
+              </p>
             </section>
           </div>
 
