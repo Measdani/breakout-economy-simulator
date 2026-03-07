@@ -39,11 +39,15 @@ function getToneClasses(tone: IndicatorTone) {
 
 function IndicatorCard({ title, state }: { title: string; state: IndicatorState }) {
   const tone = getToneClasses(state.tone);
+  const statusStyle = {
+    color: '#00D9FF',
+    textShadow: '0 0 10px rgba(0, 217, 255, 0.85)',
+  } as const;
 
   return (
     <div className={`rounded-lg p-4 border transition-colors ${tone.card}`}>
       <p className="text-xs font-semibold text-muted uppercase tracking-wider mb-2">{title}</p>
-      <p className={`text-2xl font-semibold leading-none text-[#00D9FF] drop-shadow-[0_0_8px_rgba(0,217,255,0.7)]`}>
+      <p className="text-2xl font-semibold leading-none" style={statusStyle}>
         {state.status}
       </p>
     </div>
