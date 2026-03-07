@@ -45,10 +45,10 @@ function getToneClasses(tone: IndicatorTone) {
 function IndicatorCard({ title, state }: { title: string; state: IndicatorState }) {
   const tone = getToneClasses(state.tone);
   const selectedCardClass = state.selected
-    ? 'border-amber-400 ring-2 ring-amber-300/70 bg-amber-500/12 shadow-[0_0_26px_rgba(251,191,36,0.30)]'
+    ? 'border-[#00D9FF] ring-2 ring-[#00D9FF]/75 bg-[#00D9FF]/10 shadow-[0_0_26px_rgba(0,217,255,0.35)]'
     : '';
   const selectedTextClass = state.selected
-    ? 'text-amber-100'
+    ? 'text-[#00D9FF] drop-shadow-[0_0_8px_rgba(0,217,255,0.7)]'
     : '';
 
   return (
