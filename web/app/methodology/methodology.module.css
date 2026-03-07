@@ -53,11 +53,23 @@
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 18px;
+  column-gap: 20px;
+  row-gap: 28px;
 }
 
 .full {
   grid-column: 1 / -1;
+}
+
+.groupDivider {
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(15, 23, 42, 0.15);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #475569;
 }
 
 .card {
@@ -65,7 +77,7 @@
   color: #e6edf7;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
-  padding: 18px 18px;
+  padding: 22px 22px;
   box-shadow: 0 12px 30px rgba(2, 6, 23, 0.12);
 }
 
@@ -80,6 +92,20 @@
   color: rgba(230, 237, 247, 0.82);
   line-height: 1.65;
   font-size: 14px;
+}
+
+.p + .p {
+  margin-top: 12px;
+}
+
+.formula {
+  margin: 8px 0;
+  display: inline-block;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(168, 199, 255, 0.45);
+  background: rgba(10, 18, 35, 0.65);
+  color: #dbe8ff;
 }
 
 .tableWrap {
@@ -132,6 +158,14 @@
   font-size: 14px;
 }
 
+.p + .list {
+  margin-top: 8px;
+}
+
+.tableWrap + .p {
+  margin-top: 12px;
+}
+
 .listStrong {
   color: #ffffff;
   font-weight: 600;
@@ -182,6 +216,7 @@
 
   .grid {
     grid-template-columns: 1fr;
+    row-gap: 22px;
   }
 
   .full {
