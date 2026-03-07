@@ -18,54 +18,45 @@ function getToneClasses(tone: IndicatorTone) {
   if (tone === 'positive') {
     return {
       card: 'border-emerald-400/60 bg-emerald-500/10 shadow-[0_0_18px_rgba(16,185,129,0.22)]',
-      badge: 'border-emerald-300/80 bg-emerald-400/25 text-emerald-100',
-      dot: 'bg-emerald-300',
+      text: 'text-emerald-100',
     };
   }
 
   if (tone === 'neutral') {
     return {
       card: 'border-sky-400/45 bg-sky-500/8',
-      badge: 'border-sky-300/70 bg-sky-400/20 text-sky-100',
-      dot: 'bg-sky-300',
+      text: 'text-sky-100',
     };
   }
 
   if (tone === 'caution') {
     return {
       card: 'border-amber-400/55 bg-amber-500/10',
-      badge: 'border-amber-300/80 bg-amber-400/22 text-amber-100',
-      dot: 'bg-amber-300',
+      text: 'text-amber-100',
     };
   }
 
   return {
     card: 'border-rose-400/60 bg-rose-500/10',
-    badge: 'border-rose-300/80 bg-rose-400/24 text-rose-100',
-    dot: 'bg-rose-300',
+    text: 'text-rose-100',
   };
 }
 
 function IndicatorCard({ title, state }: { title: string; state: IndicatorState }) {
   const tone = getToneClasses(state.tone);
   const selectedCardClass = state.selected
-    ? 'ring-2 ring-emerald-300/55 shadow-[0_0_26px_rgba(16,185,129,0.30)]'
+    ? 'border-amber-400 ring-2 ring-amber-300/70 bg-amber-500/12 shadow-[0_0_26px_rgba(251,191,36,0.30)]'
     : '';
-  const selectedBadgeClass = state.selected
-    ? 'border-emerald-200/90 bg-emerald-400/35 text-white'
+  const selectedTextClass = state.selected
+    ? 'text-amber-100'
     : '';
 
   return (
     <div className={`rounded-lg p-4 border transition-colors ${tone.card} ${selectedCardClass}`}>
       <p className="text-xs font-semibold text-muted uppercase tracking-wider mb-2">{title}</p>
-      <div className="flex items-center gap-2">
-        <span className={`w-2.5 h-2.5 rounded-full ${tone.dot}`} />
-        <span
-          className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-sm font-semibold ${tone.badge} ${selectedBadgeClass}`}
-        >
-          {state.status}
-        </span>
-      </div>
+      <p className={`text-2xl font-semibold leading-none ${tone.text} ${selectedTextClass}`}>
+        {state.status}
+      </p>
     </div>
   );
 }
