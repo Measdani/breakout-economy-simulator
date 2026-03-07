@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import PublicTopNav from '@/components/site/PublicTopNav'
 import './home.css'
@@ -30,6 +30,36 @@ const RESEARCH_PRINCIPLES = [
 
 export default function Home() {
   const [openPrinciple, setOpenPrinciple] = useState<number | null>(null)
+
+  useEffect(() => {
+    const titles = Array.from(document.querySelectorAll<HTMLElement>('.section h2'))
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    if (reduceMotion) {
+      titles.forEach((title) => title.classList.add('titleVisible'))
+      return
+    }
+
+    titles.forEach((title) => title.classList.add('titleReveal'))
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            return
+          }
+
+          entry.target.classList.add('titleVisible')
+          observer.unobserve(entry.target)
+        })
+      },
+      { threshold: 0.25, rootMargin: '0px 0px -10% 0px' },
+    )
+
+    titles.forEach((title) => observer.observe(title))
+
+    return () => observer.disconnect()
+  }, [])
 
   return (
     <>
@@ -78,37 +108,40 @@ export default function Home() {
 
         <div className="sectionDivider" />
 
-        <section className="section sectionNarrative">
+        <section className="section sectionNarrative transitionNarrative">
           <h2>The Economic Transition of Artificial Intelligence</h2>
           <p>
-            Artificial intelligence is changing how economic value is created.
+            <strong>Artificial intelligence is changing how economic value is created.</strong>
           </p>
           <p>
-            For more than a century, national tax systems have relied primarily on taxing human labor through wages, payroll taxes, and income taxes.
+            <strong>Labor-based taxation has defined national revenue systems for more than a century.</strong> Tax structures have relied primarily on wages, payroll taxes, and income taxes.
           </p>
           <p>
-            As AI systems increasingly perform cognitive work, economic value can be generated without corresponding human employment. This creates a structural vulnerability for governments whose revenue systems depend on labor-based taxation.
+            <strong>AI can generate economic value without corresponding human employment.</strong> As cognitive automation expands, productivity can increase even when labor participation does not.
           </p>
           <p>
-            The NAIERM framework explores how nations can adapt fiscal architecture to maintain economic stability during this transition.
+            <strong>This creates a structural vulnerability for labor-tax-dependent governments.</strong> Revenue systems tied to employment face growing instability as the AI transition accelerates.
+          </p>
+          <p>
+            <strong>The NAIERM framework explores how fiscal architecture can adapt.</strong> The objective is to preserve macroeconomic stability through the transition.
           </p>
         </section>
 
         <div className="sectionDivider" />
 
-        <section className="section">
+        <section className="section architectureSection">
           <h2>Economic System Architecture</h2>
           <div className="architectureGrid">
             <div className="flowStack">
-              <div className="flowNode">AI Compute Growth</div>
-              <div className="flowArrow">v</div>
-              <div className="flowNode">Token Tax Revenue</div>
-              <div className="flowArrow">v</div>
-              <div className="flowNode">Baseline Economic Liquidity (BEL)</div>
-              <div className="flowArrow">v</div>
-              <div className="flowNode">Consumer Demand</div>
-              <div className="flowArrow">v</div>
-              <div className="flowNode">Economic Stability</div>
+              <div className="flowNode tone1">AI Compute Growth</div>
+              <div className="flowArrow delay1" aria-hidden="true">&darr;</div>
+              <div className="flowNode tone2">Token Tax Revenue</div>
+              <div className="flowArrow delay2" aria-hidden="true">&darr;</div>
+              <div className="flowNode tone3">Baseline Economic Liquidity (BEL)</div>
+              <div className="flowArrow delay3" aria-hidden="true">&darr;</div>
+              <div className="flowNode tone4">Consumer Demand</div>
+              <div className="flowArrow delay4" aria-hidden="true">&darr;</div>
+              <div className="flowNode tone5">Economic Stability</div>
             </div>
             <div className="architectureText">
               <p>
@@ -137,26 +170,34 @@ export default function Home() {
           </p>
           <div className="simulationGrid">
             <div className="card">
-              <h3>Participants can adjust</h3>
-              <ul>
-                <li>Token tax rate on AI compute</li>
-                <li>Baseline Economic Liquidity (BEL)</li>
-                <li>Workforce incentives</li>
-                <li>Tax thresholds and public obligations</li>
+              <h3><span className="headingIcon" aria-hidden="true">&#9881;</span>Participants can adjust</h3>
+              <ul className="iconList">
+                <li><span className="listIcon" aria-hidden="true">&#9881;</span>Token tax rate on AI compute</li>
+                <li><span className="listIcon" aria-hidden="true">&#128176;</span>Baseline Economic Liquidity (BEL)</li>
+                <li><span className="listIcon" aria-hidden="true">&#128200;</span>Workforce incentives</li>
+                <li><span className="listIcon" aria-hidden="true">&#127963;</span>Tax thresholds and public obligations</li>
               </ul>
             </div>
             <div className="card">
-              <h3>Model outcomes include</h3>
-              <ul>
-                <li>Real economic output</li>
-                <li>Fiscal balance</li>
-                <li>Federal revenue and obligations</li>
-                <li>Debt retirement trajectory</li>
+              <h3><span className="headingIcon" aria-hidden="true">&#128202;</span>Model outcomes include</h3>
+              <ul className="iconList">
+                <li><span className="listIcon" aria-hidden="true">&#128202;</span>Real economic output</li>
+                <li><span className="listIcon" aria-hidden="true">&#128201;</span>Fiscal balance</li>
+                <li><span className="listIcon" aria-hidden="true">&#128181;</span>Federal revenue and obligations</li>
+                <li><span className="listIcon" aria-hidden="true">&#128201;</span>Debt retirement trajectory</li>
               </ul>
             </div>
           </div>
           <p>
             Each configuration contributes to an anonymized research dataset used to explore policy tradeoffs.
+          </p>
+        </section>
+
+        <section className="section metricCallout">
+          <p className="metricEyebrow">Projected Year-5 Economic Output</p>
+          <p className="metricValue">~$49.5 Trillion Economy</p>
+          <p className="metricCaption">
+            Projected balance between AI productivity and aggregate demand in the baseline scenario.
           </p>
         </section>
 
@@ -196,6 +237,12 @@ export default function Home() {
           <p>
             The NAIERM framework models a phased transition aligned with the adoption curve of artificial intelligence.
           </p>
+          <div className="phaseRail" aria-hidden="true">
+            <div className="phaseStep">Telemetry</div>
+            <div className="phaseStep">Infrastructure</div>
+            <div className="phaseStep">Policy Transition</div>
+            <div className="phaseStep">Equilibrium</div>
+          </div>
           <div className="timelineGrid">
             <div className="card">
               <h3>Phase 1 - Telemetry</h3>
@@ -223,7 +270,9 @@ export default function Home() {
           <p>
             The NAIERM framework emphasizes transparency in economic modeling.
           </p>
-          <p>Key principles of the framework include:</p>
+          <p className="credInvite">
+            Explore the research principles behind the NAIERM modeling framework.
+          </p>
           <div className="principlesAccordion">
             {RESEARCH_PRINCIPLES.map((principle, index) => {
               const isOpen = openPrinciple === index
@@ -264,13 +313,17 @@ export default function Home() {
         <section className="section sectionNarrative policyImpact">
           <h2>Why Policy Simulation Matters</h2>
           <p className="policyLead">
-            Technological change often moves faster than policy frameworks can adapt.
+            Technological change often moves faster than policy systems can adapt.
           </p>
           <p>
             By providing a transparent simulation environment, <span className="brandAccent">NAIERM</span> enables policymakers and researchers to explore potential fiscal architectures before structural economic shifts occur.
           </p>
-          <p>
-            This approach allows economic systems to be evaluated <span className="phraseHighlight">through modeling rather than crisis response.</span>
+          <p className="policyClosing">
+            This approach allows economic systems to be evaluated through <span className="phraseHighlight">modeling rather than crisis response.</span>
+          </p>
+          <p className="modelFirstBanner">
+            <span>MODEL FIRST</span>
+            <span>NOT CRISIS RESPONSE</span>
           </p>
         </section>
 

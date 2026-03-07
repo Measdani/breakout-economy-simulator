@@ -180,6 +180,18 @@ body {
   margin-bottom: 40px;
 }
 
+.section h2.titleReveal {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.section h2.titleReveal.titleVisible,
+.section h2.titleVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .section p {
   color: var(--muted);
   line-height: 1.65;
@@ -200,6 +212,10 @@ body {
   margin-bottom: 14px;
 }
 
+.transitionNarrative strong {
+  color: #0f2742;
+}
+
 .policyImpact .policyLead {
   font-weight: 600;
   font-size: 20px;
@@ -213,6 +229,28 @@ body {
 
 .policyImpact .phraseHighlight {
   font-weight: 600;
+  color: #1a3f66;
+}
+
+.policyImpact .policyClosing {
+  margin-bottom: 16px;
+}
+
+.modelFirstBanner {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 2px 0 0;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.modelFirstBanner span:first-child {
+  color: #1f3a8a;
+}
+
+.modelFirstBanner span:last-child {
   color: #1a3f66;
 }
 
@@ -241,6 +279,11 @@ body {
   margin-bottom: 14px;
 }
 
+.headingIcon {
+  margin-right: 8px;
+  color: #1f3a8a;
+}
+
 .card p {
   color: var(--muted);
 }
@@ -248,6 +291,27 @@ body {
 .card ul {
   padding-left: 18px;
   margin: 10px 0 0;
+}
+
+.iconList {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+}
+
+.iconList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.listIcon {
+  width: 1.15em;
+  line-height: 1.2;
+  display: inline-flex;
+  justify-content: center;
+  color: #1f3a8a;
 }
 
 .architectureGrid {
@@ -259,7 +323,7 @@ body {
 
 .flowStack {
   border: 1px solid #d9e2ec;
-  background: #ffffff;
+  background: linear-gradient(180deg, #f5f9ff 0%, #f9fbff 100%);
   border-radius: 12px;
   padding: 20px;
   display: flex;
@@ -270,18 +334,68 @@ body {
 .flowNode {
   width: 100%;
   text-align: center;
-  border: 1px solid #d7dee7;
+  border: 1px solid #d6e3f5;
   border-radius: 8px;
   background: #f8fbff;
   padding: 10px 12px;
   font-weight: 600;
-  color: #1e3a8a;
+  color: #17366a;
+}
+
+.flowNode.tone1 {
+  background: #eaf4ff;
+}
+
+.flowNode.tone2 {
+  background: #dcecff;
+}
+
+.flowNode.tone3 {
+  background: #cedff9;
+}
+
+.flowNode.tone4 {
+  background: #bed0ee;
+}
+
+.flowNode.tone5 {
+  background: #adc2e6;
+  color: #0f2742;
 }
 
 .flowArrow {
   margin: 8px 0;
-  color: #5f6c7b;
+  color: #3f5e89;
   font-weight: 700;
+  animation: arrowPulse 1.8s ease-in-out infinite;
+}
+
+.flowArrow.delay1 {
+  animation-delay: 0s;
+}
+
+.flowArrow.delay2 {
+  animation-delay: 0.2s;
+}
+
+.flowArrow.delay3 {
+  animation-delay: 0.4s;
+}
+
+.flowArrow.delay4 {
+  animation-delay: 0.6s;
+}
+
+@keyframes arrowPulse {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(2px);
+  }
 }
 
 .architectureText {
@@ -308,11 +422,89 @@ body {
   margin: 24px 0;
 }
 
+.metricCallout {
+  margin-top: 28px;
+  padding: 22px 24px;
+  border: 1px solid #d8e3f3;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #eef4ff 0%, #f7faff 100%);
+}
+
+.metricEyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 12px;
+  font-weight: 600;
+  color: #395a8d;
+}
+
+.metricValue {
+  margin: 6px 0 8px;
+  font-size: 36px;
+  line-height: 1.1;
+  font-weight: 700;
+  color: #0f2742;
+}
+
+.metricCaption {
+  margin: 0;
+  max-width: 720px;
+}
+
+.phaseRail {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 24px 0 16px;
+}
+
+.phaseRail::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 6%;
+  right: 6%;
+  height: 2px;
+  background: linear-gradient(90deg, #a9bde1 0%, #6f8cb9 100%);
+  transform: translateY(-50%);
+}
+
+.phaseStep {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e3a6b;
+  border: 1px solid #d3dff1;
+  border-radius: 999px;
+  background: #f7fbff;
+  padding: 7px 10px;
+}
+
 .timelineGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 24px;
   margin-top: 24px;
+}
+
+.timelineGrid .card {
+  position: relative;
+  border-color: #d8e1ec;
+}
+
+.timelineGrid .card::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  height: 3px;
+  border-radius: 10px 10px 0 0;
+  background: linear-gradient(90deg, #95b0df 0%, #1f3a8a 100%);
 }
 
 .cred {
@@ -321,6 +513,12 @@ body {
 
 .cred h2 {
   margin-bottom: 20px;
+}
+
+.credInvite {
+  margin-top: 0;
+  margin-bottom: 14px;
+  color: #3f5776;
 }
 
 .cred ul {
@@ -509,6 +707,28 @@ body {
     grid-template-columns: 1fr;
   }
 
+  .metricCallout {
+    padding: 18px;
+  }
+
+  .metricValue {
+    font-size: 30px;
+  }
+
+  .phaseRail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .phaseRail::before {
+    display: none;
+  }
+
+  .modelFirstBanner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
   .timelineGrid {
     grid-template-columns: 1fr;
   }
@@ -525,5 +745,17 @@ body {
   .footerRight {
     flex-wrap: wrap;
     gap: 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flowArrow {
+    animation: none;
+  }
+
+  .section h2.titleReveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
