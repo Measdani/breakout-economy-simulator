@@ -61,8 +61,8 @@ export default function FiscalSustainabilityIndicator({
   const deficitPercentage = Math.abs(surplusDeficit) / totalRevenue;
 
   const structuralBalance: IndicatorState = isSolvent
-    ? { status: '\u2713 Stable', tone: 'positive' }
-    : { status: '\u2717 Deficit', tone: 'negative' };
+    ? { status: 'Stable', tone: 'positive' }
+    : { status: 'X Deficit', tone: 'negative' };
 
   const debtTrajectory: IndicatorState =
     isSolvent && surplusDeficit > totalRevenue * 0.05
