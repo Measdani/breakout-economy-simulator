@@ -49,9 +49,33 @@ const SIMULATION_VIEWS = {
   },
 } as const
 
+const TRANSITION_PHASES = [
+  {
+    label: 'Telemetry',
+    title: 'Phase 1 - Telemetry',
+    description: 'Compute activity is measured through standardized compute units (SCUs).',
+  },
+  {
+    label: 'Infrastructure',
+    title: 'Phase 2 - Infrastructure',
+    description: 'Economic distribution systems and health infrastructure are established.',
+  },
+  {
+    label: 'Policy Transition',
+    title: 'Phase 3 - Policy Transition',
+    description: 'Baseline liquidity systems replace legacy welfare structures.',
+  },
+  {
+    label: 'Equilibrium',
+    title: 'Phase 4 - Equilibrium',
+    description: 'The system stabilizes as AI productivity and human demand reach balance.',
+  },
+] as const
+
 export default function Home() {
   const [openPrinciple, setOpenPrinciple] = useState<number | null>(null)
   const [simulationView, setSimulationView] = useState<'adjust' | 'outcomes'>('adjust')
+  const [activePhase, setActivePhase] = useState<number | null>(null)
 
   useEffect(() => {
     const titles = Array.from(document.querySelectorAll<HTMLElement>('.section h2'))
@@ -278,28 +302,33 @@ export default function Home() {
           <p>
             The NAIERM framework models a phased transition aligned with the adoption curve of artificial intelligence.
           </p>
-          <div className="phaseRail" aria-hidden="true">
-            <div className="phaseStep">Telemetry</div>
-            <div className="phaseStep">Infrastructure</div>
-            <div className="phaseStep">Policy Transition</div>
-            <div className="phaseStep">Equilibrium</div>
-          </div>
-          <div className="timelineGrid">
-            <div className="card">
-              <h3>Phase 1 - Telemetry</h3>
-              <p>Compute activity is measured through standardized compute units (SCUs).</p>
+          <div className="phaseInteractive" onMouseLeave={() => setActivePhase(null)}>
+            <div className="phaseRail">
+              {TRANSITION_PHASES.map((phase, index) => (
+                <button
+                  key={phase.label}
+                  type="button"
+                  className={`phaseStep${activePhase === index ? ' isActive' : ''}`}
+                  onMouseEnter={() => setActivePhase(index)}
+                  onFocus={() => setActivePhase(index)}
+                  onClick={() => setActivePhase(index)}
+                  aria-pressed={activePhase === index}
+                >
+                  {phase.label}
+                </button>
+              ))}
             </div>
-            <div className="card">
-              <h3>Phase 2 - Infrastructure</h3>
-              <p>Economic distribution systems and health infrastructure are established.</p>
-            </div>
-            <div className="card">
-              <h3>Phase 3 - Policy Transition</h3>
-              <p>Baseline liquidity systems replace legacy welfare structures.</p>
-            </div>
-            <div className="card">
-              <h3>Phase 4 - Equilibrium</h3>
-              <p>The system stabilizes as AI productivity and human demand reach balance.</p>
+            <div className="timelineGrid">
+              {TRANSITION_PHASES.map((phase, index) => (
+                <div
+                  key={phase.title}
+                  className={`card phaseCard${activePhase === index ? ' isActive' : ''}`}
+                  onMouseEnter={() => setActivePhase(index)}
+                >
+                  <h3>{phase.title}</h3>
+                  <p>{phase.description}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>

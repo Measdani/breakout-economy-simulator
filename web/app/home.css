@@ -497,6 +497,11 @@ body {
 .phaseStep {
   position: relative;
   z-index: 1;
+  width: 100%;
+  cursor: pointer;
+  appearance: none;
+  outline: none;
+  font: inherit;
   text-align: center;
   font-size: 13px;
   font-weight: 600;
@@ -505,6 +510,22 @@ body {
   border-radius: 999px;
   background: #f7fbff;
   padding: 7px 10px;
+  transition: all 0.2s ease;
+}
+
+.phaseStep:hover {
+  border-color: #9eb7de;
+}
+
+.phaseStep:focus-visible {
+  box-shadow: 0 0 0 2px rgba(27, 78, 216, 0.25);
+}
+
+.phaseStep.isActive {
+  background: #1f3a8a;
+  color: #ffffff;
+  border-color: #1f3a8a;
+  transform: translateY(-1px);
 }
 
 .timelineGrid {
@@ -519,6 +540,10 @@ body {
   border-color: #d8e1ec;
 }
 
+.timelineGrid .phaseCard {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
 .timelineGrid .card::before {
   content: "";
   position: absolute;
@@ -528,6 +553,15 @@ body {
   height: 3px;
   border-radius: 10px 10px 0 0;
   background: linear-gradient(90deg, #95b0df 0%, #1f3a8a 100%);
+}
+
+.timelineGrid .phaseCard.isActive {
+  border-color: #8eabdc;
+  box-shadow: 0 16px 28px rgba(20, 40, 80, 0.12);
+}
+
+.timelineGrid .phaseCard.isActive::before {
+  background: linear-gradient(90deg, #1b4ed8 0%, #0f2742 100%);
 }
 
 .cred {
