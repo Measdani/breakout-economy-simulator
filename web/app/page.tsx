@@ -1,10 +1,36 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import PublicTopNav from '@/components/site/PublicTopNav'
 import './home.css'
 
+const RESEARCH_PRINCIPLES = [
+  {
+    title: 'Explicit Allocation Logic',
+    body: 'All policy flows, including revenue capture, baseline liquidity distribution, and program funding, follow clearly defined rules within the model.',
+  },
+  {
+    title: 'Versioned Assumptions',
+    body: 'Economic assumptions, parameters, and baseline scenarios are documented and versioned so that results can be replicated and compared over time.',
+  },
+  {
+    title: 'Open Simulation Parameters',
+    body: 'Core policy variables used in the simulator are visible and adjustable, allowing researchers and policymakers to explore tradeoffs directly.',
+  },
+  {
+    title: 'Exportable Structured Datasets',
+    body: 'Simulator submissions contribute to anonymized datasets that can be exported for research analysis and comparative modeling.',
+  },
+  {
+    title: 'Privacy by Design',
+    body: 'The platform does not collect or store personally identifiable information. Any demographic inputs are optional and aggregated for research purposes only.',
+  },
+] as const
+
 export default function Home() {
+  const [openPrinciple, setOpenPrinciple] = useState<number | null>(null)
+
   return (
     <>
       <PublicTopNav />
@@ -198,23 +224,39 @@ export default function Home() {
             The NAIERM framework emphasizes transparency in economic modeling.
           </p>
           <p>Key principles of the framework include:</p>
-          <ul>
-            <li>
-              <strong>Explicit Allocation Logic:</strong> All policy flows, including revenue capture, baseline liquidity distribution, and program funding, follow clearly defined rules within the model.
-            </li>
-            <li>
-              <strong>Versioned Assumptions:</strong> Economic assumptions, parameters, and baseline scenarios are documented and versioned so that results can be replicated and compared over time.
-            </li>
-            <li>
-              <strong>Open Simulation Parameters:</strong> Core policy variables used in the simulator are visible and adjustable, allowing researchers and policymakers to explore tradeoffs directly.
-            </li>
-            <li>
-              <strong>Exportable Structured Datasets:</strong> Simulator submissions contribute to anonymized datasets that can be exported for research analysis and comparative modeling.
-            </li>
-            <li>
-              <strong>Privacy by Design:</strong> The platform does not collect or store personally identifiable information. Any demographic inputs are optional and aggregated for research purposes only.
-            </li>
-          </ul>
+          <div className="principlesAccordion">
+            {RESEARCH_PRINCIPLES.map((principle, index) => {
+              const isOpen = openPrinciple === index
+              const panelId = `principle-panel-${index}`
+
+              return (
+                <article
+                  key={principle.title}
+                  className={`principleTile${isOpen ? ' isOpen' : ''}`}
+                >
+                  <button
+                    type="button"
+                    className="principleToggle"
+                    onClick={() => setOpenPrinciple(isOpen ? null : index)}
+                    aria-expanded={isOpen}
+                    aria-controls={panelId}
+                  >
+                    <span className="principleTitle">{principle.title}</span>
+                    <span className="principleChevron" aria-hidden="true">
+                      {isOpen ? '-' : '+'}
+                    </span>
+                  </button>
+
+                  <div
+                    id={panelId}
+                    className={`principleBody${isOpen ? ' isOpen' : ''}`}
+                  >
+                    <p>{principle.body}</p>
+                  </div>
+                </article>
+              )
+            })}
+          </div>
         </section>
 
         <div className="sectionDivider" />
