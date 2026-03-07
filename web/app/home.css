@@ -200,6 +200,22 @@ body {
   margin-bottom: 14px;
 }
 
+.policyImpact .policyLead {
+  font-weight: 600;
+  font-size: 20px;
+  color: #0f2742;
+}
+
+.policyImpact .brandAccent {
+  color: #2e6be6;
+  font-weight: 600;
+}
+
+.policyImpact .phraseHighlight {
+  font-weight: 600;
+  color: #1a3f66;
+}
+
 .cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

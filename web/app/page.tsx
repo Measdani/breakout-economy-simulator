@@ -261,16 +261,16 @@ export default function Home() {
 
         <div className="sectionDivider" />
 
-        <section className="section sectionNarrative">
+        <section className="section sectionNarrative policyImpact">
           <h2>Why Policy Simulation Matters</h2>
-          <p>
-            Economic transitions driven by technological change often occur faster than policy frameworks can adapt.
+          <p className="policyLead">
+            Technological change often moves faster than policy frameworks can adapt.
           </p>
           <p>
-            By providing a transparent simulation environment, NAIERM enables policymakers and researchers to explore potential fiscal architectures before structural economic shifts occur.
+            By providing a transparent simulation environment, <span className="brandAccent">NAIERM</span> enables policymakers and researchers to explore potential fiscal architectures before structural economic shifts occur.
           </p>
           <p>
-            This approach allows economic systems to be evaluated through modeling rather than crisis response.
+            This approach allows economic systems to be evaluated <span className="phraseHighlight">through modeling rather than crisis response.</span>
           </p>
         </section>
 
