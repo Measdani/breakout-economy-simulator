@@ -197,17 +197,24 @@ export default function Home() {
           <p>
             The NAIERM framework emphasizes transparency in economic modeling.
           </p>
-          <p>Key principles include:</p>
+          <p>Key principles of the framework include:</p>
           <ul>
-            <li>Explicit allocation logic</li>
-            <li>Versioned assumptions</li>
-            <li>Open simulation parameters</li>
-            <li>Exportable structured datasets</li>
-            <li>No personally identifiable information stored</li>
+            <li>
+              <strong>Explicit Allocation Logic:</strong> All policy flows, including revenue capture, baseline liquidity distribution, and program funding, follow clearly defined rules within the model.
+            </li>
+            <li>
+              <strong>Versioned Assumptions:</strong> Economic assumptions, parameters, and baseline scenarios are documented and versioned so that results can be replicated and compared over time.
+            </li>
+            <li>
+              <strong>Open Simulation Parameters:</strong> Core policy variables used in the simulator are visible and adjustable, allowing researchers and policymakers to explore tradeoffs directly.
+            </li>
+            <li>
+              <strong>Exportable Structured Datasets:</strong> Simulator submissions contribute to anonymized datasets that can be exported for research analysis and comparative modeling.
+            </li>
+            <li>
+              <strong>Privacy by Design:</strong> The platform does not collect or store personally identifiable information. Any demographic inputs are optional and aggregated for research purposes only.
+            </li>
           </ul>
-          <p>
-            The goal is to allow policymakers, researchers, and citizens to explore policy tradeoffs within a transparent modeling environment.
-          </p>
         </section>
 
         <div className="sectionDivider" />
