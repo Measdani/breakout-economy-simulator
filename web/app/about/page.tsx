@@ -49,24 +49,24 @@ export default function AboutPage() {
                 Science Advisor
               </p>
               <p className={styles.p}>
-                The National AI Economy Resiliency Model (NAIERM) was developed by <strong>Dr.
-                James W. Bunger</strong>, a systems engineer with more than four decades of
-                experience designing and optimizing complex technological systems.
+                The National AI Economy Resiliency Model (NAIERM) was developed by Dr. James W.
+                Bunger, a systems engineer with more than four decades of experience designing and
+                optimizing complex technological systems.
               </p>
               <p className={styles.p}>
-                Dr. Bunger&apos;s work spans energy systems, petroleum refining, specialty chemicals,
+                His work spans energy systems, petroleum refining, specialty chemicals,
                 unconventional fuels development, environmental forensics, and process modeling
                 software.
               </p>
               <p className={styles.p}>
-                He earned his <strong>PhD in Fuels Engineering from the University of Utah</strong>,
-                holds <strong>15 patents</strong>, and has authored <strong>more than 50
-                peer-reviewed and technical journal publications</strong>.
+                Dr. Bunger earned his PhD in Fuels Engineering from the University of Utah. He
+                holds 15 patents and has authored more than 50 peer-reviewed and technical journal
+                publications.
               </p>
               <p className={styles.p}>
-                Dr. Bunger also served for many years as the <strong>State Science Advisor for
-                Utah</strong>, providing scientific and technical guidance on technology development
-                and public policy initiatives.
+                He conducted more than a decade of research at the University of Utah and is also
+                a successful entrepreneur. Dr. Bunger previously served as the State Science
+                Advisor for Utah, contributing to public policy and legislative initiatives.
               </p>
               <p className={styles.p}>
                 NAIERM applies systems engineering principles to economic architecture, enabling
