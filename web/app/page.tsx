@@ -165,19 +165,21 @@ export default function Home() {
         <section className="section sectionNarrative transitionNarrative">
           <h2>The Economic Transition of Artificial Intelligence</h2>
           <p>
-            <strong>Artificial intelligence is changing how economic value is created.</strong>
+            The economy is changing.
           </p>
           <p>
-            For more than a century, national tax systems have relied primarily on <strong>taxing human labor</strong> through wages, payroll taxes, and income taxes.
+            Artificial intelligence is beginning to reshape how work is done, how income is
+            earned, and how economic systems function. As technology evolves, important questions
+            emerge about jobs, income stability, healthcare, and retirement in the years ahead.
           </p>
           <p>
-            As AI systems increasingly perform <strong>cognitive work</strong>, economic value can grow even when human employment does not.
+            NAIERM invites the public, researchers, and policymakers to explore these questions
+            together. Through open modeling tools and community input, we are studying how economic
+            systems can adapt to ensure stability, opportunity, and participation in an AI-driven
+            future.
           </p>
           <p>
-            This creates a <strong>structural vulnerability for labor-based tax systems</strong>, where government revenue depends on wages.
-          </p>
-          <p>
-            <strong>NAIERM explores how fiscal architecture can adapt to this transition</strong>, ensuring economic stability even as AI productivity accelerates.
+            Your perspective helps shape this research.
           </p>
         </section>
 
