@@ -116,7 +116,7 @@ export default function Home() {
       <main className="wrapper">
         <section className="hero">
           <div className="heroContent">
-            <p className="eyebrow">National AI Economy Resiliency Model</p>
+            <p className="eyebrow">The Economy Is Changing</p>
 
             <h1>
               Policy-Grade Modeling <br />
@@ -124,13 +124,15 @@ export default function Home() {
             </h1>
 
             <p className="sub">
-              A transparent simulation framework for revenue architecture, national obligations, and long-term household stability.
+              What would make you feel economically secure in the age of AI?
             </p>
             <p className="framing">
-              NAIERM is a research model designed to explore fiscal architecture in an AI-driven economy.
+              Artificial intelligence is reshaping how work is done, how income is earned, and how
+              economic systems function. As technology advances, societies must consider how
+              economic structures can evolve to support stability, opportunity, and participation.
             </p>
             <p className="authority">
-              Structured fiscal simulation - Explicit allocation logic - Versioned assumptions
+              Share your perspective in the 2-minute survey or explore the policy simulation model.
             </p>
 
             <div className="heroButtons">
