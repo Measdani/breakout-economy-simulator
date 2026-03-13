@@ -143,10 +143,11 @@ export default function Home() {
             </div>
           </div>
 
+          <Link href="/survey" className="quickSurveyButton">
+            Quick Survey
+          </Link>
+
           <div className="heroDiagram">
-            <Link href="/survey" className="quickSurveyButton">
-              Quick Survey
-            </Link>
             <div className="heroDiagramFlow">
               <div className="diagramBox">Revenue</div>
               <div className="arrow">-&gt;</div>
