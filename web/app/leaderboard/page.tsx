@@ -32,6 +32,7 @@ type RankedScenario = {
   rank: number
   scenario: string
   secondaryLabel: string
+  isSurveyGenerated: boolean
   balance: number
   isSolvent: boolean
   revenue: number
@@ -293,6 +294,12 @@ function chooseScenarioName(
   return buildFallbackScenarioName(submission, policy)
 }
 
+function isSurveyGeneratedSubmission(submission: SubmissionRecord): boolean {
+  const payload = asRecord(submission.submission_payload_json)
+  const survey = asRecord(payload.survey_response)
+  return typeof survey.survey_name === 'string' && survey.survey_name.trim().length > 0
+}
+
 async function getLeaderboardData() {
   const supabase = createClient()
 
@@ -328,19 +335,24 @@ async function getLeaderboardData() {
 function buildRankedScenarios(submissions: SubmissionRecord[]): RankedScenario[] {
   const provisional = submissions.map((submission, idx) => {
     const policy = getPolicyDetails(submission)
-    const scenarioName = chooseScenarioName(submission, policy)
-    const secondaryLabel =
-      typeof submission.config_name === 'string' &&
-      submission.config_name.trim().length > 0 &&
-      !isGenericScenarioName(submission.config_name)
-        ? submission.config_name.trim()
-        : `${policy.revenueStructure} fiscal architecture`
+    const isSurveyGenerated = isSurveyGeneratedSubmission(submission)
+    const scenarioName = isSurveyGenerated ? 'Survey' : chooseScenarioName(submission, policy)
+    const secondaryLabel = isSurveyGenerated
+      ? 'Survey generated policy'
+      : (
+        typeof submission.config_name === 'string' &&
+        submission.config_name.trim().length > 0 &&
+        !isGenericScenarioName(submission.config_name)
+          ? submission.config_name.trim()
+          : `${policy.revenueStructure} fiscal architecture`
+      )
 
     return {
       id: submission.id,
       rank: idx + 1,
       scenario: scenarioName,
       secondaryLabel,
+      isSurveyGenerated,
       balance: toNumber(submission.surplus_deficit),
       isSolvent: Boolean(submission.is_solvent),
       revenue: getTotalRevenue(submission.result),
@@ -357,6 +369,10 @@ function buildRankedScenarios(submissions: SubmissionRecord[]): RankedScenario[]
 
   const counts = new Map<string, number>()
   return provisional.map((row) => {
+    if (row.isSurveyGenerated) {
+      return row
+    }
+
     const seenCount = (counts.get(row.scenario) ?? 0) + 1
     counts.set(row.scenario, seenCount)
 
