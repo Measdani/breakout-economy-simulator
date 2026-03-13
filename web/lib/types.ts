@@ -1,5 +1,5 @@
 /**
- * NAIERM (National AI Economy Resiliency Model) - Type Definitions
+ * NAiERM (National AI Economy Resiliency Model) - Type Definitions
  * Mirrored from ../src/types.ts for web client use
  */
 

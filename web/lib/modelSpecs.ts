@@ -1,5 +1,5 @@
 /**
- * NAIERM Model Specifications - Token Tax Engine (v2.1)
+ * NAiERM Model Specifications - Token Tax Engine (v2.1)
  *
  * This file documents all input ranges, defaults, formulas, and outputs
  * for the Token Tax Engine component of the simulator.

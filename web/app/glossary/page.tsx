@@ -2,7 +2,7 @@ import PublicSiteShell from '@/components/site/PublicSiteShell'
 
 const terms = [
   {
-    term: 'NAIERM',
+    term: 'NAiERM',
     definition: 'National AI Economy Resiliency Model; a federal policy scenario simulator.',
   },
   {
@@ -22,7 +22,7 @@ export default function GlossaryPage() {
         <p className="text-xs uppercase tracking-widest text-blue-200 mb-2">Glossary</p>
         <h1 className="text-3xl font-bold text-bright mb-3">Terminology Lock</h1>
         <p className="text-sm text-dimmed">
-          Core terms used throughout the NAIERM website and simulator.
+          Core terms used throughout the NAiERM website and simulator.
         </p>
       </section>
 

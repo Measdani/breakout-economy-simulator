@@ -26,7 +26,7 @@ export default function PublicTopNav() {
     <header className={styles.header}>
       <div className={styles.inner}>
         <Link href="/" className={styles.brand}>
-          NAIERM
+          NAiERM
         </Link>
 
         <nav className={styles.links}>

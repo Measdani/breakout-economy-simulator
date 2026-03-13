@@ -43,7 +43,7 @@ function getQuickSurveySnapshots(submissions: any[]): SurveySnapshot[] {
     const payload = asRecord(submission.submission_payload_json)
     const surveyResponse = asRecord(payload.survey_response)
 
-    if (surveyResponse.survey_name !== 'NAIERM Economic Participation Survey') {
+    if (surveyResponse.survey_name !== 'NAiERM Economic Participation Survey') {
       continue
     }
 

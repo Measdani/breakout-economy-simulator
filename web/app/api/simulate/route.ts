@@ -130,7 +130,7 @@ export async function POST(request: NextRequest) {
  */
 export async function GET() {
   return NextResponse.json({
-    api: 'NAIERM API v2.1 (National AI Economy Resiliency Model)',
+    api: 'NAiERM API v2.1 (National AI Economy Resiliency Model)',
     endpoint: '/api/simulate',
     methods: ['POST'],
     description: 'Run economic resilience policy simulations programmatically',

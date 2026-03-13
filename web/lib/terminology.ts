@@ -1,12 +1,12 @@
 /**
- * NAIERM Terminology & Labels
+ * NAiERM Terminology & Labels
  * Single source of truth for all user-facing language
  * Maintains institutional-grade terminology: BEL, SBI, Electronic Transaction Token Tax, etc.
  */
 
 export const TERMINOLOGY = {
   // === Model Identity ===
-  MODEL_NAME: 'NAIERM',
+  MODEL_NAME: 'NAiERM',
   MODEL_FULL_NAME: 'National AI Economic Resilience Model',
 
   // === Revenue Architecture ===

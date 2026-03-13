@@ -11,7 +11,7 @@ export default function ContactPage() {
             <h1 className={styles.title}>Inquiries and Partnerships</h1>
             <p className={styles.subtitle}>
               For policy collaboration, institutional demos, research partnerships, or media
-              inquiries, contact the NAIERM team directly.
+              inquiries, contact the NAiERM team directly.
             </p>
           </header>
 
@@ -28,7 +28,7 @@ export default function ContactPage() {
               <h2 className={styles.h2}>Best Use Cases</h2>
               <ul className={styles.list}>
                 <li>Policy architecture and fiscal scenario reviews.</li>
-                <li>Institutional walkthroughs of the NAIERM modeling framework.</li>
+                <li>Institutional walkthroughs of the NAiERM modeling framework.</li>
                 <li>Research collaboration and publication partnerships.</li>
                 <li>Academic and think tank demonstrations of the simulation model.</li>
                 <li>Government and policy advisory discussions related to AI-era fiscal systems.</li>
@@ -38,7 +38,7 @@ export default function ContactPage() {
             <section className={`${styles.card} ${styles.full}`}>
               <h2 className={styles.h2}>Collaboration Opportunities</h2>
               <p className={styles.p}>
-                NAIERM welcomes collaboration with researchers, academic institutions, public
+                NAiERM welcomes collaboration with researchers, academic institutions, public
                 policy organizations, and government agencies interested in exploring fiscal
                 architecture for AI-driven economies.
               </p>
@@ -53,7 +53,7 @@ export default function ContactPage() {
           </div>
 
           <p className={styles.credibilityNote}>
-            The NAIERM framework is developed as part of the Breakout Economy research initiative
+            The NAiERM framework is developed as part of the Breakout Economy research initiative
             and is designed to support transparent policy modeling and institutional collaboration.
           </p>
 

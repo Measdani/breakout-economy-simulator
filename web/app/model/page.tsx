@@ -18,7 +18,7 @@ export default async function ModelPage() {
       <div className="max-w-6xl mx-auto mb-4 bg-dark-slate rounded-lg border border-border-slate p-4">
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-xs uppercase tracking-wide text-muted mb-1">Model Workspace</p>
-          <h1 className="text-xl font-semibold text-bright mb-1">NAIERM Simulator</h1>
+          <h1 className="text-xl font-semibold text-bright mb-1">NAiERM Simulator</h1>
           <p className="text-sm text-dimmed">
             Policy simulator exploring the balance between AI productivity, consumer demand, and federal fiscal stability.
           </p>

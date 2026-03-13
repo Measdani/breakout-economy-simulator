@@ -5,7 +5,7 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'], display: 'swap' })
 
 export const metadata: Metadata = {
-  title: 'The National AI Economy Resiliency Model (NAIERM)',
+  title: 'The National AI Economy Resiliency Model (NAiERM)',
   description: 'Policy-grade simulator for revenue architecture, BEL/SBI, and national social program resilience',
 }
 

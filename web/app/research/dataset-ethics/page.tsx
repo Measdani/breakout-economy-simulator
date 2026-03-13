@@ -10,7 +10,7 @@ export default function DatasetEthicsPage() {
             <div className={styles.kicker}>Research and Dataset</div>
             <h1 className={styles.title}>Dataset and Ethics</h1>
             <p className={styles.subtitle}>
-              NAIERM submissions are stored in Supabase and exported as transparent,
+              NAiERM submissions are stored in Supabase and exported as transparent,
               structured research records.
             </p>
           </header>
@@ -19,7 +19,7 @@ export default function DatasetEthicsPage() {
             <section id="research-purpose" className={`${styles.card} ${styles.full}`}>
               <h2 className={styles.h2}>Research Purpose</h2>
               <p className={styles.p}>
-                The NAIERM simulator generates a structured dataset of policy architecture scenarios.
+                The NAiERM simulator generates a structured dataset of policy architecture scenarios.
                 Each submitted configuration represents a modeled fiscal system under defined parameters.
               </p>
               <p className={styles.p}>The dataset allows researchers to analyze:</p>

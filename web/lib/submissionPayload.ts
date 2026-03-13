@@ -277,10 +277,10 @@ export function buildSubmissionPayload({
     model_metadata: {
       submission_id: metadataOverrides?.submissionId ?? createSubmissionId(),
       timestamp: metadataOverrides?.timestamp ?? new Date().toISOString(),
-      model_version: 'NAIERM v2.1',
+      model_version: 'NAiERM v2.1',
       terminology_version: 'bel-sbi-v1',
       advanced_mode_enabled: advancedModeEnabled,
-      modelVersion: 'NAIERM v2.1',
+      modelVersion: 'NAiERM v2.1',
       terminologyVersion: 'bel-sbi-v1',
       revenueArchitectureMode,
       retirementMode,

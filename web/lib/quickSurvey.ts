@@ -1,6 +1,6 @@
 import type { PolicyConfig } from './types'
 
-export const QUICK_SURVEY_NAME = 'NAIERM Economic Participation Survey'
+export const QUICK_SURVEY_NAME = 'NAiERM Economic Participation Survey'
 
 export type FinancialSecurity =
   | 'very_secure'

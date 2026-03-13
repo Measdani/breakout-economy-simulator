@@ -342,7 +342,7 @@ export default function SurveyPage() {
               View the Leaderboard
             </Link>
             <Link href="/model" className={styles.secondaryAction}>
-              Explore the NAIERM Simulator
+              Explore the NAiERM Simulator
             </Link>
           </div>
         </section>

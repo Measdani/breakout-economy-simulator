@@ -116,12 +116,9 @@ export default function Home() {
       <main className="wrapper">
         <section className="hero">
           <div className="heroContent">
-            <p className="eyebrow">The Economy Is Changing</p>
+            <p className="eyebrow">NATIONAL AI ECONOMY RESILIENCY MODEL</p>
 
-            <h1>
-              Policy-Grade Modeling <br />
-              for AI-Era Fiscal Resilience
-            </h1>
+            <h1>The Economy Is Changing</h1>
 
             <p className="sub">
               What would make you feel economically secure in the age of AI?
@@ -175,7 +172,7 @@ export default function Home() {
             emerge about jobs, income stability, healthcare, and retirement in the years ahead.
           </p>
           <p>
-            NAIERM invites the public, researchers, and policymakers to explore these questions
+            NAiERM invites the public, researchers, and policymakers to explore these questions
             together. Through open modeling tools and community input, we are studying how economic
             systems can adapt to ensure stability, opportunity, and participation in an AI-driven
             future.
@@ -203,7 +200,7 @@ export default function Home() {
             </div>
             <div className="architectureText">
               <p>
-                NAIERM models the national economy as a system with interacting components.
+                NAiERM models the national economy as a system with interacting components.
               </p>
               <p>Core mechanisms include:</p>
               <ul>
@@ -310,7 +307,7 @@ export default function Home() {
         <section className="section">
           <h2>Transitioning to an AI Economy</h2>
           <p>
-            The NAIERM framework models a phased transition aligned with the adoption curve of artificial intelligence.
+            The NAiERM framework models a phased transition aligned with the adoption curve of artificial intelligence.
           </p>
           <div className="phaseInteractive" onMouseLeave={() => setActivePhase(null)}>
             <div className="phaseRail">
@@ -348,10 +345,10 @@ export default function Home() {
         <section className="section cred">
           <h2>Research Transparency</h2>
           <p>
-            The NAIERM framework emphasizes transparency in economic modeling.
+            The NAiERM framework emphasizes transparency in economic modeling.
           </p>
           <p className="credInvite">
-            Explore the research principles behind the NAIERM modeling framework.
+            Explore the research principles behind the NAiERM modeling framework.
           </p>
           <div className="principlesAccordion">
             {RESEARCH_PRINCIPLES.map((principle, index) => {
@@ -396,7 +393,7 @@ export default function Home() {
             Technological change often moves faster than policy systems can adapt.
           </p>
           <p>
-            By providing a transparent simulation environment, <span className="brandAccent">NAIERM</span> enables policymakers and researchers to explore potential fiscal architectures before structural economic shifts occur.
+            By providing a transparent simulation environment, <span className="brandAccent">NAiERM</span> enables policymakers and researchers to explore potential fiscal architectures before structural economic shifts occur.
           </p>
           <p className="policyClosing">
             This approach allows economic systems to be evaluated through <span className="phraseHighlight">modeling rather than crisis response.</span>
@@ -412,7 +409,7 @@ export default function Home() {
       <footer className="footer">
         <div className="footerInner">
           <div className="footerLeft">
-            <div className="footerBrand">NAIERM</div>
+            <div className="footerBrand">NAiERM</div>
             <p className="footerTag">
               National AI Economy Resiliency Model
             </p>

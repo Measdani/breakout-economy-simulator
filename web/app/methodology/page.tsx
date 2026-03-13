@@ -63,7 +63,7 @@ export default function MethodologyPage() {
         <div className={styles.container}>
           <header className={styles.header}>
             <div className={styles.kicker}>Methodology</div>
-            <h1 className={styles.title}>NAIERM Methodological Framework</h1>
+            <h1 className={styles.title}>NAiERM Methodological Framework</h1>
             <div className={styles.metaRow}>
               <span className={styles.badge}>Last updated: March 2, 2026</span>
               <span className={styles.metaNote}>
@@ -87,7 +87,7 @@ export default function MethodologyPage() {
             <section className={styles.card} id="deterministic-modeling">
               <h2 className={styles.h2}>Deterministic Scenario Modeling</h2>
               <p className={styles.p}>
-                NAIERM is a deterministic fiscal simulator, not a macroeconomic forecasting model.
+                NAiERM is a deterministic fiscal simulator, not a macroeconomic forecasting model.
               </p>
               <p className={styles.p}>
                 The framework allows policymakers and researchers to explore how different fiscal
@@ -119,7 +119,7 @@ export default function MethodologyPage() {
             <section className={`${styles.card} ${styles.full}`} id="objective-function">
               <h2 className={styles.h2}>Objective Function</h2>
               <p className={styles.p}>
-                The NAIERM simulator evaluates fiscal architecture by modeling the balance between
+                The NAiERM simulator evaluates fiscal architecture by modeling the balance between
                 productive capacity and aggregate demand.
               </p>
               <p className={styles.p}>The model&apos;s objective function is:</p>
@@ -185,7 +185,7 @@ export default function MethodologyPage() {
             <section className={`${styles.card} ${styles.full}`} id="fiscal-architecture-layers">
               <h2 className={styles.h2}>Fiscal Architecture Layers</h2>
               <p className={styles.p}>
-                NAIERM models fiscal stability through three interacting economic layers.
+                NAiERM models fiscal stability through three interacting economic layers.
               </p>
               <div className={styles.tableWrap}>
                 <table className={styles.table}>
