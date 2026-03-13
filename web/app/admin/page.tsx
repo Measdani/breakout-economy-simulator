@@ -4,10 +4,72 @@ import { createServiceClient } from '@/lib/supabase/server'
 import AdminTable from '@/components/AdminTable'
 import AdminCharts from '@/components/AdminCharts'
 import FeedbackTable from '@/components/FeedbackTable'
-import Link from 'next/link'
 import AdminHeader from '@/components/AdminHeader'
 
 export const dynamic = 'force-dynamic'
+
+function asRecord(value: unknown): Record<string, unknown> {
+  if (value && typeof value === 'object') {
+    return value as Record<string, unknown>
+  }
+  return {}
+}
+
+function prettySurveyValue(value: unknown): string {
+  if (typeof value !== 'string' || value.trim().length === 0) {
+    return '-'
+  }
+  return value.replace(/_/g, ' ')
+}
+
+type SurveySnapshot = {
+  id: string
+  createdAt: string
+  alias: string
+  country: string
+  financialSecurity: string
+  policyBelMonthly: string
+  policyDependent: string
+  policyRetirement: string
+  policyHealthcare: string
+  responses: Record<string, unknown>
+}
+
+function getQuickSurveySnapshots(submissions: any[]): SurveySnapshot[] {
+  const snapshots: SurveySnapshot[] = []
+
+  for (const submission of submissions) {
+    const payload = asRecord(submission.submission_payload_json)
+    const surveyResponse = asRecord(payload.survey_response)
+
+    if (surveyResponse.survey_name !== 'NAIERM Economic Participation Survey') {
+      continue
+    }
+
+    const responses = asRecord(surveyResponse.responses)
+    const policyModel = asRecord(surveyResponse.policy_model)
+    const belMonthlyRaw = policyModel.bel_monthly
+    const belMonthly =
+      typeof belMonthlyRaw === 'number' && Number.isFinite(belMonthlyRaw)
+        ? `$${belMonthlyRaw.toLocaleString('en-US')}`
+        : '-'
+
+    snapshots.push({
+      id: String(submission.id),
+      createdAt: String(submission.created_at),
+      alias: String(submission.name ?? responses.alias ?? 'Anonymous'),
+      country: prettySurveyValue(responses.country),
+      financialSecurity: prettySurveyValue(responses.financialSecurity),
+      policyBelMonthly: belMonthly,
+      policyDependent: prettySurveyValue(policyModel.dependent_policy),
+      policyRetirement: prettySurveyValue(policyModel.retirement),
+      policyHealthcare: prettySurveyValue(policyModel.healthcare),
+      responses,
+    })
+  }
+
+  return snapshots
+}
 
 async function getAllSubmissions() {
   if (!(await isAdmin())) {
@@ -104,6 +166,7 @@ export default async function AdminPage() {
   const submissions = await getAllSubmissions()
   const feedback = await getFeedback()
   const stats = await getStatistics(submissions)
+  const quickSurveySnapshots = getQuickSurveySnapshots(submissions)
 
   return (
     <div className="min-h-screen bg-deep-navy px-4 py-8">
@@ -180,6 +243,65 @@ export default async function AdminPage() {
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-bright mb-4">📝 User Feedback ({feedback.length})</h2>
           <FeedbackTable feedback={feedback} />
+        </div>
+
+        {/* Quick Survey Section */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-bright mb-4">
+            Quick Survey Responses ({quickSurveySnapshots.length})
+          </h2>
+          <div className="bg-dark-slate rounded-lg border border-border-slate overflow-x-auto">
+            {quickSurveySnapshots.length === 0 ? (
+              <p className="p-4 text-muted text-sm">No quick survey submissions yet.</p>
+            ) : (
+              <table className="w-full text-sm">
+                <thead className="bg-darker-slate">
+                  <tr>
+                    <th className="px-4 py-3 text-left font-semibold text-muted">Date</th>
+                    <th className="px-4 py-3 text-left font-semibold text-muted">Alias</th>
+                    <th className="px-4 py-3 text-left font-semibold text-muted">Country</th>
+                    <th className="px-4 py-3 text-left font-semibold text-muted">Financial Security</th>
+                    <th className="px-4 py-3 text-left font-semibold text-muted">BEL / Month</th>
+                    <th className="px-4 py-3 text-left font-semibold text-muted">Dependent Policy</th>
+                    <th className="px-4 py-3 text-left font-semibold text-muted">Retirement</th>
+                    <th className="px-4 py-3 text-left font-semibold text-muted">Healthcare</th>
+                    <th className="px-4 py-3 text-left font-semibold text-muted">Survey Details</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {quickSurveySnapshots.map((snapshot) => (
+                    <tr key={snapshot.id} className="border-t border-border-slate hover:bg-darker-navy transition">
+                      <td className="px-4 py-3 text-muted text-xs whitespace-nowrap">
+                        {new Date(snapshot.createdAt).toLocaleString()}
+                      </td>
+                      <td className="px-4 py-3 text-bright">{snapshot.alias}</td>
+                      <td className="px-4 py-3 text-muted">{snapshot.country}</td>
+                      <td className="px-4 py-3 text-muted">{snapshot.financialSecurity}</td>
+                      <td className="px-4 py-3 text-muted">{snapshot.policyBelMonthly}</td>
+                      <td className="px-4 py-3 text-muted">{snapshot.policyDependent}</td>
+                      <td className="px-4 py-3 text-muted">{snapshot.policyRetirement}</td>
+                      <td className="px-4 py-3 text-muted">{snapshot.policyHealthcare}</td>
+                      <td className="px-4 py-3 align-top">
+                        <details>
+                          <summary className="cursor-pointer text-xs text-blue-300">View</summary>
+                          <div className="mt-2 max-h-56 overflow-y-auto rounded border border-border-slate bg-darker-navy p-2 min-w-[340px]">
+                            {Object.entries(snapshot.responses).map(([key, value]) => (
+                              <div key={key} className="flex justify-between gap-3 text-[11px] leading-5">
+                                <span className="text-dimmed">{key}</span>
+                                <span className="text-bright text-right break-all">
+                                  {prettySurveyValue(value)}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </details>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
         </div>
 
         {/* All Submissions Table */}

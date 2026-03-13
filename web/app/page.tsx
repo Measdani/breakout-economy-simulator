@@ -144,13 +144,18 @@ export default function Home() {
           </div>
 
           <div className="heroDiagram">
-            <div className="diagramBox">Revenue</div>
-            <div className="arrow">-&gt;</div>
-            <div className="diagramBox">BEL First</div>
-            <div className="arrow">-&gt;</div>
-            <div className="diagramBox">Programs</div>
-            <div className="arrow">-&gt;</div>
-            <div className="diagramBox">Solvency</div>
+            <Link href="/survey" className="quickSurveyButton">
+              Quick Survey
+            </Link>
+            <div className="heroDiagramFlow">
+              <div className="diagramBox">Revenue</div>
+              <div className="arrow">-&gt;</div>
+              <div className="diagramBox">BEL First</div>
+              <div className="arrow">-&gt;</div>
+              <div className="diagramBox">Programs</div>
+              <div className="arrow">-&gt;</div>
+              <div className="diagramBox">Solvency</div>
+            </div>
           </div>
         </section>
 

@@ -151,6 +151,17 @@ export interface SubmissionPayload {
     user_feedback_text: string | null
     why_choice_text: string | null
   }
+  survey_response?: {
+    survey_name: string
+    survey_version: string
+    responses: Record<string, string | null>
+    policy_model: {
+      bel_monthly: number
+      dependent_policy: string
+      retirement: string
+      healthcare: string
+    }
+  }
 }
 
 interface BuildSubmissionPayloadParams {

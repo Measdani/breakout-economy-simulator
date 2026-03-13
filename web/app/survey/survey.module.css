@@ -1,0 +1,220 @@
+.page {
+  color: #e2e8f0;
+}
+
+.header {
+  background: linear-gradient(145deg, #0d1b31 0%, #111f3a 100%);
+  border: 1px solid #24324b;
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 20px;
+}
+
+.kicker {
+  margin: 0 0 6px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #93c5fd;
+  font-weight: 700;
+}
+
+.header h1 {
+  margin: 0 0 10px;
+  color: #f8fafc;
+  font-size: 30px;
+  line-height: 1.2;
+}
+
+.header p {
+  margin: 0;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+.form {
+  display: grid;
+  gap: 16px;
+}
+
+.card {
+  background: #0b1527;
+  border: 1px solid #223049;
+  border-radius: 14px;
+  padding: 22px;
+}
+
+.card h2 {
+  margin: 0 0 14px;
+  font-size: 20px;
+  color: #f8fafc;
+}
+
+.fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.legend {
+  margin: 0 0 10px;
+  font-size: 15px;
+  color: #cbd5e1;
+  font-weight: 500;
+}
+
+.options {
+  display: grid;
+  gap: 8px;
+}
+
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: #dbe6f5;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.option input {
+  margin-top: 2px;
+}
+
+.finalStepText {
+  margin: 0 0 10px;
+  color: #cbd5e1;
+}
+
+.policyPreview {
+  background: #101b30;
+  border: 1px solid #284166;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 14px;
+}
+
+.policyPreview p {
+  margin: 0 0 6px;
+  color: #dbe6f5;
+}
+
+.policyPreview p:last-child {
+  margin-bottom: 0;
+}
+
+.policyPreview span {
+  color: #93c5fd;
+  font-weight: 600;
+}
+
+.previewPlaceholder {
+  margin: 0 0 14px;
+  color: #93a7c2;
+  font-size: 14px;
+}
+
+.finalFields {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.finalFields label {
+  display: grid;
+  gap: 6px;
+  color: #cbd5e1;
+  font-size: 14px;
+}
+
+.finalFields input {
+  width: 100%;
+  background: #0f1a2f;
+  border: 1px solid #31435f;
+  border-radius: 8px;
+  color: #f8fafc;
+  padding: 9px 10px;
+  font-size: 14px;
+}
+
+.finalFields input:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 1px;
+}
+
+.submitButton {
+  border: 0;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 60%, #0ea5e9 100%);
+  color: #f8fafc;
+  font-weight: 700;
+  padding: 12px 16px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.submitButton:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.error {
+  margin: 0 0 10px;
+  color: #fca5a5;
+  font-size: 14px;
+}
+
+.thankYou {
+  background: #0b1527;
+  border: 1px solid #223049;
+  border-radius: 14px;
+  padding: 30px;
+}
+
+.thankYou h1 {
+  margin: 0 0 10px;
+  color: #f8fafc;
+  font-size: 34px;
+}
+
+.thankYou p {
+  margin: 0;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+.thankYouActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.primaryAction,
+.secondaryAction {
+  border-radius: 10px;
+  padding: 10px 14px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.primaryAction {
+  background: #1d4ed8;
+  color: #ffffff;
+}
+
+.secondaryAction {
+  background: #111e35;
+  border: 1px solid #2a3b59;
+  color: #dbe6f5;
+}
+
+@media (max-width: 760px) {
+  .header h1 {
+    font-size: 25px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+}
