@@ -24,15 +24,32 @@ function sanitizeOptionalText(value: string | null | undefined, maxLen: number):
   return trimmed.slice(0, maxLen)
 }
 
+function sanitizeOptionalEmail(value: string | null | undefined): string | null {
+  const email = sanitizeOptionalText(value, 254)
+  if (!email) {
+    return null
+  }
+
+  const normalized = email.toLowerCase()
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!emailPattern.test(normalized)) {
+    throw new Error('Please enter a valid email address or leave it blank.')
+  }
+
+  return normalized
+}
+
 export async function submitQuickSurvey(answers: QuickSurveyAnswers) {
   const supabase = createClient()
 
   const alias = sanitizeOptionalText(answers.alias, 50)
+  const email = sanitizeOptionalEmail(answers.email)
   const country = sanitizeOptionalText(answers.country, 80)
 
   const normalizedAnswers: QuickSurveyAnswers = {
     ...answers,
     alias,
+    email,
     country,
   }
 
@@ -73,7 +90,7 @@ export async function submitQuickSurvey(answers: QuickSurveyAnswers) {
     .from('submissions')
     .insert({
       name: alias || null,
-      email: null,
+      email,
       config,
       result,
       surplus_deficit: result.balance.surplusDeficit,

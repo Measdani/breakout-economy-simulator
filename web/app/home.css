@@ -141,6 +141,8 @@ body {
   font-size: 14px;
   letter-spacing: 0.01em;
   padding: 10px 16px;
+  align-self: flex-end;
+  margin-right: 8px;
   box-shadow: 0 8px 18px rgba(29, 78, 216, 0.25);
   transition: transform 0.2s ease, filter 0.2s ease;
 }
@@ -777,6 +779,11 @@ body {
 
   .heroDiagramFlow::before {
     display: none;
+  }
+
+  .quickSurveyButton {
+    align-self: flex-start;
+    margin-right: 0;
   }
 
   .cards {

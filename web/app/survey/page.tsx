@@ -42,6 +42,7 @@ type SurveyFormState = {
   educationLevel: '' | EducationLevel
   educationAlignment: '' | EducationAlignment
   alias: string
+  email: string
   country: string
 }
 
@@ -179,6 +180,7 @@ const INITIAL_FORM: SurveyFormState = {
   educationLevel: '',
   educationAlignment: '',
   alias: '',
+  email: '',
   country: '',
 }
 
@@ -252,6 +254,7 @@ export default function SurveyPage() {
       educationLevel: 'high_school',
       educationAlignment: 'yes',
       alias: null,
+      email: null,
       country: null,
     })
   }, [
@@ -309,6 +312,7 @@ export default function SurveyPage() {
       educationLevel: form.educationLevel as EducationLevel,
       educationAlignment: form.educationAlignment as EducationAlignment,
       alias: form.alias.trim() || null,
+      email: form.email.trim() || null,
       country: form.country.trim() || null,
     }
 
@@ -318,7 +322,7 @@ export default function SurveyPage() {
       setSubmitted(true)
     } catch (submitError) {
       console.error(submitError)
-      setError('Unable to submit survey right now. Please try again.')
+      setError(submitError instanceof Error ? submitError.message : 'Unable to submit survey right now. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
@@ -547,6 +551,16 @@ export default function SurveyPage() {
                   value={form.alias}
                   onChange={(event) => setForm((prev) => ({ ...prev, alias: event.target.value }))}
                   placeholder="Anonymous"
+                />
+              </label>
+              <label>
+                Email (optional)
+                <input
+                  type="email"
+                  maxLength={254}
+                  value={form.email}
+                  onChange={(event) => setForm((prev) => ({ ...prev, email: event.target.value }))}
+                  placeholder="you@example.com"
                 />
               </label>
               <label>

@@ -26,6 +26,7 @@ type SurveySnapshot = {
   id: string
   createdAt: string
   alias: string
+  email: string
   country: string
   financialSecurity: string
   policyBelMonthly: string
@@ -58,6 +59,7 @@ function getQuickSurveySnapshots(submissions: any[]): SurveySnapshot[] {
       id: String(submission.id),
       createdAt: String(submission.created_at),
       alias: String(submission.name ?? responses.alias ?? 'Anonymous'),
+      email: prettySurveyValue(submission.email ?? responses.email),
       country: prettySurveyValue(responses.country),
       financialSecurity: prettySurveyValue(responses.financialSecurity),
       policyBelMonthly: belMonthly,
@@ -259,6 +261,7 @@ export default async function AdminPage() {
                   <tr>
                     <th className="px-4 py-3 text-left font-semibold text-muted">Date</th>
                     <th className="px-4 py-3 text-left font-semibold text-muted">Alias</th>
+                    <th className="px-4 py-3 text-left font-semibold text-muted">Email</th>
                     <th className="px-4 py-3 text-left font-semibold text-muted">Country</th>
                     <th className="px-4 py-3 text-left font-semibold text-muted">Financial Security</th>
                     <th className="px-4 py-3 text-left font-semibold text-muted">BEL / Month</th>
@@ -275,6 +278,7 @@ export default async function AdminPage() {
                         {new Date(snapshot.createdAt).toLocaleString()}
                       </td>
                       <td className="px-4 py-3 text-bright">{snapshot.alias}</td>
+                      <td className="px-4 py-3 text-muted">{snapshot.email}</td>
                       <td className="px-4 py-3 text-muted">{snapshot.country}</td>
                       <td className="px-4 py-3 text-muted">{snapshot.financialSecurity}</td>
                       <td className="px-4 py-3 text-muted">{snapshot.policyBelMonthly}</td>
