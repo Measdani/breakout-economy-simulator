@@ -25,9 +25,12 @@ export default function PublicTopNav() {
   return (
     <header className={styles.header}>
       <div className={styles.inner}>
-        <Link href="/" className={styles.brand}>
-          NAiERM
-        </Link>
+        <div className={styles.brandBlock}>
+          <Link href="/" className={styles.brand}>
+            NAiERM
+          </Link>
+          <p className={styles.tagline}>Exploring the Future Economy Together</p>
+        </div>
 
         <nav className={styles.links}>
           {navItems.map((item) => (

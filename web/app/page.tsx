@@ -1,82 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import Link from 'next/link'
 import PublicTopNav from '@/components/site/PublicTopNav'
 import './home.css'
 
-const RESEARCH_PRINCIPLES = [
-  {
-    title: 'Explicit Allocation Logic',
-    body: 'All policy flows, including revenue capture, baseline liquidity distribution, and program funding, follow clearly defined rules within the model.',
-  },
-  {
-    title: 'Versioned Assumptions',
-    body: 'Economic assumptions, parameters, and baseline scenarios are documented and versioned so that results can be replicated and compared over time.',
-  },
-  {
-    title: 'Open Simulation Parameters',
-    body: 'Core policy variables used in the simulator are visible and adjustable, allowing researchers and policymakers to explore tradeoffs directly.',
-  },
-  {
-    title: 'Exportable Structured Datasets',
-    body: 'Simulator submissions contribute to anonymized datasets that can be exported for research analysis and comparative modeling.',
-  },
-  {
-    title: 'Privacy by Design',
-    body: 'The platform does not collect or store personally identifiable information. Any demographic inputs are optional and aggregated for research purposes only.',
-  },
-] as const
-
-const SIMULATION_VIEWS = {
-  adjust: {
-    title: 'Participants can adjust',
-    items: [
-      'Token tax rate on AI compute',
-      'Baseline Economic Liquidity (BEL)',
-      'Workforce incentives',
-      'Tax thresholds and obligations',
-    ],
-  },
-  outcomes: {
-    title: 'Model outcomes include',
-    items: [
-      'Real economic output',
-      'Fiscal balance',
-      'Federal revenue',
-      'Debt retirement trajectory',
-    ],
-  },
-} as const
-
-const TRANSITION_PHASES = [
-  {
-    label: 'Telemetry',
-    title: 'Phase 1 - Telemetry',
-    description: 'Compute activity is measured through standardized compute units (SCUs).',
-  },
-  {
-    label: 'Infrastructure',
-    title: 'Phase 2 - Infrastructure',
-    description: 'Economic distribution systems and health infrastructure are established.',
-  },
-  {
-    label: 'Policy Transition',
-    title: 'Phase 3 - Policy Transition',
-    description: 'Baseline liquidity systems replace legacy welfare structures.',
-  },
-  {
-    label: 'Equilibrium',
-    title: 'Phase 4 - Equilibrium',
-    description: 'The system stabilizes as AI productivity and human demand reach balance.',
-  },
-] as const
-
 export default function Home() {
-  const [openPrinciple, setOpenPrinciple] = useState<number | null>(null)
-  const [simulationView, setSimulationView] = useState<'adjust' | 'outcomes'>('adjust')
-  const [activePhase, setActivePhase] = useState<number | null>(null)
-
   useEffect(() => {
     const titles = Array.from(document.querySelectorAll<HTMLElement>('.section h2'))
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -107,8 +36,6 @@ export default function Home() {
     return () => observer.disconnect()
   }, [])
 
-  const activeSimulationView = SIMULATION_VIEWS[simulationView]
-
   return (
     <>
       <PublicTopNav />
@@ -121,40 +48,37 @@ export default function Home() {
             <h1>The Economy Is Changing</h1>
 
             <p className="sub">
-              What would make you feel economically secure in the age of AI?
+              Artificial intelligence is beginning to reshape jobs, income, and opportunity
+              across society.
             </p>
             <p className="framing">
-              Artificial intelligence is reshaping how work is done, how income is earned, and how
-              economic systems function. As technology advances, societies must consider how
-              economic structures can evolve to support stability, opportunity, and participation.
+              NAiERM is exploring how economic systems might adapt as technology becomes more
+              powerful. We're inviting the public to share their perspective and explore possible
+              solutions.
             </p>
             <p className="authority">
-              Share your perspective in the 2-minute survey or explore the policy simulation model.
+              You don't need to be an economist - your experience and ideas matter.
             </p>
 
             <div className="heroButtons">
-              <Link href="/model" className="primaryButton">
-                Launch Simulator
+              <Link href="/survey" className="primaryButton">
+                Take the Survey
               </Link>
-              <Link href="/methodology" className="btnSecondary">
-                Read Methodology
+              <Link href="/model" className="btnSecondary">
+                Launch the Simulator
               </Link>
             </div>
           </div>
 
-          <Link href="/survey" className="quickSurveyButton">
-            Quick Survey
-          </Link>
-
           <div className="heroDiagram">
             <div className="heroDiagramFlow">
-              <div className="diagramBox">Revenue</div>
+              <div className="diagramBox">AI Productivity</div>
               <div className="arrow">-&gt;</div>
-              <div className="diagramBox">BEL First</div>
+              <div className="diagramBox">Income Distribution</div>
               <div className="arrow">-&gt;</div>
-              <div className="diagramBox">Programs</div>
+              <div className="diagramBox">Workforce Incentives</div>
               <div className="arrow">-&gt;</div>
-              <div className="diagramBox">Solvency</div>
+              <div className="diagramBox">Social Support</div>
             </div>
           </div>
         </section>
@@ -162,227 +86,119 @@ export default function Home() {
         <div className="sectionDivider" />
 
         <section className="section sectionNarrative transitionNarrative">
-          <h2>The Economic Transition of Artificial Intelligence</h2>
+          <h2>Why This Project Exists</h2>
           <p>
-            The economy is changing.
+            Technology is evolving quickly, and the way economies function may change with it.
           </p>
           <p>
-            Artificial intelligence is beginning to reshape how work is done, how income is
-            earned, and how economic systems function. As technology evolves, important questions
-            emerge about jobs, income stability, healthcare, and retirement in the years ahead.
+            Questions many people are beginning to ask include:
+          </p>
+          <ul>
+            <li>How will AI affect jobs and income?</li>
+            <li>What systems keep the economy stable as technology grows?</li>
+            <li>How can opportunity remain accessible to everyone?</li>
+            <li>What policies might support a balanced future?</li>
+          </ul>
+          <p>
+            NAiERM explores these questions through open research tools and public participation.
           </p>
           <p>
-            NAiERM invites the public, researchers, and policymakers to explore these questions
-            together. Through open modeling tools and community input, we are studying how economic
-            systems can adapt to ensure stability, opportunity, and participation in an AI-driven
-            future.
-          </p>
-          <p>
-            Your perspective helps shape this research.
+            Your voice helps shape the conversation.
           </p>
         </section>
 
         <div className="sectionDivider" />
 
-        <section className="section architectureSection">
-          <h2>Economic System Architecture</h2>
-          <div className="architectureGrid">
-            <div className="flowStack">
-              <div className="flowNode tone1">AI Compute Growth</div>
-              <div className="flowArrow delay1" aria-hidden="true">&darr;</div>
-              <div className="flowNode tone2">Token Tax Revenue</div>
-              <div className="flowArrow delay2" aria-hidden="true">&darr;</div>
-              <div className="flowNode tone3">Baseline Economic Liquidity (BEL)</div>
-              <div className="flowArrow delay3" aria-hidden="true">&darr;</div>
-              <div className="flowNode tone4">Consumer Demand</div>
-              <div className="flowArrow delay4" aria-hidden="true">&darr;</div>
-              <div className="flowNode tone5">Economic Stability</div>
-            </div>
-            <div className="architectureText">
-              <p>
-                NAiERM models the national economy as a system with interacting components.
-              </p>
-              <p>Core mechanisms include:</p>
-              <ul>
-                <li>Token Tax - capturing value from AI compute</li>
-                <li>Baseline Economic Liquidity (BEL) - maintaining consumer demand</li>
-                <li>Systemic Bonus Incentive (SBI) - preserving workforce incentives</li>
-                <li>Simplified Tax Structure - reducing administrative friction</li>
-              </ul>
-              <p>
-                Together these mechanisms maintain the balance between productive capacity and aggregate demand.
-              </p>
-            </div>
+        <section className="section sectionNarrative">
+          <h2>Explore Possible Futures</h2>
+          <p>
+            The NAiERM policy simulator lets you explore how different economic ideas might
+            interact.
+          </p>
+          <p>
+            You can adjust variables like:
+          </p>
+          <ul>
+            <li>AI productivity growth</li>
+            <li>Income distribution systems</li>
+            <li>Workforce incentives</li>
+            <li>Social support structures</li>
+          </ul>
+          <p>Then see how the system responds over time.</p>
+          <p>The simulator isn't a prediction - it's a tool for exploring possibilities.</p>
+          <div className="heroButtons">
+            <Link href="/model" className="primaryButton">
+              Launch the Simulator
+            </Link>
           </div>
         </section>
 
         <div className="sectionDivider" />
 
         <section className="section">
-          <h2>Interactive Policy Simulation</h2>
+          <h2>What We&apos;re Studying</h2>
           <p>
-            The simulator allows users to explore how different policy configurations affect national economic outcomes.
+            NAiERM models the economy as a system where technology, income, and policy interact.
           </p>
-          <div className="simulationSwitch" role="tablist" aria-label="Simulation preview views">
-            <button
-              id="sim-tab-adjust"
-              type="button"
-              role="tab"
-              className={`simTab${simulationView === 'adjust' ? ' isActive' : ''}`}
-              aria-selected={simulationView === 'adjust'}
-              aria-controls="sim-panel-adjust"
-              onClick={() => setSimulationView('adjust')}
-            >
-              Adjust Policies
-            </button>
-            <button
-              id="sim-tab-outcomes"
-              type="button"
-              role="tab"
-              className={`simTab${simulationView === 'outcomes' ? ' isActive' : ''}`}
-              aria-selected={simulationView === 'outcomes'}
-              aria-controls="sim-panel-outcomes"
-              onClick={() => setSimulationView('outcomes')}
-            >
-              See Outcomes
-            </button>
-          </div>
-          <div
-            id={`sim-panel-${simulationView}`}
-            role="tabpanel"
-            aria-labelledby={`sim-tab-${simulationView}`}
-            className="card simPanel"
-          >
-            <h3>{activeSimulationView.title}</h3>
-            <ul className="simList">
-              {activeSimulationView.items.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-          <p>
-            Each configuration contributes to an anonymized research dataset used to explore policy tradeoffs.
-          </p>
-        </section>
-
-        <section className="section metricCallout">
-          <p className="metricEyebrow">Projected Year-5 Economic Output</p>
-          <p className="metricValue">~$49.5 Trillion Economy</p>
-          <p className="metricCaption">
-            Projected balance between AI productivity and aggregate demand in the baseline scenario.
-          </p>
-        </section>
-
-        <div className="sectionDivider" />
-
-        <section className="section">
-          <h2>Integrated Policy Modules</h2>
-
+          <p>The research explores areas like:</p>
           <div className="cards">
             <div className="card">
-              <h3>Revenue and Funding Engine</h3>
-              <p>
-                Models friction tax, supplemental income tax, and stress-tests fiscal inflow assumptions.
-              </p>
+              <h3>⚙️ Technology and productivity growth</h3>
+              <p>How increasing AI capability affects economic output.</p>
             </div>
-
             <div className="card">
-              <h3>Baseline Economic Liquidity (BEL)</h3>
-              <p>
-                Simulates income floor allocation order and demographic distribution modeling.
-              </p>
+              <h3>💰 Income distribution systems</h3>
+              <p>How economic value may flow through society.</p>
             </div>
-
             <div className="card">
-              <h3>National Social Programs</h3>
-              <p>
-                Evaluates retirement and healthcare obligations within remaining fiscal space.
-              </p>
+              <h3>📊 Economic stability</h3>
+              <p>How systems maintain balance between supply, demand, and opportunity.</p>
             </div>
+            <div className="card">
+              <h3>🏥 Public systems</h3>
+              <p>How services like healthcare and retirement may evolve in a changing economy.</p>
+            </div>
+          </div>
+          <p>These ideas are explored through simulation rather than assumptions alone.</p>
+        </section>
+
+        <div className="sectionDivider" />
+
+        <section className="section sectionNarrative">
+          <h2>Help Shape the Research</h2>
+          <p>
+            The survey collects perspectives from people with different experiences, backgrounds,
+            and viewpoints.
+          </p>
+          <p>Your input helps researchers explore questions like:</p>
+          <ul>
+            <li>What makes people feel economically secure</li>
+            <li>How public systems should evolve</li>
+            <li>What policies people believe could support stability</li>
+          </ul>
+          <p>The survey takes about 2 minutes.</p>
+          <div className="heroButtons">
+            <Link href="/survey" className="primaryButton">
+              Take the Survey
+            </Link>
           </div>
         </section>
 
         <div className="sectionDivider" />
 
-        <section className="section">
-          <h2>Transitioning to an AI Economy</h2>
+        <section className="section sectionNarrative">
+          <h2>How the Research Works</h2>
+          <p>NAiERM is designed as a transparent modeling framework.</p>
+          <p>The project emphasizes:</p>
+          <ul>
+            <li>Open simulation tools</li>
+            <li>Clearly documented assumptions</li>
+            <li>Exportable datasets</li>
+            <li>Research transparency</li>
+          </ul>
           <p>
-            The NAiERM framework models a phased transition aligned with the adoption curve of artificial intelligence.
+            Researchers, policymakers, and the public can explore the system and contribute ideas.
           </p>
-          <div className="phaseInteractive" onMouseLeave={() => setActivePhase(null)}>
-            <div className="phaseRail">
-              {TRANSITION_PHASES.map((phase, index) => (
-                <button
-                  key={phase.label}
-                  type="button"
-                  className={`phaseStep${activePhase === index ? ' isActive' : ''}`}
-                  onMouseEnter={() => setActivePhase(index)}
-                  onFocus={() => setActivePhase(index)}
-                  onClick={() => setActivePhase(index)}
-                  aria-pressed={activePhase === index}
-                >
-                  {phase.label}
-                </button>
-              ))}
-            </div>
-            <div className="timelineGrid">
-              {TRANSITION_PHASES.map((phase, index) => (
-                <div
-                  key={phase.title}
-                  className={`card phaseCard${activePhase === index ? ' isActive' : ''}`}
-                  onMouseEnter={() => setActivePhase(index)}
-                >
-                  <h3>{phase.title}</h3>
-                  <p>{phase.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <div className="sectionDivider" />
-
-        <section className="section cred">
-          <h2>Research Transparency</h2>
-          <p>
-            The NAiERM framework emphasizes transparency in economic modeling.
-          </p>
-          <p className="credInvite">
-            Explore the research principles behind the NAiERM modeling framework.
-          </p>
-          <div className="principlesAccordion">
-            {RESEARCH_PRINCIPLES.map((principle, index) => {
-              const isOpen = openPrinciple === index
-              const panelId = `principle-panel-${index}`
-
-              return (
-                <article
-                  key={principle.title}
-                  className={`principleTile${isOpen ? ' isOpen' : ''}`}
-                >
-                  <button
-                    type="button"
-                    className="principleToggle"
-                    onClick={() => setOpenPrinciple(isOpen ? null : index)}
-                    aria-expanded={isOpen}
-                    aria-controls={panelId}
-                  >
-                    <span className="principleTitle">{principle.title}</span>
-                    <span className="principleChevron" aria-hidden="true">
-                      {isOpen ? '-' : '+'}
-                    </span>
-                  </button>
-
-                  <div
-                    id={panelId}
-                    className={`principleBody${isOpen ? ' isOpen' : ''}`}
-                  >
-                    <p>{principle.body}</p>
-                  </div>
-                </article>
-              )
-            })}
-          </div>
         </section>
 
         <div className="sectionDivider" />
@@ -393,15 +209,35 @@ export default function Home() {
             Technological change often moves faster than policy systems can adapt.
           </p>
           <p>
-            By providing a transparent simulation environment, <span className="brandAccent">NAiERM</span> enables policymakers and researchers to explore potential fiscal architectures before structural economic shifts occur.
+            By exploring policy ideas through simulation, researchers and communities can evaluate
+            potential outcomes before major economic shifts occur.
           </p>
           <p className="policyClosing">
-            This approach allows economic systems to be evaluated through <span className="phraseHighlight">modeling rather than crisis response.</span>
+            This approach helps move policy thinking from reactive to proactive.
           </p>
-          <p className="modelFirstBanner">
-            <span>MODEL FIRST</span>
-            <span>NOT CRISIS RESPONSE</span>
+        </section>
+
+        <div className="sectionDivider" />
+
+        <section className="section sectionNarrative">
+          <h2>An Open Public Research Project</h2>
+          <p>NAiERM is designed to be accessible to everyone.</p>
+          <p>
+            Whether you&apos;re a researcher, policymaker, worker, student, or simply someone
+            thinking about the future, your perspective matters.
           </p>
+          <p>
+            Explore the tools, share your perspective, and help shape the conversation about the
+            future economy.
+          </p>
+          <div className="heroButtons">
+            <Link href="/survey" className="primaryButton">
+              Take the Survey
+            </Link>
+            <Link href="/model" className="btnSecondary">
+              Launch the Simulator
+            </Link>
+          </div>
         </section>
 
       </main>

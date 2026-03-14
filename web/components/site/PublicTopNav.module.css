@@ -14,13 +14,28 @@
   gap: 22px;
 }
 
+.brandBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
 .brand {
   font-size: 15px;
   letter-spacing: 0.08em;
   font-weight: 700;
   color: #001f4f;
   text-decoration: none;
-  line-height: 1;
+  line-height: 1.05;
+}
+
+.tagline {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  color: #435773;
+  font-weight: 500;
 }
 
 .links {
@@ -84,6 +99,11 @@
 
   .brand {
     font-size: 15px;
+  }
+
+  .brandBlock {
+    align-items: center;
+    text-align: center;
   }
 
   .link {
