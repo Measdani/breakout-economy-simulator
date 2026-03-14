@@ -63,12 +63,31 @@ body {
 }
 
 .btnSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid var(--border);
   padding: 10px 16px;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 14px;
+  font-weight: 600;
   text-decoration: none;
   color: var(--navy);
+  background: #ffffff;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.btnSecondary:hover {
+  background: #1f3a8a;
+  border-color: #1f3a8a;
+  color: #ffffff;
+  box-shadow: 0 10px 20px rgba(31, 58, 138, 0.2);
+  transform: translateY(-1px);
+}
+
+.btnSecondary:focus-visible {
+  outline: 2px solid #1b4ed8;
+  outline-offset: 2px;
 }
 
 .hero {

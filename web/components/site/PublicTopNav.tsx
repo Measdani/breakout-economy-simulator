@@ -45,10 +45,10 @@ export default function PublicTopNav() {
         </nav>
 
         <Link
-          href="/model"
+          href="/survey"
           className={styles.cta}
         >
-          Launch Simulator
+          Take the Survey
         </Link>
       </div>
     </header>
