@@ -519,7 +519,9 @@ export default async function LeaderboardPage() {
                       Tip: add a custom scenario name when submitting so you can find it later.
                     </small>
                   </div>
-                  <span className="pill">Top performing configurations</span>
+                  <Link href="/survey" className="pill pill-link">
+                    Take the Survey
+                  </Link>
                 </div>
               </div>
 
@@ -927,6 +929,23 @@ export default async function LeaderboardPage() {
           border-radius: 999px;
           font-size: 12px;
           color: rgba(230, 237, 247, 0.9);
+        }
+
+        .pill-link {
+          text-decoration: none;
+          font-weight: 600;
+          transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+        }
+
+        .pill-link:hover {
+          background: rgba(29, 78, 216, 0.22);
+          border-color: rgba(96, 165, 250, 0.72);
+          color: #ffffff;
+        }
+
+        .pill-link:focus-visible {
+          outline: 2px solid #60a5fa;
+          outline-offset: 2px;
         }
 
         .link-btn {
