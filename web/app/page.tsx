@@ -125,7 +125,8 @@ export default function Home() {
           </ul>
           <p>Then see how the system responds over time.</p>
           <p>The simulator isn't a prediction - it's a tool for exploring possibilities.</p>
-          <div className="heroButtons">
+          <p className="simulatorTooltip">Drive the simulator yourself</p>
+          <div className="heroButtons heroButtonsTight">
             <Link href="/model" className="primaryButton">
               Launch the Simulator
             </Link>

@@ -143,6 +143,19 @@ body {
   margin-top: 24px;
 }
 
+.heroButtonsTight {
+  margin-top: 8px;
+}
+
+.simulatorTooltip {
+  margin-top: 14px;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-style: italic;
+  color: #64748b;
+  letter-spacing: 0.01em;
+}
+
 .heroDiagram {
   position: relative;
   display: flex;
