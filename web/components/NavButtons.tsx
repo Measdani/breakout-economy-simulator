@@ -37,7 +37,7 @@ export default function NavButtons() {
           }
         }}
       >
-        🏆 Leaderboard
+        🏆 Submissions
       </Link>
       <Link
         href="/admin"

@@ -465,7 +465,7 @@ export default async function LeaderboardPage() {
         <div className="lb-container">
           <section className="lb-hero">
             <div className="lb-kicker">Policy Innovation</div>
-            <h1 className="lb-title">Policy Innovation Leaderboard</h1>
+            <h1 className="lb-title">Submissions</h1>
             <p className="lb-subtitle">
               Explore the most effective fiscal policy scenarios discovered using the NAiERM economic simulation model. Researchers, students, policymakers, and citizens can test their own ideas and compare outcomes.
             </p>
@@ -514,7 +514,7 @@ export default async function LeaderboardPage() {
           </section>
 
           <section className="lb-section">
-            <h2 className="lb-h2">How the Leaderboard Works</h2>
+            <h2 className="lb-h2">How Submissions Work</h2>
             <p className="lb-p">
               Each submission represents a complete policy configuration tested in the simulator.
             </p>
@@ -532,7 +532,7 @@ export default async function LeaderboardPage() {
 
           {rankedScenarios.length === 0 ? (
             <section className="lb-section">
-              <h2 className="lb-h2">Leaderboard Results</h2>
+              <h2 className="lb-h2">Submissions</h2>
               <p className="lb-p">No scenarios have been submitted yet.</p>
               <div className="lb-hero-actions">
                 <Link href="/model" className="btn-primary">
@@ -545,7 +545,7 @@ export default async function LeaderboardPage() {
               <div className="table-head">
                 <div className="table-head-row">
                   <div>
-                    <b>Leaderboard Results</b>
+                    <b>Submissions</b>
                     <br />
                     <small>
                       Tip: add a custom scenario name when submitting so you can find it later.
@@ -642,7 +642,7 @@ export default async function LeaderboardPage() {
               <h3>Test Your Own Policy Scenario</h3>
               <p>
                 Try different revenue structures, BEL levels, and program assumptions, then submit
-                your result to compare outcomes on the leaderboard.
+                your result to compare outcomes in submissions.
               </p>
             </div>
             <Link href="/model" className="btn-primary">
@@ -651,7 +651,7 @@ export default async function LeaderboardPage() {
           </section>
 
           <p className="lb-transparency">
-            All leaderboard scenarios are generated from simulator submissions and exported
+            All submission scenarios are generated from simulator submissions and exported
             directly from the model dataset. No personally identifying information is collected.
           </p>
         </div>

@@ -24,7 +24,7 @@ export default function PublicSiteShell({
               <p className="text-xs uppercase tracking-widest text-muted mb-3">Model</p>
               <div className="space-y-2 text-dimmed">
                 <Link href="/model" className="block hover:text-bright transition">Launch Simulator</Link>
-                <Link href="/leaderboard" className="block hover:text-bright transition">Leaderboard</Link>
+                <Link href="/leaderboard" className="block hover:text-bright transition">Submissions</Link>
                 <Link href="/glossary" className="block hover:text-bright transition">Glossary</Link>
               </div>
             </div>
