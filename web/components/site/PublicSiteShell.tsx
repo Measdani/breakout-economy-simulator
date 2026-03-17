@@ -52,6 +52,7 @@ export default function PublicSiteShell({
                 <Link href="/research#data-policy" className="block hover:text-bright transition">Data Policy</Link>
                 <Link href="/research#no-pii" className="block hover:text-bright transition">No PII Scope</Link>
                 <Link href="/contact" className="block hover:text-bright transition">Contact</Link>
+                <Link href="/admin" className="block hover:text-bright transition">Admin</Link>
               </div>
             </div>
           </div>

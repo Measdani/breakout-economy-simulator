@@ -11,7 +11,6 @@ const navItems = [
   { href: '/leaderboard', label: 'Leaderboard' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
-  { href: '/admin', label: 'Admin' },
 ]
 
 export default function PublicTopNav() {

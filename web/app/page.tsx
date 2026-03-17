@@ -271,6 +271,7 @@ export default function Home() {
             <div className="footerColumn">
               <h4>Research</h4>
               <Link href="/research">Dataset and Ethics</Link>
+              <Link href="/admin">Admin</Link>
             </div>
           </div>
         </div>
