@@ -52,9 +52,8 @@ export default function Home() {
               across society.
             </p>
             <p className="framing">
-              NAiERM is exploring how economic systems might adapt as technology becomes more
-              powerful. We're inviting the public to share their perspective and explore possible
-              solutions.
+              NAiERM models how our economic system must adapt as AI technology becomes more
+              powerful.
             </p>
             <p className="authority">
               You don't need to be an economist - your experience and ideas matter.
