@@ -172,9 +172,9 @@ export default function Home() {
           </p>
           <p>Your input helps researchers explore questions like:</p>
           <ul>
-            <li>What makes people feel economically secure</li>
-            <li>How public systems should evolve</li>
-            <li>What policies people believe could support stability</li>
+            <li>What makes you feel economically secure</li>
+            <li>How public systems should evolve to best serve you</li>
+            <li>What policies you believe could support stability</li>
           </ul>
           <p>The survey takes about 2 minutes.</p>
           <div className="heroButtons">
