@@ -135,20 +135,20 @@ export default function Home() {
 
         <div className="sectionDivider" />
 
-        <section className="section">
+        <section className="section studySection">
           <h2>What We&apos;re Studying</h2>
-          <p>
+          <p className="studyIntro">
             NAiERM models the economy as a system where technology, income, and policy interact.
           </p>
-          <p>The research explores areas like:</p>
-          <div className="cards">
+          <p className="studyLead">The research explores areas like:</p>
+          <div className="cards studyCards">
             <div className="card">
               <h3>⚙️ Technology and productivity growth</h3>
               <p>How increasing AI capability affects economic output.</p>
             </div>
             <div className="card">
               <h3>💰 Income distribution systems</h3>
-              <p>How economic value may flow through society.</p>
+              <p>How economic value flows through society.</p>
             </div>
             <div className="card">
               <h3>📊 Economic stability</h3>
@@ -159,7 +159,7 @@ export default function Home() {
               <p>How services like healthcare and retirement may evolve in a changing economy.</p>
             </div>
           </div>
-          <p>These ideas are explored through simulation rather than assumptions alone.</p>
+          <p className="studyOutro">These ideas are explored through simulation rather than assumptions alone.</p>
         </section>
 
         <div className="sectionDivider" />

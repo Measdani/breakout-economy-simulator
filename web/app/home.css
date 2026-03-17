@@ -325,6 +325,18 @@ body {
   gap: 24px;
 }
 
+.studySection .studyIntro {
+  margin-bottom: 20px;
+}
+
+.studySection .studyLead {
+  margin-bottom: 18px;
+}
+
+.studySection .studyCards {
+  margin-bottom: 24px;
+}
+
 .card {
   background: white;
   border: 1px solid #e3e8ef;
