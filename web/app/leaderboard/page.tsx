@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import PublicSiteShell from '@/components/site/PublicSiteShell'
+import { cookies } from 'next/headers'
 
 export const dynamic = 'force-dynamic'
 
@@ -29,7 +30,6 @@ type PolicyDetails = {
 
 type RankedScenario = {
   id: string
-  rank: number
   scenario: string
   secondaryLabel: string
   isSurveyGenerated: boolean
@@ -37,7 +37,7 @@ type RankedScenario = {
   isSolvent: boolean
   revenue: number
   workIncentive: number
-  transactionTaxPct: number
+  tokenTaxPct: number
   submittedAt: string
   revenueEfficiencyScore: number
   policy: PolicyDetails
@@ -256,13 +256,13 @@ function buildFallbackScenarioName(
   policy: PolicyDetails
 ): string {
   const balance = toNumber(submission.surplus_deficit)
-  const transactionTaxPct = toNumber(submission.token_tax_rate) * 100
+  const tokenTaxPct = toNumber(submission.token_tax_rate) * 100
 
   if (policy.revenueStructure === 'Friction only') {
     return 'Minimal State Model'
   }
 
-  if (balance > 0 && transactionTaxPct >= 0.2 && transactionTaxPct <= 0.55) {
+  if (balance > 0 && tokenTaxPct >= 0.2 && tokenTaxPct <= 0.55) {
     return 'Balanced Federal Model'
   }
 
@@ -270,7 +270,7 @@ function buildFallbackScenarioName(
     return 'Stress Test Scenario'
   }
 
-  if (transactionTaxPct < 0.2) {
+  if (tokenTaxPct < 0.2) {
     return 'Low-Friction Scenario'
   }
 
@@ -306,8 +306,7 @@ async function getLeaderboardData() {
   const submissionsQuery = supabase
     .from('submissions')
     .select('*')
-    .order('surplus_deficit', { ascending: false })
-    .limit(25)
+    .order('created_at', { ascending: false })
 
   const totalCountQuery = supabase
     .from('submissions')
@@ -333,7 +332,7 @@ async function getLeaderboardData() {
 }
 
 function buildRankedScenarios(submissions: SubmissionRecord[]): RankedScenario[] {
-  const provisional = submissions.map((submission, idx) => {
+  return submissions.map((submission) => {
     const policy = getPolicyDetails(submission)
     const isSurveyGenerated = isSurveyGeneratedSubmission(submission)
     const scenarioName = isSurveyGenerated ? 'Survey' : chooseScenarioName(submission, policy)
@@ -349,7 +348,6 @@ function buildRankedScenarios(submissions: SubmissionRecord[]): RankedScenario[]
 
     return {
       id: submission.id,
-      rank: idx + 1,
       scenario: scenarioName,
       secondaryLabel,
       isSurveyGenerated,
@@ -357,32 +355,13 @@ function buildRankedScenarios(submissions: SubmissionRecord[]): RankedScenario[]
       isSolvent: Boolean(submission.is_solvent),
       revenue: getTotalRevenue(submission.result),
       workIncentive: getWorkIncentiveScore(submission.result),
-      transactionTaxPct: toNumber(submission.token_tax_rate) * 100,
+      tokenTaxPct: toNumber(submission.token_tax_rate) * 100,
       submittedAt: submission.created_at,
       revenueEfficiencyScore:
         toNumber(submission.token_tax_rate) > 0
           ? getTotalRevenue(submission.result) / toNumber(submission.token_tax_rate)
           : getTotalRevenue(submission.result),
       policy,
-    }
-  })
-
-  const counts = new Map<string, number>()
-  return provisional.map((row) => {
-    if (row.isSurveyGenerated) {
-      return row
-    }
-
-    const seenCount = (counts.get(row.scenario) ?? 0) + 1
-    counts.set(row.scenario, seenCount)
-
-    if (seenCount === 1) {
-      return row
-    }
-
-    return {
-      ...row,
-      scenario: `${row.scenario} ${seenCount}`,
     }
   })
 }
@@ -427,6 +406,59 @@ export default async function LeaderboardPage() {
         })
       : null
 
+  const cookieStore = await cookies()
+  const lastSubmissionId = cookieStore.get('last_submission_id')?.value ?? null
+
+  const yourSubmission =
+    lastSubmissionId
+      ? rankedScenarios.find((row) => row.id === lastSubmissionId) ?? null
+      : null
+
+  const primarySubmission = yourSubmission ?? lastSubmission
+  const primaryUserLabel = yourSubmission ? 'You' : 'Last Submission'
+
+  const averageBalance =
+    rankedScenarios.length > 0
+      ? rankedScenarios.reduce((sum, row) => sum + row.balance, 0) / rankedScenarios.length
+      : 0
+
+  const averageRevenue =
+    rankedScenarios.length > 0
+      ? rankedScenarios.reduce((sum, row) => sum + row.revenue, 0) / rankedScenarios.length
+      : 0
+
+  const displayRows =
+    primarySubmission === null
+      ? []
+      : [
+          {
+            id: `primary-${primarySubmission.id}`,
+            userLabel: primaryUserLabel,
+            scenario: primarySubmission.scenario,
+            secondaryLabel: primarySubmission.secondaryLabel,
+            balance: primarySubmission.balance,
+            isSolvent: primarySubmission.isSolvent,
+            revenue: primarySubmission.revenue,
+            workIncentive: primarySubmission.workIncentive,
+            submittedAt: primarySubmission.submittedAt,
+            submissionCount: null as number | null,
+            policy: primarySubmission.policy as PolicyDetails | null,
+          },
+          {
+            id: 'average-row',
+            userLabel: 'Average',
+            scenario: 'All Submitted Scenarios',
+            secondaryLabel: 'Average across all simulator submissions',
+            balance: averageBalance,
+            isSolvent: averageBalance >= 0,
+            revenue: averageRevenue,
+            workIncentive: avgWorkIncentive,
+            submittedAt: null as string | null,
+            submissionCount: totalCount,
+            policy: null as PolicyDetails | null,
+          },
+        ]
+
   return (
     <PublicSiteShell contentClassName="max-w-none p-0">
       <main className="lb-page">
@@ -464,7 +496,7 @@ export default async function LeaderboardPage() {
                 <div className="stat-name">{mostEfficientRevenueScenario?.scenario || 'N/A'}</div>
                 <div className="stat-sub">
                   {mostEfficientRevenueScenario
-                    ? `${formatBillions(mostEfficientRevenueScenario.revenue)} revenue @ ${formatPercent(mostEfficientRevenueScenario.transactionTaxPct, 2)}`
+                    ? `${formatBillions(mostEfficientRevenueScenario.revenue)} revenue @ ${formatPercent(mostEfficientRevenueScenario.tokenTaxPct, 2)}`
                     : 'No submissions yet'}
                 </div>
               </article>
@@ -490,7 +522,7 @@ export default async function LeaderboardPage() {
               <li>Fiscal balance</li>
               <li>Sustainable revenue generation</li>
               <li>Work incentive preservation</li>
-              <li>Realistic transaction tax levels</li>
+              <li>Realistic token tax levels</li>
             </ul>
             <p className="lb-p">
               Top results highlight policy combinations that maintain government solvency while
@@ -529,7 +561,7 @@ export default async function LeaderboardPage() {
                 <table className="table">
                   <thead>
                     <tr>
-                      <th>Rank</th>
+                      <th>User</th>
                       <th>Scenario</th>
                       <th>Fiscal Balance</th>
                       <th>Revenue</th>
@@ -543,17 +575,16 @@ export default async function LeaderboardPage() {
                           i
                         </span>
                       </th>
-                      <th>Transaction Tax</th>
+                      <th>Number of Submissions</th>
                       <th>Submitted</th>
                       <th>Details</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {rankedScenarios.map((row, idx) => {
-                      const isTopRow = idx === 0
+                    {displayRows.map((row) => {
                       return (
-                        <tr key={row.id} className={isTopRow ? 'top-scenario' : undefined}>
-                          <td>{isTopRow ? `\u{1F3C6} #${row.rank} Top Scenario` : `#${row.rank}`}</td>
+                        <tr key={row.id}>
+                          <td>{row.userLabel}</td>
                           <td>
                             <span className="scenario-name">{row.scenario}</span>
                             <span className="scenario-sub">{row.secondaryLabel}</span>
@@ -563,35 +594,39 @@ export default async function LeaderboardPage() {
                           </td>
                           <td>{formatBillions(row.revenue)}</td>
                           <td>{formatPercent(row.workIncentive, 1)}</td>
-                          <td>{formatPercent(row.transactionTaxPct, 2)}</td>
-                          <td>{formatDate(row.submittedAt)}</td>
+                          <td>{row.submissionCount === null ? '' : row.submissionCount.toLocaleString('en-US')}</td>
+                          <td>{row.submittedAt ? formatDate(row.submittedAt) : '-'}</td>
                           <td>
-                            <details>
-                              <summary className="link-btn">View Policy</summary>
-                              <div className="policy-panel">
-                                <p>
-                                  <span>BEL level:</span>{' '}
-                                  {usdFormatter.format(row.policy.belLevel)} per adult/year
-                                </p>
-                                <p>
-                                  <span>SBI configuration:</span> Breakout at{' '}
-                                  {usdFormatter.format(row.policy.sbiBreakoutPoint)}
-                                </p>
-                                <p>
-                                  <span>Healthcare assumption:</span>{' '}
-                                  {row.policy.healthcareAssumption}
-                                </p>
-                                <p>
-                                  <span>Retirement replacement:</span>{' '}
-                                  {row.policy.retirementReplacement === null
-                                    ? 'Not specified'
-                                    : formatPercent(row.policy.retirementReplacement, 0)}
-                                </p>
-                                <p>
-                                  <span>Revenue structure:</span> {row.policy.revenueStructure}
-                                </p>
-                              </div>
-                            </details>
+                            {row.policy ? (
+                              <details>
+                                <summary className="link-btn">View Policy</summary>
+                                <div className="policy-panel">
+                                  <p>
+                                    <span>BEL level:</span>{' '}
+                                    {usdFormatter.format(row.policy.belLevel)} per adult/year
+                                  </p>
+                                  <p>
+                                    <span>SBI configuration:</span> Breakout at{' '}
+                                    {usdFormatter.format(row.policy.sbiBreakoutPoint)}
+                                  </p>
+                                  <p>
+                                    <span>Healthcare assumption:</span>{' '}
+                                    {row.policy.healthcareAssumption}
+                                  </p>
+                                  <p>
+                                    <span>Retirement replacement:</span>{' '}
+                                    {row.policy.retirementReplacement === null
+                                      ? 'Not specified'
+                                      : formatPercent(row.policy.retirementReplacement, 0)}
+                                  </p>
+                                  <p>
+                                    <span>Revenue structure:</span> {row.policy.revenueStructure}
+                                  </p>
+                                </div>
+                              </details>
+                            ) : (
+                              <span className="scenario-sub">-</span>
+                            )}
                           </td>
                         </tr>
                       )

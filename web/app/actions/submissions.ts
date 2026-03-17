@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/client'
 import type { PolicyConfig, SimulationResult } from '@/lib/types'
 import type { SubmissionPayload } from '@/lib/submissionPayload'
 import { revalidatePath } from 'next/cache'
+import { cookies } from 'next/headers'
 
 export async function submitSimulation(
   config: PolicyConfig,
@@ -43,6 +44,14 @@ export async function submitSimulation(
 
   // Revalidate leaderboard
   revalidatePath('/leaderboard')
+
+  const cookieStore = await cookies()
+  cookieStore.set('last_submission_id', String(data.id), {
+    path: '/',
+    sameSite: 'lax',
+    maxAge: 60 * 60 * 24 * 365,
+    secure: process.env.NODE_ENV === 'production',
+  })
 
   return data
 }

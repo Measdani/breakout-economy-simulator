@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/client'
 import { runSimulation } from '@/lib/engine'
 import { buildSubmissionPayload } from '@/lib/submissionPayload'
+import { cookies } from 'next/headers'
 import {
   QUICK_SURVEY_NAME,
   buildSurveyPolicyConfig,
@@ -111,6 +112,14 @@ export async function submitQuickSurvey(answers: QuickSurveyAnswers) {
 
   revalidatePath('/leaderboard')
   revalidatePath('/admin')
+
+  const cookieStore = await cookies()
+  cookieStore.set('last_submission_id', String(data.id), {
+    path: '/',
+    sameSite: 'lax',
+    maxAge: 60 * 60 * 24 * 365,
+    secure: process.env.NODE_ENV === 'production',
+  })
 
   return {
     id: data.id,

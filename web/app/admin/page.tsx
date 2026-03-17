@@ -5,6 +5,7 @@ import AdminTable from '@/components/AdminTable'
 import AdminCharts from '@/components/AdminCharts'
 import FeedbackTable from '@/components/FeedbackTable'
 import AdminHeader from '@/components/AdminHeader'
+import QuickSurveyTable, { type QuickSurveySnapshot } from '@/components/QuickSurveyTable'
 
 export const dynamic = 'force-dynamic'
 
@@ -22,22 +23,8 @@ function prettySurveyValue(value: unknown): string {
   return value.replace(/_/g, ' ')
 }
 
-type SurveySnapshot = {
-  id: string
-  createdAt: string
-  alias: string
-  email: string
-  country: string
-  financialSecurity: string
-  policyBelMonthly: string
-  policyDependent: string
-  policyRetirement: string
-  policyHealthcare: string
-  responses: Record<string, unknown>
-}
-
-function getQuickSurveySnapshots(submissions: any[]): SurveySnapshot[] {
-  const snapshots: SurveySnapshot[] = []
+function getQuickSurveySnapshots(submissions: any[]): QuickSurveySnapshot[] {
+  const snapshots: QuickSurveySnapshot[] = []
 
   for (const submission of submissions) {
     const payload = asRecord(submission.submission_payload_json)
@@ -252,60 +239,7 @@ export default async function AdminPage() {
           <h2 className="text-2xl font-bold text-bright mb-4">
             Quick Survey Responses ({quickSurveySnapshots.length})
           </h2>
-          <div className="bg-dark-slate rounded-lg border border-border-slate overflow-x-auto">
-            {quickSurveySnapshots.length === 0 ? (
-              <p className="p-4 text-muted text-sm">No quick survey submissions yet.</p>
-            ) : (
-              <table className="w-full text-sm">
-                <thead className="bg-darker-slate">
-                  <tr>
-                    <th className="px-4 py-3 text-left font-semibold text-muted">Date</th>
-                    <th className="px-4 py-3 text-left font-semibold text-muted">Alias</th>
-                    <th className="px-4 py-3 text-left font-semibold text-muted">Email</th>
-                    <th className="px-4 py-3 text-left font-semibold text-muted">Country</th>
-                    <th className="px-4 py-3 text-left font-semibold text-muted">Financial Security</th>
-                    <th className="px-4 py-3 text-left font-semibold text-muted">BEL / Month</th>
-                    <th className="px-4 py-3 text-left font-semibold text-muted">Dependent Policy</th>
-                    <th className="px-4 py-3 text-left font-semibold text-muted">Retirement</th>
-                    <th className="px-4 py-3 text-left font-semibold text-muted">Healthcare</th>
-                    <th className="px-4 py-3 text-left font-semibold text-muted">Survey Details</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {quickSurveySnapshots.map((snapshot) => (
-                    <tr key={snapshot.id} className="border-t border-border-slate hover:bg-darker-navy transition">
-                      <td className="px-4 py-3 text-muted text-xs whitespace-nowrap">
-                        {new Date(snapshot.createdAt).toLocaleString()}
-                      </td>
-                      <td className="px-4 py-3 text-bright">{snapshot.alias}</td>
-                      <td className="px-4 py-3 text-muted">{snapshot.email}</td>
-                      <td className="px-4 py-3 text-muted">{snapshot.country}</td>
-                      <td className="px-4 py-3 text-muted">{snapshot.financialSecurity}</td>
-                      <td className="px-4 py-3 text-muted">{snapshot.policyBelMonthly}</td>
-                      <td className="px-4 py-3 text-muted">{snapshot.policyDependent}</td>
-                      <td className="px-4 py-3 text-muted">{snapshot.policyRetirement}</td>
-                      <td className="px-4 py-3 text-muted">{snapshot.policyHealthcare}</td>
-                      <td className="px-4 py-3 align-top">
-                        <details>
-                          <summary className="cursor-pointer text-xs text-blue-300">View</summary>
-                          <div className="mt-2 max-h-56 overflow-y-auto rounded border border-border-slate bg-darker-navy p-2 min-w-[340px]">
-                            {Object.entries(snapshot.responses).map(([key, value]) => (
-                              <div key={key} className="flex justify-between gap-3 text-[11px] leading-5">
-                                <span className="text-dimmed">{key}</span>
-                                <span className="text-bright text-right break-all">
-                                  {prettySurveyValue(value)}
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                        </details>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-          </div>
+          <QuickSurveyTable snapshots={quickSurveySnapshots} />
         </div>
 
         {/* All Submissions Table */}
