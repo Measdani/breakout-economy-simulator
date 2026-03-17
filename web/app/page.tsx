@@ -87,16 +87,16 @@ export default function Home() {
         <section className="section sectionNarrative transitionNarrative">
           <h2>Why This Project Exists</h2>
           <p>
-            Technology is evolving quickly, and the way economies function may change with it.
+            AI technology is evolving quickly,
           </p>
           <p>
-            Questions many people are beginning to ask include:
+            Questions people are beginning to ask include:
           </p>
           <ul>
             <li>How will AI affect jobs and income?</li>
             <li>What systems keep the economy stable as technology grows?</li>
             <li>How can opportunity remain accessible to everyone?</li>
-            <li>What policies might support a balanced future?</li>
+            <li>What policies might support a fluid economic future?</li>
           </ul>
           <p>
             NAiERM explores these questions through open research tools and public participation.
