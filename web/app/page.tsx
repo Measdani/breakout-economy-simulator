@@ -252,6 +252,18 @@ export default function Home() {
             <p className="footerVersion">
               Web v0.3 - Model assumptions versioned and archived.
             </p>
+            <p className="footerPartnerLine">
+              <a
+                href="https://energyandwealth.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Powering Prosperity Through Energy"
+                className="footerPartnerLink"
+              >
+                energyandwealth.com
+              </a>
+              <span className="footerPartnerTag">Powering Prosperity Through Energy</span>
+            </p>
           </div>
 
           <div className="footerRight">

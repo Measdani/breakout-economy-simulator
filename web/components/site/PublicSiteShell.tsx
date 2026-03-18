@@ -60,6 +60,18 @@ export default function PublicSiteShell({
           <div className="mt-10 text-xs text-muted">
             <p>NAiERM Web v0.3 | Last updated March 2, 2026</p>
             <p className="mt-2">Model assumptions versioned and archived. See changelog for revisions.</p>
+            <p className="mt-2">
+              <a
+                href="https://energyandwealth.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Powering Prosperity Through Energy"
+                className="text-blue-300 hover:text-blue-200 underline underline-offset-2 transition"
+              >
+                energyandwealth.com
+              </a>
+              <span className="ml-2 italic text-dimmed">Powering Prosperity Through Energy</span>
+            </p>
           </div>
         </div>
       </footer>

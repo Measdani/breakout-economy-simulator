@@ -784,6 +784,29 @@ body {
   color: #64748b;
 }
 
+.footerPartnerLine {
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+.footerPartnerLink {
+  font-size: 13px;
+  color: #93c5fd;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footerPartnerLink:hover {
+  color: #bfdbfe;
+}
+
+.footerPartnerTag {
+  margin-left: 8px;
+  font-size: 12px;
+  color: #94a3b8;
+  font-style: italic;
+}
+
 .footerRight {
   display: flex;
   gap: 50px;
