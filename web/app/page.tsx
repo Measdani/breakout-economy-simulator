@@ -209,8 +209,8 @@ export default function Home() {
             Technological change often moves faster than policy systems can adapt.
           </p>
           <p>
-            By exploring policy ideas through simulation, researchers and communities can evaluate
-            potential outcomes before major economic shifts occur.
+            By exploring policy ideas through simulation, researchers and communities can evaulate
+            potential outcomes before major econmic downturn occurs.
           </p>
           <p className="policyClosing">
             This approach helps move policy thinking from reactive to proactive.
