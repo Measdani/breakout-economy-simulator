@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { runSimulation } from '@/lib/engine'
 import { buildSubmissionPayload } from '@/lib/submissionPayload'
 import { cookies } from 'next/headers'
+import { sendSurveyResultsEmail } from '@/lib/email/sendSurveyResultsEmail'
 import {
   QUICK_SURVEY_NAME,
   buildSurveyPolicyConfig,
@@ -121,9 +122,24 @@ export async function submitQuickSurvey(answers: QuickSurveyAnswers) {
     secure: process.env.NODE_ENV === 'production',
   })
 
+  const resultsEmail = await sendSurveyResultsEmail({
+    to: email,
+    alias,
+    submissionId: String(data.id),
+    submittedAt: String(data.created_at ?? new Date().toISOString()),
+    configName,
+    belMonthly: policyModel.belMonthly,
+    dependentPolicy: policyModel.dependentPolicyLabel,
+    retirement: policyModel.retirementLabel,
+    healthcare: policyModel.healthcareLabel,
+    isSolvent: result.balance.isSolvent,
+    surplusDeficit: result.balance.surplusDeficit,
+  })
+
   return {
     id: data.id,
     isSolvent: result.balance.isSolvent,
     surplusDeficit: result.balance.surplusDeficit,
+    resultsEmailStatus: resultsEmail.status,
   }
 }

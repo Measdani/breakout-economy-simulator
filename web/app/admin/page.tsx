@@ -23,17 +23,38 @@ function prettySurveyValue(value: unknown): string {
   return value.replace(/_/g, ' ')
 }
 
+function isQuickSurveySubmission(submission: any): boolean {
+  const payload = asRecord(submission.submission_payload_json)
+  const surveyResponse = asRecord(payload.survey_response)
+  const surveyName = typeof surveyResponse.survey_name === 'string'
+    ? surveyResponse.survey_name.trim().toLowerCase()
+    : ''
+  const responseCount = Object.keys(asRecord(surveyResponse.responses)).length
+  const policyModelCount = Object.keys(asRecord(surveyResponse.policy_model)).length
+  const configName =
+    typeof submission.config_name === 'string'
+      ? submission.config_name.trim().toLowerCase()
+      : ''
+
+  // Accept legacy/variant survey rows even when survey_name is absent or differs.
+  return (
+    surveyName === 'naierm economic participation survey' ||
+    responseCount > 0 ||
+    policyModelCount > 0 ||
+    configName.startsWith('survey bel ')
+  )
+}
+
 function getQuickSurveySnapshots(submissions: any[]): QuickSurveySnapshot[] {
   const snapshots: QuickSurveySnapshot[] = []
 
   for (const submission of submissions) {
-    const payload = asRecord(submission.submission_payload_json)
-    const surveyResponse = asRecord(payload.survey_response)
-
-    if (surveyResponse.survey_name !== 'NAiERM Economic Participation Survey') {
+    if (!isQuickSurveySubmission(submission)) {
       continue
     }
 
+    const payload = asRecord(submission.submission_payload_json)
+    const surveyResponse = asRecord(payload.survey_response)
     const responses = asRecord(surveyResponse.responses)
     const policyModel = asRecord(surveyResponse.policy_model)
     const belMonthlyRaw = policyModel.bel_monthly
