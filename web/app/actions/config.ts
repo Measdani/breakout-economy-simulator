@@ -1,7 +1,7 @@
 'use server'
 
 import { createServiceClient } from '@/lib/supabase/server'
-import { isAdmin, requireAdmin } from '@/lib/auth/admin'
+import { getAdminSession, requireAdmin } from '@/lib/auth/admin'
 import type { PolicyConfig } from '@/lib/types'
 import type { GlobalConfigRow } from '@/lib/supabase/types'
 
@@ -16,7 +16,6 @@ export async function getActiveConfig(): Promise<PolicyConfig> {
 
   if (error) {
     console.error('Error fetching active config:', error)
-    // Return default config if fetch fails
     return {
       tokenTaxRate: 0.0035,
       flowBaseAnnual: 1e15,
@@ -71,9 +70,9 @@ export async function updateGlobalConfig(
 ): Promise<void> {
   await requireAdmin()
 
+  const adminSession = await getAdminSession()
   const supabase = createServiceClient()
 
-  // Mark current active config as inactive
   const { error: deactivateError } = await supabase
     .from('global_config')
     .update({ is_active: false })
@@ -84,14 +83,13 @@ export async function updateGlobalConfig(
     throw new Error('Failed to update configuration')
   }
 
-  // Insert new active config
   const { error: insertError } = await supabase
     .from('global_config')
     .insert({
       is_active: true,
       config: newConfig,
       note: note || null,
-      changed_by: 'admin',
+      changed_by: adminSession?.email || 'admin',
     })
 
   if (insertError) {
