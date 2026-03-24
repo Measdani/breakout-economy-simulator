@@ -653,8 +653,8 @@ export default async function LeaderboardPage() {
           </section>
 
           <p className="lb-transparency">
-            All submission scenarios are generated from simulator submissions and exported
-            directly from the model dataset. No personally identifying information is collected.
+            Public submissions pages display policy scenario data only. Optional contact details
+            may be provided in private submission records, but they are not shown here.
           </p>
         </div>
       </main>

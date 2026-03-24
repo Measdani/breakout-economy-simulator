@@ -201,7 +201,7 @@ export default function AssumptionsPanel({ config, onClose }: AssumptionsPanelPr
           {/* Data Privacy */}
           <div className="bg-blue-900 bg-opacity-20 border border-blue-600 rounded p-4">
             <p className="text-xs text-blue-400">
-              <strong>ℹ Data Privacy:</strong> Your configurations and any submitted demographics are anonymized and used only for aggregate policy research. No personal information is retained or disclosed.
+              <strong>ℹ Data Privacy:</strong> Public submissions display policy scenario data only. Optional demographic context is used for aggregate research, and optional contact details are kept private.
             </p>
           </div>
         </div>

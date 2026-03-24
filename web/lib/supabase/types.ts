@@ -39,6 +39,18 @@ export interface GlobalConfigRow {
   changed_by: string
 }
 
+export interface SubmissionContactRow {
+  submission_id: string
+  email: string
+  created_at: string
+}
+
+export interface FeedbackContactRow {
+  feedback_id: string
+  email: string
+  created_at: string
+}
+
 export type Database = {
   public: {
     Tables: {
@@ -51,6 +63,16 @@ export type Database = {
         Row: FeedbackRow
         Insert: Omit<FeedbackRow, 'id' | 'created_at'>
         Update: Partial<Omit<FeedbackRow, 'id' | 'created_at'>>
+      }
+      submission_contacts: {
+        Row: SubmissionContactRow
+        Insert: Omit<SubmissionContactRow, 'created_at'>
+        Update: Partial<Omit<SubmissionContactRow, 'created_at'>>
+      }
+      feedback_contacts: {
+        Row: FeedbackContactRow
+        Insert: Omit<FeedbackContactRow, 'created_at'>
+        Update: Partial<Omit<FeedbackContactRow, 'created_at'>>
       }
       global_config: {
         Row: GlobalConfigRow

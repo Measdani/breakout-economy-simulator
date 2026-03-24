@@ -126,8 +126,8 @@ Default policy settings in `components/Simulator.tsx`:
 ## Notes
 
 - **Educational Only**: This is a simplified policy simulation for exploration and understanding. Not suitable for actual policy recommendations without validation.
-- **No Backend**: All calculations run in the browser (client-side only).
-- **No Data Collection**: No tracking, cookies, or data sent to servers.
+- **Server-backed submissions**: Public submissions, survey responses, and admin views use Supabase through server-side routes/actions.
+- **Minimal collection**: Optional contact details may be submitted, but public pages focus on policy data only.
 - **Open Source**: Math engine fully documented and testable.
 
 ## Related

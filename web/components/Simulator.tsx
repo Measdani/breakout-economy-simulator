@@ -1619,14 +1619,14 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                     <span className="font-semibold">🔒 Data Privacy</span>
                   </p>
                   <p className="text-xs text-dimmed leading-relaxed">
-                    Your configuration will be anonymized and aggregated into a public policy dataset. No personal information will be stored or disclosed.
+                    Public submissions display policy scenario data only. If you choose to add optional contact details in the submission form, those fields are kept private and are not shown in the public dataset.
                   </p>
                 </div>
 
                 {/* Optional Demographics */}
                 <div className="bg-dark-slate rounded-lg p-5 border border-border-slate">
                   <p className="text-sm font-semibold text-muted uppercase tracking-wide mb-4">Optional: Demographic Context</p>
-                  <p className="text-xs text-dimmed mb-4">Optional demographic context helps researchers understand how policy preferences vary across populations. All responses are anonymized and aggregated.</p>
+                  <p className="text-xs text-dimmed mb-4">Optional demographic context helps researchers understand how policy preferences vary across populations. Those fields are stored as aggregate research context and are not shown on the public submissions page.</p>
                   <div className="space-y-3">
                     <div>
                       <label className="text-xs text-dimmed mb-1 block">Age Range</label>

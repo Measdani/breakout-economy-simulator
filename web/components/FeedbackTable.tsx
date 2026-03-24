@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Papa from 'papaparse'
 import type { FeedbackRow } from '@/lib/supabase/types'
+import { sanitizeSpreadsheetCell } from '@/lib/spreadsheet'
 
 interface Props {
   feedback: FeedbackRow[]
@@ -11,14 +12,15 @@ interface Props {
 export default function FeedbackTable({ feedback }: Props) {
   const [search, setSearch] = useState('')
   const [categoryFilter, setCategoryFilter] = useState<string>('all')
+  const searchTerm = search.trim().toLowerCase()
 
   // Client-side filtering
   const filtered = feedback.filter((item) => {
     const matchesSearch =
-      !search ||
-      (item.name?.toLowerCase().includes(search.toLowerCase()) ?? false) ||
-      (item.email?.toLowerCase().includes(search.toLowerCase()) ?? false) ||
-      item.message.toLowerCase().includes(search.toLowerCase())
+      !searchTerm ||
+      (item.name?.toLowerCase().includes(searchTerm) ?? false) ||
+      (item.email?.toLowerCase().includes(searchTerm) ?? false) ||
+      item.message.toLowerCase().includes(searchTerm)
 
     const matchesCategory = categoryFilter === 'all' || item.category === categoryFilter
 
@@ -31,13 +33,13 @@ export default function FeedbackTable({ feedback }: Props) {
   const exportCSV = () => {
     const csv = Papa.unparse(
       filtered.map((item) => ({
-        id: item.id,
-        created_at: new Date(item.created_at).toLocaleString(),
-        name: item.name || 'Anonymous',
-        email: item.email || '',
-        category: item.category,
-        message: item.message,
-        config_name: item.config_name || 'N/A',
+        id: sanitizeSpreadsheetCell(item.id),
+        created_at: sanitizeSpreadsheetCell(new Date(item.created_at).toLocaleString()),
+        name: sanitizeSpreadsheetCell(item.name || 'Anonymous'),
+        email: sanitizeSpreadsheetCell(item.email || ''),
+        category: sanitizeSpreadsheetCell(item.category),
+        message: sanitizeSpreadsheetCell(item.message),
+        config_name: sanitizeSpreadsheetCell(item.config_name || 'N/A'),
       }))
     )
 

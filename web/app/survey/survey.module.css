@@ -195,12 +195,6 @@
   line-height: 1.6;
 }
 
-.emailStatus {
-  margin-top: 10px;
-  color: #93c5fd;
-  font-size: 14px;
-}
-
 .thankYouActions {
   display: flex;
   flex-wrap: wrap;

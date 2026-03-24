@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
+import { sanitizeSpreadsheetCell } from '@/lib/spreadsheet'
 
 export interface QuickSurveySnapshot {
   id: string
@@ -119,16 +120,18 @@ export default function QuickSurveyTable({ snapshots }: Props) {
     ]
 
     const rows = snapshots.map((snapshot) => [
-      new Date(snapshot.createdAt).toLocaleString(),
-      snapshot.alias,
-      snapshot.email,
-      snapshot.country,
-      snapshot.financialSecurity,
-      snapshot.policyBelMonthly,
-      snapshot.policyDependent,
-      snapshot.policyRetirement,
-      snapshot.policyHealthcare,
-      ...responseKeys.map((key) => prettySurveyValue(snapshot.responses[key])),
+      String(sanitizeSpreadsheetCell(new Date(snapshot.createdAt).toLocaleString()) ?? ''),
+      String(sanitizeSpreadsheetCell(snapshot.alias) ?? ''),
+      String(sanitizeSpreadsheetCell(snapshot.email) ?? ''),
+      String(sanitizeSpreadsheetCell(snapshot.country) ?? ''),
+      String(sanitizeSpreadsheetCell(snapshot.financialSecurity) ?? ''),
+      String(sanitizeSpreadsheetCell(snapshot.policyBelMonthly) ?? ''),
+      String(sanitizeSpreadsheetCell(snapshot.policyDependent) ?? ''),
+      String(sanitizeSpreadsheetCell(snapshot.policyRetirement) ?? ''),
+      String(sanitizeSpreadsheetCell(snapshot.policyHealthcare) ?? ''),
+      ...responseKeys.map((key) =>
+        String(sanitizeSpreadsheetCell(prettySurveyValue(snapshot.responses[key])) ?? '')
+      ),
     ])
 
     const excelXml = toExcelXml(headers, rows)

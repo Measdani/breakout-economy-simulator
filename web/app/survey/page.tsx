@@ -46,14 +46,6 @@ type SurveyFormState = {
   country: string
 }
 
-type ResultsEmailStatus =
-  | 'not_requested'
-  | 'sent'
-  | 'disabled'
-  | 'missing_config'
-  | 'skipped_no_email'
-  | 'failed'
-
 type Option<T extends string> = {
   value: T
   label: string
@@ -235,8 +227,6 @@ export default function SurveyPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [submitted, setSubmitted] = useState(false)
-  const [resultsEmailStatus, setResultsEmailStatus] =
-    useState<ResultsEmailStatus>('not_requested')
 
   const policyPreview = useMemo(() => {
     if (
@@ -328,10 +318,7 @@ export default function SurveyPage() {
 
     setIsSubmitting(true)
     try {
-      const submissionResult = await submitQuickSurvey(payload)
-      setResultsEmailStatus(
-        payload.email ? submissionResult.resultsEmailStatus : 'not_requested'
-      )
+      await submitQuickSurvey(payload)
       setSubmitted(true)
     } catch (submitError) {
       console.error(submitError)
@@ -350,13 +337,6 @@ export default function SurveyPage() {
             Your responses help researchers understand how economic support systems influence
             productivity and participation in modern economies.
           </p>
-          {resultsEmailStatus !== 'not_requested' ? (
-            <p className={styles.emailStatus}>
-              {resultsEmailStatus === 'sent'
-                ? 'A copy of your results was sent to your email.'
-                : 'You requested an emailed copy of your results. Finish email domain/provider setup to enable delivery.'}
-            </p>
-          ) : null}
           <div className={styles.thankYouActions}>
             <Link href="/leaderboard" className={styles.primaryAction}>
               View Submissions
@@ -582,9 +562,6 @@ export default function SurveyPage() {
                   onChange={(event) => setForm((prev) => ({ ...prev, email: event.target.value }))}
                   placeholder="you@example.com"
                 />
-                <p className={styles.fieldHint}>
-                  Add your email to receive a copy of your results. Delivery activates after domain setup.
-                </p>
               </label>
               <label>
                 Country (optional)

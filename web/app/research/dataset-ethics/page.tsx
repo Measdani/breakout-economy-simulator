@@ -73,7 +73,8 @@ export default function DatasetEthicsPage() {
             <section id="no-pii" className={`${styles.card} ${styles.full}`}>
               <h2 className={styles.h2}>Privacy Posture</h2>
               <p className={styles.p}>
-                The model is designed to support research without collecting personal identity.
+                The model is designed to keep public research outputs focused on policy data,
+                not personal identity.
               </p>
               <p className={styles.p}>We prioritize:</p>
               <ul className={styles.list}>
@@ -83,7 +84,9 @@ export default function DatasetEthicsPage() {
                 <li>no behavioral tracking</li>
               </ul>
               <p className={styles.p}>
-                No personally identifiable information is collected or stored.
+                Optional contact details may be submitted in some forms, but those fields are kept
+                private, are not included in public dataset views, and are not required to use the
+                simulator.
               </p>
             </section>
           </div>

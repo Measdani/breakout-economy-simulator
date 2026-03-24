@@ -4,8 +4,14 @@ import { revalidatePath } from 'next/cache'
 import { createServiceClient } from '@/lib/supabase/server'
 import { runSimulation } from '@/lib/engine'
 import { buildSubmissionPayload } from '@/lib/submissionPayload'
-import { cookies } from 'next/headers'
-import { sendSurveyResultsEmail } from '@/lib/email/sendSurveyResultsEmail'
+import { cookies, headers } from 'next/headers'
+import { sanitizeOptionalEmail, sanitizeOptionalText } from '@/lib/inputSanitizers'
+import { storeSubmissionContact } from '@/lib/privateContacts'
+import {
+  PUBLIC_RATE_LIMITS,
+  checkPublicRateLimit,
+  getRequestFingerprint,
+} from '@/lib/security/publicRateLimit'
 import {
   QUICK_SURVEY_NAME,
   buildSurveyPolicyConfig,
@@ -13,46 +19,31 @@ import {
   type QuickSurveyAnswers,
 } from '@/lib/quickSurvey'
 
-function sanitizeOptionalText(value: string | null | undefined, maxLen: number): string | null {
-  if (typeof value !== 'string') {
-    return null
-  }
-
-  const trimmed = value.trim()
-  if (trimmed.length === 0) {
-    return null
-  }
-
-  return trimmed.slice(0, maxLen)
-}
-
-function sanitizeOptionalEmail(value: string | null | undefined): string | null {
-  const email = sanitizeOptionalText(value, 254)
-  if (!email) {
-    return null
-  }
-
-  const normalized = email.toLowerCase()
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  if (!emailPattern.test(normalized)) {
-    throw new Error('Please enter a valid email address or leave it blank.')
-  }
-
-  return normalized
-}
-
 export async function submitQuickSurvey(answers: QuickSurveyAnswers) {
+  const requestHeaders = await headers()
+  const rateLimit = await checkPublicRateLimit(
+    'survey',
+    getRequestFingerprint(requestHeaders),
+    PUBLIC_RATE_LIMITS.survey
+  )
+
+  if (!rateLimit.allowed) {
+    throw new Error(
+      `Too many survey submissions from this connection. Try again in about ${rateLimit.retryAfterSeconds} seconds.`
+    )
+  }
+
   const supabase = createServiceClient()
 
   const alias = sanitizeOptionalText(answers.alias, 50)
-  const email = sanitizeOptionalEmail(answers.email)
   const country = sanitizeOptionalText(answers.country, 80)
+  const email = sanitizeOptionalEmail(answers.email)
 
   const normalizedAnswers: QuickSurveyAnswers = {
     ...answers,
     alias,
-    email,
     country,
+    email,
   }
 
   const { config, policyModel, configName } = buildSurveyPolicyConfig(normalizedAnswers)
@@ -92,7 +83,7 @@ export async function submitQuickSurvey(answers: QuickSurveyAnswers) {
     .from('submissions')
     .insert({
       name: alias || null,
-      email,
+      email: null,
       config,
       result,
       surplus_deficit: result.balance.surplusDeficit,
@@ -111,6 +102,16 @@ export async function submitQuickSurvey(answers: QuickSurveyAnswers) {
     throw new Error('Failed to submit quick survey response')
   }
 
+  if (email) {
+    try {
+      await storeSubmissionContact(supabase, String(data.id), email)
+    } catch (contactError) {
+      console.error('Quick survey contact storage error:', contactError)
+      await supabase.from('submissions').delete().eq('id', data.id)
+      throw new Error('Failed to store contact details')
+    }
+  }
+
   revalidatePath('/leaderboard')
   revalidatePath('/admin')
 
@@ -122,24 +123,9 @@ export async function submitQuickSurvey(answers: QuickSurveyAnswers) {
     secure: process.env.NODE_ENV === 'production',
   })
 
-  const resultsEmail = await sendSurveyResultsEmail({
-    to: email,
-    alias,
-    submissionId: String(data.id),
-    submittedAt: String(data.created_at ?? new Date().toISOString()),
-    configName,
-    belMonthly: policyModel.belMonthly,
-    dependentPolicy: policyModel.dependentPolicyLabel,
-    retirement: policyModel.retirementLabel,
-    healthcare: policyModel.healthcareLabel,
-    isSolvent: result.balance.isSolvent,
-    surplusDeficit: result.balance.surplusDeficit,
-  })
-
   return {
     id: data.id,
     isSolvent: result.balance.isSolvent,
     surplusDeficit: result.balance.surplusDeficit,
-    resultsEmailStatus: resultsEmail.status,
   }
 }

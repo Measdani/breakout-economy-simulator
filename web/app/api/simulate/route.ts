@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { runSimulation } from '@/lib/engine'
-import type { PolicyConfig, SimulationResult } from '@/lib/types'
+import type { SimulationResult } from '@/lib/types'
+import { normalizePublicPolicyConfig } from '@/lib/publicPolicyConfig'
+import {
+  PUBLIC_RATE_LIMITS,
+  checkPublicRateLimit,
+  getRequestFingerprint,
+} from '@/lib/security/publicRateLimit'
 
 /**
  * POST /api/simulate
@@ -19,76 +25,23 @@ import type { PolicyConfig, SimulationResult } from '@/lib/types'
  */
 export async function POST(request: NextRequest) {
   try {
+    const rateLimit = await checkPublicRateLimit(
+      'simulate',
+      getRequestFingerprint(request.headers),
+      PUBLIC_RATE_LIMITS.simulate
+    )
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          error: `Too many simulation requests. Try again in about ${rateLimit.retryAfterSeconds} seconds.`,
+        },
+        { status: 429 }
+      )
+    }
+
     const body = await request.json()
-
-    // Validate input is a partial config
-    if (!body || typeof body !== 'object') {
-      return NextResponse.json(
-        { error: 'Request body must be a valid PolicyConfig object' },
-        { status: 400 }
-      )
-    }
-
-    // Default config values
-    const DEFAULT_CONFIG: PolicyConfig = {
-      tokenTaxRate: 0.0035,
-      flowBaseAnnual: 1e15,
-      ubiAnnualPerAdult: 12000,
-      adultPopulation: 265000000,
-      welfareSavingsCredit: 630e9,
-      govtOperatingRequirement: 2.74e12,
-      breakoutPoint: 60000,
-      tier1Rate: 0.19,
-      tier1Start: 60000,
-      tier2Rate: 0.29,
-      tier2Start: 135000,
-      supplementApexIncome: 24000,
-      supplementApexBonus: 6000,
-      personaWeights: [0.25, 0.25, 0.25, 0.25],
-      ubiDependent1: 6000,
-      ubiDependent2: 4000,
-      ubiDependent3: 2000,
-      pctHouseholds1Dep: 0.25,
-      pctHouseholds2Dep: 0.15,
-      pctHouseholds3Dep: 0.10,
-    }
-
-    // Keep tier1Start in sync with breakoutPoint unless explicitly provided.
-    const normalizedTier1Start =
-      typeof body.tier1Start === 'number'
-        ? body.tier1Start
-        : typeof body.breakoutPoint === 'number'
-          ? body.breakoutPoint
-          : DEFAULT_CONFIG.breakoutPoint
-
-    // Merge provided config with defaults
-    const config: PolicyConfig = {
-      ...DEFAULT_CONFIG,
-      ...body,
-      tier1Start: normalizedTier1Start,
-    }
-
-    // Validate critical parameters
-    if (config.tokenTaxRate < 0.001 || config.tokenTaxRate > 0.01) {
-      return NextResponse.json(
-        { error: 'tokenTaxRate must be between 0.001 and 0.01' },
-        { status: 400 }
-      )
-    }
-
-    if (config.ubiAnnualPerAdult < 0 || config.ubiAnnualPerAdult > 20000) {
-      return NextResponse.json(
-        { error: 'ubiAnnualPerAdult must be between $0 and $20,000' },
-        { status: 400 }
-      )
-    }
-
-    if (config.breakoutPoint < 30000 || config.breakoutPoint > 100000) {
-      return NextResponse.json(
-        { error: 'breakoutPoint must be between $30,000 and $100,000' },
-        { status: 400 }
-      )
-    }
+    const config = normalizePublicPolicyConfig(body)
 
     // Run simulation
     const result: SimulationResult = runSimulation(config)
@@ -116,6 +69,10 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     )
   } catch (error) {
+    if (error instanceof Error && /must be|Configuration must/.test(error.message)) {
+      return NextResponse.json({ error: error.message }, { status: 400 })
+    }
+
     console.error('Simulation error:', error)
     return NextResponse.json(
       { error: 'Failed to run simulation', details: error instanceof Error ? error.message : 'Unknown error' },

@@ -243,7 +243,7 @@ export default function MethodologyPage() {
               <h2 className={styles.h2}>Research Dataset Generation</h2>
               <p className={styles.p}>
                 Each simulator configuration submitted through the platform contributes to an
-                anonymized research dataset.
+                policy research dataset.
               </p>
               <p className={styles.p}>This dataset enables analysis of:</p>
               <ul className={styles.list}>
@@ -251,7 +251,10 @@ export default function MethodologyPage() {
                   <li key={item}>{item}</li>
                 ))}
               </ul>
-              <p className={styles.p}>No personally identifiable information is collected or stored.</p>
+              <p className={styles.p}>
+                Optional contact details may be submitted in some forms, but those fields are kept
+                private and are not included in public research views.
+              </p>
             </section>
 
             <section className={styles.card} id="limitations">

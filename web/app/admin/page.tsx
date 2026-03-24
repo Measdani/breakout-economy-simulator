@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { isAdmin } from '@/lib/auth/admin'
 import { createServiceClient } from '@/lib/supabase/server'
+import { getFeedbackContactMap, getSubmissionContactMap } from '@/lib/privateContacts'
 import AdminTable from '@/components/AdminTable'
 import AdminCharts from '@/components/AdminCharts'
 import FeedbackTable from '@/components/FeedbackTable'
@@ -67,7 +68,7 @@ function getQuickSurveySnapshots(submissions: any[]): QuickSurveySnapshot[] {
       id: String(submission.id),
       createdAt: String(submission.created_at),
       alias: String(submission.name ?? responses.alias ?? 'Anonymous'),
-      email: prettySurveyValue(submission.email ?? responses.email),
+      email: prettySurveyValue(submission.email),
       country: prettySurveyValue(responses.country),
       financialSecurity: prettySurveyValue(responses.financialSecurity),
       policyBelMonthly: belMonthly,
@@ -94,7 +95,17 @@ async function getAllSubmissions() {
     .order('created_at', { ascending: false })
 
   if (error) throw error
-  return data
+
+  const submissions = data || []
+  const contactMap = await getSubmissionContactMap(
+    supabase,
+    submissions.map((submission) => String(submission.id))
+  )
+
+  return submissions.map((submission) => ({
+    ...submission,
+    email: contactMap.get(String(submission.id)) ?? submission.email ?? null,
+  }))
 }
 
 async function getFeedback() {
@@ -110,7 +121,17 @@ async function getFeedback() {
     .order('created_at', { ascending: false })
 
   if (error) throw error
-  return data || []
+
+  const feedback = data || []
+  const contactMap = await getFeedbackContactMap(
+    supabase,
+    feedback.map((item) => String(item.id))
+  )
+
+  return feedback.map((item) => ({
+    ...item,
+    email: contactMap.get(String(item.id)) ?? item.email ?? null,
+  }))
 }
 
 async function getStatistics(submissions: any[]) {

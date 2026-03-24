@@ -1,7 +1,20 @@
 'use server'
 
 import { createServiceClient } from '@/lib/supabase/server'
-import type { PolicyConfig, SimulationResult } from '@/lib/types'
+import type { PolicyConfig } from '@/lib/types'
+import { normalizePublicPolicyConfig } from '@/lib/publicPolicyConfig'
+import { storeFeedbackContact } from '@/lib/privateContacts'
+import {
+  sanitizeOptionalEmail,
+  sanitizeOptionalText,
+  sanitizeRequiredText,
+} from '@/lib/inputSanitizers'
+import {
+  PUBLIC_RATE_LIMITS,
+  checkPublicRateLimit,
+  getRequestFingerprint,
+} from '@/lib/security/publicRateLimit'
+import { headers } from 'next/headers'
 
 interface FeedbackPayload {
   name?: string
@@ -16,27 +29,43 @@ interface FeedbackPayload {
 const VALID_CATEGORIES = ['bug', 'suggestion', 'question', 'general']
 
 export async function submitFeedback(feedback: FeedbackPayload) {
-  // Validate required fields
-  if (!feedback.message || !feedback.message.trim()) {
-    throw new Error('Message is required')
+  const requestHeaders = await headers()
+  const rateLimit = await checkPublicRateLimit(
+    'feedback',
+    getRequestFingerprint(requestHeaders),
+    PUBLIC_RATE_LIMITS.feedback
+  )
+
+  if (!rateLimit.allowed) {
+    throw new Error(
+      `Too many feedback submissions from this connection. Try again in about ${rateLimit.retryAfterSeconds} seconds.`
+    )
   }
 
   if (!feedback.category || !VALID_CATEGORIES.includes(feedback.category)) {
     throw new Error('Invalid feedback category')
   }
 
+  const sanitizedName = sanitizeOptionalText(feedback.name, 50)
+  const sanitizedEmail = sanitizeOptionalEmail(feedback.email)
+  const sanitizedMessage = sanitizeRequiredText(feedback.message, 500, 'Message')
+  const sanitizedConfigName = sanitizeOptionalText(feedback.configName, 160)
+  const configSnapshot = feedback.config
+    ? normalizePublicPolicyConfig(feedback.config)
+    : null
+
   const supabase = createServiceClient()
 
   const { data, error } = await supabase
     .from('feedback')
     .insert({
-      name: feedback.name || null,
-      email: feedback.email || null,
+      name: sanitizedName,
+      email: null,
       category: feedback.category,
-      message: feedback.message.trim(),
-      config_snapshot: feedback.config || null,
-      surplus_deficit: feedback.surplusDeficit || null,
-      config_name: feedback.configName || null,
+      message: sanitizedMessage,
+      config_snapshot: configSnapshot,
+      surplus_deficit: feedback.surplusDeficit ?? null,
+      config_name: sanitizedConfigName,
     })
     .select()
     .single()
@@ -44,6 +73,16 @@ export async function submitFeedback(feedback: FeedbackPayload) {
   if (error) {
     console.error('Feedback submission error:', error)
     throw new Error('Failed to submit feedback')
+  }
+
+  if (sanitizedEmail) {
+    try {
+      await storeFeedbackContact(supabase, String(data.id), sanitizedEmail)
+    } catch (contactError) {
+      console.error('Feedback contact storage error:', contactError)
+      await supabase.from('feedback').delete().eq('id', data.id)
+      throw new Error('Failed to store contact details')
+    }
   }
 
   return data

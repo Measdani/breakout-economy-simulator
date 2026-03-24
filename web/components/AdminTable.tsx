@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Papa from 'papaparse'
 import type { SubmissionRow } from '@/lib/supabase/types'
 import { buildSubmissionPayload, flattenSubmissionPayload } from '@/lib/submissionPayload'
+import { sanitizeSpreadsheetCell } from '@/lib/spreadsheet'
 
 interface Props {
   submissions: SubmissionRow[]
@@ -11,12 +12,18 @@ interface Props {
 
 export default function AdminTable({ submissions }: Props) {
   const [search, setSearch] = useState('')
+  const searchTerm = search.trim().toLowerCase()
 
-  const filtered = submissions.filter(
-    (sub) =>
-      (sub.name?.toLowerCase().includes(search.toLowerCase()) || sub.name === null) ||
-      (sub.email?.toLowerCase().includes(search.toLowerCase()) || sub.email === null)
-  )
+  const filtered = submissions.filter((sub) => {
+    if (!searchTerm) {
+      return true
+    }
+
+    return (
+      sub.name?.toLowerCase().includes(searchTerm) === true ||
+      sub.email?.toLowerCase().includes(searchTerm) === true
+    )
+  })
 
   const getSubmissionPayload = (sub: SubmissionRow) => {
     const existing = sub.submission_payload_json as any
@@ -51,13 +58,19 @@ export default function AdminTable({ submissions }: Props) {
     const csv = Papa.unparse(
       filtered.map((sub) => {
         const payload = getSubmissionPayload(sub)
+        const flattenedPayload = Object.fromEntries(
+          Object.entries(flattenSubmissionPayload(payload)).map(([key, value]) => [
+            key,
+            sanitizeSpreadsheetCell(value),
+          ])
+        )
 
         return {
-          id: sub.id,
-          created_at: sub.created_at,
-          name: sub.name || 'Anonymous',
-          email: sub.email || '',
-          ...flattenSubmissionPayload(payload),
+          id: sanitizeSpreadsheetCell(sub.id),
+          created_at: sanitizeSpreadsheetCell(sub.created_at),
+          name: sanitizeSpreadsheetCell(sub.name || 'Anonymous'),
+          email: sanitizeSpreadsheetCell(sub.email || ''),
+          ...flattenedPayload,
         }
       })
     )

@@ -404,7 +404,6 @@ export function toSurveyResponseRecord(answers: QuickSurveyAnswers): Record<stri
     educationLevel: answers.educationLevel,
     educationAlignment: answers.educationAlignment,
     alias: answers.alias,
-    email: answers.email,
     country: answers.country,
   }
 }

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import type { PolicyConfig, SimulationResult } from '@/lib/types'
 import { submitSimulation } from '@/app/actions/submissions'
-import { buildSubmissionPayload, type SubmissionDemographics } from '@/lib/submissionPayload'
+import type { SubmissionDemographics } from '@/lib/submissionPayload'
 
 interface Props {
   config: PolicyConfig
@@ -33,20 +33,13 @@ export default function SubmitModal({ config, result, isOpen, onClose, configNam
     setError(null)
 
     try {
-      const payload = buildSubmissionPayload({
-        config,
-        result,
-        userFeedbackText: userFeedbackText || null,
-        demographics: demographics ?? null,
-      })
-
       await submitSimulation(
         config,
-        result,
-        payload,
         name || undefined,
         email || undefined,
-        configName
+        configName,
+        userFeedbackText || undefined,
+        demographics ?? null
       )
 
       setSuccess(true)
