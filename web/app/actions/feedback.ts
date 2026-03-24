@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/client'
+import { createServiceClient } from '@/lib/supabase/server'
 import type { PolicyConfig, SimulationResult } from '@/lib/types'
 
 interface FeedbackPayload {
@@ -25,7 +25,7 @@ export async function submitFeedback(feedback: FeedbackPayload) {
     throw new Error('Invalid feedback category')
   }
 
-  const supabase = createClient()
+  const supabase = createServiceClient()
 
   const { data, error } = await supabase
     .from('feedback')

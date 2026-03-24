@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { createClient } from '@/lib/supabase/client'
+import { createServiceClient } from '@/lib/supabase/server'
 import { runSimulation } from '@/lib/engine'
 import { buildSubmissionPayload } from '@/lib/submissionPayload'
 import { cookies } from 'next/headers'
@@ -42,7 +42,7 @@ function sanitizeOptionalEmail(value: string | null | undefined): string | null 
 }
 
 export async function submitQuickSurvey(answers: QuickSurveyAnswers) {
-  const supabase = createClient()
+  const supabase = createServiceClient()
 
   const alias = sanitizeOptionalText(answers.alias, 50)
   const email = sanitizeOptionalEmail(answers.email)

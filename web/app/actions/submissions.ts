@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/client'
+import { createServiceClient } from '@/lib/supabase/server'
 import type { PolicyConfig, SimulationResult } from '@/lib/types'
 import type { SubmissionPayload } from '@/lib/submissionPayload'
 import { revalidatePath } from 'next/cache'
@@ -14,7 +14,7 @@ export async function submitSimulation(
   email?: string,
   configName?: string
 ) {
-  const supabase = createClient()
+  const supabase = createServiceClient()
 
   const { data, error } = await supabase
     .from('submissions')

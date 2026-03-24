@@ -323,16 +323,6 @@ export default async function AssumptionsPage({ searchParams }: PageProps) {
           ))}
         </div>
 
-        <section className={styles.footerNote}>
-          <p>
-            This remains a deterministic policy reference, not a macroeconomic forecast. The point of
-            the page is to make the simulator&apos;s assumptions easy to audit.
-          </p>
-          <p>
-            For the broader research framing, objective function, and dataset context, see the{' '}
-            <Link href="/methodology">methodology page</Link>.
-          </p>
-        </section>
       </main>
     </PublicSiteShell>
   )

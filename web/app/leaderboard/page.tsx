@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/client'
+import { createServiceClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import PublicSiteShell from '@/components/site/PublicSiteShell'
 import { cookies } from 'next/headers'
@@ -301,11 +301,13 @@ function isSurveyGeneratedSubmission(submission: SubmissionRecord): boolean {
 }
 
 async function getLeaderboardData() {
-  const supabase = createClient()
+  const supabase = createServiceClient()
 
   const submissionsQuery = supabase
     .from('submissions')
-    .select('*')
+    .select(
+      'id, name, config_name, token_tax_rate, ubi_annual, breakout_point, is_solvent, surplus_deficit, created_at, result, config, submission_payload_json'
+    )
     .order('created_at', { ascending: false })
 
   const totalCountQuery = supabase
