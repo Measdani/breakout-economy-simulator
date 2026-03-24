@@ -56,6 +56,10 @@
   padding: 0;
 }
 
+.fieldset + .fieldset {
+  margin-top: 18px;
+}
+
 .legend {
   margin: 0 0 10px;
   font-size: 15px;

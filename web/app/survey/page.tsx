@@ -378,7 +378,7 @@ export default function SurveyPage() {
           <h1>{QUICK_SURVEY_NAME}</h1>
           <p>
             Share your perspective and policy preferences. Your submission is converted into a
-            policy model and added to the leaderboard dataset.
+            policy model and added to the submissions dataset.
           </p>
         </header>
 
