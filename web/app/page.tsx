@@ -276,7 +276,7 @@ export default function Home() {
             <div className="footerColumn">
               <h4>Methodology</h4>
               <Link href="/methodology">Framework</Link>
-              <Link href="/methodology#assumptions">Assumptions</Link>
+              <Link href="/assumptions">Assumptions</Link>
               <Link href="/methodology#modules">Program Modules</Link>
             </div>
 

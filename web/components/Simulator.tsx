@@ -6,6 +6,7 @@ import { runSimulation, calculateFrictionTaxSensitivity } from '../lib/engine';
 import { useAnimatedNumber, numberFormatters } from '../lib/hooks/useAnimatedNumber';
 import { TERMINOLOGY, getRetirementModeBadge } from '../lib/terminology';
 import type { PolicyConfig, SimulationResult } from '../lib/types';
+import { buildAssumptionsHref } from '../lib/assumptionsRoute';
 import PolicySliders from './PolicySliders';
 import ResultsDisplay from './ResultsDisplay';
 import FiscalSustainabilityIndicator from './FiscalSustainabilityIndicator';
@@ -16,7 +17,6 @@ import Warnings from './Warnings';
 import GlossaryPanel from './GlossaryPanel';
 import SubmitModal from './SubmitModal';
 import FeedbackModal from './FeedbackModal';
-import AssumptionsPanel from './AssumptionsPanel';
 import Tooltip from './Tooltip';
 import ProgramModuleTemplate from './ProgramModuleTemplate';
 
@@ -136,8 +136,6 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [showGlossary, setShowGlossary] = useState(false);
-  const [showAssumptionsPanel, setShowAssumptionsPanel] = useState(false);
-  const [showFrictionTaxAssumptions, setShowFrictionTaxAssumptions] = useState(false);
   const [demographics, setDemographics] = useState({ ageRange: '', incomeLevel: '', region: '', affiliation: '' });
 
   const handlePresetSelectWithName = (presetName: string, presetConfig: Partial<PolicyConfig>) => {
@@ -215,6 +213,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
   };
 
   const result: SimulationResult = useMemo(() => runSimulation(config), [config]);
+  const assumptionsHref = buildAssumptionsHref(config);
 
   // Friction Tax Sensitivity Analysis
   const frictionTaxSensitivityUp = useMemo(() =>
@@ -732,49 +731,20 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                         </div>
                       </div>
 
-                      {/* Model Assumptions (Collapsible) */}
+                      {/* Model Assumptions */}
                       <div className="border-t border-border-slate pt-6">
-                        <button
-                          type="button"
-                          onClick={() => setShowFrictionTaxAssumptions(!showFrictionTaxAssumptions)}
+                        <Link
+                          href={assumptionsHref}
                           className="flex items-center justify-between w-full mb-3 hover:opacity-80 transition bg-darker-slate rounded px-3 py-2 border border-border-slate"
                         >
-                          <p className="text-sm text-bright uppercase tracking-wide font-semibold">📘 Model Assumptions</p>
-                          <span className="text-xs text-dimmed">{showFrictionTaxAssumptions ? '▼' : '▶'}</span>
-                        </button>
+                          <p className="text-sm text-bright uppercase tracking-wide font-semibold">Model Assumptions</p>
+                          <span className="text-xs text-blue-300 font-semibold">Open</span>
+                        </Link>
 
-                        {showFrictionTaxAssumptions && (
-                          <div className="space-y-2 text-xs bg-darker-navy rounded p-3 border border-border-slate">
-                            <div className="flex justify-between items-center mb-2">
-                              <span></span>
-                              <button
-                                type="button"
-                                onClick={() => setShowFrictionTaxAssumptions(false)}
-                                style={{ cursor: 'pointer', fontSize: '18px', lineHeight: '1', color: '#cbd5e1', background: 'none', border: 'none', padding: '0', transition: 'color 0.2s ease' }}
-                                onMouseEnter={(e) => { e.currentTarget.style.color = '#f1f5f9'; }}
-                                onMouseLeave={(e) => { e.currentTarget.style.color = '#cbd5e1'; }}
-                              >
-                                ✕
-                              </button>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-dimmed">Base Transaction Volume:</span>
-                              <span className="text-bright font-semibold">1.0 Quadrillion tokens</span>
-                            </div>
-                            <p className="text-dimmed text-xs mt-1">Applied to electronic settlement layer</p>
-
-                            <div className="flex justify-between pt-2 border-t border-border-slate">
-                              <span className="text-dimmed">Growth Rate Compounding:</span>
-                              <span className="text-bright font-semibold">Annual</span>
-                            </div>
-
-                            <div className="flex justify-between pt-2 border-t border-border-slate">
-                              <span className="text-dimmed">Sensitivity Analysis:</span>
-                              <span className="text-bright font-semibold">Static Volume</span>
-                            </div>
-                            <p className="text-dimmed text-xs mt-1">±0.10 mils rate changes assume constant transaction volume</p>
-                          </div>
-                        )}
+                        <p className="text-xs text-dimmed mt-2">
+                          Fiscal baselines, tax architecture, BEL structure, and module settings now live
+                          on a separate page so the reference material is readable.
+                        </p>
                       </div>
                     </div>
                   )}
@@ -1795,8 +1765,8 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
             {activeScreen === 'submit' && <div style={{ width: '90px' }} />}
           </div>
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-              <button
-                onClick={() => setShowAssumptionsPanel(true)}
+              <Link
+                href={assumptionsHref}
                 className="px-5 py-3 rounded transition hover:shadow-lg"
                 style={{
                   background: '#0F172A',
@@ -1816,8 +1786,8 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                   e.currentTarget.style.boxShadow = '0 0 12px rgba(0, 217, 255, 0.4), inset 0 0 12px rgba(0, 217, 255, 0.1)';
                 }}
               >
-                ⚙ Assumptions
-              </button>
+                Assumptions
+              </Link>
               <button
                 onClick={() => setShowFeedbackModal(true)}
                 className="px-5 py-3 rounded transition hover:shadow-lg"
@@ -1864,14 +1834,6 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
         onClose={() => setShowFeedbackModal(false)}
         configName={currentConfig}
       />
-
-      {/* Assumptions Panel */}
-      {showAssumptionsPanel && (
-        <AssumptionsPanel
-          config={config}
-          onClose={() => setShowAssumptionsPanel(false)}
-        />
-      )}
     </div>
   );
 }

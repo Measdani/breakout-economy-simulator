@@ -33,7 +33,7 @@ export default function PublicSiteShell({
               <p className="text-xs uppercase tracking-widest text-muted mb-3">Methodology</p>
               <div className="space-y-2 text-dimmed">
                 <Link href="/methodology" className="block hover:text-bright transition">Framework</Link>
-                <Link href="/methodology#assumptions" className="block hover:text-bright transition">Assumptions</Link>
+                <Link href="/assumptions" className="block hover:text-bright transition">Assumptions</Link>
                 <Link href="/methodology#modules" className="block hover:text-bright transition">Program Modules</Link>
               </div>
             </div>
