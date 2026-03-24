@@ -359,7 +359,7 @@ export default function SurveyPage() {
           ) : null}
           <div className={styles.thankYouActions}>
             <Link href="/leaderboard" className={styles.primaryAction}>
-              View the Leaderboard
+              View Submissions
             </Link>
             <Link href="/model" className={styles.secondaryAction}>
               Explore the NAiERM Simulator
@@ -537,7 +537,7 @@ export default function SurveyPage() {
           </section>
 
           <section className={styles.card}>
-            <h2>Final Step - Leaderboard Submission</h2>
+            <h2>Final Step - Submission Details</h2>
             <p className={styles.finalStepText}>
               Your Policy Model
             </p>
