@@ -557,7 +557,7 @@ export default async function LeaderboardPage() {
       : null
 
   const primarySubmission = yourSubmission ?? lastSubmission
-  const primaryUserLabel = yourSubmission ? 'Your Submission' : 'Last Submission'
+  const primaryUserLabel = 'Last Submission'
 
   const averageBalance =
     rankedScenarios.length > 0
