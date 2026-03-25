@@ -2,6 +2,7 @@ import { createServiceClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import PublicSiteShell from '@/components/site/PublicSiteShell'
 import { cookies } from 'next/headers'
+import { Fragment } from 'react'
 
 export const dynamic = 'force-dynamic'
 
@@ -42,6 +43,8 @@ type RankedScenario = {
   revenueEfficiencyScore: number
   policy: PolicyDetails
 }
+
+type SupportBand = 'lower' | 'moderate' | 'higher'
 
 const usdFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -368,9 +371,146 @@ function buildRankedScenarios(submissions: SubmissionRecord[]): RankedScenario[]
   })
 }
 
+function getMedian(values: number[]): number | null {
+  const sorted = values
+    .filter((value) => Number.isFinite(value))
+    .sort((a, b) => a - b)
+
+  if (sorted.length === 0) {
+    return null
+  }
+
+  const middle = Math.floor(sorted.length / 2)
+
+  return sorted.length % 2 === 0
+    ? (sorted[middle - 1] + sorted[middle]) / 2
+    : sorted[middle]
+}
+
+function getSupportBand(belLevel: number): SupportBand {
+  if (belLevel < 10000) {
+    return 'lower'
+  }
+
+  if (belLevel <= 16000) {
+    return 'moderate'
+  }
+
+  return 'higher'
+}
+
+function buildPolicyInsights(rows: RankedScenario[]): string[] {
+  if (rows.length === 0) {
+    return []
+  }
+
+  const belLevels = rows
+    .map((row) => row.policy.belLevel)
+    .filter((value) => Number.isFinite(value) && value > 0)
+  const breakoutPoints = rows
+    .map((row) => row.policy.sbiBreakoutPoint)
+    .filter((value) => Number.isFinite(value) && value > 0)
+  const workIncentives = rows
+    .map((row) => row.workIncentive)
+    .filter((value) => Number.isFinite(value))
+
+  const supportBandCounts: Record<SupportBand, number> = {
+    lower: 0,
+    moderate: 0,
+    higher: 0,
+  }
+
+  for (const belLevel of belLevels) {
+    supportBandCounts[getSupportBand(belLevel)] += 1
+  }
+
+  const dominantSupportBand = (Object.entries(supportBandCounts) as [SupportBand, number][])
+    .reduce((best, current) => (current[1] > best[1] ? current : best), ['moderate', 0])[0]
+  const moderateShare = belLevels.length > 0 ? supportBandCounts.moderate / belLevels.length : 0
+  const medianBelLevel = getMedian(belLevels)
+  const belLevelText =
+    medianBelLevel === null
+      ? 'income support levels'
+      : `income support levels, with a median BEL of ${usdFormatter.format(Math.round(medianBelLevel))} per adult/year`
+
+  let supportInsight = `Submission patterns are still forming around ${belLevelText}.`
+
+  if (belLevels.length > 0) {
+    if (moderateShare >= 0.5) {
+      supportInsight = `Most submissions cluster around moderate ${belLevelText}.`
+    } else if (dominantSupportBand === 'lower') {
+      supportInsight = `The most common submissions lean toward lighter ${belLevelText}.`
+    } else if (dominantSupportBand === 'higher') {
+      supportInsight = `The most common submissions lean toward higher ${belLevelText}.`
+    } else {
+      supportInsight = `The most common income support range is moderate, with a median BEL of ${usdFormatter.format(Math.round(medianBelLevel ?? 0))} per adult/year.`
+    }
+  }
+
+  const medianBreakoutPoint = getMedian(breakoutPoints)
+  const gradualBreakoutShare =
+    breakoutPoints.length > 0
+      ? breakoutPoints.filter((value) => value >= 60000).length / breakoutPoints.length
+      : 0
+
+  let breakoutInsight = 'Supplement phaseout patterns will appear here as more submissions come in.'
+
+  if (medianBreakoutPoint !== null) {
+    if (gradualBreakoutShare >= 0.5) {
+      breakoutInsight = `${formatPercent(gradualBreakoutShare * 100, 0)} of submissions keep supplemental support active to at least ${usdFormatter.format(60000)}, with a median breakout point of ${usdFormatter.format(Math.round(medianBreakoutPoint))}.`
+    } else {
+      breakoutInsight = `Typical submissions phase supplemental support out around ${usdFormatter.format(Math.round(medianBreakoutPoint))} of earned income.`
+    }
+  }
+
+  const averageWorkIncentive =
+    workIncentives.length > 0
+      ? workIncentives.reduce((sum, value) => sum + value, 0) / workIncentives.length
+      : null
+  const strongWorkShare =
+    workIncentives.length > 0
+      ? workIncentives.filter((value) => value >= 75).length / workIncentives.length
+      : 0
+
+  let workInsight = 'Work incentive data will appear once submissions accumulate.'
+
+  if (averageWorkIncentive !== null) {
+    if (strongWorkShare >= 0.5) {
+      workInsight = `Work incentives stay strong across the dataset: ${formatPercent(strongWorkShare * 100, 0)} of submissions score at least 75%, and the average model lands at ${formatPercent(averageWorkIncentive, 1)}.`
+    } else {
+      workInsight = `Submitted models average ${formatPercent(averageWorkIncentive, 1)} on the work-incentive metric.`
+    }
+  }
+
+  return [supportInsight, breakoutInsight, workInsight]
+}
+
+function buildTradeoffLine(row: RankedScenario): string {
+  const supportBand = getSupportBand(row.policy.belLevel)
+
+  if (row.isSolvent) {
+    if (supportBand === 'moderate') {
+      return 'This policy maintains solvency with moderate support levels.'
+    }
+
+    if (supportBand === 'higher') {
+      return 'This policy maintains solvency while offering higher support levels.'
+    }
+
+    return 'This policy preserves fiscal balance with lighter support levels.'
+  }
+
+  if (supportBand === 'higher' || supportBand === 'moderate') {
+    return 'This policy increases support but reduces fiscal balance.'
+  }
+
+  return 'This policy falls short of fiscal balance without significantly increasing support levels.'
+}
+
 export default async function LeaderboardPage() {
   const { submissions, totalCount } = await getLeaderboardData()
   const rankedScenarios = buildRankedScenarios(submissions)
+  const policyInsights = buildPolicyInsights(rankedScenarios)
 
   const avgWorkIncentive =
     rankedScenarios.length > 0
@@ -438,6 +578,7 @@ export default async function LeaderboardPage() {
             userLabel: primaryUserLabel,
             scenario: primarySubmission.scenario,
             secondaryLabel: primarySubmission.secondaryLabel,
+            tradeoffLine: buildTradeoffLine(primarySubmission),
             balance: primarySubmission.balance,
             isSolvent: primarySubmission.isSolvent,
             revenue: primarySubmission.revenue,
@@ -451,6 +592,7 @@ export default async function LeaderboardPage() {
             userLabel: 'Average',
             scenario: 'All Submitted Scenarios',
             secondaryLabel: 'Average across all simulator submissions',
+            tradeoffLine: null as string | null,
             balance: averageBalance,
             isSolvent: averageBalance >= 0,
             revenue: averageRevenue,
@@ -513,6 +655,18 @@ export default async function LeaderboardPage() {
                 </div>
               </article>
             </div>
+
+            {policyInsights.length > 0 ? (
+              <div className="lb-insights">
+                <div className="lb-insights-kicker">Policy Insights</div>
+                <h2 className="lb-insights-title">Key Insights from Submissions</h2>
+                <ul className="lb-insights-list">
+                  {policyInsights.map((insight) => (
+                    <li key={insight}>{insight}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
           </section>
 
           <section className="lb-section">
@@ -585,52 +739,61 @@ export default async function LeaderboardPage() {
                   <tbody>
                     {displayRows.map((row) => {
                       return (
-                        <tr key={row.id}>
-                          <td>{row.userLabel}</td>
-                          <td>
-                            <span className="scenario-name">{row.scenario}</span>
-                            <span className="scenario-sub">{row.secondaryLabel}</span>
-                          </td>
-                          <td className={row.isSolvent ? 'value-positive' : 'value-negative'}>
-                            {formatBillions(row.balance, true)}
-                          </td>
-                          <td>{formatBillions(row.revenue)}</td>
-                          <td>{formatPercent(row.workIncentive, 1)}</td>
-                          <td>{row.submissionCount === null ? '' : row.submissionCount.toLocaleString('en-US')}</td>
-                          <td>{row.submittedAt ? formatDate(row.submittedAt) : '-'}</td>
-                          <td>
-                            {row.policy ? (
-                              <details>
-                                <summary className="link-btn">View Policy</summary>
-                                <div className="policy-panel">
-                                  <p>
-                                    <span>BEL level:</span>{' '}
-                                    {usdFormatter.format(row.policy.belLevel)} per adult/year
-                                  </p>
-                                  <p>
-                                    <span>SBI configuration:</span> Breakout at{' '}
-                                    {usdFormatter.format(row.policy.sbiBreakoutPoint)}
-                                  </p>
-                                  <p>
-                                    <span>Healthcare assumption:</span>{' '}
-                                    {row.policy.healthcareAssumption}
-                                  </p>
-                                  <p>
-                                    <span>Retirement replacement:</span>{' '}
-                                    {row.policy.retirementReplacement === null
-                                      ? 'Not specified'
-                                      : formatPercent(row.policy.retirementReplacement, 0)}
-                                  </p>
-                                  <p>
-                                    <span>Revenue structure:</span> {row.policy.revenueStructure}
-                                  </p>
-                                </div>
-                              </details>
-                            ) : (
-                              <span className="scenario-sub">-</span>
-                            )}
-                          </td>
-                        </tr>
+                        <Fragment key={row.id}>
+                          <tr>
+                            <td>{row.userLabel}</td>
+                            <td>
+                              <span className="scenario-name">{row.scenario}</span>
+                              <span className="scenario-sub">{row.secondaryLabel}</span>
+                            </td>
+                            <td className={row.isSolvent ? 'value-positive' : 'value-negative'}>
+                              {formatBillions(row.balance, true)}
+                            </td>
+                            <td>{formatBillions(row.revenue)}</td>
+                            <td>{formatPercent(row.workIncentive, 1)}</td>
+                            <td>{row.submissionCount === null ? '' : row.submissionCount.toLocaleString('en-US')}</td>
+                            <td>{row.submittedAt ? formatDate(row.submittedAt) : '-'}</td>
+                            <td>
+                              {row.policy ? (
+                                <details>
+                                  <summary className="link-btn">View Policy</summary>
+                                  <div className="policy-panel">
+                                    <p>
+                                      <span>BEL level:</span>{' '}
+                                      {usdFormatter.format(row.policy.belLevel)} per adult/year
+                                    </p>
+                                    <p>
+                                      <span>SBI configuration:</span> Breakout at{' '}
+                                      {usdFormatter.format(row.policy.sbiBreakoutPoint)}
+                                    </p>
+                                    <p>
+                                      <span>Healthcare assumption:</span>{' '}
+                                      {row.policy.healthcareAssumption}
+                                    </p>
+                                    <p>
+                                      <span>Retirement replacement:</span>{' '}
+                                      {row.policy.retirementReplacement === null
+                                        ? 'Not specified'
+                                        : formatPercent(row.policy.retirementReplacement, 0)}
+                                    </p>
+                                    <p>
+                                      <span>Revenue structure:</span> {row.policy.revenueStructure}
+                                    </p>
+                                  </div>
+                                </details>
+                              ) : (
+                                <span className="scenario-sub">-</span>
+                              )}
+                            </td>
+                          </tr>
+                          {row.tradeoffLine ? (
+                            <tr className="tradeoff-row">
+                              <td colSpan={8}>
+                                <div className="tradeoff-note">{row.tradeoffLine}</div>
+                              </td>
+                            </tr>
+                          ) : null}
+                        </Fragment>
                       )
                     })}
                   </tbody>
@@ -750,6 +913,40 @@ export default async function LeaderboardPage() {
           grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: 12px;
           margin-top: 16px;
+        }
+
+        .lb-insights {
+          margin-top: 18px;
+          background: linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
+          border: 1px solid #d6e4ff;
+          border-radius: 16px;
+          padding: 18px 20px;
+        }
+
+        .lb-insights-kicker {
+          font-size: 12px;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: #2563eb;
+          font-weight: 700;
+          margin-bottom: 6px;
+        }
+
+        .lb-insights-title {
+          margin: 0;
+          font-size: 22px;
+          color: #0f172a;
+        }
+
+        .lb-insights-list {
+          margin: 14px 0 0;
+          padding-left: 20px;
+          color: #334155;
+          line-height: 1.65;
+        }
+
+        .lb-insights-list li + li {
+          margin-top: 8px;
         }
 
         .stat {
@@ -908,6 +1105,24 @@ export default async function LeaderboardPage() {
 
         .table tr:hover td {
           background: rgba(255, 255, 255, 0.03);
+        }
+
+        .tradeoff-row td {
+          background: rgba(37, 99, 235, 0.08);
+          border-bottom: 1px solid rgba(96, 165, 250, 0.16);
+          padding-top: 0;
+        }
+
+        .tradeoff-row:hover td {
+          background: rgba(37, 99, 235, 0.08);
+        }
+
+        .tradeoff-note {
+          color: #bfdbfe;
+          font-size: 13px;
+          line-height: 1.5;
+          padding: 2px 0 2px 56px;
+          font-weight: 600;
         }
 
         .top-scenario td {
@@ -1084,6 +1299,14 @@ export default async function LeaderboardPage() {
 
           .lb-stats {
             grid-template-columns: 1fr;
+          }
+
+          .lb-insights {
+            padding: 16px;
+          }
+
+          .lb-insights-title {
+            font-size: 20px;
           }
         }
       `}</style>
