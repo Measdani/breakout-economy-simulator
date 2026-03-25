@@ -557,7 +557,7 @@ export default async function LeaderboardPage() {
       : null
 
   const primarySubmission = yourSubmission ?? lastSubmission
-  const primaryUserLabel = yourSubmission ? 'You' : 'Last Submission'
+  const primaryUserLabel = yourSubmission ? 'Your Submission' : 'Last Submission'
 
   const averageBalance =
     rankedScenarios.length > 0
@@ -656,6 +656,10 @@ export default async function LeaderboardPage() {
               </article>
             </div>
 
+            <p className="lb-results-note">
+              All results are based on real public input and transparent economic modeling.
+            </p>
+
             {policyInsights.length > 0 ? (
               <div className="lb-insights">
                 <div className="lb-insights-kicker">Policy Insights</div>
@@ -670,19 +674,18 @@ export default async function LeaderboardPage() {
           </section>
 
           <section className="lb-section">
-            <h2 className="lb-h2">How Submissions Work</h2>
+            <h2 className="lb-h2">How to Read This Data</h2>
             <p className="lb-p">
-              Each submission represents a complete policy configuration tested in the simulator.
+              Each policy reflects a complete economic configuration tested in the NAIERM model.
             </p>
             <ul className="lb-list">
-              <li>Fiscal balance</li>
-              <li>Sustainable revenue generation</li>
-              <li>Work incentive preservation</li>
-              <li>Realistic token tax levels</li>
+              <li>Fiscal Balance - Government surplus or deficit</li>
+              <li>Revenue - Total federal income under the model</li>
+              <li>Work Incentive - Likelihood of continued economic participation</li>
             </ul>
             <p className="lb-p">
-              Top results highlight policy combinations that maintain government solvency while
-              supporting household economic stability.
+              All results are generated from real public input and deterministic simulation
+              modeling.
             </p>
           </section>
 
@@ -921,6 +924,14 @@ export default async function LeaderboardPage() {
           border: 1px solid #d6e4ff;
           border-radius: 16px;
           padding: 18px 20px;
+        }
+
+        .lb-results-note {
+          margin: 16px 0 0;
+          text-align: center;
+          color: #475569;
+          font-size: 15px;
+          line-height: 1.6;
         }
 
         .lb-insights-kicker {
