@@ -609,7 +609,7 @@ export default async function LeaderboardPage() {
         <div className="lb-container">
           <section className="lb-hero">
             <div className="lb-kicker">Policy Innovation</div>
-            <h1 className="lb-title">Submissions</h1>
+            <h1 className="lb-title">Public Policy Submissions</h1>
             <p className="lb-subtitle">
               Explore the most effective fiscal policy scenarios discovered using the NAiERM economic simulation model. Researchers, students, policymakers, and citizens can test their own ideas and compare outcomes.
             </p>
