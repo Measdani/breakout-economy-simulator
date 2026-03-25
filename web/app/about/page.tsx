@@ -9,12 +9,18 @@ export default function AboutPage() {
           <header className={styles.header}>
             <div className={styles.kicker}>About</div>
             <h1 className={styles.title}>Mission and Credibility</h1>
-            <p className={styles.subtitle}>
-              NAiERM provides transparent, policy-grade scenario modeling for AI-era public
-              finance and national social programs. The framework allows policymakers, analysts,
-              and researchers to explore how fiscal architecture influences economic stability in
-              economies shaped by artificial intelligence and automated productivity.
-            </p>
+            <div className={styles.subtitle}>
+              <p>
+                NAiERM was developed by a systems engineer with over 40 years of experience
+                designing and optimizing complex technological systems.
+              </p>
+              <p>
+                NAiERM provides transparent, policy-grade scenario modeling for AI-era public
+                finance and national social programs. The framework allows policymakers, analysts,
+                and researchers to explore how fiscal architecture influences economic stability in
+                economies shaped by artificial intelligence and automated productivity.
+              </p>
+            </div>
           </header>
 
           <div className={styles.grid}>
@@ -49,9 +55,8 @@ export default function AboutPage() {
                 Science Advisor
               </p>
               <p className={styles.p}>
-                The National AI Economy Resiliency Model (NAiERM) was developed by Dr. James W.
-                Bunger, a systems engineer with more than four decades of experience designing and
-                optimizing complex technological systems.
+                Dr. James W. Bunger is a systems engineer with more than four decades of
+                experience designing and optimizing complex technological systems.
               </p>
               <p className={styles.p}>
                 His work spans energy systems, petroleum refining, specialty chemicals,
@@ -59,19 +64,15 @@ export default function AboutPage() {
                 software.
               </p>
               <p className={styles.p}>
-                Dr. Bunger earned his PhD in Fuels Engineering from the University of Utah. He
-                holds 15 patents and has authored more than 50 peer-reviewed and technical journal
+                He earned his PhD in Fuels Engineering from the University of Utah, holds 15
+                patents, and has authored more than 50 peer-reviewed and technical journal
                 publications.
               </p>
               <p className={styles.p}>
-                He conducted more than a decade of research at the University of Utah and is also
-                a successful entrepreneur. Dr. Bunger previously served as the State Science
-                Advisor for Utah, contributing to public policy and legislative initiatives.
-              </p>
-              <p className={styles.p}>
-                NAiERM applies systems engineering principles to economic architecture, enabling
-                policymakers and researchers to evaluate fiscal stability in economies shaped by
-                artificial intelligence and automation.
+                With more than a decade of research conducted at the University of Utah, he has
+                also built a successful career as an entrepreneur and previously served as the
+                State Science Advisor for Utah, contributing to public policy and legislative
+                initiatives.
               </p>
             </section>
           </div>

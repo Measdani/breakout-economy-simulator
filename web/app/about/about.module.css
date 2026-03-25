@@ -37,6 +37,14 @@
   line-height: 1.6;
 }
 
+.subtitle p {
+  margin: 0 0 12px;
+}
+
+.subtitle p:last-child {
+  margin-bottom: 0;
+}
+
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
