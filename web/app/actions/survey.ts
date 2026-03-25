@@ -6,6 +6,7 @@ import { runSimulation } from '@/lib/engine'
 import { buildSubmissionPayload } from '@/lib/submissionPayload'
 import { cookies, headers } from 'next/headers'
 import { sanitizeOptionalEmail, sanitizeOptionalText } from '@/lib/inputSanitizers'
+import { isHoneypotTriggered } from '@/lib/honeypot'
 import { storeSubmissionContact } from '@/lib/privateContacts'
 import {
   PUBLIC_RATE_LIMITS,
@@ -19,7 +20,15 @@ import {
   type QuickSurveyAnswers,
 } from '@/lib/quickSurvey'
 
-export async function submitQuickSurvey(answers: QuickSurveyAnswers) {
+export async function submitQuickSurvey(answers: QuickSurveyAnswers, honeypot?: string) {
+  if (isHoneypotTriggered(honeypot)) {
+    return {
+      blocked: true,
+      isSolvent: false,
+      surplusDeficit: 0,
+    }
+  }
+
   const requestHeaders = await headers()
   const rateLimit = await checkPublicRateLimit(
     'survey',

@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import PublicSiteShell from '@/components/site/PublicSiteShell'
 import { submitQuickSurvey } from '@/app/actions/survey'
+import { HONEYPOT_FIELD_LABEL, HONEYPOT_FIELD_NAME } from '@/lib/honeypot'
 import {
   QUICK_SURVEY_NAME,
   buildSurveyPolicyModel,
@@ -224,6 +225,7 @@ function isInsecureSelection(value: '' | FinancialSecurity): boolean {
 
 export default function SurveyPage() {
   const [form, setForm] = useState<SurveyFormState>(INITIAL_FORM)
+  const [honeypot, setHoneypot] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [submitted, setSubmitted] = useState(false)
@@ -318,7 +320,7 @@ export default function SurveyPage() {
 
     setIsSubmitting(true)
     try {
-      await submitQuickSurvey(payload)
+      await submitQuickSurvey(payload, honeypot || undefined)
       setSubmitted(true)
     } catch (submitError) {
       console.error(submitError)
@@ -363,6 +365,19 @@ export default function SurveyPage() {
         </header>
 
         <form onSubmit={onSubmit} className={styles.form}>
+          <div className={styles.honeypotField} aria-hidden="true">
+            <label htmlFor="survey-website">{HONEYPOT_FIELD_LABEL}</label>
+            <input
+              id="survey-website"
+              name={HONEYPOT_FIELD_NAME}
+              type="text"
+              value={honeypot}
+              onChange={(event) => setHoneypot(event.target.value)}
+              tabIndex={-1}
+              autoComplete="off"
+            />
+          </div>
+
           <section className={styles.card}>
             <h2>1. Financial Security</h2>
             <RadioGroup

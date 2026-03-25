@@ -4,6 +4,7 @@ import { createServiceClient } from '@/lib/supabase/server'
 import type { PolicyConfig } from '@/lib/types'
 import { normalizePublicPolicyConfig } from '@/lib/publicPolicyConfig'
 import { storeFeedbackContact } from '@/lib/privateContacts'
+import { isHoneypotTriggered } from '@/lib/honeypot'
 import {
   sanitizeOptionalEmail,
   sanitizeOptionalText,
@@ -24,11 +25,16 @@ interface FeedbackPayload {
   config?: PolicyConfig
   surplusDeficit?: number
   configName?: string
+  honeypot?: string
 }
 
 const VALID_CATEGORIES = ['bug', 'suggestion', 'question', 'general']
 
 export async function submitFeedback(feedback: FeedbackPayload) {
+  if (isHoneypotTriggered(feedback.honeypot)) {
+    return { blocked: true }
+  }
+
   const requestHeaders = await headers()
   const rateLimit = await checkPublicRateLimit(
     'feedback',

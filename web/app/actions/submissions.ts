@@ -8,6 +8,7 @@ import {
 } from '@/lib/submissionPayload'
 import { normalizePublicPolicyConfig } from '@/lib/publicPolicyConfig'
 import { storeSubmissionContact } from '@/lib/privateContacts'
+import { isHoneypotTriggered } from '@/lib/honeypot'
 import {
   sanitizeOptionalEmail,
   sanitizeOptionalText,
@@ -47,8 +48,13 @@ export async function submitSimulation(
   email?: string,
   configName?: string,
   userFeedbackText?: string,
-  demographics?: SubmissionDemographics | null
+  demographics?: SubmissionDemographics | null,
+  honeypot?: string
 ) {
+  if (isHoneypotTriggered(honeypot)) {
+    return { blocked: true }
+  }
+
   const requestHeaders = await headers()
   const rateLimit = await checkPublicRateLimit(
     'submission',

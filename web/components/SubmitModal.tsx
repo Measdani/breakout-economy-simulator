@@ -4,6 +4,7 @@ import { useState } from 'react'
 import type { PolicyConfig, SimulationResult } from '@/lib/types'
 import { submitSimulation } from '@/app/actions/submissions'
 import type { SubmissionDemographics } from '@/lib/submissionPayload'
+import { HONEYPOT_FIELD_LABEL, HONEYPOT_FIELD_NAME } from '@/lib/honeypot'
 
 interface Props {
   config: PolicyConfig
@@ -18,6 +19,7 @@ export default function SubmitModal({ config, result, isOpen, onClose, configNam
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [userFeedbackText, setUserFeedbackText] = useState('')
+  const [honeypot, setHoneypot] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -39,7 +41,8 @@ export default function SubmitModal({ config, result, isOpen, onClose, configNam
         email || undefined,
         configName,
         userFeedbackText || undefined,
-        demographics ?? null
+        demographics ?? null,
+        honeypot || undefined
       )
 
       setSuccess(true)
@@ -49,6 +52,7 @@ export default function SubmitModal({ config, result, isOpen, onClose, configNam
         setName('')
         setEmail('')
         setUserFeedbackText('')
+        setHoneypot('')
       }, 2000)
     } catch (err) {
       setError('Failed to submit. Please try again.')
@@ -159,6 +163,28 @@ export default function SubmitModal({ config, result, isOpen, onClose, configNam
             </div>
 
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <div
+                aria-hidden="true"
+                style={{
+                  position: 'absolute',
+                  left: '-9999px',
+                  width: '1px',
+                  height: '1px',
+                  overflow: 'hidden',
+                }}
+              >
+                <label htmlFor="submit-website">{HONEYPOT_FIELD_LABEL}</label>
+                <input
+                  id="submit-website"
+                  name={HONEYPOT_FIELD_NAME}
+                  type="text"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
+
               <div>
                 <label style={{ display: 'block', fontSize: '0.6rem', color: '#94a3b8', marginBottom: '0.25rem', fontWeight: 600, letterSpacing: '0.05em' }}>Name (optional)</label>
                 <input

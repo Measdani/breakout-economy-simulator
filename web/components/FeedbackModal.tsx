@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import type { PolicyConfig, SimulationResult } from '@/lib/types'
 import { submitFeedback } from '@/app/actions/feedback'
+import { HONEYPOT_FIELD_LABEL, HONEYPOT_FIELD_NAME } from '@/lib/honeypot'
 
 interface Props {
   config: PolicyConfig
@@ -22,6 +23,7 @@ const FEEDBACK_CATEGORIES = [
 export default function FeedbackModal({ config, result, isOpen, onClose, configName }: Props) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [honeypot, setHoneypot] = useState('')
   const [category, setCategory] = useState('general')
   const [message, setMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -44,6 +46,7 @@ export default function FeedbackModal({ config, result, isOpen, onClose, configN
         config,
         surplusDeficit: result.balance.surplusDeficit,
         configName,
+        honeypot: honeypot || undefined,
       })
       setSuccess(true)
       setTimeout(() => {
@@ -51,6 +54,7 @@ export default function FeedbackModal({ config, result, isOpen, onClose, configN
         setSuccess(false)
         setName('')
         setEmail('')
+        setHoneypot('')
         setCategory('general')
         setMessage('')
       }, 2000)
@@ -75,6 +79,28 @@ export default function FeedbackModal({ config, result, isOpen, onClose, configN
           </div>
         ) : (
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            <div
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                left: '-9999px',
+                width: '1px',
+                height: '1px',
+                overflow: 'hidden',
+              }}
+            >
+              <label htmlFor="feedback-website">{HONEYPOT_FIELD_LABEL}</label>
+              <input
+                id="feedback-website"
+                name={HONEYPOT_FIELD_NAME}
+                type="text"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+                tabIndex={-1}
+                autoComplete="off"
+              />
+            </div>
+
             {/* Name */}
             <div>
               <label style={{ display: 'block', fontSize: '0.6rem', color: '#94a3b8', marginBottom: '0.25rem', fontWeight: 600, letterSpacing: '0.05em' }}>Name (optional)</label>
