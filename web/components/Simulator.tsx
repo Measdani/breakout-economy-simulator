@@ -421,6 +421,19 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
     setActiveScreen('engine');
   };
 
+  const householdDistributionSum = pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep;
+  const pctHouseholds0Dep = Math.max(0, 1 - householdDistributionSum);
+  const householdDistribution = [
+    { label: '0 dependents', pct: pctHouseholds0Dep, color: '#475569' },
+    { label: '1 dependent', pct: pctHouseholds1Dep, color: '#38bdf8' },
+    { label: '2 dependents', pct: pctHouseholds2Dep, color: '#22c55e' },
+    { label: '3+ dependents', pct: pctHouseholds3Dep, color: '#f59e0b' },
+  ];
+  const householdDistributionScale = Math.max(
+    1,
+    householdDistribution.reduce((sum, item) => sum + item.pct, 0)
+  );
+
   return (
     <div className="min-h-screen bg-deep-navy px-4 py-8 flex items-center justify-center">
       {/* Toast Notification */}
@@ -867,6 +880,12 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                       📊 Household Distribution
                     </p>
                     <div className="space-y-3">
+                      <p className="text-xs text-dimmed leading-5">
+                        Enter the share of households that have 1, 2, or 3+ dependents. Any
+                        percentage left over is automatically treated as households with 0
+                        dependents.
+                      </p>
+
                       {/* User Input Fields */}
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
@@ -919,12 +938,45 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                       {/* Auto remainder helper */}
                       <div className="flex justify-end">
                         <p className="text-xs text-dimmed">
-                          Remaining: {Math.round((1 - (pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep)) * 100)}%
+                          Auto-assigned to 0 dependents: {Math.round(pctHouseholds0Dep * 100)}%
                         </p>
                       </div>
 
+                      <div className="rounded-lg border border-border-slate bg-darker-navy p-3 space-y-3">
+                        <div className="flex h-3 overflow-hidden rounded-full bg-slate-900">
+                          {householdDistribution.map((item) => (
+                            <div
+                              key={item.label}
+                              style={{
+                                width: `${(item.pct / householdDistributionScale) * 100}%`,
+                                backgroundColor: item.color,
+                              }}
+                            />
+                          ))}
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                          {householdDistribution.map((item) => (
+                            <div
+                              key={item.label}
+                              className="rounded-md border border-border-slate bg-dark-slate px-3 py-2"
+                            >
+                              <div className="flex items-center gap-2">
+                                <span
+                                  className="inline-block h-2.5 w-2.5 rounded-full"
+                                  style={{ backgroundColor: item.color }}
+                                />
+                                <span className="text-xs text-dimmed">{item.label}</span>
+                              </div>
+                              <p className="mt-1 text-sm font-semibold text-bright">
+                                {Math.max(0, Math.round(item.pct * 100))}%
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
                       {/* Validation Message */}
-                      {(pctHouseholds1Dep + pctHouseholds2Dep + pctHouseholds3Dep) > 1 && (
+                      {householdDistributionSum > 1 && (
                         <div className="bg-red-900 bg-opacity-30 border border-red-600 rounded px-3 py-2">
                           <p className="text-xs text-red-400 font-semibold">⚠ Total exceeds 100%. Please adjust.</p>
                         </div>
