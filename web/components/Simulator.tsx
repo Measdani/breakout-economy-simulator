@@ -469,15 +469,12 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
           <div className="bg-dark-slate rounded-2xl overflow-hidden shadow-lg flex flex-col h-screen glow-border-blue" style={{ maxHeight: '700px' }}>
           {/* Header - Polished */}
           <div className="bg-darker-slate px-5 py-6 border-b border-border-slate">
-            <div className="mb-5">
-              <h1 className="text-xl font-bold text-bright">The National AI Economy Resiliency Model</h1>
-              <div className="mt-1 flex items-center justify-between gap-3">
-                <p className="text-xs text-muted">NAiERM v2.1</p>
-                <div className="flex items-center gap-2">
-                  <div className={`w-2 h-2 rounded-full ${tokenTaxRate > ubiAnnualPerAdult / 1000000 ? 'bg-green-500' : 'bg-slate-600'}`}></div>
-                  <span className="text-xs text-muted">Configuration:</span>
-                  <span className="text-xs font-medium text-bright bg-darker-slate px-2.5 py-1 rounded-full border border-border-slate">{currentConfig}</span>
-                </div>
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <p className="text-xs text-muted">NAiERM v2.1</p>
+              <div className="flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full ${tokenTaxRate > ubiAnnualPerAdult / 1000000 ? 'bg-green-500' : 'bg-slate-600'}`}></div>
+                <span className="text-xs text-muted">Configuration:</span>
+                <span className="text-xs font-medium text-bright bg-darker-slate px-2.5 py-1 rounded-full border border-border-slate">{currentConfig}</span>
               </div>
             </div>
 
