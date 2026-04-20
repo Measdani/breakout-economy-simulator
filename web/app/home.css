@@ -18,6 +18,8 @@ body {
 }
 
 .landingFrame {
+  --landing-shell-width: 1420px;
+  --landing-shell-gutter: 24px;
   position: relative;
   min-height: 100vh;
   overflow: clip;
@@ -50,19 +52,20 @@ body {
 .landingPage {
   position: relative;
   z-index: 1;
-  max-width: 1180px;
+  max-width: var(--landing-shell-width);
   margin: 0 auto;
-  padding: 42px 20px 0;
+  padding: 52px var(--landing-shell-gutter) 0;
   display: flex;
   flex-direction: column;
-  gap: 104px;
+  gap: clamp(104px, 11vh, 144px);
 }
 
 .heroSection {
   display: grid;
-  grid-template-columns: minmax(0, 1.04fr) minmax(360px, 0.96fr);
-  gap: 34px;
+  grid-template-columns: minmax(0, 1.1fr) minmax(420px, 0.9fr);
+  gap: clamp(34px, 3vw, 48px);
   align-items: stretch;
+  min-height: clamp(580px, 72vh, 760px);
 }
 
 .heroCopy,
@@ -75,7 +78,10 @@ body {
 
 .heroCopy {
   border-radius: 34px;
-  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(52px, 5vw, 76px);
 }
 
 .heroEyebrow,
@@ -92,15 +98,15 @@ body {
 
 .heroCopy h1 {
   margin: 0;
-  max-width: 12ch;
-  font-size: clamp(3.2rem, 6vw, 4.85rem);
+  max-width: 13ch;
+  font-size: clamp(3.4rem, 6vw, 5.4rem);
   line-height: 0.98;
   letter-spacing: -0.04em;
 }
 
 .heroLead {
   margin: 26px 0 0;
-  max-width: 640px;
+  max-width: 720px;
   font-size: 1.18rem;
   line-height: 1.65;
   color: var(--landing-text-soft);
@@ -108,7 +114,7 @@ body {
 
 .heroSupport {
   margin: 18px 0 0;
-  max-width: 620px;
+  max-width: 760px;
   font-size: 1rem;
   line-height: 1.72;
   color: rgba(210, 223, 245, 0.84);
@@ -193,7 +199,7 @@ body {
 .heroPanel {
   position: relative;
   border-radius: 32px;
-  padding: 34px 30px 30px;
+  padding: clamp(36px, 3vw, 44px);
   overflow: hidden;
 }
 
@@ -218,15 +224,15 @@ body {
 
 .panelIntro {
   margin: 0;
-  max-width: 420px;
+  max-width: 520px;
   line-height: 1.65;
 }
 
 .factorRail {
   position: relative;
   display: grid;
-  gap: 14px;
-  margin-top: 28px;
+  gap: 16px;
+  margin-top: 32px;
 }
 
 .factorRail::before {
@@ -275,9 +281,9 @@ body {
 }
 
 .panelFocus {
-  margin-top: 22px;
+  margin-top: 28px;
   border-radius: 22px;
-  padding: 18px 20px;
+  padding: 22px 24px;
   border: 1px solid rgba(88, 207, 255, 0.12);
   background: rgba(7, 13, 26, 0.82);
 }
@@ -294,11 +300,11 @@ body {
 .section {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 36px;
 }
 
 .sectionIntro {
-  max-width: 760px;
+  max-width: 880px;
 }
 
 .sectionIntro h2,
@@ -330,12 +336,16 @@ body {
 .signalGrid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 16px;
+  gap: 18px;
 }
 
 .signalCard {
-  border-radius: 22px;
-  padding: 22px 20px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 190px;
+  border-radius: 24px;
+  padding: 28px 24px;
 }
 
 .signalTitle {
@@ -364,16 +374,16 @@ body {
 .footer {
   position: relative;
   z-index: 1;
-  max-width: 1180px;
-  margin: 96px auto 0;
-  padding: 34px 20px 40px;
+  max-width: var(--landing-shell-width);
+  margin: 112px auto 0;
+  padding: 40px var(--landing-shell-gutter) 48px;
 }
 
 .footerInner {
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
   gap: 28px;
-  padding: 30px;
+  padding: 36px;
   border: 1px solid rgba(148, 163, 184, 0.16);
   border-radius: 30px;
   background: rgba(6, 10, 20, 0.78);
@@ -517,6 +527,7 @@ body {
   .framingSection,
   .footerInner {
     grid-template-columns: 1fr;
+    min-height: auto;
   }
 
   .heroCopy {
