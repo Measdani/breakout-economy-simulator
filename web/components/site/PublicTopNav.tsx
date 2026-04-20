@@ -10,11 +10,7 @@ const navItems = [
   { href: '/leaderboard', label: 'Submissions' },
 ]
 
-interface PublicTopNavProps {
-  onSurveyClick?: () => void
-}
-
-export default function PublicTopNav({ onSurveyClick }: PublicTopNavProps) {
+export default function PublicTopNav() {
   const pathname = usePathname()
 
   const isActive = (href: string) =>
@@ -43,16 +39,6 @@ export default function PublicTopNav({ onSurveyClick }: PublicTopNavProps) {
             </Link>
           ))}
         </nav>
-
-        {onSurveyClick ? (
-          <button type="button" className={styles.cta} onClick={onSurveyClick} aria-haspopup="dialog">
-            Take the Survey
-          </button>
-        ) : (
-          <Link href="/survey" className={styles.cta}>
-            Take the Survey
-          </Link>
-        )}
       </div>
     </header>
   )

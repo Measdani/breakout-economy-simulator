@@ -47,21 +47,6 @@ const liquiditySignals = [
   },
 ]
 
-const projectPrinciples = [
-  {
-    title: 'Public-Facing Research',
-    text: 'The framework is designed to gather public perspectives alongside modeling work.',
-  },
-  {
-    title: 'System-Level Thinking',
-    text: 'NAiERM explores how wages, demand, taxation, and policy fit together under AI growth.',
-  },
-  {
-    title: 'Transparent Assumptions',
-    text: 'The project keeps its logic visible so the research direction can be challenged and improved.',
-  },
-]
-
 const simulatorBullets = [
   'GDP and human labor are beginning to decouple',
   'High-income taxable wages may decline',
@@ -164,7 +149,7 @@ export default function Home() {
   return (
     <>
       <div className="landingFrame">
-        <PublicTopNav onSurveyClick={openSurveyModal} />
+        <PublicTopNav />
 
         <main className="landingPage">
           <section className="heroSection">
@@ -245,32 +230,6 @@ export default function Home() {
                 <article key={signal.title} className="signalCard">
                   <p className="signalTitle">{signal.title}</p>
                   <p>{signal.text}</p>
-                </article>
-              ))}
-            </div>
-          </section>
-
-          <section className="section framingSection">
-            <div className="framingCard">
-              <p className="sectionEyebrow">Why This Project Exists</p>
-              <h2 className="revealTitle">A public-facing framework for economic resilience</h2>
-              <p>
-                NAiERM is designed as a research effort that helps people examine how AI-driven
-                value creation may affect economic security, future policy design, and the overall
-                balance of the economy.
-              </p>
-              <p>
-                The goal is not to predict a single future. It is to create a clear structure for
-                testing assumptions, comparing policy directions, and keeping the research open to
-                public input.
-              </p>
-            </div>
-
-            <div className="principleGrid">
-              {projectPrinciples.map((principle) => (
-                <article key={principle.title} className="principleCard">
-                  <h3>{principle.title}</h3>
-                  <p>{principle.text}</p>
                 </article>
               ))}
             </div>
