@@ -197,12 +197,21 @@ export default function Home() {
                 {modelFactors.map((factor, index) => (
                   <div
                     key={factor}
-                    className={factor === 'Economic Liquidity' ? 'factorCard factorCardActive' : 'factorCard'}
+                    className={[
+                      'factorCard',
+                      `factorCard${index + 1}`,
+                      factor === 'Economic Liquidity' ? 'factorCardActive' : '',
+                    ]
+                      .filter(Boolean)
+                      .join(' ')}
                   >
                     <span className="factorIndex">{`0${index + 1}`}</span>
-                    <span>{factor}</span>
+                    <span className="factorLabel">{factor}</span>
                   </div>
                 ))}
+                <div className="trace traceUpper" aria-hidden="true" />
+                <div className="trace traceMiddle" aria-hidden="true" />
+                <div className="trace traceLower" aria-hidden="true" />
               </div>
 
               <div className="panelFocus">

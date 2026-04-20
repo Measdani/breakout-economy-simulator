@@ -201,15 +201,51 @@ body {
   border-radius: 32px;
   padding: clamp(36px, 3vw, 44px);
   overflow: hidden;
+  background:
+    radial-gradient(circle at 82% 18%, rgba(59, 130, 246, 0.26), transparent 30%),
+    radial-gradient(circle at 86% 78%, rgba(56, 189, 248, 0.18), transparent 28%),
+    linear-gradient(145deg, rgba(13, 20, 40, 0.98) 0%, rgba(9, 14, 28, 0.96) 54%, rgba(6, 10, 20, 0.92) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 30px 72px rgba(2, 6, 18, 0.4);
 }
 
 .heroPanel::before {
   content: "";
   position: absolute;
-  inset: 20px;
-  border: 1px solid rgba(96, 165, 250, 0.12);
+  inset: 18px;
+  border: 1px solid rgba(96, 165, 250, 0.14);
   border-radius: 24px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
   pointer-events: none;
+}
+
+.heroPanel::after {
+  content: "";
+  position: absolute;
+  inset: 18px;
+  border-radius: 24px;
+  background:
+    linear-gradient(rgba(88, 207, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(88, 207, 255, 0.05) 1px, transparent 1px),
+    radial-gradient(circle at 78% 24%, rgba(96, 165, 250, 0.14), transparent 18%);
+  background-size: 100% 86px, 86px 100%, 100% 100%;
+  opacity: 0.42;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.14) 0%, rgba(0, 0, 0, 0.94) 18%, rgba(0, 0, 0, 0.94) 84%, rgba(0, 0, 0, 0.12) 100%);
+  pointer-events: none;
+  animation: panelGridShift 18s linear infinite;
+}
+
+.panelEyebrow,
+.panelIntro,
+.factorRail,
+.panelFocus {
+  position: relative;
+  z-index: 1;
+}
+
+.panelEyebrow {
+  text-shadow: 0 0 22px rgba(88, 207, 255, 0.18);
 }
 
 .panelIntro,
@@ -229,39 +265,119 @@ body {
 }
 
 .factorRail {
+  --trace-height: 0px;
   position: relative;
   display: grid;
-  gap: 16px;
+  gap: 18px;
   margin-top: 32px;
+  padding: 18px 148px 12px 54px;
 }
 
 .factorRail::before {
   content: "";
   position: absolute;
-  top: 18px;
-  bottom: 18px;
-  left: 22px;
-  width: 1px;
-  background: linear-gradient(180deg, rgba(96, 165, 250, 0.18) 0%, rgba(88, 207, 255, 0.32) 100%);
+  top: 54px;
+  bottom: 78px;
+  left: 36px;
+  width: 2px;
+  background: linear-gradient(180deg, rgba(96, 165, 250, 0) 0%, rgba(96, 165, 250, 0.74) 18%, rgba(88, 207, 255, 0.82) 100%);
+  box-shadow: 0 0 18px rgba(96, 165, 250, 0.2);
+}
+
+.factorRail::after {
+  content: "";
+  position: absolute;
+  inset: 8px 76px 12px 24px;
+  border-radius: 28px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.05), transparent 34%),
+    radial-gradient(circle at 84% 50%, rgba(96, 165, 250, 0.16), transparent 34%);
+  opacity: 0.38;
+  pointer-events: none;
 }
 
 .factorCard {
   position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   gap: 14px;
-  min-height: 72px;
-  padding: 16px 18px;
-  border-radius: 20px;
-  border: 1px solid rgba(148, 163, 184, 0.16);
-  background: rgba(255, 255, 255, 0.03);
+  width: min(100%, 430px);
+  min-height: 82px;
+  margin-left: var(--factor-shift, 0px);
+  padding: 18px 22px;
+  border-radius: 22px;
+  border: 1px solid rgba(124, 146, 189, 0.22);
+  background: linear-gradient(180deg, rgba(27, 36, 64, 0.9) 0%, rgba(12, 18, 34, 0.98) 100%);
   color: #eff6ff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    inset 0 -12px 30px rgba(6, 10, 20, 0.3),
+    0 20px 36px rgba(2, 6, 18, 0.3);
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+}
+
+.factorCard::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -54px;
+  width: 42px;
+  height: 12px;
+  transform: translateY(-50%);
+  background: linear-gradient(90deg, rgba(96, 165, 250, 0) 0%, rgba(147, 197, 253, 0.88) 100%);
+  clip-path: polygon(0 45%, 70% 45%, 70% 12%, 100% 50%, 70% 88%, 70% 55%, 0 55%);
+  filter: drop-shadow(0 0 12px rgba(96, 165, 250, 0.28));
+  opacity: 0.88;
+}
+
+.factorCard::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  background: linear-gradient(115deg, rgba(255, 255, 255, 0) 18%, rgba(255, 255, 255, 0.12) 48%, rgba(255, 255, 255, 0) 70%);
+  transform: translateX(-42%);
+  opacity: 0.42;
+  pointer-events: none;
+  animation: cardSheen 8.4s ease-in-out infinite;
+}
+
+.factorCard1 {
+  --factor-shift: 12px;
+}
+
+.factorCard2 {
+  --factor-shift: 48px;
+}
+
+.factorCard3 {
+  --factor-shift: 24px;
+}
+
+.factorCard4 {
+  --factor-shift: 66px;
 }
 
 .factorCardActive {
-  border-color: var(--landing-border-strong);
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.18) 0%, rgba(14, 165, 233, 0.1) 100%);
-  box-shadow: 0 16px 30px rgba(14, 165, 233, 0.12);
+  border-color: rgba(96, 165, 250, 0.52);
+  background: linear-gradient(135deg, rgba(30, 75, 178, 0.34) 0%, rgba(14, 165, 233, 0.18) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -10px 28px rgba(2, 8, 22, 0.24),
+    0 22px 44px rgba(14, 165, 233, 0.16),
+    0 0 28px rgba(88, 207, 255, 0.18);
+}
+
+.factorCardActive::before {
+  background: linear-gradient(90deg, rgba(88, 207, 255, 0) 0%, rgba(125, 240, 255, 1) 100%);
+  filter: drop-shadow(0 0 14px rgba(88, 207, 255, 0.42));
+}
+
+.factorCardActive::after {
+  opacity: 0.64;
+  animation-duration: 5.2s;
 }
 
 .factorIndex {
@@ -278,14 +394,128 @@ body {
   font-size: 12px;
   font-weight: 700;
   color: #bfdbfe;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+.factorCardActive .factorIndex {
+  border-color: rgba(125, 240, 255, 0.42);
+  background: linear-gradient(180deg, rgba(18, 38, 70, 0.96) 0%, rgba(8, 18, 38, 0.96) 100%);
+  color: #e0f7ff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 16px rgba(88, 207, 255, 0.16);
+}
+
+.factorLabel {
+  position: relative;
+  z-index: 1;
+  font-size: 1.06rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-shadow: 0 0 20px rgba(7, 13, 26, 0.18);
+}
+
+.trace {
+  --trace-height: 120px;
+  position: absolute;
+  z-index: 0;
+  right: 0;
+  height: var(--trace-height);
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  border-top-right-radius: 26px;
+  border-bottom-right-radius: 26px;
+  filter: drop-shadow(0 0 12px currentColor);
+  opacity: 0.88;
+  pointer-events: none;
+  animation: traceGlow 4.8s ease-in-out infinite;
+}
+
+.trace::before {
+  content: "";
+  position: absolute;
+  left: -5px;
+  top: -5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow:
+    0 0 14px currentColor,
+    0 calc(var(--trace-height) - 10px) 0 0 currentColor,
+    0 calc(var(--trace-height) - 10px) 14px 0 currentColor;
+}
+
+.trace::after {
+  content: "";
+  position: absolute;
+  right: -5px;
+  top: 14px;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 0 0 14px currentColor;
+  animation: traceNode 3.8s linear infinite;
+}
+
+.traceUpper {
+  --trace-height: 284px;
+  top: 52px;
+  right: 18px;
+  width: 132px;
+  color: rgba(102, 134, 255, 0.78);
+}
+
+.traceMiddle {
+  --trace-height: 194px;
+  top: 152px;
+  right: 42px;
+  width: 102px;
+  color: rgba(84, 160, 255, 0.88);
+  animation-delay: -1.4s;
+}
+
+.traceMiddle::after {
+  animation-delay: -0.9s;
+}
+
+.traceLower {
+  --trace-height: 112px;
+  top: 246px;
+  right: -4px;
+  width: 150px;
+  color: rgba(115, 243, 255, 0.96);
+  animation-delay: -2.6s;
+}
+
+.traceLower::after {
+  animation-delay: -1.8s;
 }
 
 .panelFocus {
   margin-top: 28px;
+  position: relative;
   border-radius: 22px;
   padding: 22px 24px;
   border: 1px solid rgba(88, 207, 255, 0.12);
   background: rgba(7, 13, 26, 0.82);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 18px 34px rgba(2, 6, 18, 0.22);
+}
+
+.panelFocus::before {
+  content: "";
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(88, 207, 255, 0) 0%, rgba(88, 207, 255, 0.72) 50%, rgba(88, 207, 255, 0) 100%);
 }
 
 .panelFocusLabel {
@@ -511,9 +741,84 @@ body {
   margin-top: 26px;
 }
 
+@keyframes panelGridShift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(-8px, 8px, 0);
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes cardSheen {
+  0%,
+  100% {
+    transform: translateX(-48%);
+    opacity: 0.2;
+  }
+
+  45%,
+  65% {
+    transform: translateX(26%);
+    opacity: 0.52;
+  }
+}
+
+@keyframes traceGlow {
+  0%,
+  100% {
+    opacity: 0.58;
+    filter: drop-shadow(0 0 10px currentColor);
+  }
+
+  50% {
+    opacity: 0.96;
+    filter: drop-shadow(0 0 18px currentColor);
+  }
+}
+
+@keyframes traceNode {
+  0%,
+  12% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+
+  22% {
+    opacity: 1;
+  }
+
+  84% {
+    transform: translateY(calc(var(--trace-height) - 28px));
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(calc(var(--trace-height) - 28px));
+    opacity: 0;
+  }
+}
+
 @media (max-width: 1120px) {
   .signalGrid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .factorRail {
+    padding-right: 126px;
+  }
+
+  .factorCard2 {
+    --factor-shift: 36px;
+  }
+
+  .factorCard4 {
+    --factor-shift: 52px;
   }
 }
 
@@ -536,6 +841,25 @@ body {
 
   .heroPanel {
     padding: 28px 24px 24px;
+  }
+
+  .factorRail {
+    padding: 14px 116px 8px 46px;
+  }
+
+  .traceUpper {
+    right: 10px;
+    width: 118px;
+  }
+
+  .traceMiddle {
+    right: 26px;
+    width: 94px;
+  }
+
+  .traceLower {
+    right: -8px;
+    width: 134px;
   }
 
   .signalGrid {
@@ -566,6 +890,33 @@ body {
   .heroCopy h1 {
     max-width: none;
     font-size: 2.85rem;
+  }
+
+  .factorRail {
+    padding: 10px 28px 4px 36px;
+  }
+
+  .factorRail::after,
+  .trace {
+    display: none;
+  }
+
+  .factorRail::before {
+    left: 22px;
+    top: 48px;
+    bottom: 62px;
+  }
+
+  .factorCard {
+    width: 100%;
+    min-height: 76px;
+    margin-left: 0;
+    padding: 16px 18px;
+  }
+
+  .factorCard::before {
+    left: -36px;
+    width: 28px;
   }
 
   .heroActions,
@@ -610,6 +961,13 @@ body {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  .heroPanel::after,
+  .factorCard::after,
+  .trace,
+  .trace::after {
+    animation: none;
   }
 
   .primaryButton,
