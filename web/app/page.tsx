@@ -17,6 +17,13 @@ interface CtaModalContent {
   bullets?: string[]
 }
 
+interface ResearchSignalCard {
+  id: string
+  frontTitle: string
+  frontBody: string
+  backBody: string
+}
+
 const modelFactors = [
   'AI Productivity',
   'Income Distribution',
@@ -24,26 +31,48 @@ const modelFactors = [
   'Economic Liquidity',
 ]
 
-const liquiditySignals = [
+const researchSignalCards: ResearchSignalCard[] = [
   {
-    title: 'Decoupling Begins',
-    text: 'GDP and human labor are beginning to decouple.',
+    id: 'decoupling-begins',
+    frontTitle: 'Decoupling Begins',
+    frontBody: 'GDP and human labor begin separating.',
+    backBody:
+      'As AI-driven production increases, economic output becomes less dependent on human labor input, altering how value is generated in the system.',
   },
   {
-    title: 'Taxable Wages Contract',
-    text: 'High-income taxable wages may decline as automation expands.',
+    id: 'taxable-wages-contract',
+    frontTitle: 'Taxable Wages Contract',
+    frontBody: 'High-income wages may decline.',
+    backBody:
+      'Automation reduces reliance on high-skill labor, leading to a contraction in taxable income streams that traditionally supported economic systems.',
   },
   {
-    title: 'Purchasing Power Pressure',
-    text: 'Purchasing power may weaken under current economic structures.',
+    id: 'purchasing-power-pressure',
+    frontTitle: 'Purchasing Power Pressure',
+    frontBody: 'Demand begins to weaken.',
+    backBody:
+      'As income distribution shifts, consumer purchasing power may fall below levels required to sustain growing economic output.',
   },
   {
-    title: 'Liquidity Becomes Central',
-    text: 'Economic liquidity becomes increasingly important to system stability.',
+    id: 'economic-liquidity',
+    frontTitle: 'Economic Liquidity',
+    frontBody: 'Participation must be sustained.',
+    backBody:
+      'Economic liquidity becomes a critical variable, ensuring that individuals retain the ability to participate in the economy despite changes in how income is generated.',
   },
   {
-    title: 'Balance Requires New Tools',
-    text: 'New system-level mechanisms may be needed to maintain balance.',
+    id: 'system-imbalance',
+    frontTitle: 'System Imbalance',
+    frontBody: 'Supply outpaces demand.',
+    backBody:
+      'Without structural adjustment, production capacity may exceed the purchasing ability of consumers, creating systemic imbalance.',
+  },
+  {
+    id: 'new-mechanisms',
+    frontTitle: 'New Mechanisms',
+    frontBody: 'System redesign is required.',
+    backBody:
+      'Model outputs suggest that new system-level mechanisms may be necessary to realign economic flow and maintain long-term stability.',
   },
 ]
 
@@ -78,6 +107,7 @@ const ctaModals: Record<CtaModalKey, CtaModalContent> = {
 export default function Home() {
   const router = useRouter()
   const [activeModal, setActiveModal] = useState<CtaModalKey | null>(null)
+  const [openSignalCards, setOpenSignalCards] = useState<string[]>([])
 
   useEffect(() => {
     const titles = Array.from(document.querySelectorAll<HTMLElement>('.revealTitle'))
@@ -136,6 +166,13 @@ export default function Home() {
   const openSurveyModal = () => setActiveModal('survey')
   const openModelModal = () => setActiveModal('model')
   const closeModal = () => setActiveModal(null)
+  const toggleSignalCard = (cardId: string) => {
+    setOpenSignalCards((currentCards) =>
+      currentCards.includes(cardId)
+        ? currentCards.filter((currentCardId) => currentCardId !== cardId)
+        : [...currentCards, cardId],
+    )
+  }
 
   const handleModalContinue = () => {
     if (!activeCta) {
@@ -235,12 +272,38 @@ export default function Home() {
             </div>
 
             <div className="signalGrid">
-              {liquiditySignals.map((signal) => (
-                <article key={signal.title} className="signalCard">
-                  <p className="signalTitle">{signal.title}</p>
-                  <p>{signal.text}</p>
-                </article>
-              ))}
+              {researchSignalCards.map((signal, index) => {
+                const isOpen = openSignalCards.includes(signal.id)
+
+                return (
+                  <button
+                    key={signal.id}
+                    type="button"
+                    className={['signalCard', isOpen ? 'signalCardOpen' : ''].filter(Boolean).join(' ')}
+                    onClick={() => toggleSignalCard(signal.id)}
+                    aria-expanded={isOpen}
+                    aria-label={`${signal.frontTitle}. ${isOpen ? 'Hide details' : 'Show details'}`}
+                  >
+                    <span className="signalCardInner">
+                      <span className="signalFace signalFaceFront">
+                        <span className="signalMeta">{`0${index + 1}`}</span>
+                        <span className="signalTitle">{signal.frontTitle}</span>
+                        <span className="signalFrontCopy">{signal.frontBody}</span>
+                        <span className="signalHint">
+                          {isOpen ? 'Close Detail' : 'Learn More'}{' '}
+                          <span aria-hidden="true">{isOpen ? '−' : '+'}</span>
+                        </span>
+                      </span>
+
+                      <span className="signalFace signalFaceBack">
+                        <span className="signalMeta">Context</span>
+                        <span className="signalTitle">{signal.frontTitle}</span>
+                        <span className="signalBackCopy">{signal.backBody}</span>
+                      </span>
+                    </span>
+                  </button>
+                )
+              })}
             </div>
           </section>
 
