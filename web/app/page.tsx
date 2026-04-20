@@ -1,13 +1,101 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import PublicTopNav from '@/components/site/PublicTopNav'
 import './home.css'
 
+type CtaModalKey = 'survey' | 'model'
+
+interface CtaModalContent {
+  title: string
+  body: string
+  buttonLabel: string
+  href: string
+  kicker: string
+  bullets?: string[]
+}
+
+const modelFactors = [
+  'AI Productivity',
+  'Income Distribution',
+  'Workforce Incentives',
+  'Economic Liquidity',
+]
+
+const liquiditySignals = [
+  {
+    title: 'Decoupling Begins',
+    text: 'GDP and human labor are beginning to decouple.',
+  },
+  {
+    title: 'Taxable Wages Contract',
+    text: 'High-income taxable wages may decline as automation expands.',
+  },
+  {
+    title: 'Purchasing Power Pressure',
+    text: 'Purchasing power may weaken under current economic structures.',
+  },
+  {
+    title: 'Liquidity Becomes Central',
+    text: 'Economic liquidity becomes increasingly important to system stability.',
+  },
+  {
+    title: 'Balance Requires New Tools',
+    text: 'New system-level mechanisms may be needed to maintain balance.',
+  },
+]
+
+const projectPrinciples = [
+  {
+    title: 'Public-Facing Research',
+    text: 'The framework is designed to gather public perspectives alongside modeling work.',
+  },
+  {
+    title: 'System-Level Thinking',
+    text: 'NAiERM explores how wages, demand, taxation, and policy fit together under AI growth.',
+  },
+  {
+    title: 'Transparent Assumptions',
+    text: 'The project keeps its logic visible so the research direction can be challenged and improved.',
+  },
+]
+
+const simulatorBullets = [
+  'GDP and human labor are beginning to decouple',
+  'High-income taxable wages may decline',
+  'Purchasing power may weaken under current systems',
+  'Economic liquidity becomes increasingly important',
+  'New system-level mechanisms may be needed to maintain balance',
+]
+
+const ctaModals: Record<CtaModalKey, CtaModalContent> = {
+  survey: {
+    title: 'Help Shape the Research',
+    kicker: 'Survey introduction',
+    body:
+      'NAiERM is designed as a public-facing research effort. Survey participation helps gather perspectives on economic security, future policy design, and how people believe value should continue circulating in an AI-shaped economy.',
+    buttonLabel: 'Start Survey',
+    href: '/survey',
+  },
+  model: {
+    title: 'Understanding the NAiERM Model',
+    kicker: 'Simulator introduction',
+    body:
+      'Artificial intelligence is beginning to generate major economic value without relying on human labor in the traditional way. The NAiERM framework explores what happens when GDP growth becomes increasingly disconnected from wages, purchasing power weakens, and older tax structures no longer fit the economy they were designed for.',
+    buttonLabel: 'Launch Simulator',
+    href: '/model',
+    bullets: simulatorBullets,
+  },
+}
+
 export default function Home() {
+  const router = useRouter()
+  const [activeModal, setActiveModal] = useState<CtaModalKey | null>(null)
+
   useEffect(() => {
-    const titles = Array.from(document.querySelectorAll<HTMLElement>('.section h2'))
+    const titles = Array.from(document.querySelectorAll<HTMLElement>('.revealTitle'))
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     if (reduceMotion) {
@@ -36,223 +124,255 @@ export default function Home() {
     return () => observer.disconnect()
   }, [])
 
+  useEffect(() => {
+    if (!activeModal) {
+      return
+    }
+
+    const previousOverflow = document.body.style.overflow
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setActiveModal(null)
+      }
+    }
+
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [activeModal])
+
+  const activeCta = activeModal ? ctaModals[activeModal] : null
+
+  const openSurveyModal = () => setActiveModal('survey')
+  const openModelModal = () => setActiveModal('model')
+  const closeModal = () => setActiveModal(null)
+
+  const handleModalContinue = () => {
+    if (!activeCta) {
+      return
+    }
+
+    setActiveModal(null)
+    router.push(activeCta.href)
+  }
+
   return (
     <>
-      <PublicTopNav />
+      <div className="landingFrame">
+        <PublicTopNav onSurveyClick={openSurveyModal} />
 
-      <main className="wrapper">
-        <section className="hero">
-          <div className="heroContent">
-            <p className="eyebrow">NATIONAL AI ECONOMY RESILIENCY MODEL</p>
+        <main className="landingPage">
+          <section className="heroSection">
+            <div className="heroCopy">
+              <p className="heroEyebrow">Public Research for an AI-Shaped Economy</p>
+              <h1>The Economy Is Changing Faster Than Our Systems Can Adapt</h1>
+              <p className="heroLead">
+                Artificial intelligence is beginning to generate major economic value without
+                relying on human labor in the traditional way.
+              </p>
+              <p className="heroSupport">
+                NAiERM explores what happens when GDP growth, wages, purchasing power, and public
+                systems stop moving together, and why liquidity may become the deciding factor in
+                whether economic value continues to circulate.
+              </p>
 
-            <h1>The Economy Is Changing</h1>
+              <div className="heroActions">
+                <button
+                  type="button"
+                  className="primaryButton"
+                  onClick={openModelModal}
+                  aria-haspopup="dialog"
+                >
+                  Launch the Simulator
+                </button>
+                <button
+                  type="button"
+                  className="secondaryButton"
+                  onClick={openSurveyModal}
+                  aria-haspopup="dialog"
+                >
+                  Take the Survey
+                </button>
+              </div>
 
-            <p className="sub">
-              Artificial intelligence is beginning to reshape jobs, income, and opportunity
-              across society.
-            </p>
-            <p className="framing">
-              NAiERM models how our economic system must adapt as AI technology becomes more
-              powerful.
-            </p>
-            <p className="authority">
-              You don't need to be an economist - your experience and ideas matter.
-            </p>
+              <div className="heroPillRow" aria-label="Project themes">
+                <span className="heroPill">Economic resilience</span>
+                <span className="heroPill">Public participation</span>
+                <span className="heroPill">Policy design</span>
+              </div>
+            </div>
 
-            <div className="heroButtons">
-              <Link href="/survey" className="primaryButton">
-                Take the Survey
+            <aside className="heroPanel" aria-label="Core model factors">
+              <p className="panelEyebrow">Core Model Factors</p>
+              <p className="panelIntro">
+                The framework examines where pressure builds when AI productivity expands faster
+                than the systems that distribute value.
+              </p>
+
+              <div className="factorRail">
+                {modelFactors.map((factor, index) => (
+                  <div
+                    key={factor}
+                    className={factor === 'Economic Liquidity' ? 'factorCard factorCardActive' : 'factorCard'}
+                  >
+                    <span className="factorIndex">{`0${index + 1}`}</span>
+                    <span>{factor}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="panelFocus">
+                <p className="panelFocusLabel">Why liquidity stands out</p>
+                <p>
+                  If value no longer keeps moving through households, businesses, and public
+                  systems, rising output alone does not guarantee resilience.
+                </p>
+              </div>
+            </aside>
+          </section>
+
+          <section className="section">
+            <div className="sectionIntro">
+              <p className="sectionEyebrow">Research Focus</p>
+              <h2 className="revealTitle">Economic Liquidity Is the Critical Factor</h2>
+              <p className="sectionSummary">
+                NAiERM models what happens when economic output grows while the older channels that
+                translate output into wages, demand, and purchasing power begin to weaken.
+              </p>
+            </div>
+
+            <div className="signalGrid">
+              {liquiditySignals.map((signal) => (
+                <article key={signal.title} className="signalCard">
+                  <p className="signalTitle">{signal.title}</p>
+                  <p>{signal.text}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section className="section framingSection">
+            <div className="framingCard">
+              <p className="sectionEyebrow">Why This Project Exists</p>
+              <h2 className="revealTitle">A public-facing framework for economic resilience</h2>
+              <p>
+                NAiERM is designed as a research effort that helps people examine how AI-driven
+                value creation may affect economic security, future policy design, and the overall
+                balance of the economy.
+              </p>
+              <p>
+                The goal is not to predict a single future. It is to create a clear structure for
+                testing assumptions, comparing policy directions, and keeping the research open to
+                public input.
+              </p>
+            </div>
+
+            <div className="principleGrid">
+              {projectPrinciples.map((principle) => (
+                <article key={principle.title} className="principleCard">
+                  <h3>{principle.title}</h3>
+                  <p>{principle.text}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section className="section actionSection">
+            <article className="actionCard">
+              <p className="cardEyebrow">Survey</p>
+              <h2 className="revealTitle">Help Shape the Research</h2>
+              <p>
+                NAiERM is designed as a public-facing research effort. Survey participation helps
+                gather perspectives on economic security, future policy design, and how people
+                believe value should continue circulating in an AI-shaped economy.
+              </p>
+
+              <button
+                type="button"
+                className="primaryButton"
+                onClick={openSurveyModal}
+                aria-haspopup="dialog"
+              >
+                Start Survey
+              </button>
+            </article>
+
+            <article className="actionCard actionCardFeature">
+              <p className="cardEyebrow">Simulator</p>
+              <h2 className="revealTitle">Understanding the NAiERM Model</h2>
+              <p>
+                Artificial intelligence is beginning to generate major economic value without
+                relying on human labor in the traditional way. The NAiERM framework explores what
+                happens when GDP growth becomes increasingly disconnected from wages, purchasing
+                power weakens, and older tax structures no longer fit the economy they were
+                designed for.
+              </p>
+
+              <ul className="actionList">
+                {simulatorBullets.map((bullet) => (
+                  <li key={bullet}>{bullet}</li>
+                ))}
+              </ul>
+
+              <button
+                type="button"
+                className="secondaryButton secondaryButtonStrong"
+                onClick={openModelModal}
+                aria-haspopup="dialog"
+              >
+                Launch Simulator
+              </button>
+            </article>
+          </section>
+        </main>
+
+        <footer className="footer">
+          <div className="footerInner">
+            <div className="footerIntro">
+              <Link href="/" className="footerBrand">
+                NAiERM
               </Link>
-              <Link href="/model" className="btnSecondary">
-                Launch the Simulator
-              </Link>
+              <p className="footerTag">National AI Economy Resiliency Model</p>
+              <p className="footerSummary">
+                Public-facing research exploring how value keeps circulating through an
+                AI-shaped economy.
+              </p>
+            </div>
+
+            <div className="footerLinks">
+              <div className="footerColumn">
+                <h3>Explore</h3>
+                <Link href="/methodology">Methodology</Link>
+                <Link href="/research">Research</Link>
+                <Link href="/leaderboard">Submissions</Link>
+              </div>
+
+              <div className="footerColumn">
+                <h3>Project</h3>
+                <Link href="/about">About</Link>
+                <Link href="/contact">Contact</Link>
+                <Link href="/glossary">Glossary</Link>
+              </div>
+
+              <div className="footerColumn">
+                <h3>Resources</h3>
+                <Link href="/assumptions">Assumptions</Link>
+                <Link href="/model">Model Overview</Link>
+                <a href="/admin/login/index.php" rel="nofollow">
+                  Admin Sign In
+                </a>
+              </div>
             </div>
           </div>
 
-          <div className="heroDiagram">
-            <div className="heroDiagramFlow">
-              <div className="diagramBox">AI Productivity</div>
-              <div className="arrow">-&gt;</div>
-              <div className="diagramBox">Income Distribution</div>
-              <div className="arrow">-&gt;</div>
-              <div className="diagramBox">Workforce Incentives</div>
-              <div className="arrow">-&gt;</div>
-              <div className="diagramBox">Social Support</div>
-            </div>
-          </div>
-        </section>
-
-        <div className="sectionDivider" />
-
-        <section className="section sectionNarrative transitionNarrative">
-          <h2>Why This Project Exists</h2>
-          <p>
-            AI technology is evolving quickly,
-          </p>
-          <p>
-            Questions people are beginning to ask include:
-          </p>
-          <ul>
-            <li>How will AI affect jobs and income?</li>
-            <li>What systems keep the economy stable as technology grows?</li>
-            <li>How can opportunity remain accessible to everyone?</li>
-            <li>What policies might support a fluid economic future?</li>
-          </ul>
-          <p>
-            NAiERM explores these questions through open research tools and public participation.
-          </p>
-          <p>
-            Your voice helps shape the conversation.
-          </p>
-        </section>
-
-        <div className="sectionDivider" />
-
-        <section className="section sectionNarrative">
-          <h2>Explore Possible Futures</h2>
-          <p>
-            The NAiERM policy simulator lets you explore how different economic ideas might
-            interact.
-          </p>
-          <p>
-            You can adjust variables like:
-          </p>
-          <ul>
-            <li>AI productivity growth</li>
-            <li>Income distribution systems</li>
-            <li>Workforce incentives</li>
-            <li>Social support structures</li>
-          </ul>
-          <p>Then see how the system responds over time.</p>
-          <p>The simulator isn't a prediction - it's a tool for exploring possibilities.</p>
-          <p className="simulatorTooltip">Drive the simulator yourself</p>
-          <div className="heroButtons heroButtonsTight">
-            <Link href="/model" className="primaryButton">
-              Launch the Simulator
-            </Link>
-          </div>
-        </section>
-
-        <div className="sectionDivider" />
-
-        <section className="section studySection">
-          <h2>What We&apos;re Studying</h2>
-          <p className="studyIntro">
-            NAiERM models the economy as a system where technology, income, and policy interact.
-          </p>
-          <p className="studyLead">The research explores areas like:</p>
-          <div className="cards studyCards">
-            <div className="card">
-              <h3>⚙️ Technology and productivity growth</h3>
-              <p>How increasing AI capability affects economic output.</p>
-            </div>
-            <div className="card">
-              <h3>💰 Income distribution systems</h3>
-              <p>How economic value flows through society.</p>
-            </div>
-            <div className="card">
-              <h3>📊 Economic stability</h3>
-              <p>How systems maintain balance between supply, demand, and opportunity.</p>
-            </div>
-            <div className="card">
-              <h3>🏥 Public systems</h3>
-              <p>How services like healthcare and retirement may evolve in a changing economy.</p>
-            </div>
-          </div>
-          <p className="studyOutro">These ideas are explored through simulation rather than assumptions alone.</p>
-        </section>
-
-        <div className="sectionDivider" />
-
-        <section className="section sectionNarrative">
-          <h2>Help Shape the Research</h2>
-          <p>
-            The survey collects perspectives from people with different experiences, backgrounds,
-            and viewpoints.
-          </p>
-          <p>Your input helps researchers explore questions like:</p>
-          <ul>
-            <li>What makes you feel economically secure</li>
-            <li>How public systems should evolve to best serve you</li>
-            <li>What policies you believe could support stability</li>
-          </ul>
-          <p>The survey takes about 2 minutes.</p>
-          <div className="heroButtons">
-            <Link href="/survey" className="primaryButton">
-              Take the Survey
-            </Link>
-          </div>
-        </section>
-
-        <div className="sectionDivider" />
-
-        <section className="section sectionNarrative">
-          <h2>How the Research Works</h2>
-          <p>NAiERM is designed as a transparent modeling framework.</p>
-          <p>The project emphasizes:</p>
-          <ul>
-            <li>Open simulation tools</li>
-            <li>Clearly documented assumptions</li>
-            <li>Exportable datasets</li>
-            <li>Research transparency</li>
-          </ul>
-          <p>
-            Researchers, policymakers, and the public can explore the system and contribute ideas.
-          </p>
-        </section>
-
-        <div className="sectionDivider" />
-
-        <section className="section sectionNarrative policyImpact">
-          <h2>Why Policy Simulation Matters</h2>
-          <p className="policyLead">
-            Technological change often moves faster than policy systems can adapt.
-          </p>
-          <p>
-            By exploring policy ideas through simulation, researchers and communities can evaulate
-            potential outcomes before major econmic downturn occurs.
-          </p>
-          <p className="policyClosing">
-            This approach helps move policy thinking from reactive to proactive.
-          </p>
-        </section>
-
-        <div className="sectionDivider" />
-
-        <section className="section sectionNarrative">
-          <h2>An Open Public Research Project</h2>
-          <p>NAiERM is designed to be accessible to everyone.</p>
-          <p>
-            Whether you&apos;re a researcher, policymaker, worker, student, or simply someone
-            thinking about the future, your perspective matters.
-          </p>
-          <p>
-            Explore the tools, share your perspective, and help shape the conversation about the
-            future economy.
-          </p>
-          <div className="heroButtons">
-            <Link href="/survey" className="primaryButton">
-              Take the Survey
-            </Link>
-            <Link href="/model" className="btnSecondary">
-              Launch the Simulator
-            </Link>
-          </div>
-        </section>
-
-      </main>
-
-      <footer className="footer">
-        <div className="footerInner">
-          <div className="footerLeft">
-            <div className="footerBrand">NAiERM</div>
-            <p className="footerTag">
-              National AI Economy Resiliency Model
-            </p>
-            <p className="footerVersion">
-              Web v0.3 - Model assumptions versioned and archived.
-            </p>
-            <p className="footerPartnerLine">
+          <div className="footerMeta">
+            <p>NAiERM Web v0.3 | Model assumptions versioned and archived.</p>
+            <p>
               <a
                 href="https://energyandwealth.com/"
                 target="_blank"
@@ -265,29 +385,46 @@ export default function Home() {
               <span className="footerPartnerTag">Powering Prosperity Through Energy</span>
             </p>
           </div>
+        </footer>
+      </div>
 
-          <div className="footerRight">
-            <div className="footerColumn">
-              <h4>Model</h4>
-              <Link href="/model">Launch Simulator</Link>
-              <Link href="/glossary">Glossary</Link>
-            </div>
+      {activeCta ? (
+        <div className="modalBackdrop" onClick={closeModal}>
+          <div
+            className="modalCard"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="cta-modal-title"
+            aria-describedby="cta-modal-description"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button type="button" className="modalClose" onClick={closeModal} aria-label="Close dialog">
+              Close
+            </button>
 
-            <div className="footerColumn">
-              <h4>Methodology</h4>
-              <Link href="/methodology">Framework</Link>
-              <Link href="/assumptions">Assumptions</Link>
-              <Link href="/methodology#modules">Program Modules</Link>
-            </div>
+            <p className="modalEyebrow">{activeCta.kicker}</p>
+            <h2 id="cta-modal-title">{activeCta.title}</h2>
+            <p id="cta-modal-description">{activeCta.body}</p>
 
-            <div className="footerColumn">
-              <h4>Research</h4>
-              <Link href="/research">Dataset and Ethics</Link>
-              <Link href="/admin">Admin</Link>
+            {activeCta.bullets ? (
+              <ul className="modalList">
+                {activeCta.bullets.map((bullet) => (
+                  <li key={bullet}>{bullet}</li>
+                ))}
+              </ul>
+            ) : null}
+
+            <div className="modalActions">
+              <button type="button" className="primaryButton" onClick={handleModalContinue}>
+                {activeCta.buttonLabel}
+              </button>
+              <button type="button" className="ghostButton" onClick={closeModal}>
+                Not now
+              </button>
             </div>
           </div>
         </div>
-      </footer>
+      ) : null}
     </>
   )
 }

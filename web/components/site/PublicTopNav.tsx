@@ -5,15 +5,16 @@ import { usePathname } from 'next/navigation'
 import styles from './PublicTopNav.module.css'
 
 const navItems = [
-  { href: '/', label: 'Home' },
   { href: '/methodology', label: 'Methodology' },
   { href: '/research', label: 'Research' },
   { href: '/leaderboard', label: 'Submissions' },
-  { href: '/about', label: 'About' },
-  { href: '/contact', label: 'Contact' },
 ]
 
-export default function PublicTopNav() {
+interface PublicTopNavProps {
+  onSurveyClick?: () => void
+}
+
+export default function PublicTopNav({ onSurveyClick }: PublicTopNavProps) {
   const pathname = usePathname()
 
   const isActive = (href: string) =>
@@ -28,7 +29,7 @@ export default function PublicTopNav() {
           <Link href="/" className={styles.brand}>
             NAiERM
           </Link>
-          <p className={styles.tagline}>Exploring the Future Economy Together</p>
+          <p className={styles.tagline}>National AI Economy Resiliency Model</p>
         </div>
 
         <nav className={styles.links}>
@@ -43,12 +44,15 @@ export default function PublicTopNav() {
           ))}
         </nav>
 
-        <Link
-          href="/survey"
-          className={styles.cta}
-        >
-          Take the Survey
-        </Link>
+        {onSurveyClick ? (
+          <button type="button" className={styles.cta} onClick={onSurveyClick} aria-haspopup="dialog">
+            Take the Survey
+          </button>
+        ) : (
+          <Link href="/survey" className={styles.cta}>
+            Take the Survey
+          </Link>
+        )}
       </div>
     </header>
   )

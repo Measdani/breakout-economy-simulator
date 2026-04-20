@@ -21,38 +21,69 @@ export default function PublicSiteShell({
         <div className="max-w-[1120px] mx-auto px-5 md:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
             <div>
-              <p className="text-xs uppercase tracking-widest text-muted mb-3">Model</p>
+              <p className="text-xs uppercase tracking-widest text-muted mb-3">Explore</p>
               <div className="space-y-2 text-dimmed">
-                <Link href="/model" className="block hover:text-bright transition">Launch Simulator</Link>
-                <Link href="/leaderboard" className="block hover:text-bright transition">Submissions</Link>
-                <Link href="/glossary" className="block hover:text-bright transition">Glossary</Link>
+                <Link href="/model" className="block hover:text-bright transition">
+                  Model Overview
+                </Link>
+                <Link href="/leaderboard" className="block hover:text-bright transition">
+                  Submissions
+                </Link>
+                <Link href="/glossary" className="block hover:text-bright transition">
+                  Glossary
+                </Link>
               </div>
             </div>
 
             <div>
               <p className="text-xs uppercase tracking-widest text-muted mb-3">Methodology</p>
               <div className="space-y-2 text-dimmed">
-                <Link href="/methodology" className="block hover:text-bright transition">Framework</Link>
-                <Link href="/assumptions" className="block hover:text-bright transition">Assumptions</Link>
-                <Link href="/methodology#modules" className="block hover:text-bright transition">Program Modules</Link>
+                <Link href="/methodology" className="block hover:text-bright transition">
+                  Framework
+                </Link>
+                <Link href="/assumptions" className="block hover:text-bright transition">
+                  Assumptions
+                </Link>
+                <Link href="/methodology#modules" className="block hover:text-bright transition">
+                  Program Modules
+                </Link>
               </div>
             </div>
 
             <div>
               <p className="text-xs uppercase tracking-widest text-muted mb-3">Research</p>
               <div className="space-y-2 text-dimmed">
-                <Link href="/research" className="block hover:text-bright transition">Dataset &amp; Ethics</Link>
-                <Link href="/research#submission-use" className="block hover:text-bright transition">Submission Use</Link>
+                <Link href="/research" className="block hover:text-bright transition">
+                  Research Overview
+                </Link>
+                <Link href="/research" className="block hover:text-bright transition">
+                  Dataset &amp; Ethics
+                </Link>
+                <Link href="/research#submission-use" className="block hover:text-bright transition">
+                  Submission Use
+                </Link>
               </div>
             </div>
 
             <div>
-              <p className="text-xs uppercase tracking-widest text-muted mb-3">Legal</p>
+              <p className="text-xs uppercase tracking-widest text-muted mb-3">Project</p>
               <div className="space-y-2 text-dimmed">
-                <Link href="/research#data-policy" className="block hover:text-bright transition">Data Policy</Link>
-                <Link href="/research#no-pii" className="block hover:text-bright transition">No PII Scope</Link>
-                <Link href="/contact" className="block hover:text-bright transition">Contact</Link>
-                <Link href="/admin" className="block hover:text-bright transition">Admin</Link>
+                <Link href="/about" className="block hover:text-bright transition">
+                  About
+                </Link>
+                <Link href="/contact" className="block hover:text-bright transition">
+                  Contact
+                </Link>
+                <Link href="/research#data-policy" className="block hover:text-bright transition">
+                  Data Policy
+                </Link>
+                <a
+                  href="/admin/login/index.php"
+                  className="block hover:text-bright transition"
+                  rel="nofollow"
+                >
+                  Admin Sign In
+                </a>
               </div>
             </div>
           </div>
