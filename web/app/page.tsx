@@ -235,53 +235,6 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="section actionSection">
-            <article className="actionCard">
-              <p className="cardEyebrow">Survey</p>
-              <h2 className="revealTitle">Help Shape the Research</h2>
-              <p>
-                NAiERM is designed as a public-facing research effort. Survey participation helps
-                gather perspectives on economic security, future policy design, and how people
-                believe value should continue circulating in an AI-shaped economy.
-              </p>
-
-              <button
-                type="button"
-                className="primaryButton"
-                onClick={openSurveyModal}
-                aria-haspopup="dialog"
-              >
-                Start Survey
-              </button>
-            </article>
-
-            <article className="actionCard actionCardFeature">
-              <p className="cardEyebrow">Simulator</p>
-              <h2 className="revealTitle">Understanding the NAiERM Model</h2>
-              <p>
-                Artificial intelligence is beginning to generate major economic value without
-                relying on human labor in the traditional way. The NAiERM framework explores what
-                happens when GDP growth becomes increasingly disconnected from wages, purchasing
-                power weakens, and older tax structures no longer fit the economy they were
-                designed for.
-              </p>
-
-              <ul className="actionList">
-                {simulatorBullets.map((bullet) => (
-                  <li key={bullet}>{bullet}</li>
-                ))}
-              </ul>
-
-              <button
-                type="button"
-                className="secondaryButton secondaryButtonStrong"
-                onClick={openModelModal}
-                aria-haspopup="dialog"
-              >
-                Launch Simulator
-              </button>
-            </article>
-          </section>
         </main>
 
         <footer className="footer">
