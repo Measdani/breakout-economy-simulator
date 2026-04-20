@@ -263,11 +263,11 @@ export default function Home() {
 
           <section className="section">
             <div className="sectionIntro">
-              <p className="sectionEyebrow">Research Focus</p>
-              <h2 className="revealTitle">Economic Liquidity Is the Critical Factor</h2>
+              <p className="sectionEyebrow">Model Findings</p>
+              <h2 className="revealTitle">Key Pressure Points in the Model</h2>
               <p className="sectionSummary">
-                NAiERM models what happens when economic output grows while the older channels that
-                translate output into wages, demand, and purchasing power begin to weaken.
+                NAIERM highlights several linked pressures that emerge as productivity grows while
+                older wage-based channels begin to weaken.
               </p>
             </div>
 
