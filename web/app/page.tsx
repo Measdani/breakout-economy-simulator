@@ -199,12 +199,6 @@ export default function Home() {
                   Take the Survey
                 </button>
               </div>
-
-              <div className="heroPillRow" aria-label="Project themes">
-                <span className="heroPill">Economic resilience</span>
-                <span className="heroPill">Public participation</span>
-                <span className="heroPill">Policy design</span>
-              </div>
             </div>
 
             <aside className="heroPanel" aria-label="Core model factors">

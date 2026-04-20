@@ -194,22 +194,6 @@ body {
   outline-offset: 3px;
 }
 
-.heroPillRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 24px;
-}
-
-.heroPill {
-  border: 1px solid rgba(148, 163, 184, 0.18);
-  border-radius: 999px;
-  padding: 10px 14px;
-  font-size: 13px;
-  color: rgba(224, 231, 255, 0.86);
-  background: rgba(255, 255, 255, 0.03);
-}
-
 .heroPanel {
   position: relative;
   border-radius: 32px;
