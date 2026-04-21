@@ -7,13 +7,30 @@
 .container {
   max-width: 1120px;
   margin: 0 auto;
-  padding: 56px 20px 96px;
+  padding: 48px 20px 96px;
+}
+
+.card {
+  max-width: 720px;
+  background: #0f1b33;
+  color: #e6edf7;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 12px 30px rgba(2, 6, 23, 0.12);
+}
+
+.title {
+  margin: 0 0 16px;
+  color: #ffffff;
+  font-size: 34px;
+  line-height: 1.1;
 }
 
 .message,
 .emailLine {
   margin: 0;
-  color: #0b1220;
+  color: rgba(230, 237, 247, 0.86);
   font-size: 18px;
   line-height: 1.6;
 }
@@ -23,11 +40,11 @@
 }
 
 .link {
-  color: #1555b8;
+  color: #c2d8ff;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
 .link:hover {
-  color: #0f3f8f;
+  color: #ffffff;
 }

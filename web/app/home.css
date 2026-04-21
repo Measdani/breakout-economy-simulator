@@ -573,17 +573,19 @@ body {
 
 .signalCard {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
   min-height: 276px;
-  padding: 0;
+  padding: 26px 24px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 26px;
   overflow: hidden;
-  appearance: none;
   width: 100%;
-  font: inherit;
-  text-align: left;
-  color: inherit;
-  cursor: pointer;
-  perspective: 1400px;
+  background:
+    radial-gradient(circle at top right, rgba(88, 207, 255, 0.13), transparent 36%),
+    linear-gradient(180deg, rgba(11, 18, 35, 0.94) 0%, rgba(7, 12, 24, 0.98) 100%);
+  box-shadow: 0 18px 40px rgba(2, 6, 18, 0.22);
   transition:
     transform 0.2s ease,
     border-color 0.2s ease,
@@ -604,46 +606,6 @@ body {
   border-color: rgba(96, 165, 250, 0.24);
   box-shadow: 0 24px 48px rgba(2, 6, 18, 0.34);
   transform: translateY(-2px);
-}
-
-.signalCard:focus-visible {
-  outline: 2px solid rgba(147, 197, 253, 0.94);
-  outline-offset: 4px;
-}
-
-.signalCardInner {
-  position: relative;
-  display: block;
-  min-height: 276px;
-  transform-style: preserve-3d;
-  transition: transform 0.42s ease;
-}
-
-.signalCardOpen .signalCardInner {
-  transform: rotateY(180deg);
-}
-
-.signalFace {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  padding: 26px 24px 24px;
-  backface-visibility: hidden;
-}
-
-.signalFaceFront {
-  background:
-    radial-gradient(circle at top right, rgba(96, 165, 250, 0.08), transparent 34%),
-    linear-gradient(180deg, rgba(11, 18, 35, 0.92) 0%, rgba(7, 12, 24, 0.96) 100%);
-}
-
-.signalFaceBack {
-  transform: rotateY(180deg);
-  background:
-    radial-gradient(circle at top right, rgba(88, 207, 255, 0.14), transparent 36%),
-    linear-gradient(180deg, rgba(14, 23, 44, 0.98) 0%, rgba(8, 14, 28, 0.98) 100%);
 }
 
 .signalMeta {
@@ -678,35 +640,13 @@ body {
 }
 
 .signalFrontCopy {
-  max-width: 22ch;
+  max-width: 24ch;
+  color: #dbe8ff;
+  font-weight: 700;
 }
 
 .signalBackCopy {
-  max-width: 32ch;
-}
-
-.signalHint {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: auto;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #c8dcff;
-}
-
-.signalHint span {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 18px;
-  height: 18px;
-  border-radius: 999px;
-  border: 1px solid rgba(147, 197, 253, 0.24);
-  font-size: 12px;
-  line-height: 1;
+  max-width: 34ch;
 }
 
 .modalList {
@@ -1074,13 +1014,6 @@ body {
   }
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .signalCard:hover .signalCardInner,
-  .signalCard:focus-visible .signalCardInner {
-    transform: rotateY(180deg);
-  }
-}
-
 @media (hover: none), (max-width: 760px) {
   .signalCard {
     min-height: auto;
@@ -1088,44 +1021,6 @@ body {
 
   .signalCard:hover {
     transform: none;
-  }
-
-  .signalCardInner,
-  .signalCardOpen .signalCardInner {
-    min-height: auto;
-    transform: none;
-  }
-
-  .signalFace {
-    position: relative;
-    inset: auto;
-    backface-visibility: visible;
-  }
-
-  .signalFaceBack {
-    transform: none;
-    max-height: 0;
-    margin-top: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    overflow: hidden;
-    opacity: 0;
-    border-top: 1px solid transparent;
-    transition:
-      max-height 0.36s ease,
-      opacity 0.24s ease,
-      padding 0.36s ease,
-      margin 0.36s ease,
-      border-color 0.36s ease;
-  }
-
-  .signalCardOpen .signalFaceBack {
-    max-height: 360px;
-    margin-top: 2px;
-    padding-top: 18px;
-    padding-bottom: 22px;
-    opacity: 1;
-    border-top-color: rgba(96, 165, 250, 0.16);
   }
 }
 
@@ -1139,9 +1034,7 @@ body {
   .heroPanel::after,
   .factorCard::after,
   .trace,
-  .trace::after,
-  .signalCardInner,
-  .signalFaceBack {
+  .trace::after {
     animation: none;
     transition: none;
   }

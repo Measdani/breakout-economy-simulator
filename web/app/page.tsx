@@ -107,7 +107,6 @@ const ctaModals: Record<CtaModalKey, CtaModalContent> = {
 export default function Home() {
   const router = useRouter()
   const [activeModal, setActiveModal] = useState<CtaModalKey | null>(null)
-  const [openSignalCards, setOpenSignalCards] = useState<string[]>([])
 
   useEffect(() => {
     const titles = Array.from(document.querySelectorAll<HTMLElement>('.revealTitle'))
@@ -166,13 +165,6 @@ export default function Home() {
   const openSurveyModal = () => setActiveModal('survey')
   const openModelModal = () => setActiveModal('model')
   const closeModal = () => setActiveModal(null)
-  const toggleSignalCard = (cardId: string) => {
-    setOpenSignalCards((currentCards) =>
-      currentCards.includes(cardId)
-        ? currentCards.filter((currentCardId) => currentCardId !== cardId)
-        : [...currentCards, cardId],
-    )
-  }
 
   const handleModalContinue = () => {
     if (!activeCta) {
@@ -272,38 +264,14 @@ export default function Home() {
             </div>
 
             <div className="signalGrid">
-              {researchSignalCards.map((signal, index) => {
-                const isOpen = openSignalCards.includes(signal.id)
-
-                return (
-                  <button
-                    key={signal.id}
-                    type="button"
-                    className={['signalCard', isOpen ? 'signalCardOpen' : ''].filter(Boolean).join(' ')}
-                    onClick={() => toggleSignalCard(signal.id)}
-                    aria-expanded={isOpen}
-                    aria-label={`${signal.frontTitle}. ${isOpen ? 'Hide details' : 'Show details'}`}
-                  >
-                    <span className="signalCardInner">
-                      <span className="signalFace signalFaceFront">
-                        <span className="signalMeta">{`0${index + 1}`}</span>
-                        <span className="signalTitle">{signal.frontTitle}</span>
-                        <span className="signalFrontCopy">{signal.frontBody}</span>
-                        <span className="signalHint">
-                          {isOpen ? 'Close Detail' : 'Learn More'}{' '}
-                          <span aria-hidden="true">{isOpen ? '−' : '+'}</span>
-                        </span>
-                      </span>
-
-                      <span className="signalFace signalFaceBack">
-                        <span className="signalMeta">Context</span>
-                        <span className="signalTitle">{signal.frontTitle}</span>
-                        <span className="signalBackCopy">{signal.backBody}</span>
-                      </span>
-                    </span>
-                  </button>
-                )
-              })}
+              {researchSignalCards.map((signal, index) => (
+                <article key={signal.id} className="signalCard">
+                  <span className="signalMeta">{`0${index + 1}`}</span>
+                  <h3 className="signalTitle">{signal.frontTitle}</h3>
+                  <p className="signalFrontCopy">{signal.frontBody}</p>
+                  <p className="signalBackCopy">{signal.backBody}</p>
+                </article>
+              ))}
             </div>
           </section>
 
