@@ -29,27 +29,6 @@
   color: #0b1220;
 }
 
-.metaRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
-}
-
-.badge {
-  background: #ffffff;
-  border: 1px solid #e6edf7;
-  padding: 8px 10px;
-  border-radius: 10px;
-  font-size: 13px;
-  color: #334155;
-}
-
-.metaNote {
-  font-size: 13px;
-  color: #64748b;
-}
-
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

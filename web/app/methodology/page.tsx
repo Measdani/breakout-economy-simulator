@@ -64,12 +64,6 @@ export default function MethodologyPage() {
           <header className={styles.header}>
             <div className={styles.kicker}>Methodology</div>
             <h1 className={styles.title}>NAiERM Methodological Framework</h1>
-            <div className={styles.metaRow}>
-              <span className={styles.badge}>Last updated: March 2, 2026</span>
-              <span className={styles.metaNote}>
-                Deterministic fiscal simulator - Scenario comparison (not forecasting)
-              </span>
-            </div>
           </header>
 
           <div className={styles.grid}>
@@ -221,6 +215,10 @@ export default function MethodologyPage() {
                 <li>
                   <span className={styles.listStrong}>SBI:</span> Systemic Bonus Incentive that ramps
                   then phases out at breakout threshold.
+                </li>
+                <li>
+                  <span className={styles.listStrong}>Token Tax:</span> Levied against standard
+                  compute units (SCU).
                 </li>
                 <li>
                   <span className={styles.listStrong}>Tax Tiers:</span> Simplified two-tier income tax
