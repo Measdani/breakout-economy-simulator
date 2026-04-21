@@ -14,7 +14,7 @@ export default function PersonaComparison({ personas }: PersonaComparisonProps) 
   const chartData = personas.map((p) => ({
     name: p.label,
     'Earned Income': p.earnedIncome / 1000,
-    UBI: p.ubi / 1000,
+    BEL: p.ubi / 1000,
     Supplement: p.supplement / 1000,
     'Income Tax': -p.incomeTax / 1000,
   }));
@@ -53,7 +53,7 @@ export default function PersonaComparison({ personas }: PersonaComparisonProps) 
             <p style={{ fontWeight: 'bold', marginBottom: '8px' }}>{personaData.label}</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
               <p>Earned: {formatCurrency(personaData.earnedIncome)}</p>
-              <p style={{ color: '#4ade80' }}>UBI: {formatCurrency(personaData.ubi)}</p>
+              <p style={{ color: '#4ade80' }}>BEL: {formatCurrency(personaData.ubi)}</p>
               <p style={{ color: '#c084fc' }}>Supplement: {formatCurrency(personaData.supplement)}</p>
               <p style={{ color: '#f87171' }}>Tax: {formatCurrency(personaData.incomeTax)}</p>
               <p style={{ borderTop: '1px solid #475569', paddingTop: '4px', marginTop: '4px', fontWeight: 'bold' }}>
@@ -88,7 +88,7 @@ export default function PersonaComparison({ personas }: PersonaComparisonProps) 
             <Tooltip content={customTooltip} />
             <Legend />
             <Bar dataKey="Earned Income" stackId="a" fill="#3b82f6" />
-            <Bar dataKey="UBI" stackId="a" fill="#22c55e" />
+            <Bar dataKey="BEL" stackId="a" fill="#22c55e" />
             <Bar dataKey="Supplement" stackId="a" fill="#a78bfa" />
             <Bar dataKey="Income Tax" stackId="a" fill="#ef4444" />
           </BarChart>
@@ -134,7 +134,7 @@ export default function PersonaComparison({ personas }: PersonaComparisonProps) 
               </p>
             </div>
             <div className="p-4 bg-green-50 rounded-lg">
-              <p className="text-xs text-slate-600 mb-1">🎁 Base UBI</p>
+              <p className="text-xs text-slate-600 mb-1">🎁 Base BEL</p>
               <p className="text-2xl font-bold text-green-600">
                 {formatCurrency(selectedPersona.ubi)}
               </p>

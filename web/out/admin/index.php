@@ -704,7 +704,7 @@ admin_render_shell_start('Dashboard', [
               </div>
             </div>
             <div class="admin-kv__row">
-              <div class="admin-kv__label">BEL / annual UBI</div>
+              <div class="admin-kv__label">BEL / annual</div>
               <div class="admin-kv__value">
                 <?php if ($selectedSummary['bel_monthly'] !== null): ?>
                   <?= admin_escape('$' . number_format((float) $selectedSummary['bel_monthly']) . ' monthly') ?>

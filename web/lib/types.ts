@@ -18,7 +18,7 @@ export interface PolicyConfig {
   supplementApexIncome: number;
   supplementApexBonus: number;
   personaWeights?: number[];
-  // Dependent UBI tiers
+  // Dependent BEL tiers
   ubiDependent1?: number;
   ubiDependent2?: number;
   ubiDependent3?: number;

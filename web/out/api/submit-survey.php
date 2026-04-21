@@ -468,7 +468,7 @@ function run_survey_simulation(array $config, array $personas): array
         $warnings[] = 'Token tax rate unusually high (>0.8%) and may imply capital flight risk or market distortion.';
     }
     if ($config['ubiAnnualPerAdult'] > 18000) {
-        $warnings[] = 'UBI floor exceeds $18k and should be checked for affordability.';
+        $warnings[] = 'BEL floor exceeds $18k and should be checked for affordability.';
     }
     if (!$isSolvent) {
         $warnings[] = 'Budget is in deficit. Adjust policy parameters to achieve solvency.';

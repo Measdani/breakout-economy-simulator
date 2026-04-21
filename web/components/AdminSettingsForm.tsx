@@ -182,9 +182,9 @@ export default function AdminSettingsForm({ currentConfig, history }: Props) {
       {tab === 'settings' && (
         <form onSubmit={handleSave}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
-            {/* UBI Annual Amount */}
+            {/* BEL Annual Amount */}
             <div>
-              <label style={{ display: 'block', fontSize: '0.875rem', color: '#e0e7ff', marginBottom: '0.5rem', fontWeight: '600' }}>UBI Annual Amount</label>
+              <label style={{ display: 'block', fontSize: '0.875rem', color: '#e0e7ff', marginBottom: '0.5rem', fontWeight: '600' }}>BEL Annual Amount</label>
               <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                 <input
                   type="number"
@@ -866,7 +866,7 @@ export default function AdminSettingsForm({ currentConfig, history }: Props) {
                     )}
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem', fontSize: '0.75rem', color: '#94a3b8' }}>
-                    <div>UBI: ${(config.config.ubiAnnualPerAdult / 1000).toFixed(1)}K</div>
+                    <div>BEL: ${(config.config.ubiAnnualPerAdult / 1000).toFixed(1)}K</div>
                     <div>Tax: {(config.config.tokenTaxRate * 100).toFixed(3)}%</div>
                     <div>Breakout: ${(config.config.breakoutPoint / 1000).toFixed(0)}K</div>
                     <div>Pop: {(config.config.adultPopulation / 1000000).toFixed(0)}M</div>

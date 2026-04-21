@@ -1,22 +1,22 @@
 # Policy Flight Simulator - Web UI (v2.1)
 
-Interactive web interface for the Policy Flight Simulator - Educational UBI + Token Tax explorer.
+Interactive web interface for the Policy Flight Simulator - Educational BEL + Token Tax explorer.
 
 ## Features
 
 ✅ **Real-time Policy Sliders**
 - Token Tax Rate (0.10 - 1.00 mils per 1,000 tokens total compute)
-- Annual UBI per Adult ($0 - $20,000)
+- Annual BEL per Adult ($0 - $20,000)
 - Supplement Breakout Point ($30,000 - $100,000)
 
 ✅ **Live Financial Dashboard**
 - Revenue breakdown (Token Tax, Income Tax, Welfare Savings)
-- Obligations summary (UBI Cost, Government Operations)
+- Obligations summary (BEL Cost, Government Operations)
 - Fiscal solvency indicator (Green = Solvent, Red = Deficit)
 
 ✅ **Persona Outcomes Table**
 - 4 income archetypes: Starter, Professional, Manager, Executive
-- Shows: Earned Income, UBI, Supplement, Income Tax, Net Income
+- Shows: Earned Income, BEL, Supplement, Income Tax, Net Income
 - Demonstrates no welfare cliffs (net income always increases)
 
 ✅ **Policy Diagnostics**
@@ -84,7 +84,7 @@ The UI imports the calculation engine from `lib/engine.ts`, which is a client-si
 - `runSimulation(config)` - Main entry point
 - `calculateTokenTaxRevenue()` - Token tax calculation
 - `calculateIncomeTax()` - Tiered income tax
-- `calculateSupplement()` - UBI supplement curve
+- `calculateSupplement()` - BEL supplement curve
 - `calculatePersonaOutcome()` - Individual scenario results
 
 ### Configuration

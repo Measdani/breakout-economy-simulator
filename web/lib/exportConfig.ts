@@ -20,10 +20,10 @@ export function exportConfigAsCSV(
   rows.push('=== POLICY PARAMETERS ===');
   rows.push(`Token Tax Rate (%),${(config.tokenTaxRate * 100).toFixed(4)}`);
   rows.push(`Annual Digital Flow Base ($),${config.flowBaseAnnual.toLocaleString()}`);
-  rows.push(`UBI Annual Per Adult ($),${config.ubiAnnualPerAdult.toLocaleString()}`);
-  rows.push(`UBI Dependent Tier 1 ($),${config.ubiDependent1?.toLocaleString() || 'N/A'}`);
-  rows.push(`UBI Dependent Tier 2 ($),${config.ubiDependent2?.toLocaleString() || 'N/A'}`);
-  rows.push(`UBI Dependent Tier 3 ($),${config.ubiDependent3?.toLocaleString() || 'N/A'}`);
+  rows.push(`BEL Annual Per Adult ($),${config.ubiAnnualPerAdult.toLocaleString()}`);
+  rows.push(`BEL Dependent Tier 1 ($),${config.ubiDependent1?.toLocaleString() || 'N/A'}`);
+  rows.push(`BEL Dependent Tier 2 ($),${config.ubiDependent2?.toLocaleString() || 'N/A'}`);
+  rows.push(`BEL Dependent Tier 3 ($),${config.ubiDependent3?.toLocaleString() || 'N/A'}`);
   rows.push(`Breakout Point ($),${config.breakoutPoint.toLocaleString()}`);
   rows.push(`Supplement Apex Income ($),${config.supplementApexIncome.toLocaleString()}`);
   rows.push(`Supplement Apex Bonus ($),${config.supplementApexBonus.toLocaleString()}`);
@@ -66,9 +66,9 @@ export function exportConfigAsCSV(
   rows.push('');
 
   rows.push('Obligations Breakdown:');
-  rows.push(`  Adult UBI Cost ($),${result.obligations.adultUBICost?.toLocaleString() || 'N/A'}`);
-  rows.push(`  Dependent UBI Cost ($),${result.obligations.dependentUBICost?.toLocaleString() || 'N/A'}`);
-  rows.push(`  Total UBI Cost ($),${result.obligations.ubiCost.toLocaleString()}`);
+  rows.push(`  Adult BEL Cost ($),${result.obligations.adultUBICost?.toLocaleString() || 'N/A'}`);
+  rows.push(`  Dependent BEL Cost ($),${result.obligations.dependentUBICost?.toLocaleString() || 'N/A'}`);
+  rows.push(`  Total BEL Cost ($),${result.obligations.ubiCost.toLocaleString()}`);
   rows.push(`  Government Operations ($),${result.obligations.govtOperatingRequirement.toLocaleString()}`);
   if (result.obligations.retirementProgramCost && result.obligations.retirementProgramCost > 0) {
     rows.push(`  Retirement Program ($),${result.obligations.retirementProgramCost.toLocaleString()}`);
@@ -88,9 +88,9 @@ export function exportConfigAsCSV(
   const assumedGDP = 28e12;
   const ubiPercentageGDP = (result.obligations.ubiCost / assumedGDP) * 100;
   rows.push('=== POLICY METRICS ===');
-  rows.push(`UBI Cost as % of GDP,${ubiPercentageGDP.toFixed(2)}`);
+  rows.push(`BEL Cost as % of GDP,${ubiPercentageGDP.toFixed(2)}`);
   rows.push(`Token Tax Revenue as % of Total Revenue,${((result.revenue.tokenTaxRevenue / result.revenue.totalRevenue) * 100).toFixed(2)}`);
-  rows.push(`UBI Cost as % of Total Obligations,${((result.obligations.ubiCost / result.obligations.totalObligations) * 100).toFixed(2)}`);
+  rows.push(`BEL Cost as % of Total Obligations,${((result.obligations.ubiCost / result.obligations.totalObligations) * 100).toFixed(2)}`);
   rows.push('');
 
   // Convert to CSV string

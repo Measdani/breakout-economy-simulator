@@ -27,7 +27,7 @@ const PRESETS = [
   {
     name: 'High Growth',
     icon: '📈',
-    description: 'Lower taxes, higher UBI',
+    description: 'Lower taxes, higher BEL',
     summary: 'High Growth increases household income and workforce participation, with tighter fiscal buffer.',
     color: 'from-green-400 to-green-600',
     textColor: 'text-green-300',
@@ -42,7 +42,7 @@ const PRESETS = [
   {
     name: 'Safety Net',
     icon: '🛡️',
-    description: 'Higher taxes, robust UBI',
+    description: 'Higher taxes, robust BEL',
     summary: 'Safety Net maximizes baseline stability at the cost of higher structural revenue requirements.',
     color: 'from-orange-400 to-orange-600',
     textColor: 'text-orange-300',

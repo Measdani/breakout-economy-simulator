@@ -183,7 +183,7 @@ export function runSimulation(config: PolicyConfig): SimulationResult {
   const welfareSavingsCredit = config.welfareSavingsCredit;
   const totalRevenue = tokenTaxRevenue + frictionTaxRevenue + incomeTaxRevenue + welfareSavingsCredit;
 
-  // Calculate UBI cost: adults + tiered dependents
+  // Calculate BEL cost: adults + tiered dependents
   const dep1Rate = config.ubiDependent1 ?? 6000;
   const dep2Rate = config.ubiDependent2 ?? 4000;
   const dep3Rate = config.ubiDependent3 ?? 2000;
@@ -276,7 +276,7 @@ export function runSimulation(config: PolicyConfig): SimulationResult {
   }
 
   if (config.ubiAnnualPerAdult > 18000) {
-    warnings.push('UBI floor exceeds $18k—verify affordability across income distribution.');
+    warnings.push('BEL floor exceeds $18k—verify affordability across income distribution.');
   }
 
   if (!isSolvent) {

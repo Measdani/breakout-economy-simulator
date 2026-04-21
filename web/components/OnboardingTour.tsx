@@ -21,13 +21,13 @@ export default function OnboardingTour({ onComplete }: OnboardingTourProps) {
     {
       title: '🚀 Welcome to NAiERM (The National AI Economy Resiliency Model)',
       description:
-        'This interactive tool lets you explore how a UBI + Token Tax system could build economic resilience in the AI era. Adjust the sliders and see the impact in real-time!',
+        'This interactive tool lets you explore how a BEL + Token Tax system could build economic resilience in the AI era. Adjust the sliders and see the impact in real-time!',
       highlight: null,
     },
     {
       title: '⚙️ Step 1: Adjust Policy Parameters',
       description:
-        'Use the three sliders to change: Token Tax Rate (tax on electronic transactions), UBI Floor (annual income), and Breakout Point (where benefits end).',
+        'Use the three sliders to change: Token Tax Rate (tax on electronic transactions), BEL Floor (annual income), and Breakout Point (where benefits end).',
       highlight: 'policy-sliders',
     },
     {

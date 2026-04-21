@@ -1,7 +1,7 @@
 {
   "name": "policy-flight-simulator-web",
   "version": "0.2.0",
-  "description": "UI for Policy Flight Simulator - Interactive UBI + Token Tax explorer",
+  "description": "UI for Policy Flight Simulator - Interactive BEL + Token Tax explorer",
   "main": "index.js",
   "scripts": {
     "dev": "next dev",

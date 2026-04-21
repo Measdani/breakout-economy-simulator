@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 const GLOSSARY_ITEMS = [
   {
-    term: 'UBI (Universal Basic Income)',
+    term: 'BEL (Basic Economic Liquidity)',
     definition:
       'A guaranteed annual payment given to all adults, regardless of income or employment status.',
     example: 'Default: $12,000/year per adult',
@@ -24,19 +24,19 @@ const GLOSSARY_ITEMS = [
   {
     term: 'Welfare Floor & Launchpad',
     definition:
-      'The UBI is a guaranteed income floor—it never disappears when you earn more. The supplement is a launchpad—a bonus that rises as you enter the workforce, peaking around $24k earned income, then gliding smoothly to zero at the breakout point.',
+      'The BEL is a guaranteed income floor—it never disappears when you earn more. The supplement is a launchpad—a bonus that rises as you enter the workforce, peaking around $24k earned income, then gliding smoothly to zero at the breakout point.',
     example: 'Floor = $12k/yr guaranteed to all. Launchpad = +$6k bonus at $24k earned. No cliff, no trap.',
   },
   {
     term: 'Breakout Point',
     definition:
-      'The earned income level where the UBI supplement reaches zero. Beyond this point, you earn on your own without government support.',
+      'The earned income level where the BEL supplement reaches zero. Beyond this point, you earn on your own without government support.',
     example: 'Default: $60,000',
   },
   {
     term: 'Supplement',
     definition:
-      'A bonus on top of base UBI that peaks at lower incomes and tapers to zero at the breakout point. Encourages work without welfare cliffs.',
+      'A bonus on top of base BEL that peaks at lower incomes and tapers to zero at the breakout point. Encourages work without welfare cliffs.',
     example: 'Peaks at $24k earned income (+$6k bonus), tapers to $0 at $60k',
   },
   {
@@ -59,8 +59,8 @@ const GLOSSARY_ITEMS = [
   {
     term: 'Net Income',
     definition:
-      'Total money you keep after earning income, receiving UBI/supplement, and paying taxes.',
-    example: '$50k earned + $12k UBI + $2k supplement - $0 tax = $64k net',
+      'Total money you keep after earning income, receiving BEL/supplement, and paying taxes.',
+    example: '$50k earned + $12k BEL + $2k supplement - $0 tax = $64k net',
   },
   {
     term: 'Tiered Tax',

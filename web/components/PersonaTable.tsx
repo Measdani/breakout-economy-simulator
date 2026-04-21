@@ -24,7 +24,7 @@ export default function PersonaTable({ personas }: PersonaTableProps) {
             <th className="px-4 py-3 text-right font-semibold text-slate-900">
               Earned Income
             </th>
-            <th className="px-4 py-3 text-right font-semibold text-slate-900">UBI</th>
+            <th className="px-4 py-3 text-right font-semibold text-slate-900">BEL</th>
             <th className="px-4 py-3 text-right font-semibold text-slate-900">Supplement</th>
             <th className="px-4 py-3 text-right font-semibold text-slate-900">
               Income Tax
@@ -64,7 +64,7 @@ export default function PersonaTable({ personas }: PersonaTableProps) {
       </table>
       <div className="mt-6 p-4 bg-slate-50 rounded text-sm text-slate-600">
         <p>
-          <strong>Net Income</strong> = Earned Income + UBI + Supplement - Income Tax
+          <strong>Net Income</strong> = Earned Income + BEL + Supplement - Income Tax
         </p>
         <p className="mt-2">
           Note: Higher earned income always results in higher net income (no welfare cliffs).

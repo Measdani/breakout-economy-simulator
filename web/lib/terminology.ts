@@ -18,7 +18,7 @@ export const TERMINOLOGY = {
   REVENUE_WELFARE_SAVINGS: 'Welfare Savings',
   REVENUE_TOTAL: 'Total Revenue',
 
-  // === Basic Economic Liquidity (BEL - formerly UBI) ===
+  // === Basic Economic Liquidity (BEL) ===
   BEL_LONG: 'Basic Economic Liquidity',
   BEL_SHORT: 'BEL',
   BEL_ADULT: 'BEL – Adult Allocation',

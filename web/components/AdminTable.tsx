@@ -134,7 +134,7 @@ export default function AdminTable({ submissions }: Props) {
               <th className="px-4 py-3 text-left font-semibold text-muted">Name</th>
               <th className="px-4 py-3 text-left font-semibold text-muted">Email</th>
               <th className="px-4 py-3 text-right font-semibold text-muted">Balance</th>
-              <th className="px-4 py-3 text-right font-semibold text-muted">UBI</th>
+              <th className="px-4 py-3 text-right font-semibold text-muted">BEL</th>
               <th className="px-4 py-3 text-right font-semibold text-muted">Tax Rate</th>
               <th className="px-4 py-3 text-right font-semibold text-muted">Solvent</th>
               <th className="px-4 py-3 text-left font-semibold text-muted">Variables</th>

@@ -40,7 +40,7 @@ export default function AdminCharts({ submissions }: AdminChartsProps) {
   // ============ OBLIGATIONS DATA ============
   const avgObligationsData = [
     {
-      name: 'UBI Cost',
+      name: 'BEL Cost',
       value: submissions.reduce((sum, s) => sum + (s.result?.obligations?.ubiCost || 0), 0) / n / 1e9,
     },
     {
@@ -49,7 +49,7 @@ export default function AdminCharts({ submissions }: AdminChartsProps) {
     },
   ]
 
-  // ============ DEPENDENT UBI ANALYSIS ============
+  // ============ DEPENDENT BEL ANALYSIS ============
   const avgDependent1 = submissions.reduce((sum, s) => sum + (s.config?.ubiDependent1 || 0), 0) / n / 1000
   const avgDependent2 = submissions.reduce((sum, s) => sum + (s.config?.ubiDependent2 || 0), 0) / n / 1000
   const avgDependent3 = submissions.reduce((sum, s) => sum + (s.config?.ubiDependent3 || 0), 0) / n / 1000
@@ -102,7 +102,7 @@ export default function AdminCharts({ submissions }: AdminChartsProps) {
   })
   const breakoutData = Object.entries(breakoutBuckets).map(([range, count]) => ({ range, count }))
 
-  // ============ UBI DISTRIBUTION ============
+  // ============ BEL DISTRIBUTION ============
   const allUbi = submissions.map(s => s.ubi_annual)
   const minUbi = Math.floor(Math.min(...allUbi) / 2000) * 2000
   const maxUbi = Math.ceil(Math.max(...allUbi) / 2000) * 2000
@@ -224,7 +224,7 @@ export default function AdminCharts({ submissions }: AdminChartsProps) {
   const sustainabilityMetrics = {
     stableCount: submissions.filter(s => s.is_solvent && s.surplus_deficit > 0).length,
     deficitCount: submissions.filter(s => !s.is_solvent).length,
-    avgUBIasPercentGDP: (submissions.reduce((sum, s) => sum + (s.result?.obligations?.ubiCost || 0), 0) / submissions.length) / 28e12 * 100,
+    avgBELasPercentGDP: (submissions.reduce((sum, s) => sum + (s.result?.obligations?.ubiCost || 0), 0) / submissions.length) / 28e12 * 100,
     avgTokenTaxPercent: (submissions.reduce((sum, s) => sum + (s.result?.revenue?.tokenTaxRevenue || 0), 0) /
                          submissions.reduce((sum, s) => sum + (s.result?.revenue?.totalRevenue || 0), 0)) * 100 || 0,
   }
@@ -347,9 +347,9 @@ export default function AdminCharts({ submissions }: AdminChartsProps) {
         </div>
       </div>
 
-      {/* ============ DEPENDENT UBI ANALYTICS ============ */}
+      {/* ============ DEPENDENT BEL ANALYTICS ============ */}
       <div style={{ marginBottom: '2rem' }}>
-        <h2 style={{ color: '#e0e7ff', marginBottom: '1rem', fontSize: '1.25rem', fontWeight: 'bold' }}>Dependent UBI Strategy</h2>
+        <h2 style={{ color: '#e0e7ff', marginBottom: '1rem', fontSize: '1.25rem', fontWeight: 'bold' }}>Dependent BEL Strategy</h2>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
           <div style={{ backgroundColor: '#0f1629', border: '1px solid rgba(168, 85, 247, 0.3)', borderRadius: '0.5rem', padding: '1.5rem' }}>
             <p style={{ color: '#94a3b8', fontSize: '0.875rem', marginBottom: '0.5rem' }}>Avg Dependent Tier 1</p>
@@ -425,9 +425,9 @@ export default function AdminCharts({ submissions }: AdminChartsProps) {
             </ResponsiveContainer>
           </div>
 
-          {/* UBI Distribution */}
+          {/* BEL Distribution */}
           <div style={{ backgroundColor: '#0f1629', border: '1px solid rgba(59, 130, 246, 0.3)', borderRadius: '0.5rem', padding: '1rem' }}>
-            <h3 style={{ color: '#e0e7ff', marginBottom: '1rem', fontSize: '0.95rem', fontWeight: '600' }}>UBI Annual Distribution</h3>
+            <h3 style={{ color: '#e0e7ff', marginBottom: '1rem', fontSize: '0.95rem', fontWeight: '600' }}>BEL Annual Distribution</h3>
             <ResponsiveContainer width="100%" height={280}>
               <BarChart data={ubiData} margin={{ bottom: 40 }}>
                 <XAxis dataKey="range" angle={-30} textAnchor="end" height={80} tick={{ fill: '#94a3b8', fontSize: 12 }} />
@@ -467,7 +467,7 @@ export default function AdminCharts({ submissions }: AdminChartsProps) {
                 <th style={{ padding: '0.75rem', textAlign: 'left', color: '#94a3b8' }}>Rank</th>
                 <th style={{ padding: '0.75rem', textAlign: 'left', color: '#94a3b8' }}>Name</th>
                 <th style={{ padding: '0.75rem', textAlign: 'left', color: '#94a3b8' }}>Balance</th>
-                <th style={{ padding: '0.75rem', textAlign: 'left', color: '#94a3b8' }}>UBI</th>
+                <th style={{ padding: '0.75rem', textAlign: 'left', color: '#94a3b8' }}>BEL</th>
                 <th style={{ padding: '0.75rem', textAlign: 'left', color: '#94a3b8' }}>Tax Rate</th>
                 <th style={{ padding: '0.75rem', textAlign: 'left', color: '#94a3b8' }}>Breakout</th>
                 <th style={{ padding: '0.75rem', textAlign: 'left', color: '#94a3b8' }}>Date</th>
@@ -503,7 +503,7 @@ export default function AdminCharts({ submissions }: AdminChartsProps) {
               <Tooltip content={<PersonaTooltip />} />
               <Legend />
               <Bar dataKey="earnedIncome" name="Earned Income" fill={COLORS.tokenTax} isAnimationActive={false} />
-              <Bar dataKey="transferIncome" name="UBI + Supplement" fill={COLORS.incomeTax} isAnimationActive={false} />
+              <Bar dataKey="transferIncome" name="BEL + Supplement" fill={COLORS.incomeTax} isAnimationActive={false} />
               <Bar dataKey="incomeTax" name="Income Tax" fill={COLORS.govtOps} isAnimationActive={false} />
               <Bar dataKey="netIncome" name="Net Income" fill={COLORS.welfareSavings} isAnimationActive={false} />
             </BarChart>
@@ -528,8 +528,8 @@ export default function AdminCharts({ submissions }: AdminChartsProps) {
           </div>
 
           <div style={{ backgroundColor: '#0f1629', border: '1px solid rgba(59, 130, 246, 0.3)', borderRadius: '0.5rem', padding: '1.5rem' }}>
-            <p style={{ color: '#94a3b8', fontSize: '0.875rem', marginBottom: '0.5rem' }}>Avg UBI as % of GDP</p>
-            <p style={{ color: '#60a5fa', fontSize: '2rem', fontWeight: 'bold' }}>{sustainabilityMetrics.avgUBIasPercentGDP.toFixed(2)}%</p>
+            <p style={{ color: '#94a3b8', fontSize: '0.875rem', marginBottom: '0.5rem' }}>Avg BEL as % of GDP</p>
+            <p style={{ color: '#60a5fa', fontSize: '2rem', fontWeight: 'bold' }}>{sustainabilityMetrics.avgBELasPercentGDP.toFixed(2)}%</p>
             <p style={{ color: '#94a3b8', fontSize: '0.75rem', marginTop: '0.5rem' }}>Relative to $28T GDP</p>
           </div>
 

@@ -87,7 +87,7 @@ export default function PolicySliders({
   // Calculate estimated values for context
   const estimatedFrictionTaxRevenue = frictionTaxRate * 1e15 * (1 - capitalFlightRate);
   const estimatedTokenTaxRevenue = tokenTaxRate * 1e15;
-  const estimatedUBICost = ubiAnnualPerAdult * 265000000;
+  const estimatedBELCost = ubiAnnualPerAdult * 265000000;
   const estimatedSbiAnnualPool = sbiMaximum * 265000000 * 0.6;
 
   const getFrictionTaxContext = () => {
@@ -123,10 +123,10 @@ export default function PolicySliders({
     };
   };
 
-  const getUBIContext = () => {
-    const cost = estimatedUBICost / 1e12;
+  const getBELContext = () => {
+    const cost = estimatedBELCost / 1e12;
     return {
-      label: 'Adult UBI Cost',
+      label: 'Adult BEL Cost',
       value: `$${cost.toFixed(2)}T`
     };
   };
@@ -296,7 +296,7 @@ export default function PolicySliders({
       <div>
         <p className="text-xs font-bold text-muted uppercase tracking-widest mb-3">LIQUIDITY ENGINE</p>
         <div className="space-y-6">
-      {/* UBI Annual Per Adult - Social Floor */}
+      {/* BEL Annual Per Adult - Social Floor */}
       <SliderSection
         title="Baseline Economic Liquidity"
         subtitle="Annual BEL Amount"
@@ -311,7 +311,7 @@ export default function PolicySliders({
         maxLabel="$20,000"
         formattedValue={formatCurrency(ubiAnnualPerAdult)}
         position={ubiPosition}
-        context={getUBIContext()}
+        context={getBELContext()}
         tooltipText="A universal liquidity floor distributed to all citizens to maintain consumer demand in an AI-driven economy."
       />
 

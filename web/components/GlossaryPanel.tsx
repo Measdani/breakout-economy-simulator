@@ -2,7 +2,7 @@
 
 const GLOSSARY_ITEMS = [
   {
-    term: 'UBI (Universal Basic Income)',
+    term: 'BEL (Basic Economic Liquidity)',
     definition: 'A guaranteed annual payment given to all adults, regardless of income or employment status.',
     example: 'Default: $12,000/year per adult',
   },
@@ -18,17 +18,17 @@ const GLOSSARY_ITEMS = [
   },
   {
     term: 'Welfare Floor & Launchpad',
-    definition: 'The UBI is a guaranteed floor. The supplement is a launchpad—a bonus that rises then glides smoothly to zero at the breakout point.',
+    definition: 'The BEL is a guaranteed floor. The supplement is a launchpad—a bonus that rises then glides smoothly to zero at the breakout point.',
     example: 'Floor = $12k/yr. Launchpad = +$6k bonus at $24k earned.',
   },
   {
     term: 'Breakout Point',
-    definition: 'The earned income level where the UBI supplement reaches zero.',
+    definition: 'The earned income level where the BEL supplement reaches zero.',
     example: 'Default: $60,000',
   },
   {
     term: 'Supplement',
-    definition: 'A bonus on top of base UBI that peaks at lower incomes and tapers to zero at the breakout point.',
+    definition: 'A bonus on top of base BEL that peaks at lower incomes and tapers to zero at the breakout point.',
     example: 'Peaks at $24k earned income (+$6k bonus), tapers to $0 at $60k',
   },
   {
@@ -48,8 +48,8 @@ const GLOSSARY_ITEMS = [
   },
   {
     term: 'Net Income',
-    definition: 'Total money you keep after earning income, receiving UBI/supplement, and paying taxes.',
-    example: '$50k earned + $12k UBI + $2k supplement - $0 tax = $64k net',
+    definition: 'Total money you keep after earning income, receiving BEL/supplement, and paying taxes.',
+    example: '$50k earned + $12k BEL + $2k supplement - $0 tax = $64k net',
   },
   {
     term: 'Tiered Tax',
@@ -57,9 +57,9 @@ const GLOSSARY_ITEMS = [
     example: '0% up to $60k, 19% from $60k-$135k, 29% above $135k',
   },
   {
-    term: 'Dependent UBI',
-    definition: 'Additional UBI payments for dependents (children, elderly, disabled) on top of adult UBI. Paid in tiers: 1st dependent = $6k, 2nd = $4k, 3rd+ = $2k.',
-    example: 'Household with 2 children receives: $12k (adults) + $6k (1st child) + $4k (2nd child) = $22k total UBI',
+    term: 'Dependent BEL',
+    definition: 'Additional BEL payments for dependents (children, elderly, disabled) on top of adult BEL. Paid in tiers: 1st dependent = $6k, 2nd = $4k, 3rd+ = $2k.',
+    example: 'Household with 2 children receives: $12k (adults) + $6k (1st child) + $4k (2nd child) = $22k total BEL',
   },
   {
     term: 'Household Composition',
@@ -68,8 +68,8 @@ const GLOSSARY_ITEMS = [
   },
   {
     term: 'Household Demographics Impact',
-    definition: 'Real-time metrics showing fiscal impact of the dependent UBI structure: total dependent cost, % of budget, dependent population, and coverage rate.',
-    example: 'Toggled in right panel—shows that dependents might represent 8-12% of total UBI budget',
+    definition: 'Real-time metrics showing fiscal impact of the dependent BEL structure: total dependent cost, % of budget, dependent population, and coverage rate.',
+    example: 'Toggled in right panel—shows that dependents might represent 8-12% of total BEL budget',
   },
 ];
 

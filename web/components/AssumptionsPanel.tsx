@@ -67,7 +67,7 @@ export default function AssumptionsPanel({ config, onClose }: AssumptionsPanelPr
               <AssumptionRow
                 label="Adult Population"
                 value={config.adultPopulation.toLocaleString()}
-                description="Primary eligible population for UBI. Based on US adult population (18+)."
+                description="Primary eligible population for BEL. Based on US adult population (18+)."
               />
               <AssumptionRow
                 label="Total Households (Estimated)"
@@ -86,17 +86,17 @@ export default function AssumptionsPanel({ config, onClose }: AssumptionsPanelPr
               <AssumptionRow
                 label="Assumed US GDP"
                 value="$28 Trillion"
-                description="Used for policy metric calculations (e.g., UBI as % of GDP). Based on recent US economic data."
+                description="Used for policy metric calculations (e.g., BEL as % of GDP). Based on recent US economic data."
               />
               <AssumptionRow
                 label="Government Operating Requirement"
                 value={formatCurrency(config.govtOperatingRequirement)}
-                description="Annual government operations budget (non-UBI, non-welfare). Includes defense, infrastructure, education, healthcare administration."
+                description="Annual government operations budget (non-BEL, non-welfare). Includes defense, infrastructure, education, healthcare administration."
               />
               <AssumptionRow
                 label="Welfare Savings Credit"
                 value={formatCurrency(config.welfareSavingsCredit)}
-                description="Annual offset from consolidating existing welfare programs into UBI. Reflects administrative simplification and program consolidation."
+                description="Annual offset from consolidating existing welfare programs into BEL. Reflects administrative simplification and program consolidation."
               />
               <AssumptionRow
                 label="Annual Digital Flow Base"
@@ -137,14 +137,14 @@ export default function AssumptionsPanel({ config, onClose }: AssumptionsPanelPr
             </h3>
             <div className="space-y-4 ml-4">
               <AssumptionRow
-                label="UBI Structure"
+                label="BEL Structure"
                 value="Multi-tier"
-                description="Adults receive base UBI. Dependents receive tier-based supplements (1st: $6k, 2nd: $4k, 3rd: $2k). Designed to support child-rearing without cliff effects."
+                description="Adults receive base BEL. Dependents receive tier-based supplements (1st: $6k, 2nd: $4k, 3rd: $2k). Designed to support child-rearing without cliff effects."
               />
               <AssumptionRow
                 label="Breakout Point"
                 value={formatCurrency(config.breakoutPoint)}
-                description="Income threshold where supplemental support fully phases out. Above this income, citizens receive UBI only."
+                description="Income threshold where supplemental support fully phases out. Above this income, citizens receive BEL only."
               />
               <AssumptionRow
                 label="Supplement Bonus (Peak)"
@@ -153,7 +153,7 @@ export default function AssumptionsPanel({ config, onClose }: AssumptionsPanelPr
               />
               <div className="bg-darker-slate rounded p-3 border border-border-slate">
                 <p className="text-xs text-dimmed">
-                  <strong>Total Obligations = UBI Cost + Dependent UBI + Gov Operations</strong>
+                  <strong>Total Obligations = BEL Cost + Dependent BEL + Gov Operations</strong>
                 </p>
               </div>
             </div>
@@ -189,7 +189,7 @@ export default function AssumptionsPanel({ config, onClose }: AssumptionsPanelPr
               🔬 Scope & Limitations
             </h3>
             <div className="space-y-2 ml-4 text-sm text-dimmed">
-              <p>✓ Model captures direct fiscal impact of UBI + supplemental policy</p>
+              <p>✓ Model captures direct fiscal impact of BEL + supplemental policy</p>
               <p>✓ Work incentive effects modeled via supplement/breakout curve</p>
               <p>✗ Does not model behavioral economic effects (labor supply elasticity)</p>
               <p>✗ Does not include macroeconomic feedback loops (inflation, growth)</p>

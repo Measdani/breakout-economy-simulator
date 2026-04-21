@@ -6,7 +6,7 @@ import { runSimulation, calculateFrictionTaxSensitivity } from '../lib/engine';
 import { useAnimatedNumber, numberFormatters } from '../lib/hooks/useAnimatedNumber';
 import { TERMINOLOGY, getRetirementModeBadge } from '../lib/terminology';
 import type { PolicyConfig, SimulationResult } from '../lib/types';
-import { buildAssumptionsHref } from '../lib/assumptionsRoute';
+import { buildAssumptionsHref, saveAssumptionsSnapshot } from '../lib/assumptionsRoute';
 import PolicySliders from './PolicySliders';
 import ResultsDisplay from './ResultsDisplay';
 import FiscalSustainabilityIndicator from './FiscalSustainabilityIndicator';
@@ -214,6 +214,9 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
 
   const result: SimulationResult = useMemo(() => runSimulation(config), [config]);
   const assumptionsHref = buildAssumptionsHref(config);
+  const handleAssumptionsOpen = () => {
+    saveAssumptionsSnapshot(config);
+  };
 
   // Friction Tax Sensitivity Analysis
   const frictionTaxSensitivityUp = useMemo(() =>
@@ -745,6 +748,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                       <div className="border-t border-border-slate pt-6">
                         <Link
                           href={assumptionsHref}
+                          onClick={handleAssumptionsOpen}
                           className="flex items-center justify-between w-full mb-3 hover:opacity-80 transition bg-darker-slate rounded px-3 py-2 border border-border-slate"
                         >
                           <p className="text-sm text-bright uppercase tracking-wide font-semibold">Model Assumptions</p>
@@ -820,7 +824,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
               <div className="grid grid-cols-6 gap-6 h-full">
                 {/* LEFT: Household Inputs */}
                 <div className="col-span-2 overflow-y-auto pr-2 space-y-6">
-                  {/* Dependent UBI Rates */}
+                  {/* Dependent BEL Rates */}
                   <div className="bg-dark-slate rounded-lg p-5 glow-border-blue" style={{ transition: 'all 0.3s ease' }}>
                     <p className="text-sm font-semibold text-muted uppercase tracking-wide mb-4">
                       💰 Tiered Dependent Support
@@ -982,12 +986,12 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                   </div>
                 </div>
 
-                {/* MIDDLE: UBI Program Cost Display */}
+                {/* MIDDLE: BEL Program Cost Display */}
                 <div className="col-span-2 rounded-lg p-8 bg-dark-slate glow-border-blue overflow-y-auto">
                   <div className="space-y-6">
-                    {/* UBI Program Cost Hero */}
+                    {/* BEL Program Cost Hero */}
                     <div>
-                      <p className="text-sm font-semibold text-muted uppercase tracking-wider mb-3">UBI Program Cost</p>
+                      <p className="text-sm font-semibold text-muted uppercase tracking-wider mb-3">BEL Program Cost</p>
                       <p
                         className="font-bold leading-none"
                         style={{
@@ -1003,13 +1007,13 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                     {/* Breakdown */}
                     <div className="border-t border-border-slate pt-6 space-y-3">
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-muted">Adult UBI</span>
+                        <span className="text-sm text-muted">Adult BEL</span>
                         <span className="font-semibold text-green-400">
                           ${(result.obligations.adultUBICost ? result.obligations.adultUBICost / 1e12 : 0).toFixed(2)}T
                         </span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-muted">Dependent UBI</span>
+                        <span className="text-sm text-muted">Dependent BEL</span>
                         <span className="font-semibold text-purple-400">
                           ${(result.obligations.dependentUBICost ? result.obligations.dependentUBICost / 1e12 : 0).toFixed(2)}T
                         </span>
@@ -1018,7 +1022,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
 
                     {/* Dependent Percentage Bar */}
                     <div className="border-t border-border-slate pt-6">
-                      <p className="text-xs text-muted mb-3 uppercase tracking-wide">Dependent % of UBI</p>
+                      <p className="text-xs text-muted mb-3 uppercase tracking-wide">Dependent % of BEL</p>
                       <div className="w-full h-4 bg-darker-slate rounded-full overflow-hidden border border-border-slate">
                         <div
                           className="h-full bg-gradient-to-r from-purple-500 to-purple-400"
@@ -1064,17 +1068,17 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
 
                     return (
                       <>
-                        {/* Card 1: Dependent UBI Cost */}
+                        {/* Card 1: Dependent BEL Cost */}
                         <div className="bg-dark-slate rounded-lg p-5 border-l-4 border-emerald-500 glow-border-blue">
-                          <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-2">Dependent UBI Cost</p>
+                          <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-2">Dependent BEL Cost</p>
                           <p className="text-2xl font-bold text-emerald-400">
                             ${(dependentCost / 1e12).toFixed(2)}T
                           </p>
                         </div>
 
-                        {/* Card 2: % of UBI Budget */}
+                        {/* Card 2: % of BEL Budget */}
                         <div className="bg-dark-slate rounded-lg p-5 border-l-4 border-blue-500 glow-border-blue">
-                          <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-2">% of UBI Budget</p>
+                          <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-2">% of BEL Budget</p>
                           <p className="text-2xl font-bold text-blue-400">
                             {result.obligations.ubiCost > 0 ? ((dependentCost / result.obligations.ubiCost) * 100).toFixed(1) : '0'}%
                           </p>
@@ -1816,6 +1820,7 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
               <Link
                 href={assumptionsHref}
+                onClick={handleAssumptionsOpen}
                 className="px-5 py-3 rounded transition hover:shadow-lg"
                 style={{
                   background: '#0F172A',
