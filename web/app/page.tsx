@@ -77,14 +77,6 @@ const researchSignalCards: ResearchSignalCard[] = [
   },
 ]
 
-const simulatorBullets = [
-  'GDP and human labor are beginning to decouple',
-  'High-income taxable wages may decline',
-  'Purchasing power may weaken under current systems',
-  'Economic liquidity becomes increasingly important',
-  'New system-level mechanisms may be needed to maintain balance',
-]
-
 const ctaModals: Record<CtaModalKey, CtaModalContent> = {
   survey: {
     title: 'Help Shape the Research',
@@ -95,13 +87,12 @@ const ctaModals: Record<CtaModalKey, CtaModalContent> = {
     href: '/survey',
   },
   model: {
-    title: 'Understanding the NAiERM Model',
-    kicker: 'Simulator introduction',
+    title: 'Simulator Update',
+    kicker: 'Temporary notice',
     body:
-      'Artificial intelligence is beginning to generate major economic value without relying on human labor in the traditional way. The NAiERM framework explores what happens when GDP growth becomes increasingly disconnected from wages, purchasing power weakens, and older tax structures no longer fit the economy they were designed for.',
-    buttonLabel: 'Launch Simulator',
+      'The simulator is currently being updated and will be available again shortly. Thank you for your patience.',
+    buttonLabel: 'Close',
     href: '/model',
-    bullets: simulatorBullets,
   },
 }
 
@@ -178,6 +169,9 @@ export default function Home() {
     }
 
     setActiveModal(null)
+    if (activeModal === 'model') {
+      return
+    }
     router.push(activeCta.href)
   }
 
@@ -205,11 +199,22 @@ export default function Home() {
                 <button
                   type="button"
                   className="primaryButton"
+                  onClick={openModelModal}
+                  aria-haspopup="dialog"
+                >
+                  Launch the Simulator
+                </button>
+                <button
+                  type="button"
+                  className="secondaryButton"
                   onClick={openSurveyModal}
                   aria-haspopup="dialog"
                 >
                   Take the Survey
                 </button>
+                <Link href="/white-paper/" className="secondaryButton">
+                  White paper
+                </Link>
               </div>
             </div>
 
@@ -429,9 +434,11 @@ export default function Home() {
               <button type="button" className="primaryButton" onClick={handleModalContinue}>
                 {activeCta.buttonLabel}
               </button>
-              <button type="button" className="ghostButton" onClick={closeModal}>
-                Not now
-              </button>
+              {activeModal === 'model' ? null : (
+                <button type="button" className="ghostButton" onClick={closeModal}>
+                  Not now
+                </button>
+              )}
             </div>
           </div>
         </div>
