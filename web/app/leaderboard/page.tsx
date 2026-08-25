@@ -693,11 +693,6 @@ export default async function LeaderboardPage() {
             <section className="lb-section">
               <h2 className="lb-h2">Submissions</h2>
               <p className="lb-p">No scenarios have been submitted yet.</p>
-              <div className="lb-hero-actions">
-                <Link href="/model" className="btn-primary">
-                  Launch Policy Simulator -&gt;
-                </Link>
-              </div>
             </section>
           ) : (
             <section className="table-card">
@@ -804,19 +799,6 @@ export default async function LeaderboardPage() {
               </div>
             </section>
           )}
-
-          <section className="lb-cta">
-            <div>
-              <h3>Test Your Own Policy Scenario</h3>
-              <p>
-                Try different revenue structures, BEL levels, and program assumptions, then submit
-                your result to compare outcomes in submissions.
-              </p>
-            </div>
-            <Link href="/model" className="btn-primary">
-              Launch the Simulator
-            </Link>
-          </section>
 
           <p className="lb-transparency">
             Public submissions pages display policy scenario data only. Optional contact details

@@ -276,9 +276,6 @@ export default async function AssumptionsPage({ searchParams }: PageProps) {
           </p>
 
           <div className={styles.heroActions}>
-            <Link href="/model" className={styles.primaryAction}>
-              Back to Simulator
-            </Link>
             <Link href="/methodology" className={styles.secondaryAction}>
               View Methodology
             </Link>

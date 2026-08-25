@@ -205,14 +205,6 @@ export default function Home() {
                 <button
                   type="button"
                   className="primaryButton"
-                  onClick={openModelModal}
-                  aria-haspopup="dialog"
-                >
-                  Launch the Simulator
-                </button>
-                <button
-                  type="button"
-                  className="secondaryButton"
                   onClick={openSurveyModal}
                   aria-haspopup="dialog"
                 >
@@ -314,7 +306,6 @@ export default function Home() {
               <div className="footerColumn">
                 <h3>Resources</h3>
                 <Link href="/assumptions">Assumptions</Link>
-                <Link href="/model">Model Overview</Link>
                 <a href="/admin/login/index.php" rel="nofollow">
                   Admin Sign In
                 </a>

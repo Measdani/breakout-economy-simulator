@@ -343,9 +343,6 @@ export default function SurveyPage() {
             <Link href="/leaderboard" className={styles.primaryAction}>
               View Submissions
             </Link>
-            <Link href="/model" className={styles.secondaryAction}>
-              Explore the NAiERM Simulator
-            </Link>
           </div>
         </section>
       </PublicSiteShell>
