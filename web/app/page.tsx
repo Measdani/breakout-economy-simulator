@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import PublicTopNav from '@/components/site/PublicTopNav'
+import { AMAZON_BOOK_URL } from '@/lib/book'
 import './home.css'
 
 type CtaModalKey = 'survey' | 'model'
@@ -106,6 +107,7 @@ const ctaModals: Record<CtaModalKey, CtaModalContent> = {
 
 export default function Home() {
   const router = useRouter()
+  const [showBookModal, setShowBookModal] = useState(true)
   const [activeModal, setActiveModal] = useState<CtaModalKey | null>(null)
 
   useEffect(() => {
@@ -139,7 +141,7 @@ export default function Home() {
   }, [])
 
   useEffect(() => {
-    if (!activeModal) {
+    if (!activeModal && !showBookModal) {
       return
     }
 
@@ -147,7 +149,11 @@ export default function Home() {
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        setActiveModal(null)
+        if (showBookModal) {
+          setShowBookModal(false)
+        } else {
+          setActiveModal(null)
+        }
       }
     }
 
@@ -158,7 +164,7 @@ export default function Home() {
       document.body.style.overflow = previousOverflow
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [activeModal])
+  }, [activeModal, showBookModal])
 
   const activeCta = activeModal ? ctaModals[activeModal] : null
 
@@ -333,6 +339,74 @@ export default function Home() {
           </div>
         </footer>
       </div>
+
+      {showBookModal ? (
+        <div className="bookModalBackdrop" onClick={() => setShowBookModal(false)}>
+          <section
+            className="bookModal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="book-modal-title"
+            aria-describedby="book-modal-description"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="bookModalClose"
+              onClick={() => setShowBookModal(false)}
+              aria-label="Close book announcement"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+
+            <div className="bookModalMain">
+              <div className="bookCoverWrap">
+                {/* A direct public asset is required because this site deploys as a static export. */}
+                <img
+                  className="bookCover"
+                  src="/a-stake-in-the-machine-book-cover.png"
+                  alt="Cover of A Stake in the Machine by James Bunger, Ph.D., with Audrey Panhorst and Meashia Daniels"
+                  width={1800}
+                  height={2700}
+                />
+              </div>
+
+              <div className="bookModalCopy">
+                <p className="bookModalEyebrow"><span>New book</span></p>
+                <h2 id="book-modal-title">A Stake in<br />the Machine</h2>
+                <p className="bookModalSubtitle">
+                  Redesigning the Economy<br />when Machines do the Thinking
+                </p>
+                <div className="bookModalRule" aria-hidden="true" />
+                <p id="book-modal-description" className="bookModalDescription">
+                  AI is creating extraordinary wealth. The question is: who benefits—and who
+                  doesn&apos;t?
+                </p>
+                <p className="bookModalDescription">
+                  This book introduces a new way of thinking about the economy and a model for
+                  giving everyone a stake in the future.
+                </p>
+                <a
+                  className="bookModalCta"
+                  href={AMAZON_BOOK_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Learn more on Amazon
+                </a>
+                <button
+                  type="button"
+                  className="bookModalDismiss"
+                  onClick={() => setShowBookModal(false)}
+                >
+                  No thanks, I&apos;ll continue exploring
+                </button>
+              </div>
+            </div>
+
+          </section>
+        </div>
+      ) : null}
 
       {activeCta ? (
         <div className="modalBackdrop" onClick={closeModal}>

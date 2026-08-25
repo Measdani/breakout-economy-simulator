@@ -799,6 +799,213 @@ body {
   margin-top: 26px;
 }
 
+.bookModalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  overflow-y: auto;
+  padding: 24px;
+  background: rgba(1, 5, 13, 0.88);
+  backdrop-filter: blur(12px);
+}
+
+.bookModal {
+  position: relative;
+  width: min(860px, 100%);
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  padding: clamp(28px, 4vw, 48px);
+  border: 1px solid rgba(215, 162, 48, 0.78);
+  border-radius: 18px;
+  color: #fffaf0;
+  background:
+    radial-gradient(circle at 18% 30%, rgba(20, 74, 112, 0.34), transparent 38%),
+    linear-gradient(145deg, #03182d 0%, #001328 54%, #020d1c 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 213, 113, 0.08),
+    0 32px 90px rgba(0, 0, 0, 0.72),
+    0 0 50px rgba(201, 148, 38, 0.08);
+}
+
+.bookModal::before,
+.bookModal::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.bookModal::before {
+  inset: 10px;
+  border: 1px solid rgba(215, 162, 48, 0.14);
+  border-radius: 12px;
+}
+
+.bookModal::after {
+  inset: 0;
+  opacity: 0.12;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 46px 46px;
+  mask-image: linear-gradient(135deg, #000, transparent 52%);
+}
+
+.bookModalClose {
+  position: absolute;
+  z-index: 3;
+  top: 12px;
+  right: 16px;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  background: transparent;
+  color: #e9b642;
+  font: inherit;
+  font-size: 32px;
+  font-weight: 300;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.bookModalClose:hover {
+  color: #ffe39a;
+}
+
+.bookModalMain {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(190px, 0.72fr) minmax(300px, 1.28fr);
+  gap: clamp(32px, 5vw, 58px);
+  align-items: center;
+}
+
+.bookCoverWrap {
+  perspective: 900px;
+}
+
+.bookCover {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 2px 7px 7px 2px;
+  transform: rotateY(5deg) rotateZ(-1deg);
+  transform-origin: left center;
+  box-shadow:
+    -10px 10px 0 #e8e1d5,
+    -13px 13px 0 rgba(3, 10, 19, 0.9),
+    0 26px 44px rgba(0, 0, 0, 0.52);
+}
+
+.bookModalCopy {
+  text-align: center;
+}
+
+.bookModalEyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 12px;
+  color: #e0aa35;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.bookModalEyebrow::before,
+.bookModalEyebrow::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #b98621;
+}
+
+.bookModal h2 {
+  margin: 0;
+  color: #fffdf6;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(2.35rem, 5vw, 4.2rem);
+  font-weight: 500;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  text-shadow: 0 3px 0 rgba(0, 0, 0, 0.44);
+}
+
+.bookModalSubtitle {
+  margin: 17px 0 0;
+  color: #efb629;
+  font-size: clamp(1rem, 2vw, 1.22rem);
+  font-style: italic;
+  line-height: 1.3;
+}
+
+.bookModalRule {
+  width: 100%;
+  height: 1px;
+  margin: 17px 0;
+  background: linear-gradient(90deg, transparent, #bd8b24 15%, #bd8b24 85%, transparent);
+}
+
+.bookModalDescription {
+  margin: 0 0 12px;
+  color: rgba(255, 250, 240, 0.9);
+  font-size: 14px;
+  line-height: 1.55;
+  text-align: left;
+}
+
+.bookModalCta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  margin-top: 20px;
+  border: 1px solid #edc25a;
+  border-radius: 5px;
+  color: #071426;
+  background: linear-gradient(180deg, #efc45c, #c99027);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.32);
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.bookModalCta:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.bookModalDismiss {
+  margin-top: 12px;
+  border: 0;
+  padding: 2px;
+  color: rgba(255, 255, 255, 0.82);
+  background: transparent;
+  font: inherit;
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.bookModalDismiss:hover {
+  color: #ffffff;
+}
+
+.bookModalClose:focus-visible,
+.bookModalCta:focus-visible,
+.bookModalDismiss:focus-visible {
+  outline: 2px solid #ffe39a;
+  outline-offset: 3px;
+}
+
 @keyframes panelGridShift {
   0% {
     transform: translate3d(0, 0, 0);
@@ -1011,6 +1218,56 @@ body {
     margin-left: 0;
     display: block;
     margin-top: 4px;
+  }
+
+  .bookModalBackdrop {
+    align-items: start;
+    padding: 12px;
+  }
+
+  .bookModal {
+    max-height: none;
+    padding: 38px 20px 24px;
+    border-radius: 14px;
+  }
+
+  .bookModalMain {
+    grid-template-columns: minmax(112px, 0.7fr) minmax(0, 1.3fr);
+    gap: 20px;
+    align-items: start;
+  }
+
+  .bookModal h2 {
+    font-size: clamp(1.75rem, 9vw, 2.7rem);
+  }
+
+  .bookModalSubtitle {
+    font-size: 0.88rem;
+  }
+
+  .bookModalDescription {
+    font-size: 12px;
+  }
+
+  .bookModalCta {
+    min-height: 44px;
+    font-size: 12px;
+  }
+
+}
+
+@media (max-width: 460px) {
+  .bookModalMain {
+    grid-template-columns: 1fr;
+  }
+
+  .bookCoverWrap {
+    width: min(190px, 58vw);
+    margin: 0 auto;
+  }
+
+  .bookModalDescription {
+    text-align: center;
   }
 }
 
