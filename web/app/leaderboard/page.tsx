@@ -704,7 +704,7 @@ export default async function LeaderboardPage() {
               <h2 className="lb-h2">Submissions</h2>
               <p className="lb-p">
                 {unavailable
-                  ? 'Submissions are temporarily unavailable. Please try again shortly.'
+                  ? 'Submissions are connected to our simulator, which is currently being updated. The submission feature will be available again shortly. Thank you for your patience.'
                   : 'No scenarios have been submitted yet.'}
               </p>
             </section>
