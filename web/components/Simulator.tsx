@@ -6,7 +6,7 @@ import { runSimulation, calculateFrictionTaxSensitivity } from '../lib/engine';
 import { useAnimatedNumber, numberFormatters } from '../lib/hooks/useAnimatedNumber';
 import { TERMINOLOGY, getRetirementModeBadge } from '../lib/terminology';
 import type { PolicyConfig, SimulationResult } from '../lib/types';
-import { buildAssumptionsHref, saveAssumptionsSnapshot } from '../lib/assumptionsRoute';
+import { buildAssumptionsHref } from '../lib/assumptionsRoute';
 import PolicySliders from './PolicySliders';
 import ResultsDisplay from './ResultsDisplay';
 import FiscalSustainabilityIndicator from './FiscalSustainabilityIndicator';
@@ -214,9 +214,6 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
 
   const result: SimulationResult = useMemo(() => runSimulation(config), [config]);
   const assumptionsHref = buildAssumptionsHref(config);
-  const handleAssumptionsOpen = () => {
-    saveAssumptionsSnapshot(config);
-  };
 
   // Friction Tax Sensitivity Analysis
   const frictionTaxSensitivityUp = useMemo(() =>
@@ -748,7 +745,6 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
                       <div className="border-t border-border-slate pt-6">
                         <Link
                           href={assumptionsHref}
-                          onClick={handleAssumptionsOpen}
                           className="flex items-center justify-between w-full mb-3 hover:opacity-80 transition bg-darker-slate rounded px-3 py-2 border border-border-slate"
                         >
                           <p className="text-sm text-bright uppercase tracking-wide font-semibold">Model Assumptions</p>
@@ -1820,7 +1816,6 @@ export default function Simulator({ initialConfig }: SimulatorProps = {}) {
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
               <Link
                 href={assumptionsHref}
-                onClick={handleAssumptionsOpen}
                 className="px-5 py-3 rounded transition hover:shadow-lg"
                 style={{
                   background: '#0F172A',
