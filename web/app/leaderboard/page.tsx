@@ -304,35 +304,45 @@ function isSurveyGeneratedSubmission(submission: SubmissionRecord): boolean {
 }
 
 async function getLeaderboardData() {
-  const supabase = createServiceClient()
+  try {
+    const supabase = createServiceClient()
 
-  const submissionsQuery = supabase
-    .from('submissions')
-    .select(
-      'id, name, config_name, token_tax_rate, ubi_annual, breakout_point, is_solvent, surplus_deficit, created_at, result, config, submission_payload_json'
-    )
-    .order('created_at', { ascending: false })
+    const submissionsQuery = supabase
+      .from('submissions')
+      .select(
+        'id, name, config_name, token_tax_rate, ubi_annual, breakout_point, is_solvent, surplus_deficit, created_at, result, config, submission_payload_json'
+      )
+      .order('created_at', { ascending: false })
 
-  const totalCountQuery = supabase
-    .from('submissions')
-    .select('id', { count: 'exact', head: true })
+    const totalCountQuery = supabase
+      .from('submissions')
+      .select('id', { count: 'exact', head: true })
 
-  const [{ data, error }, { count, error: countError }] = await Promise.all([
-    submissionsQuery,
-    totalCountQuery,
-  ])
+    const [{ data, error }, { count, error: countError }] = await Promise.all([
+      submissionsQuery,
+      totalCountQuery,
+    ])
 
-  if (error) {
-    throw error
-  }
+    if (error) {
+      throw error
+    }
 
-  if (countError) {
-    console.error('Leaderboard count query error:', countError)
-  }
+    if (countError) {
+      console.error('Leaderboard count query error:', countError)
+    }
 
-  return {
-    submissions: (data ?? []) as SubmissionRecord[],
-    totalCount: typeof count === 'number' ? count : (data ?? []).length,
+    return {
+      submissions: (data ?? []) as SubmissionRecord[],
+      totalCount: typeof count === 'number' ? count : (data ?? []).length,
+      unavailable: false,
+    }
+  } catch (error) {
+    console.error('Submissions data is unavailable:', error)
+    return {
+      submissions: [] as SubmissionRecord[],
+      totalCount: 0,
+      unavailable: true,
+    }
   }
 }
 
@@ -508,7 +518,7 @@ function buildTradeoffLine(row: RankedScenario): string {
 }
 
 export default async function LeaderboardPage() {
-  const { submissions, totalCount } = await getLeaderboardData()
+  const { submissions, totalCount, unavailable } = await getLeaderboardData()
   const rankedScenarios = buildRankedScenarios(submissions)
   const policyInsights = buildPolicyInsights(rankedScenarios)
 
@@ -692,7 +702,11 @@ export default async function LeaderboardPage() {
           {rankedScenarios.length === 0 ? (
             <section className="lb-section">
               <h2 className="lb-h2">Submissions</h2>
-              <p className="lb-p">No scenarios have been submitted yet.</p>
+              <p className="lb-p">
+                {unavailable
+                  ? 'Submissions are temporarily unavailable. Please try again shortly.'
+                  : 'No scenarios have been submitted yet.'}
+              </p>
             </section>
           ) : (
             <section className="table-card">
