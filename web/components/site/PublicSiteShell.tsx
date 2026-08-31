@@ -89,6 +89,10 @@ export default function PublicSiteShell({
             <p>NAiERM Web v0.3 | Last updated March 2, 2026</p>
             <p className="mt-2">Model assumptions versioned and archived. See changelog for revisions.</p>
             <p className="mt-2">
+              © 2026 JWBA, Inc. NAiERM (National AI Economy Resilience Model) is an initiative of
+              Energy and Wealth, a trade name of JWBA, Inc.
+            </p>
+            <p className="mt-2">
               <a
                 href="https://energyandwealth.com/"
                 target="_blank"

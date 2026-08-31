@@ -34,6 +34,11 @@ export default function AboutPage() {
                 The simulator enables structured comparison of fiscal architectures under transparent
                 assumptions.
               </p>
+              <p className={styles.p}>
+                The National AI Economy Resilience Model is an initiative of Energy and Wealth, a
+                trade name of JWBA, Inc. Research published here is produced independently of client
+                engagements.
+              </p>
             </section>
 
             <section className={styles.card}>
